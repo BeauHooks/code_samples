@@ -1,0 +1,18 @@
+<div id="rules" class="no_result">
+  <h4>Rules for <%= @entity.name %></h4>
+  <% rules = @entity.get_rules() %>
+  <% if rules.size == 0 %>
+    <span class="dis_block padding_ends_2 padding_sides_5">No rules found</span>
+  <% else %>
+    <% n = 0 %>
+    <% @entity.get_rules.each do |rule| %>
+      <span class="dis_block padding_ends_2 padding_sides_5"><%= n += 1 %>) <%= rule.rule_text %></span>
+    <% end %>
+  <% end %>
+</div>
+
+<% unless @entity.has_rules? %>
+  <script type="text/javascript">
+    $("div#rules").addClass("empty");
+  </script>
+<% end %>

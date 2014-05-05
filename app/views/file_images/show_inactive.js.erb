@@ -1,0 +1,9 @@
+$("#file_images_list").html("<%= j(render 'file_images/partials/image_results').html_safe %>");
+
+<% if @toggle %>
+  $("#show_inactive").html("Hide Inactive")
+  $("#show_inactive").attr("href", "/index/<%= @file.ID %>/file_images/show_inactive?toggle=false")
+<% else %>
+  $("#show_inactive").html("Show Inactive")
+  $("#show_inactive").attr("href", "/index/<%= @file.ID %>/file_images/show_inactive?toggle=true")
+<% end %>

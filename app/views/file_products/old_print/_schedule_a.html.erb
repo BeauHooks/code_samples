@@ -1,0 +1,77 @@
+<div class="file_product_wrapper" style="position: relative;">
+	<div style="float: left;">
+		<h3><%= @company.CompanyName %></h3>
+		<p style="font-weight: bold;">
+			<%= @office != nil ? "#{@office.OfficeAddress1}#{ " #{@office.OfficeAddress2}" if !@office.OfficeAddress2.blank?}, #{@office.OfficeCity}, #{@office.OfficeState} #{@office.OfficeZip}" : "#{@company.CompanyAddress} #{@company.CompanyCSZ}" %>
+			<br />
+			<%= @closer != nil ? "PH: #{number_to_phone(@closer.DirectPhone)} FAX: #{number_to_phone(@closer.DirectFax)}" : "PH:#{@company.CompanyPhone} FAX:#{@company.CompanyFax}" %>
+		</p>
+	</div>
+	<%= image_tag @logo, alt: "", style: "float: right;" %>
+	<p style="clear:both; text-align: right; margin-bottom: 1em; font-weight: bold;">COMMITMENT FOR TITLE INSURANCE</p>
+	<p style="text-align: center; position: relative; font-weight: bold;">
+		SCHEDULE A
+		<span style="position: absolute; right: 0px; text-align: left;">
+			<%= @company.DirName %> File No. <%= !@schedule_a_old.amended.nil? ? "#{@file.DisplayFileID}-#{@schedule_a_old.amended}" : @file.DisplayFileID %><br />
+			Page No. 1
+		</span>
+	</p>
+	<p>&nbsp;</p>
+	<div style="margin-bottom: 1em;">
+		<% if !@schedule_a_old.OwnerPremiumAmt.blank? %>
+			<p style="font-weight: bold;">OWNER PREMIUM: <%= number_to_currency(@schedule_a_old.OwnerPremiumAmt, unit: "$") %></p>
+		<% end %>
+		<% if !@schedule_a_old.AltaPremiumAmt.blank? %>
+			<p style="font-weight: bold;">ALTA PREMIUM: <%= number_to_currency(@schedule_a_old.AltaPremiumAmt, unit: "$") %></p>
+		<% end %>
+		<% if !@schedule_a_old.EndorsementAmt.blank? %>
+			<p style="font-weight: bold;">Endorsements: <%= @schedule_a_old.Endorsements %> <%= number_to_currency(@schedule_a_old.EndorsementAmt, unit: "$") %></p>
+		<% end %>
+	</div>
+
+	<p style="margin-bottom: 1em;">1. Effective Date: <span style="font-weight: bold;"><%= @schedule_a_old.EffectiveDate.upcase %></span></p>
+	<table style="width: 100%; border-collapse: collapse; margin-bottom: 1em;">
+		<tr>
+			<td style="width: 60%; padding-bottom: 1em;">2. Policy or Policies to be issued:</td>
+			<td style="padding-bottom: 1em;">Amount</td>
+		</tr>
+		<% if !@schedule_a_old.OwnerPremiumAmt.blank? %>
+			<tr>
+				<td>(a)[] <%= @schedule_a_old.Policy1Type %></td>
+				<td style="font-weight: bold;"><%= number_to_currency(@schedule_a_old.Policy1Amount, unit: "$") %></td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding-bottom: 1em;">Proposed Insured: <%= @schedule_a_old.Policy1ProposedInsured %></td>
+			</tr>
+		<% end %>
+		<% if !@schedule_a_old.AltaPremiumAmt.blank? %>
+			<tr>
+				<td>(a)[] <%= @schedule_a_old.Policy2Type %></td>
+				<td style="font-weight: bold;"><%= number_to_currency(@schedule_a_old.Policy2Amount, unit: "$") %></td>
+			</tr>
+			<tr>
+				<td colspan="2">Proposed Insured: <%= @schedule_a_old.Policy2ProposedInsured %></td>
+			</tr>
+		<% end %>
+	</table>
+	<p style="margin-bottom: 1em;">3. The estate or interest in the land described or referred to in this Commitment is <span style="font-weight: bold;"><%= @schedule_a_old.VestingType %></span>.</p>
+	<p style="margin-bottom: 1em;">4. Title to the <%= @schedule_a_old.VestingType %> estate or interest in the land is at the Effective Date vested in:</p>
+	<p style="margin-bottom: 1em; padding: 0em 2em;"><%= @schedule_a_old.TextVesting %></p>
+	<p style="margin-bottom: 1em;">5. The land referred to in this Commitment is situated in the County of <%= @schedule_a_old.LandCounty %>, State of <%= @schedule_a_old.LandState %>, and described as follows:</p>
+	<% legal = @schedule_a_old.TextLegal.to_s %>
+	<% if @schedule_a_old.use_exhibit_a? %>
+		<p style="margin-bottom: 1em; text-align: center;">SEE ATTACHED EXHIBIT "A" - LEGAL DESCRIPTION<br />***</p>
+	<% else %>
+		<p style="margin-bottom: 1em; padding: 0em 2em;"><%= legal %></p>
+	<% end %>
+	<p style="margin-bottom: 1em; font-weight: bold;">NOTE: The names above have been checked for Judgements and any matters thereon are shown on Schedule “B” of this Commitment.</p>
+	<p style="font-weight: bold;">The address of said <%= @schedule_a_old.LandType %>:<br /><%= "#{@schedule_a_old.LandAddress}, #{@schedule_a_old.LandCity}, #{@schedule_a_old.LandState} #{@schedule_a_old.LandZipCode}" %></p>
+
+	<% if @schedule_a_old.use_exhibit_a? %>
+		<div style='page-break-before:always;'>
+			<p style="margin-bottom: 1em; font-weight: bold;">EXHIBIT "A" - LEGAL DESCRIPTION</p>
+			<p style="margin-bottom: 1em; font-weight: bold;"><%= legal %></p>
+			<p style="text-align: center">***</p>
+		</div>
+	<% end %>
+</div>

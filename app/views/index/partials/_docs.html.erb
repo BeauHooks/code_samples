@@ -1,0 +1,133 @@
+<div id="doc_left" style="">
+  <div id="doc_selection" class="box">
+    <div class="box_header">
+      <p class="title" id="doc_header">Docs</p>
+      <% if @file.SentForFunding.blank? %>
+        <%# if @file.has_doc_updates == true %>
+        <% docs = @file.docs_with_updates %>
+        <% if docs.size > 0 %>
+          <% title = "Updates Available" %>
+          <% message = "The following docs have updates available. Update?" %>
+          <% post = "docs/update_all?file_id=#{@file.FileID}" %>
+          <% confirm = "Update" %>
+
+          <% list = "" %>
+          <% docs.each do |doc_name| %>
+            <% list +=  "&list[]=#{doc_name}" %>
+          <% end %>
+
+          <script type="text/javascript">
+            $.get('application/flash_notice?title=<%= title %>&notice=<%= message %>&post=<%= post %>&confirm=<%= confirm %><%= list.html_safe %>');
+          </script>
+        <% end %>
+
+        <% if @file.docs.where("is_active = -1").count == 0 %>
+          <script type="text/javascript">
+            $.get('<%= doc_lookup_overlays_path(file_id: @file.ID) %>');
+          </script>
+        <% end %>
+      <% end %>
+
+      <div class="tools">
+        <div id="doc_list_tools">
+          <span id="save_doc" onclick="save_doc(this, event);" class="trigger link" style="margin-right: 10px;">Save</span>
+          <span id="print_doc" onclick="print_doc(this, event);" class="trigger link" style="margin-right: 10px;">Print</span>
+          <span id="remove_doc" onclick="return destroySelected(this, 'all_docs', <%= @file.FileID %>);" class="trigger link" style="margin-right: 10px;">Remove</span>
+          <a href="<%= doc_lookup_overlays_path(file_id: @file.ID) %>" data-remote="true"><img src="/assets/search.png" class="trigger" /></a>
+          <%= link_to "", "docs/doc_list?file_id=#{@file.ID}", {remote: true, style: "display: none", id: "show_doc_list"} %>
+        </div>
+        <div id="doc_list_spinner" style="display: none;">
+          <span class="trigger" style="margin-right: 10px;"><%= image_tag "loading.gif", style: "width: 11px; margin-right: 5px;" %>Please Wait...</span>
+        </div>
+      </div>
+    </div>
+    <div id="doc_quickadd" style="display:none">
+      <%= form_tag "docs/create?type=Template&file_id=#{@file.FileID}", remote: true, style: "padding: 2px 5px;" do %>
+        ShortCode>> <%= text_field_tag "quickadd","", id: "quickadd_field", style: "border:0px; width: 149px; " %>
+           <%= button_tag "Add", style: "font-size:10px;", onclick: "$(this).closest('div#doc_quickadd').hide(); $.get('docs/quick_add?template=' + $('#quickadd_field').val() + '&file_id=#{@file.FileID}'); return false;", remote: true %>
+           <a href="docs/doc_list?file_id=<%= @file.ID %>" style="display: none;" id="docs_refresh" data-remote="true"></a>
+      <% end %>
+    </div>
+
+    <div class="outer_table">
+      <div class="grid_header"></div>
+      <div class="inner_table">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="selected"><div><input type="checkbox" onchange="selectAll(this, 'all_docs');" id="select_all_docs"></div></th>
+              <th class="name" id="doc_list_last"><div>Name</div></th>
+            </tr>
+          </thead>
+          <tbody id="all_docs">
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+  </div>
+  <div id="input" class="box">
+    <div class="box_header">
+      <p class="title">Default Fields</p>
+      <div class="tools">
+        <span id="reset_fields" onclick="" class="trigger link" data-remote="true" style="display: none;">Reset Defaults</span>
+      </div>
+    </div>
+    <div id="doc_input_fields" class="doc_input_fields">
+      <%# _input_fields.html.erb from show_doc.js.erb %>
+    </div>
+  </div>
+</div>
+<div id="doc_right">
+  <div id="doc_preview-anchor"></div>
+	<div id="doc_preview" class="box">
+		<div class="box_header">
+			<p class="title">Doc Preview</p>
+			<div class="tools" id="doc_tools">
+			</div>
+		</div>
+    <div id="loading_doc" class="doc" style="display:none;">
+      <center>
+        <h1 style="padding-top:150px;">
+          <%= image_tag "loading.gif", width: "30px", height: "30px" %><br />
+          Loading...
+        </h1>
+      </center>
+    </div>
+    <div id="<%= current_user.users_preferences[:docs_theme] %>">
+      <div id="doc_content" class="doc" data-fileid="<%= @file.ID %>">
+      </div>
+    </div>
+	</div>
+	<!-- <p class="center"><%#= link_to "<<  " %> Page 1 of 1 <%#= link_to "  >>" %></p> -->
+</div>
+
+<!-- Overlays -->
+<!-- <div class="overlay" id="overlay_send"></div>
+<div class="overlay" id="overlay_signature"></div>
+<div id="overlay_new_hud_line" class="overlay"></div>
+<div id="overlay_choose_side" class="overlay"></div>
+<div id="overlay_edit_address" class="overlay"></div>
+<div class="overlay" id="overlay_manage_hud_line"></div>
+<div class="overlay" id="overlay_disbursements"></div>
+<div class="overlay" id="overlay_hud_fees"></div>
+<div class="overlay" id="overlay_tax_proration_calculator"></div>
+<div class="overlay" id="overlay_hoa_proration_calculator"></div> -->
+
+<!-- Place Holders -->
+<div style="display:none;" id="field_placeholder"></div>
+<div style="display: none;" id="temp_doc"></div>
+
+<script type="text/javascript">
+  function print_doc(object, event){
+    return printSelected(this, 'all_docs', <%= @file.FileID %>);
+  }
+
+  function save_doc(object, event){
+    return saveSelected(this, 'all_docs', <%= @file.FileID %>);
+  }
+
+  document.getElementById("show_doc_list").click();
+</script>

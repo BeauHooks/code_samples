@@ -1,0 +1,26 @@
+.overview_subdivision{
+  .phase{
+    width: 150px;
+  }
+  .lot, .block, .plat, .unit, .week{
+    width: 75px;
+  }
+}
+
+.overview_section{
+  .section, .township, .range, .quarter, .qq{
+    width: 75px;
+  }
+}
+
+.overview_affiliation{
+  .number, .type, .recorded, .taxid{
+    width: 125px;
+  }
+  .amount{
+    width: 150px;
+  }
+  .from, .to, .for{
+    width: 200px;
+  }
+}

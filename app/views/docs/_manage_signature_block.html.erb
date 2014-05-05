@@ -1,0 +1,66 @@
+<% content_for :overlay_class do %>
+  signature_management
+<% end %>
+
+<% content_for :overlay_title do %>
+  Manage Signature Blocks - <%= truncate(@signature.description, length: 25) %>
+<% end %>
+
+<% content_for :overlay do %>
+  <div id="rolodex_signatures">
+    <div id="signature_left">
+    <div id="signatures" class="box">
+      <div class="box_header">
+        <p class="title">Signatures</p>
+        <div class="tools">
+          <img src="/assets/plus.png" onclick="$.get('<%= new_rolodex_signature_path(entity: @rolodex_entity.EntityID) %>');" remote="true" class="trigger" />
+        </div>
+      </div>
+      <div class="grid_header">
+        <table>
+          <tr>
+            <td class="signature">Signature</td>
+            <td class="modify_date">Modified</td>
+            <td class="modify_user">Modified By</td>
+            <td class="active" id="rolodex_signatures_last">Active</td>
+          </tr>
+        </table>
+      </div>
+      <div class="results" id="signatures_info">
+      </div>
+    </div>
+      <div id="manage_tree_view" class="box">
+      <div class="box_header">
+        <p class="title">Tree View</p>
+        <div class="tools">
+        </div>
+      </div>
+      <div id="tree_view" style="position: relative;">
+        <div id="tree">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="signature_right">
+    <div id="signature_preview" class="box">
+    <div class="box_header">
+      <p class="title">Signature Preview</p>
+      <div class="tools" id="signature_tools">
+          <ul>
+            <li class="menu_item"><a class="trigger" href="signatures//show_editor" data-remote="true" id="edit_signature">Edit</a></li>
+          </ul>
+      </div>
+    </div>
+    <div id="signature_content" class="doc">
+    </div>
+  </div>
+  </div>
+  <p class="clear"></p>
+ </div>
+<% end %>
+
+<% content_for :overlay_footer do %>
+  <input type="button" value="Close" class="button" data-remote="true" onclick="$('#<%= @doc_entity.doc_id != 0 ? "manage_" : "" %>block_<%= @doc_entity.id %>').val( $('#selected_signature').val() ).change(); $(this).closest('.overlay').remove();" id="close_manage_signature_block" />
+  <input type="hidden" id="selected_signature" value = "<%= @doc_entity.rolodex_signature_id %>" />
+<% end %>
+

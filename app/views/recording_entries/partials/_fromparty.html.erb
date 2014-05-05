@@ -1,0 +1,10 @@
+<div class="result_container">
+  <div class="box_header">
+    <span class="title">From</span>
+  </div>
+  <div>
+  <% @detail.recording_froms.each do |from| %>
+    <div class="padding_left_5"><%= from.RecordationName %></div>
+  <% end %>
+  </div>
+</div>

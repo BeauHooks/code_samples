@@ -1,0 +1,675 @@
+<div id="closing_disclosure" class="hud">
+  <div id="closing_disclosure_page" class="page">
+    <div class="hud_header">
+      <div>
+        <h1>Closing Disclosure</h1>
+      </div>
+      <div>
+        <p class="italic">This form is a statement of final loan terms and closing costs. Compare this document with your Loan Estimate.</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <hr>
+    <div class="info_row">
+      <div class="info_column">
+        <p class="column_header">Closing Information</p>
+        <table>
+          <tbody>
+            <tr>
+              <td class="label">Date Issued</td>
+              <td>9/10/2012</td>
+            </tr>
+            <tr>
+              <td class="label">Closing Date</td>
+              <td>9/10/2012</td>
+            </tr>
+            <tr>
+              <td class="label">Disbursement Date</td>
+              <td>9/10/2012</td>
+            </tr>
+            <tr>
+              <td class="label">Agent</td>
+              <td>Southern Utah Title</td>
+            </tr>
+            <tr>
+              <td class="label">File #</td>
+              <td>102345</td>
+            </tr>
+            <tr>
+              <td class="label">Property</td>
+              <td>456 Somewhere Ave<br>Anytown, ST 12345</td>
+            </tr>
+            <tr>
+              <td class="label">Sale Price</td>
+              <td>$180,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info_column">
+        <p class="column_header">Transaction Information</p>
+        <table>
+          <tbody>
+            <tr>
+              <td class="label">Borrower</td>
+              <td>John A. and Mary B.<br>123 Anywhere Street<br>Anytown, ST 12345</td>
+            </tr>
+            <tr>
+              <td class="label">Seller</td>
+              <td>Steve C. and Amy D.<br>321 Somewhere Drive<br>Anytown, ST 12345</td>
+            </tr>
+            <tr>
+              <td class="label">Lender</td>
+              <td>Ficus Bank</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info_column">
+        <p class="column_header">Loan Information</p>
+        <table>
+          <tbody>
+            <tr>
+              <td class="label">Loan Term</td>
+              <td>30 Years</td>
+            </tr>
+            <tr>
+              <td class="label">Purpose</td>
+              <td>Purchase</td>
+            </tr>
+            <tr>
+              <td class="label">Product</td>
+              <td>Fixed Rate</td>
+            </tr>
+            <tr>
+              <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="label">Loan Type</td>
+              <td>
+                <label><%= check_box_tag :loan_type, true, true %> Conventional</label> <label><%= check_box_tag :loan_type, true, true %> FHA</label><br>
+                <label><%= check_box_tag :loan_type, true, true %> VA</label> <label><%= check_box_tag :loan_type, true, true %> _______</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">Loan ID #</td>
+              <td>123456789</td>
+            </tr>
+            <tr>
+              <td class="label">MIC #</td>
+              <td>000654321</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <table id="loan_terms" class="section">
+      <tbody>
+        <tr class="section_header">
+          <td class="label tru_4"><div class="header_tab"><span>Loan Terms</span></div></td>
+          <td class="tru_3"></td>
+          <td class="label tru_8">Can this amount increase after closing?</td>
+        </tr>
+        <tr>
+          <td class="label border-right">Loan Amount</td>
+          <td class="big top">$162,000</td>
+          <td class="label">NO</td>
+        </tr>
+        <tr>
+          <td class="label border-right">Interest Rate</td>
+          <td class="big top">3.875%</td>
+          <td class="label">NO</td>
+        </tr>
+        <tr>
+          <td class="border-right"><p class="label no_pad_left">Monthly Principal & Interest</p><span class="italic">See Projected Payments Below for Your Total Monthly Payment</span></td>
+          <td class="big top">$761.78</td>
+          <td class="label top">NO</td>
+        </tr>
+        <tr>
+          <td class="label bottom border-right">Prepayment Penalty</td>
+          <td class="big"></td>
+          <td class="label bottom"><div>Does the loan have these features?</div><br>NO</td>
+        </tr>
+        <tr>
+          <td class="label border-right">Balloon Payment</td>
+          <td class="big"></td>
+          <td class="label">NO</td>
+        </tr>
+      </tbody>
+    </table>
+    <table id="projected_payments" class="section">
+      <tbody>
+        <tr class="section_header">
+          <td class="label tru_4"><div class="header_tab"><span>Projected Payments</span></div></td>
+          <td class="tru_5"></td>
+          <td class="label tru_6"></td>
+        </tr>
+        <tr class="background">
+          <td class="label border-right">Payment Calculation</td>
+          <td class="label center border-right">Years 1-7</td>
+          <td class="label center">Years 8-30</td>
+        </tr>
+        <tr>
+          <td class="border-right top">
+            <p>Principal & Interest</p>
+            <p>Mortgage Insurance</p>
+            <p>Estimated Escrow<br><span class="italic">Amount Can Increase Over Time</span></p>
+          </td>
+          <td class="border-right top">
+            <div class="sum">
+              <p>$761.78</p>
+              <p><span>+</span>82.35</p>
+              <p><span>+</span>206.13</span></p>
+            </div>
+          </td>
+          <td class="top">
+            <div class="sum">
+              <p>$761.78</p>
+              <p><span>+</span>-</p>
+              <p><span>+</span>206.13</span></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="border-bottom-double">
+          <td class="label border-right"><p>Estimated Total<br>Monthly Payment</p></td>
+          <td class="big border-right center">$1,050.26</td>
+          <td class="big center">$967.91</td>
+        </tr>
+        <tr>
+          <td class="border-right"><div class="label">Estimated Taxes, Insurance<br>& Assessments</div><span class="italic">Amount Can Increase Over Time<br>See Details on Page 4</span></td>
+          <td colspan='2' id="estimated_amounts">
+            <div class="tru_2">
+              <span class="big">$356.13</span><br>a month
+            </div>
+            <table class="no-border tru_7">
+              <tbody>
+                <tr>
+                  <td class="label">This estimate includes</td>
+                  <td class="label">In escrow?</td>
+                </tr>
+                <tr>
+                  <td><%= check_box_tag :property_taxes, true, true %> Property Taxes</td>
+                  <td class="label">YES</td>
+                </tr>
+                <tr>
+                  <td><%= check_box_tag :property_taxes, true, true %> Homeowner's Insurance</td>
+                  <td class="label">YES</td>
+                </tr>
+                <tr>
+                  <td><%= check_box_tag :property_taxes, true, true %> Other: Homeowner's Association</td>
+                  <td class="label">NO</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="italic">See page 4 for escrowed property costs. You must pay for other property costs separately.</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table id="cash_to_close" class="section">
+      <tbody>
+        <tr class="section_header">
+          <td class="label tru_4"><div class="header_tab"><span>Cash to Close</span></div></td>
+          <td class="tru_2"></td>
+          <td class="label tru_9"></td>
+        </tr>
+        <tr>
+          <td class="label border-right">Cash to Close</td>
+          <td class="big">$14,272.35</td>
+          <td>Includes <span class="big">$9,729.54</span> in Closing Costs ($4,694.05 + $5,035.49 - $0). See details on page 2.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="clear"></div>
+  {{PAGE_BREAK}}
+  <div id="closing_cost_details" class="page">
+    <h1>Closing Cost Details</h1>
+    <div class="tru_container border-top-double">
+      <div class="tru_new_line header_row">
+        <div class="tru_4 header_tab_container">
+          <div class="header_tab"><span>Loan Costs</span></div>
+        </div>
+        <div class="tru_3"></div>
+        <div class="tru_3 background border-left">
+          <div class="tru_bold center">Borrower-Paid</div>
+          <div class="tru_half"><div>At Closing</div></div>
+          <div class="tru_half"><div>Before Closing</div></div>
+        </div>
+        <div class="tru_3 background border-left">
+          <div class="tru_bold center">Seller-Paid</div>
+          <div class="tru_half"><div>At Closing</div></div>
+          <div class="tru_half"><div>Before Closing</div></div>
+        </div>
+        <div class="tru_2 tru_amount center background tru_bold border-left">Paid by<br>Others</div>
+        <div class="clear"></div>
+      </div>
+      <div class="tru_new_line border-top">
+        <div class="tru_7 background tru_bold">
+          <div>A. Origination Charges</div>
+        </div>
+        <div class="tru_3 background border-left center tru_bold"><div>$1,802.00</div></div>
+        <div class="tru_3 border-left"></div>
+        <div class="tru_2 tru_amount border-left"></div>
+        <div class="clear"></div>
+      </div>
+      <% 9.times do |i| %>
+        <div class="tru_new_line">
+          <div class="tru_1"><div>0<%= i %></div></div>
+          <div class="tru_6">
+            <%= text_field_tag :name, "" %>
+          </div>
+          <div class="tru_3 border-left center border-bottom">
+            <div class="tru_half"><%= text_field_tag :amount, "" %></div>
+            <div class="tru_half border-left"><%= text_field_tag :amount, "" %></div>
+          </div>
+          <div class="tru_3 border-left border-bottom">
+            <div class="tru_half"><%= text_field_tag :amount, "" %></div>
+            <div class="tru_half border-left"><%= text_field_tag :amount, "" %></div>
+          </div>
+          <div class="tru_2 tru_amount border-left border-bottom">
+            <%= text_field_tag :amount, "" %>
+          </div>
+          <div class="clear"></div>
+        </div>
+      <% end %>
+      <div class="tru_new_line border-top-double">
+        <div class="tru_7 background tru_bold">
+          <div>B. Services Borrower Did Not Shop For</div>
+        </div>
+        <div class="tru_3 background border-left center tru_bold"><div>$236.55</div></div>
+        <div class="tru_3 border-left"></div>
+        <div class="tru_2 tru_amount border-left"></div>
+        <div class="clear"></div>
+      </div>
+      <% 9.times do |i| %>
+        <div class="tru_new_line border-bottom">
+          <div class="tru_1"><div>0<%= i %></div></div>
+          <div class="tru_6">
+            <%= text_field_tag :name, "" %>
+          </div>
+          <div class="tru_3 border-left center">
+            <div class="tru_half"><%= text_field_tag :amount, "" %></div>
+            <div class="tru_half border-left"><%= text_field_tag :amount, "" %></div>
+          </div>
+          <div class="tru_3 border-left">
+            <div class="tru_half"><%= text_field_tag :amount, "" %></div>
+            <div class="tru_half border-left"><%= text_field_tag :amount, "" %></div>
+          </div>
+          <div class="tru_2 tru_amount border-left">
+            <%= text_field_tag :amount, "" %>
+          </div>
+          <div class="clear"></div>
+        </div>
+      <% end %>
+      <div class="tru_new_line border-top-double">
+        <div class="tru_7 background tru_bold">
+          <div>C. Services Borrower Did Shop For</div>
+        </div>
+        <div class="tru_3 background border-left center tru_bold"><div>$2,655.50</div></div>
+        <div class="tru_3 border-left"></div>
+        <div class="tru_2 tru_amount border-left"></div>
+        <div class="clear"></div>
+      </div>
+      <% 8.times do |i| %>
+        <div class="tru_new_line border-bottom">
+          <div class="tru_1"><div>0<%= i + 1 %></div></div>
+          <div class="tru_6">
+            <%= text_field_tag :name, "" %>
+          </div>
+          <div class="tru_3 border-left center">
+            <div class="tru_half"><%= text_field_tag :amount, "" %></div>
+            <div class="tru_half border-left"><%= text_field_tag :amount, "" %></div>
+          </div>
+          <div class="tru_3 border-left">
+            <div class="tru_half"><%= text_field_tag :amount, "" %></div>
+            <div class="tru_half border-left"><%= text_field_tag :amount, "" %></div>
+          </div>
+          <div class="tru_2 tru_amount border-left">
+            <%= text_field_tag :amount, "" %>
+          </div>
+          <div class="clear"></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="clear"></div>
+  {{PAGE_BREAK}}
+  <div id="additional_information_about_this_loan" class="page">
+    <h1>Additional Information About This Loan</h1>
+    <div class="clear"></div>
+    <div class="border-bottom">
+      <div class="tru_4  header_tab_container">
+        <div class="header_tab"><span>Loan Disclosures</span></div>
+      </div>
+    </div>
+    <div class="column column-left">
+      <p class="heading label">Assumption</p>
+      <p>If you sell or transfer this property to another person, your lender</p>
+      <ul class="checkbox-list">
+       <li>
+        <label>
+         <%= check_box_tag :will_allow, true, false %>will allow, under certain conditions, this person to assume this loan on the original terms
+        </label>
+       </li>
+       <li>
+        <label>
+         <%= check_box_tag :will_allow, true, true %>will not allow assumption of this loan
+        </label>
+       </li>
+      </ul>
+
+      <p class="heading label">Demand Feature</p>
+      <p>Your loan</p>
+      <ul class="checkbox-list">
+       <li>
+        <label>
+         <%= check_box_tag :has_demand_feature, true, false %>has a demand feature, which permits your lender to require early repayment of the loan. You should review your note for details.
+        </label>
+       </li>
+       <li>
+        <label>
+         <%= check_box_tag :has_demand_feature, true, true %>does not have a demand feature.
+        </label>
+       </li>
+      </ul>
+
+      <p class="heading label">Late Payment</p>
+      <p>If your payment is more than 15 days late, your lender will charge a late fee of 5% of the monthly principal and interest payment.</p>
+
+      <p class="heading"><span class="label">Negative Amortization</span> (Increase in Loan Amount)</p>
+      <p>Under your loan terms, you</p>
+      <ul class="checkbox-list">
+       <li>
+        <label>
+         <%= check_box_tag :negative_amortization, true, false %> are scheduled to make monthly payments that do not pay all of the interest due that month. as a result, your loan amount will increase (negatively amortize) , and your loan amount will likely become larger than your original loan amount. Increases in your loan amount lower the equity you have in this property.
+        </label>
+       </li>
+       <li>
+        <label>
+         <%= check_box_tag :negative_amortization, true, false %> may have monthly payments that do not pay all of the interest due that month. If you do, your loan amount will increase (negatively amortize), and, as a result, your loan amount may become larger than you original loan amount. Increases in your loan amount lower the equity you have in this property.
+        </label>
+       </li>
+       <li>
+        <label>
+         <%= check_box_tag :negative_amortization, true, true %> do not have a negative amortization feature.
+        </label>
+       </li>
+      </ul>
+
+      <p class="heading label">Patial Payment</p>
+      <p>Your lender will</p>
+      <ul class="checkbox-list">
+       <li>
+        <label>
+         <%= check_box_tag :partial_payment, true, false %> accept payments that are less than the full amount due (partial payments). Partial payments will be applied:<br><br><hr><br><hr>
+        </label>
+       </li>
+       <li>
+        <label>
+         <%= check_box_tag :partial_payment, true, false %> not accept partial payments.
+        </label>
+       </li>
+      </ul>
+      <p>If this loan is sold, your new lender may have a different policy.</p>
+
+      <p class="heading label">Security Interest</p>
+      <p>You are granting a security interest in</p><br><hr><br><hr>
+      <p>You may lose this property if you do not make your payments or satisfy other obligations for this loan.</p>
+    </div>
+    <div class="column">
+      <p class="heading label">Escrow Account</p>
+      <p><span class="bold italic">For now,</span> your loan</p>
+      <ul class="checkbox-list">
+       <li>
+        <label>
+         <%= check_box_tag :escrow_account, true, false %> will have an escrow account (also called an "impound" or "trust" account) to pay the property costs listed below. Without an escrow account, you would pay them directly, possibly in one or two large payments a year. Your lender may be liable for penalties and interest for failing to make a payment.
+        </label>
+       </li>
+      </ul>
+      <table>
+        <tbody>
+          <tr>
+            <td class="bold background border-bottom border-top" colspan="3">Escrow</td>
+          </tr>
+          <tr class="border-bottom">
+            <td>Escrowed Property Costs over Year 1</td>
+            <td>$2,473.56</td>
+            <td>Estimated total amount over year 1 for your escrowed property costs:<span class="italic">Homeowner's Insurance Property Taxes</span></td>
+          </tr>
+          <tr class="border-bottom">
+            <td>Non-Escrowed Property Costs over Year 1</td>
+            <td>$1,800.00</td>
+            <td>Estimated total amount over year 1 for your non-escrowed property costs:<span class="italic">Homeowner's Association Dues</span><br><br>You may have other property costs.</td>
+          </tr>
+          <tr class="border-bottom">
+            <td>Initial Payment</td>
+            <td>$412.00</td>
+            <td>A cushion for the escrow account you pay at closing. See Section G on page 2.</td>
+          </tr>
+          <tr class="border-bottom">
+            <td>Monthly Payment</td>
+            <td>$206.00</td>
+            <td>The amount included in your total monthly payment.</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="checkbox-list">
+       <li>
+        <label>
+         <%= check_box_tag :will_not_have_an_escrow_account, true, false %> will now have an escrow account because <%= check_box_tag :declined, true, false %> you declined it <%= check_box_tag :will_not_have_an_escrow_account, true, false %> your lender down not require or offer one. You must directly pay your property costs, such as taxes and homeonwer's insurance. Contact your lender to ask if your loan can have an escrow account.
+        </label>
+       </li>
+      </ul>
+      <table>
+        <tbody>
+          <tr>
+            <td class="bold background border-bottom border-top" colspan="3">No Escrow</td>
+          </tr>
+          <tr class="border-bottom">
+            <td>Estimated Property Costs over Year 1</td>
+            <td></td>
+            <td>Estimated total amount over year 1. you must pay these costs directly, possibly in one or tow large payments a year.</td>
+          </tr>
+          <tr class="border-bottom">
+            <td>Escrow Waiver Fee</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="heading bold italic">In the future,</p>
+      <p>Your property costs may change and, as a result, your escrow payment may change. You may be able to cancel your escrow account, but if you do, you must pay your property costs directly. If you fail to pay your property taxes, your state of local government may (1) impose fines and penalties or (2) place a tax lien on this property. If you fail to pay any of your property costs, your lender may (1) add the amounts to your loan balance, (2) add an escrow account to your loan, or (3) require you to pay for property insurance that the lender buys on your behalf, which likely would cost more and provide fewer benefits than what you could buy on your own.</p>
+    </div>
+  </div>
+  <div class="clear"></div>
+  {{PAGE_BREAK}}
+  <div id="loan_calculations" class="page">
+    <div class="column column-left">
+      <div class="border-bottom">
+        <div class="tru_4 header_tab_container">
+          <div class="header_tab"><span>Loan Calculations</span></div>
+        </div>
+      </div>
+      <table class="loan_calculations">
+        <tbody>
+          <tr class="border-bottom">
+            <td class="border-right col-1"><span class="label">Total of Payments.</span> Total you will have paid after you make all payments of principal, interest, mortgage insurance, and loan costs, as scheduled.</td>
+            <td class="col-2">$292,420.88</td>
+          </tr>
+          <tr class="border-bottom">
+            <td class="border-right"><span class="label">Finance Charge.</span> The dollar amount the loan will cost you.</td>
+            <td>$123,997.58</td>
+          </tr>
+          <tr class="border-bottom">
+            <td class="border-right"><span class="label">Amount Financed.</span> The loan amount available after paying your upfron finance charge.</td>
+            <td>$156,964.47</td>
+          </tr>
+          <tr class="border-bottom">
+            <td class="border-right"><span class="label">Annual Percentage Rate (APR).</span> Your costs over the loan term expressed as a rate. This is not your interest rate.</td>
+            <td>4.441%</td>
+          </tr>
+          <tr class="border-bottom">
+            <td class="border-right"><span class="label">Total Insterest Percentage (TIP).</span> The total amount of interest that you will pay over the loan term as a percentage of your loan amount.</td>
+            <td>69.468%</td>
+          </tr>
+          <tr class="border-bottom">
+            <td class="border-right"><span class="label">Approximate Cost of Funds (ACF).</span> The approximate cost of the funds used to make this loan. This is not a direct cost to you.</td>
+            <td>1.63%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        <div class="info-box-icon">
+          ?
+        </div>
+        <div class="info-box-content">
+          <span class="label">Questions?</span> If you have questions about the loan terms and costs on the form, contact your lender. To get more information or make a complaint, contact the Consumer Financial Protection Bureau at <span class="bold">www.consumerfinance.gov/leranmore.</span>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="border-bottom">
+        <div class="tru_4 header_tab_container">
+          <div class="header_tab"><span>Other Disclosures</span></div>
+        </div>
+      </div>
+
+      <p class="heading label">Appraisal</p>
+      <p>If the property was appraised for your loan, your lender is required to give you a copy at no additional cost at least 3 days before closing. If you have not yet received it, please contact you lender at the information listed below.</p>
+
+      <p class="heading label">Contract Details</p>
+      <p>See your note and security instrument for information about</p>
+      <ul>
+        <li>what happens if you fail to make your payments,</li>
+        <li>what is a default on the loan,</li>
+        <li>situations in which your lender can require early repaymnet of the loan, and</li>
+        <li>the rules for making payments before they are due.</li>
+      </ul>
+
+      <p class="heading label">Liability after Foreclosure</p>
+      <p>If your lender forecloses on this property and the foreclosure does not cover the amount of unpaid balance on this loan,</p>
+      <ul class="checkbox-list no_pad_left">
+       <li>
+        <label>
+         <%= check_box_tag :state_law_protection, true, false %> state law may protect you from liability for the unpaid balance. If you refinance or take on any additional debt on this property, you may lose this protection and be liable for debt remaining after the foreclosure. you may want to consult a lawyer for more information.
+        </label>
+       </li>
+       <li>
+        <label>
+         <%= check_box_tag :state_law_protection, true, false %> state law does not protect you from liability for the unpaid balance.
+        </label>
+       </li>
+      </ul>
+
+      <p class="heading label">Refinance</p>
+      <p>Refinancing this loan will depend on your future financial situation, the property value, and market conditions. You may not be able to refinance this loan.</p>
+
+      <p class="heading label">Tax Deductions</p>
+      <p>If you borrow mmore than this property is worth, the interest on the loan amount above this property's fair market value is not deductible from your federal income taxes. You should consult a tax advisor for more information.</p>
+    </div>
+    <div class="clear"></div>
+    <div class="border-bottom margin-top">
+      <div class="tru_4 header_tab_container">
+        <div class="header_tab"><span>Contact Information</span></div>
+      </div>
+    </div>
+    <table class="contact-information align-top">
+      <tbody>
+        <tr>
+          <th class="border-right"></th>
+          <th class="border-right">Lender</th>
+          <th class="border-right">Mortgage Broker</th>
+          <th class="border-right">Real Estate Broker (B)</th>
+          <th class="border-right">Real Estate Broker (S)</th>
+          <th>Settlement Agent</th>
+        </tr>
+        <tr>
+          <td class="label border-right">Name</td>
+          <td class="border-right">Ficus Bank</td>
+          <td class="border-right"></td>
+          <td class="border-right">Omega Real Estate Broker Inc.</td>
+          <td class="border-right">Alpha Real Estate Broker Co.</td>
+          <td>Epsilon Title Co.</td>
+        </tr>
+        <tr>
+          <td class="label border-right">Address</td>
+          <td class="border-right">4321 Random Blvd.<br />Somecity, ST 12340</td>
+          <td class="border-right"></td>
+          <td class="border-right">789 Local Lane<br />Sometown, ST 12345</td>
+          <td class="border-right">987 Suburb Ct.<br />Someplace, ST 12340</td>
+          <td>123 Commerce Pl.<br />Somecity, ST 12344</td>
+        </tr>
+        <tr>
+          <td class="label border-right">NMLS/<br />License ID</td>
+          <td class="border-right"></td>
+          <td class="border-right"></td>
+          <td class="border-right">Z765416</td>
+          <td class="border-right">Z61456</td>
+          <td>Z61616</td>
+        </tr>
+        <tr>
+          <td class="label border-right">Conact</td>
+          <td class="border-right">Joe S.</td>
+          <td class="border-right"></td>
+          <td class="border-right">Samuel G.</td>
+          <td class="border-right">Joseph C.</td>
+          <td>Sarah A.</td>
+        </tr>
+        <tr>
+          <td class="label border-right">Contact NMLS/<br />License ID</td>
+          <td class="border-right">12345</td>
+          <td class="border-right"></td>
+          <td class="border-right">P16415</td>
+          <td class="border-right">P51461</td>
+          <td>PT1234</td>
+        </tr>
+        <tr>
+          <td class="label border-right">Email</td>
+          <td class="border-right">joesmith@ficusbank.com</td>
+          <td class="border-right"></td>
+          <td class="border-right">sam@omegare.biz</td>
+          <td class="border-right">joe@alphare.biz</td>
+          <td>sarah@epsilontitle.com</td>
+        </tr>
+        <tr class="border-bottom">
+          <td class="label border-right">Phone</td>
+          <td class="border-right">123-456-7890</td>
+          <td class="border-right"></td>
+          <td class="border-right">123-555-1717</td>
+          <td class="border-right">321-555-7171</td>
+          <td>987-555-4321</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="border-bottom margin-top">
+      <div class="tru_4 header_tab_container">
+        <div class="header_tab"><span>Confirm Receipt</span></div>
+      </div>
+    </div>
+    <p>By signing, you are only confirming that you have received this form. You do not have to accept this loan because you have signed or received this form.</p>
+    <table class="signature_table">
+      <tbody>
+        <tr>
+          <td class="border-bottom signature_line" colspan="2"></td>
+          <td class="spacer"></td>
+          <td class="border-bottom signature_line" colspan="2"></td>
+        </tr>
+        <tr>
+          <td class="name">Applicant Signature</td>
+          <td class="date">Date</td>
+          <td></td>
+          <td class="name">Co-Applicant Signature</td>
+          <td class="date">Date</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="clear"></div>
+  </div>
+
+</div>

@@ -1,0 +1,14 @@
+if($("div#doc_left").attr("style").indexOf("none") != -1){
+  $("div#doc_large").attr("id", "doc_right");
+  $("div#doc_left").show();
+  $("a#zoom_doc").html("Large View");
+  $("#tinymce_ifr").contents().find("body").removeClass("large_editor");
+  //alert($("#tinymce_ifr").contents().find("body").attr("class"));
+}
+else{
+  $("div#doc_right").attr("id", "doc_large");
+  $("div#doc_left").hide();
+  $("a#zoom_doc").html("Small View");
+  $("#tinymce_ifr").contents().find("body").addClass("large_editor");
+  //alert($("#tinymce_ifr").contents().find("body").attr("class"));
+}

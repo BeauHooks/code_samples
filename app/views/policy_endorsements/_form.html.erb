@@ -1,0 +1,50 @@
+<div id="endorsement">
+  <div class="overlay_header">
+    <h2><%= @endorsement.new_record? ? "Add" : "Edit" %> Endorsement</h2>
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+      <span id="endorsement_spinner" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Saving...</span>
+    </div>
+  </div>
+  <%= form_for @endorsement, remote: true do |f| %>
+    <%= hidden_field_tag :policy_id, @policy.id %>
+    <div class="overlay_content">
+      <table style="margin-top: 10px;">
+        <tr>
+          <td class="label" style="padding-right: 5px;">Endorsement:</td>
+          <td>
+            <% underwriter = @policy.underwriter %>
+            <%= select_tag :endorsement,
+            "<option value=''>Select Endorsement</option>\n".html_safe +
+            options_for_select(@schedule_a.endorsement_options, @endorsement.endorsement_id),
+            style: "width: 205px;"
+            %>
+          </td>
+          <!-- <td class="label" style="padding-left: 10px; padding-right: 5px;">Amount:</td> -->
+          <td>
+            <%#= f.text_field :amount, value: number_to_currency(@endorsement.amount, unit: ""), onkeydown: "numbersOnly(event);", style: "width: 100px;", onchange: "toUSD(this);", disabled: true %>
+          </td>
+        </tr>
+        <tr>
+          <td class="label" style="padding-right: 5px;">Endorsement Group:</td>
+          <td>
+            <%= select_tag :endorsement_group,
+            "<option value=''>Select Group</option>\n".html_safe +
+            options_for_select(RateCalculation.new.calculator::CALC_ENDORSEMENTS.map { |k, v| [v[:name], k] }),
+            :style => "width:205px;"
+            %>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <span style="float: right;">
+        <%= f.submit "Save" %>
+        <%= submit_tag "Close", onclick: "closeOverlay('endorsement');", type: "button" %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	openOverlay("endorsement");
+</script>

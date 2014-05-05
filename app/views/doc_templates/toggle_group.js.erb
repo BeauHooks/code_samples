@@ -1,0 +1,5 @@
+$("div#doc_groups").html("<%= j(render 'doc_groups/doc_groups').html_safe %>");
+
+if($("#manage_document_groups").html() != undefined){
+  $("div#overlay_groups").html("<%= j(render 'doc_groups/show').html_safe %>");
+}

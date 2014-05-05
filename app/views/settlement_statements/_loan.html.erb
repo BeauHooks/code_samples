@@ -1,0 +1,88 @@
+<div id="ss">
+  <div>
+    <div style="float: left;" id="hud_title">
+      <h1 style="text-transform: uppercase; font-size: .5em;">{{COMPANY_NAME}}</h1>
+      <h2 style="font-size: .4em;">{{COMPANY_ADDRESS}}, {{COMPANY_CITY}}, {{COMPANY_STATE}} {{COMPANY_ZIP}}</h2>
+    </div>
+    <div style="float: right;">
+      <p style="font-weight: bold; margin: 0;">LOAN SETTLEMENT STATEMENT</p>
+    </div>
+    <div style="clear: both; height: .5em"></div>
+  </div>
+
+  <table>
+    <tr>
+      <td class="hud_box_title label" style="width: 50%; border: 1px solid #000;">Borrower</td>
+      <td style="width: .5em;"></td>
+      <td class="hud_box_title label" style="border: 1px solid #000;">Lender</td>
+    </tr>
+    <tr>
+      <td style="height: 3.5em; border: 1px solid #000; vertical-align: top;">
+        {{GRANTEE_NAMES}}<br />
+        {{GRANTEE_ADDRESS_1}} {{GRANTEE_ADDRESS_2}}<br />
+        {{GRANTEE_CITY}}, {{GRANTEE_STATE}} {{GRANTEE_ZIP}}
+      </td>
+      <td></td>
+      <td style="border: 1px solid #000; vertical-align: top;">
+        {{LENDER_NAME}}<br />
+        {{LENDER_ADDRESS_1}} {{LENDER_ADDRESS_2}}<br />
+        {{LENDER_CITY}}, {{LENDER_STATE}} {{LENDER_ZIP}}
+      </td>
+    </tr>
+  </table>
+  <table style="margin-top: .5em; margin-bottom: .5em;">
+    <tr>
+      <td class="hud_box_title label" style="width: 75%; border: 1px solid #000;">Property Address/Description</td>
+      <td style="width: .5em;"></td>
+      <td class="hud_box_title label" style="border: 1px solid #000;">Closing Date</td>
+    </tr>
+    <tr>
+      <td rowspan="3" style="vertical-align: top;border: 1px solid #000;">{{PROPERTY_ADDRESS}}<br />{{PROPERTY_CITY}}, {{PROPERTY_STATE}} {{PROPERTY_ZIP}}
+        <br />
+        <% legal = @doc.file_doc_fields.where("tag = 'PROPERTY_LEGAL_DESCRIPTION' AND value != '' AND is_active = 1").first %>
+        <% legal == nil ? legal = @file.file_doc_fields.where("doc_id = 0 AND tag = 'PROPERTY_LEGAL_DESCRIPTION' AND is_active = 1").first.value : legal = legal.value %>
+        <%= (legal.length < 50 ? "{{PROPERTY_LEGAL_DESCRIPTION}}" : "{{PROPERTY_TAX_ID}}") unless legal.nil? %>
+      </td>
+      <td></td>
+      <td style="height: 1.5em;border: 1px solid #000;">{{CLOSING_DATE}}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="hud_box_title label" style="border: 1px solid #000;">Order Number</td>
+    </tr>
+    <tr>
+      <td style="border-bottom: 1px solid #FFFFFF;"></td>
+      <td style="height: 1.5em;border: 1px solid #000;">{{FILE_ID_NUMBER}}</td>
+    </tr>
+  </table>
+
+  <table class="ss_body full_content">
+    <tr>
+      <td style="border-top: none; border-left: none;">&nbsp;</td>
+      <td style="text-align: center;">Charges</td>
+      <td style="text-align: center;">Credits</td>
+    </tr>
+    <% condition = "number >=  5000 AND number < 6000" %>
+    <% @hud.hud_lines.where("#{condition}").each do |line| %>
+      <tr id="hud_row_<%= line.number %>" class="<%= (line.type != nil && line.type != "ss_none") ? line.type : "ss_none trigger" %>" onclick="<%= line.type != nil ? "" : "$.post('/hud_lines/#{line.hud_id}/new_description?line=#{line.number}&hud_id=#{line.hud_id}&type=ss&group=ss');" %>" > 
+          <%= render 'huds/partials/full-line', builder: line %>
+      </tr>
+    <% end %>
+  </table>
+
+  <div style="margin-top: 5px;">{{CB_FINAL_2}} Preliminary <span style="margin-left: 10px;">{{CB_FINAL_1}} Final</span></div>
+  {{BUYER_SIGNATURES}}
+  <table class='signature_container' style='width: 45%'>
+    <tr>
+       <td colspan='2'><h4>{{COMPANY_NAME}}</h4></td>
+    </tr>
+    <tr>
+      <td style='width: 5%'>By: </td>
+      <td style='width: 70%; height: 25px; border-bottom: 1px solid #464646 !important;' colspan='2'></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>{{CLOSER_NAME}}</td>
+    </tr>
+  </table>
+</div>

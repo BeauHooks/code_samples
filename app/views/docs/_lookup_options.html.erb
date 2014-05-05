@@ -1,0 +1,76 @@
+<% case @option %>
+<% when "1" %>
+  <div class="outer_table box">
+    <div class="grid_header"></div>
+    <div class="inner_table">
+      <table>
+        <thead class="grid_header_font">
+          <tr>
+            <th class="action" style="padding-left: 5px;"><div>Actions</div></th>
+            <th class="name"><div>Name</div></th>
+            <th class="version"><div>Version</div></th>
+            <th class="county"><div>State</div></th>
+            <th class="modify_date"><div>Modify Date</div></th>
+            <th class="modify_by" id="doc_search_last"><div>Modified By</div></th>
+          </tr>
+        </thead>
+        <tbody id="doc_search_result">
+      
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var docs = [
+      <% DocTemplate.all(conditions: ["is_active = ?", 1], order: "description ASC", group: "description").each do |a| %>
+        "<%= a.description %>",
+      <% end %>
+    ];
+
+    $( "#doc_search" ).autocomplete({
+      source: docs
+    });
+
+    initializer();
+  </script>
+<% when "2" %>
+  <div class="outer_table box">
+    <div class="grid_header"></div>
+    <div class="inner_table">
+      <table>
+        <thead class="grid_header_font">
+          <tr>
+            <th class="action" style="padding-left: 5px;"><div>Actions</div></th>
+            <th class="name"><div>Group</div></th>
+            <th class="description"><div>State</div></th>
+            <th class="modify_date"><div>Modify Date</div></th>
+            <th class="modify_by" id="doc_search_last"><div>Modified By</div></th>
+          </tr>
+        </thead>
+        <tbody id="group_search_result">
+      
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var groups = [
+      <% DocGroup.all(conditions: ["is_active != ?", 0], order: "name ASC", group: "name").each do |a| %>
+        "<%= a.name %>",
+      <% end %>
+    ];
+
+    $( "#doc_search" ).autocomplete({
+      source: groups
+    });
+
+    initializer();
+  </script>
+<% when "3" %>
+  <form action="docs/create" method="post" data-remote="true" onsubmit="closeOverlay('add_doc');">
+    <p>Prior: <input name='prior' placeholder="Enter Prior File #" /><input type="submit" value="Save" /></p>
+    <input type="hidden" value="Prior" name="type" />
+  </form>
+<% end %>

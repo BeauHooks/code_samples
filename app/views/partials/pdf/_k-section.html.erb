@@ -1,0 +1,8 @@
+<%= f.fields_for :hud_lines do |builder| %>
+  <% if builder.object.number >= 400 && builder.object.number <= 603 %>
+    <tr>
+      <%= render 'huds/partials/half-line', :f => builder %>
+    </tr>
+  <% end %>
+<% end %>
+

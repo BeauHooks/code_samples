@@ -1,0 +1,88 @@
+<div id="view_log">
+  <div class="overlay_header">
+    <h2>File Images Delivery Log</h2>
+  </div>
+  <div class="overlay_content w800">
+    <div class="box">
+      <div class="grid_header">
+        <table>
+          <tr>
+            <td class="type padding_left_5 w95">Image</td>
+            <td class="note w95">Note</td>
+            <td class="created_by w95">Created By</td>
+            <td class="created_date w95" id="view_log_last">Create Date</td>
+          </tr>
+        </table>
+      </div>
+      <div id="view_log" class="results">
+        <table id="image_list">
+          <% @c = 0 %>
+          <% @image_id = @file_images.first.ImageID %>
+          <% @file_images.each do |image| %>
+            <% @c += 1 %>
+            <tr data-image-id="<%= image.ImageID %>">
+              <td class="type padding_left_5 w95"><%= image.ImageType %></td>
+
+              <% note = image.ImageNotes %>
+              <% if !note.nil? && note.length > 15 %>
+                <td class="note hint w95"><span><%= note %></span><%= truncate(note, length: 15) %></td>
+              <% else %>
+                <td class="note w95"><%= note %></td>
+              <% end %>
+
+              <% create_user = image.entered_by.FullName rescue nil %>
+              <% if !create_user.nil? && create_user.length > 15 %>
+                <td class="create_user hint w95"><span><%= create_user %></span><%= truncate(create_user, length: 15) %></td>
+              <% else %>
+                <td class="create_user w95"><%= create_user %></td>
+              <% end %>
+
+              <td class="created_date w95"><%= image.ImageDate.to_s(:std) %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+    <div class="log_details box">
+      <div class="grid_header">
+        <table>
+          <tr>
+            <td class="to">To</td>
+            <td class="sent_date">Sent Date</td>
+            <td class="expire_date">Expire Date</td>
+            <td class="viewed_at">Viewed At</td>
+            <td id="log_last" class="created_by">Created By</td>
+          </tr>
+        </table>
+      </div>
+      <div id="log" class="results">
+        <%= render 'delivery_history', delivery_log: @delivery_log %>
+      </div>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <span class="float_right">
+      <input type="button" value="Close" onclick="closeOverlay('view_log')" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("#image_list").find("tr").first().addClass("active_row");
+
+  $("#image_list tr").click(function(){
+    $.ajax({
+      url: "/file_images/" + $(this).attr("data-image-id") + "/delivery_history",
+      type: "post"
+    })
+    $("#image_list").find("tr").removeClass("active_row");
+    $(this).addClass("active_row");
+  });
+
+  <%# OPTIMIZE: Easier way to inject js? %>
+  <% if @c > 4 %>
+      addWidth('view_log', 95);
+  <% else %>
+      fixWidth('view_log', 95);
+  <% end %>
+</script>

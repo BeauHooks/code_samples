@@ -1,0 +1,32 @@
+<div class="box_header">
+  <span class="title">Subdivisions</span>
+</div>
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_subdivision">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="phase"><div>Phase</div></th>
+          <th class="lot"><div>Lot</div></th>
+          <th class="block"><div>Block</div></th>
+          <th class="plat"><div>Plat</div></th>
+          <th class="unit"><div>Unit</div></th>
+          <th class="week"><div>Week</div></th>
+        </tr>
+      </thead>
+      <tbody class="results">
+        <% @detail.recording_subdivisions.each do |subdivision| %>
+          <tr id="<%= subdivision.id %>">
+            <td class="phase"><%= subdivision.SubdivCode %></td>
+            <td class="lot"><%= subdivision.LotNum %></td>
+            <td class="block"><%= subdivision.Block %></td>
+            <td class="plat"><%= subdivision.Plat %></td>
+            <td class="unit"><%= subdivision.Unit %></td>
+            <td class="week"><%= subdivision.Week %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+$("#search_results").html("<%= j(render partial: "shared/results_table").html_safe -%>");
+$("tr.result_row").first().trigger("click");
+$("#search_box").attr("readonly", false);
+$('#spinner').hide();
+$('#searching_text').hide();
+$('#include_closed_control').show();
+$("#search_button").show();
+initializer();

@@ -1,0 +1,70 @@
+<% check = "checkForDuplicates(this);" %>
+<% if @type == "Individual" || @type == nil %>
+	<table id="primary_info">
+		<tr>
+			<td class="label col1">Prefix:/Suffix:</td>
+			<td><%= select :entity, :Prefix, options_for_select([["Mr.", "Mr."], ["Mrs.", "Mrs."], ["Ms.", "Ms."]]), { include_blank: true }, { class: "prefix" } %> / <%= select :entity, :Suffix, options_for_select([["I", "I"], ["II", "II"], ["III", "III"], ["JR", "JR"], ["SR", "SR"]]), { include_blank: true }, { class: "suffix" } %></td>
+		</tr>
+		<tr>
+			<td class="label">Name*:</td>
+			<td>
+				<%= text_field_tag "entity[FirstName]", nil, class: "name", placeholder: "First", onchange: "#{check}", "data-check" => "name" %>
+				<%= text_field_tag "entity[MiddleInitial]", nil, style: "width: 35px;", placeholder: "Middle" %>
+				<%= text_field_tag "entity[LastName]", nil, class: "last", placeholder: "Last", style: "width: 117px;", onchange: "#{check}", "data-check" => "name" %>
+			</td>
+		</tr>
+		<tr>
+			<td class="label">Description:</td>
+			<td><%= text_field_tag "entity[Description]" %></td>
+		</tr>
+		<tr>
+			<td class="label">Type:</td>
+			<td><%= select :entity, :CustomerType, options_for_select([["Accountant", "Accountant"], ["Assistant", "Assistant"], ["Attorney", "Attorney"], ["Engineer", "Engineer"], ["Loan Officer", "Loan Officer"], ["Loan Processor", "Loan Processor"], ["President", "President"], ["Processor", "Processor"], ["Realtor", "Realtor"], ["Custom", "Custom"]]), { include_blank: true }, { onChange: "toggleCustomType(this.value)", id: "customer_type" } %>
+		</tr>
+	</table>
+	<table id="secondary_info">
+		<tr>
+			<td class="label">Send Docs:</td>
+			<td><%= select :entity, :SendDocsVia, options_for_select([["Email", "Email"], ["Fax", "Fax"], ["Hand Deliver", "Hand Deliver"], ["Web Email", "Web Email"], ["Web-Based", "Web-Based"]]), { include_blank: true } %></td>
+		</tr>
+		<tr>
+			<td class="label">DOB:</td>
+			<td class="date"><%= text_field_tag "entity[EffectiveDate]", nil, :class => "datepicker", placeholder: "mm/dd/yyyy", onchange: "validateDate(this); #{check}" %></td>
+		</tr>
+		<tr>
+			<td class="label" id="tax_id">SSN:</td>
+			<td><%= text_field_tag "entity[TaxID]", nil, :placeholder => "xxx-xx-xxxx", onchange: "#{check} //validateSSN(this);", "data-check" => "tax_id" %></td>
+		</tr>
+	</table>
+<% else %>
+	<table id="primary_info">
+		<tr>
+			<td class="label col1">Name*:</td>
+			<td>
+				<%= text_field_tag "entity[FullName]", nil, onchange: "#{check}", "data-check" => "name" %>
+			</td>
+		</tr>
+		<tr>
+			<td class="label">Description:</td>
+			<td><%= text_field_tag "entity[Description]" %></td>
+		</tr>
+		<tr>
+			<td class="label">Type:</td>
+			<td><%= select :entity, :CustomerType, options_for_select([["Broker (Lender)", "Broker (Lender)"], ["Broker (Real E)", "Broker (Real E)"], ["Corporation", "Corporation"], ["Developer", "Developer"], ["Government", "Government"], ["HOA", "HOA"], ["Lender", "Lender"], ["LLC", "LLC"], ["Manager", "Manager"], ["Member", "Member"], ["Partnership", "Partnership"], ["Title Co.", "Title Co."], ["Custom", "Custom"]]), { include_blank: true }, { onChange: "toggleCustomType(this.value)", id: "customer_type" } %>
+		</tr>
+	</table>
+	<table id="secondary_info">
+		<tr>
+			<td class="label">Send Docs:</td>
+			<td><%= select :entity, :SendDocsVia, options_for_select([["Email", "Email"], ["Fax", "Fax"], ["Hand Deliver", "Hand Deliver"], ["Web Email", "Web Email"], ["Web-Based", "Web-Based"]]), { include_blank: true } %></td>
+		</tr>
+		<tr>
+			<td class="label">Effective Date:</td>
+			<td class="date"><%= text_field_tag "entity[EffectiveDate]", nil, class: "datepicker", placeholder: "mm/dd/yyyy", onchange: "validateDate(this);" %></td>
+		</tr>
+		<tr>
+			<td class="label" id="tax_id">Tax ID:</td>
+			<td><%= text_field_tag "entity[TaxID]", nil, onchange: "#{check}", "data-check" => "tax_id" %></td>
+		</tr>
+	</table>
+<% end %>

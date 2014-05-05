@@ -1,0 +1,5 @@
+<% @hud.hud_lines.where("number >= 400 AND number <= 603").each do |builder| %>
+  <tr>
+    <%= render 'huds/partials/half-line', :f => builder %>
+  </tr>
+<% end %>

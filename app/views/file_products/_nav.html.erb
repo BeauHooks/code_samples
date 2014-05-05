@@ -1,0 +1,8 @@
+<% unless @file_product == nil %>
+	<ul style="list-style: none;">
+		<li class="side_navigation"><%= link_to "Schedule A", "#", class: "active", onclick: "event.preventDefault(); selectFileProductSection(this, 'schedule_a_content');", style: "padding-left: 5px;", id: "schedule_a_nav" %></li>
+		<li class="side_navigation"><%= link_to "Policies", "#", onclick: "event.preventDefault(); selectFileProductSection(this, 'policies_content');", style: "padding-left: 5px;", id: "policies_nav" %></li>
+		<li class="side_navigation"><%= link_to "Requirements", "#", onclick: "event.preventDefault(); selectFileProductSection(this, 'requirements_content');", style: "padding-left: 5px;", id: "requirements_nav" %></li>
+		<li class="side_navigation"><%= link_to "Exceptions", "#", onclick: "event.preventDefault(); selectFileProductSection(this, 'exceptions_content');", style: "padding-left: 5px;", id: "exceptions_nav" %></li>
+	</ul>
+<% end %>

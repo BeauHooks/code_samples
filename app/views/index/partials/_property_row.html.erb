@@ -1,0 +1,30 @@
+<tr id="new_property_<%= random_string(5) %>">
+	<td class="no_wrap">
+		<%= image_tag "redx.png", class: "trigger", onclick: "refreshIndexFormPosition($(this).closest('tr'));" %>
+		<%= f.select :CountyID, @counties.collect{|county| [county.CountyName, county.CountyID]}, {include_blank: false, selected: @default_county}, {class: "county", style: "width: 100px;"} %>
+	</td>
+	<td>
+    <%= f.text_field :TaxID, { class: "taxid", data: {field: "serialnum"} } %>
+	</td>
+	<td>
+    <%= f.text_field :AccountID, { class: "account", data: {field: "accountnum"} } %>
+  </td>
+	<td>
+    <%= f.text_field :PropertyAddress, { class: "address" } %>
+  </td>
+	<td>
+    <%= f.text_field :City, { class: "city" } %>
+  </td>
+	<td>
+    <%= f.text_field :State, { class: "state" } %>
+  </td>
+	<td>
+    <%= f.text_field :Zip, { class: "zip" } %> <%= image_tag "/assets/notice.png", class: "trigger icon", onclick: "searchProperty(this);" %>
+  </td>
+	<td>
+    <%= f.text_field :LegalDescription, { class: "legal" } %>
+  </td>
+  <td>
+    <%= text_field_tag :owner, "", class: "owner", disabled: "disabled" %>
+  </td>
+</tr>

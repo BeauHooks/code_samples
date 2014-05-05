@@ -1,0 +1,27 @@
+<h3>Add New Property</h3>
+<form method="post" action="/file_properties?id=<%= @file.ID %>" data-remote="true">
+<table id="custom_property">
+  <tr>
+    <td class="tax_id">Tax ID</td>
+    <td class="account">Account #</td>
+    <td class="address">Address</td>
+    <td class="city">City</td>
+    <td class="state">State</td>
+    <td class="zip">Zip</td>
+    <td class="county">County</td>
+    <td class="legal">Legal</td>
+    <td class="action"></td>
+  </tr>
+  <tr>
+    <td class="tax_id"><input type="text" name="TaxID"/></td>
+    <td class="account"><input type="text" name="AccountID" onchange="fixNumberOnly(this);" /></td>
+    <td class="address"><input type="text" name="PropertyAddress" /></td>
+    <td class="city"><input type="text" name="PropertyCity"/></td>
+    <td class="state"><input type="text" name="PropertyState" /></td>
+    <td class="zip"><input type="text" name="PropertyZip" /></td>
+    <td class="county"><%= select "property", :to_s, StatCounty.find(:all, :order => "CountyName ASC").collect{|county| [county.CountyAbrv, county.CountyID]}, {:include_blank => false, :selected => 4}, name: "CountyID" %></td>
+    <td class="legal"><input type="text" name="LegalDescription"/></td>
+    <td class="action"><input type="submit" value="Save" /></td>
+  </tr>
+</table>
+</form

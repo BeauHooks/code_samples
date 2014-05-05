@@ -1,0 +1,68 @@
+<% # Normal Field %>
+<% if f.object.type.nil? || f.object.type == "jk_normal" %>
+  <td>
+    <%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:290px;' %>
+  </td>
+<% end %>
+
+<% # Header Field %>
+<% if f.object.type == "jk_header" %>
+  <% if f.object.number == 100 || f.object.number == 400%>
+    <td  colspan="3">
+      <b><%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:290px; font-weight:bold;' %></b>
+    </td>
+  <% else %>
+    <td>
+      <b><%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:290px; font-weight:bold;' %></b>
+    </td>
+  <% end %>
+<% end %>
+
+<% # Footer Field %>
+<% if f.object.type == "jk_footer" %>
+  <td>
+    <b><%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:290px; font-weight:bold;' %></b>
+  </td>
+<% end %>
+
+<% # Checkbox Field %>
+<% if f.object.type == "jk_checkbox" %>
+  <td>
+    <%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:300px;' %>
+  </td>
+<% end %>
+
+<% # Inverse Field %>
+<% if f.object.type == "jk_inverse" %>
+  <td>
+    <%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:290px;' %>
+  </td>
+  <td style="width:95px;">
+    <% if f.object.number >= 100 && f.object.number <= 303 %>
+      (<%= f.text_field :borrower_amount, :style => 'width:100px;' %>)
+    <% else %>
+      (<%= f.text_field :seller_amount, :style => 'width:100px;' %>)
+    <% end %>
+  </td>
+<% end %>
+
+<% # Payee Field %>
+<% if f.object.type == "jk_proration" %>
+  <td>
+    <%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:100px;' %>
+    <%= f.text_field :start_date, :style => 'width:80px; text-align:center;', :id => 'datepicker' %> to 
+    <%= f.text_field :end_date, :style => 'width:80px; text-align:center;', :id => 'datepicker' %>
+  </td>
+<% end %>
+
+<% # 2 Fields to the right %>
+<% if f.object.number == 100 || f.object.number == 400 || f.object.number == 302 || f.object.number == 602 %>
+<% else %>
+  <td style="width:95px;">
+    <% if f.object.number >= 100 && f.object.number <= 303 %>
+      <%= number_to_currency(100) %>
+    <% else %>
+      <%= f.text_field :seller_amount, :style => 'width:110px;' %>
+    <% end %>
+  </td>
+<% end %>

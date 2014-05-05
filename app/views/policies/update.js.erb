@@ -1,0 +1,11 @@
+<% unless @stop_refresh %>
+	$("#policies_content").html("<%= j(render "index").html_safe %>");
+	$("#policies_content").find(".sb_container").eq(0).find(".first").eq(0).focus();
+	fileProductInitializer();
+<% end %>
+
+<% unless @container.blank? || @value.blank? %>
+	$("#<%= @container %>").val("<%= j(@value).html_safe %>");
+<% end %>
+
+$('#rate_loader').hide();

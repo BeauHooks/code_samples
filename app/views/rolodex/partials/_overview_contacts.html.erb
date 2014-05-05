@@ -1,0 +1,21 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_contacts">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="actions"><div>Contacts<%= link_to image_tag("plus.png", class: "icon"), rolodex_entity_contacts_path(@entity.EntityID, type: "contact"), method: :post, remote: true %></div></th>
+          <th class="is_primary"><div>Primary</div></th>
+          <th class="type"><div>Type</div></th>
+          <th class="info"><div>Info</div></th>
+          <th class="description"><div>Description</div></th>
+          <th class="modify_date"><div>Modified</div></th>
+          <th class="modify_user"><div>Modified By</div></th>
+        </tr>
+      </thead>
+      <tbody id="entity_contact_results" class="results highlight">
+        <%= render 'entity_contacts/partials/contact_results' %>
+      </tbody>
+    </table>
+  </div>
+</div>

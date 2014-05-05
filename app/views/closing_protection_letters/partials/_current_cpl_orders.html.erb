@@ -1,0 +1,40 @@
+<h3 style="margin-top: 10px;">Existing CPL Orders</h3>
+<!-- Show current file employees -->
+<div class="box">
+  <table class="grid_header">
+    <tr>
+      <td class="add_link" style="padding-left: 5px;">Actions</td>
+      <td class="underwriter">Underwriter</td>
+      <td class="lender">Lender</td>
+      <td class="pertains_to">Pertains To</td>
+      <td class="status">Status</td>
+      <td class="updated" id="current_cpl_order_last">Updated</td>
+    </tr>
+  </table>
+  <div id="current_cpl_orders" class="results">
+    <table id="new_current_cpl_orders">
+      <% @file.closing_protection_letters.each do |cpl| %>
+        <tr class="row_<%= cpl.id %>">
+          <td class="add_link" style="padding-left: 5px;">
+            <%= link_to "Edit", cpl_show_overlay_path(cpl), onclick: "$('[id^=#{@identifier}]').remove();", type: "button", remote: true %>
+          </td>
+          <td class="underwriter">
+            <%= cpl.underwriter.Underwriter %>
+          </td>
+          <td class="lender">
+            <%= cpl.lender_name %>
+          </td>
+          <td class="pertains_to">
+            <%= cpl.pertains_to %>
+          </td>
+          <td class="status">
+            <%= cpl.cpl_status.nil? ? "Unsubmitted" : cpl.cpl_status %>
+          </td>
+          <td class="updated">
+            <%= cpl.cpl_updated_at.nil? ? "Not Sent" : cpl.cpl_updated_at.to_s(:db) %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

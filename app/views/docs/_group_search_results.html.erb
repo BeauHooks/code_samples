@@ -1,0 +1,20 @@
+<% @groups.each do |t| %>
+  <tr>
+    <td class="action" style="padding-left: 5px;">
+      <input type="button" onclick="$('#adding_new_docs').show(); $(this).val('Added'); $(this).attr('disabled', 'disabled'); $.post('<%= docs_path(type: "Group", file_id: @file_id, group_id: t.id) %>'); $('#doc_search').val(''); $('#doc_lookup_options').val('1').change(); $('#doc_search').focus();" value="Add Group" />
+    </td>
+    <% if t.name.length > 17 %>
+      <td class="name hint"><span><%= t.name %></span><%= truncate(t.name, length: 17) %></td>
+    <% else %>
+      <td class="name"><%= t.name %></td>
+    <% end %>
+    <% if  t.state != nil && t.state.length > 17 %>
+      <td class="description hint"><span><%=  t.state %></span><%= truncate( t.state, length: 17) %></td>
+    <% else %>
+      <td class="description"><%=  t.state %></td>
+    <% end %>
+    <td class="modify_date"><%= t.updated_at.strftime('%m/%d/%Y') %></td>
+    <td class="modify_by"><%= t.update_employee.FullName %></td>
+    
+  </tr>
+<% end %>

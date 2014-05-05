@@ -1,0 +1,7 @@
+$("#new_rolodex_contact_info").append("<%= j(render "rolodex/partials/contact_info_row").html_safe %>");
+initRolodexFormPosition( $("tr#contact_info_BLANK") );
+$("#overlay_new_rolodex input").keydown(function(event){
+  if(event.which == 13){
+    event.preventDefault();
+  }
+});

@@ -1,0 +1,436 @@
+#overlay_list{
+  .cell_attributes{
+    td{vertical-align: top; padding: 0 0 2px;}
+    select{width: 125px;}
+    .label{padding-right: 5px;}
+  }
+
+  .employee_lookup{
+    width: 600px;
+  }
+
+  .property_lookup{
+    width: 820px;
+
+    .add_link{
+      width: 60px;
+      max-width: 60px;
+    }
+
+    .owner_name{
+      width: 125px;
+      max-width: 125px;
+    }
+
+    .owner_address{
+      width: 105px;
+      max-width: 105px;
+    }
+
+    .tax_id{
+      width: 70px;
+      max-width: 70px;
+    }
+
+    .account{
+      width: 75px;
+      max-width: 75px;
+    }
+
+    .address{
+      width: 90px;
+      max-width: 90px;
+    }
+
+    .legal{
+      min-width: 210px;
+      max-width: 210px;
+    }
+  }
+
+  .choose_side{
+    width: 305px;
+    top: 120px;
+    z-index: 10;
+
+    select{
+      width: 120px;
+    }
+  }
+
+  .signature_management{
+    textarea{
+      margin: 0;
+    }
+
+    .label{
+      padding-right: 5px;
+      text-align: right;
+    }
+
+    button{
+      margin-left: 5px;
+    }
+  }
+
+  .doc_manage_signatures{
+    min-width: 550px;
+
+    .overlay_content{
+      position: relative;
+
+      .entity_contents{
+        padding: 5px;
+      }
+
+      h4{
+        margin-bottom: 5px;
+      }
+
+      #entities{
+        min-height: 200px;
+        width: 270px;
+
+        table{
+          width: 100%;
+        }
+      }
+
+      textarea{
+        width: 125px;
+        height: 35px;
+        margin: 0;
+      }
+
+      select{
+        margin-top: 5px;
+        width: 125px;
+      }
+
+      #entities, #signature_preview_container{
+        float: left;
+      }
+
+      #signature_preview_container{
+        margin-left: 20px;
+      }
+
+      #signature_preview{
+        overflow-x: hidden;
+        padding: 5px;
+        width: 632px;
+        height: 350px;
+        overflow-y: auto;
+      }
+
+      .preview{
+        position: absolute;
+        top: 7px;
+        right: 10px;
+      }
+
+      .individual_signature{
+        width: 330px;
+
+        input{
+          width: 99%;
+        }
+      }
+
+      .trigger{
+        position: relative;
+        top: 1px;
+      }
+
+      input#sort{
+        text-align: right;
+        width: 13px;
+      }
+
+      .entity{
+        padding-left: 5px;
+        width: 205px;
+      }
+
+      #manage_vesting{
+        textarea{
+          padding: 5px;
+          width: 518px;
+        }
+      }
+    }
+  }
+
+  .doc_lookup{
+    width: 600px;
+
+    .inner_table{
+      height: 125px;
+    }
+
+    table{
+      width: 100%;
+    }
+
+    .action{
+      width: 62px;
+    }
+
+    .name{
+      width: 100px;
+    }
+
+    .version{
+      width: 50px;
+    }
+
+    .county{
+      width: 85px;
+    }
+
+    .modify_date{
+      width: 75px;
+    }
+
+    .modify_by{
+      width: 75px;
+    }
+
+    .description{
+      width: 80px;
+    }
+  }
+
+  .new_file_note{
+    table{
+      border-collapse: separate;
+    }
+
+    select{
+      width: 163px;
+    }
+
+    textarea{
+      margin: 0;
+    }
+
+    .label{
+      width: 100px;
+    }
+  }
+
+  .new_order{
+    table{
+      border-collapse: separate;
+    }
+  }
+
+  .disbursement{
+    width: 960px;
+    position: absolute;
+    top: 120px;
+
+    .amount{
+      text-align: right;
+    }
+
+    #disbursement_payments{
+      padding: 0 5px;
+
+      .col_1{
+        width: 50px;
+      }
+
+      .col_2{
+        width: 300px;
+      }
+
+      .col_3{
+        width: 150px;
+      }
+
+      .col_4{
+        width: 95px;
+      }
+    }
+
+    .row_disbursement_form{
+      table{
+        margin-bottom: 5px;
+      }
+    }
+
+    .row{
+      clear: both;
+      width: 100%;
+    }
+
+    .col{
+      float: left;
+      padding: 5px;
+      width: 30%;
+
+      p{
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .col:last-of-type{
+      float: right;
+      padding: 5px 0 5px 5px;
+    }
+
+    #payment_results{
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: 400px;
+
+      .payment_result{
+
+        .info{
+          float: left;
+          padding: 2px;
+        }
+
+        .info.number{
+          width: 5%
+        }
+
+        .info.name{
+          width: 70%;
+        }
+
+        .info.amount{
+          width: 20%;
+          text-align: right;
+        }
+      }
+
+      .tru_payment_window{
+        padding-left: 5px;
+        border: none;
+        border-bottom: 1px solid #CCC;
+        border-top: 1px solid #CCC;
+        width: 100%;
+
+        .tru_disbursement_row{
+          width: 465px;
+
+          input[type="text"]:not(.memo), select{
+            width: 121px;
+          }
+
+          input[type="text"].address{
+            width: 186px;
+          }
+        }
+      }
+
+      .payment_info{
+        width: 480px;
+        float: left;
+        margin-right: 20px;
+      }
+
+      .payment_balance{
+        width: 150px;
+        float: left;
+      }
+
+      .amount{
+        float: right;
+      }
+
+      .right{
+        float: right;
+      }
+    }
+
+    .selector{
+      padding: 2px;
+    }
+
+    table{
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td{
+      white-space: nowrap;
+      vertical-align: top;
+    }
+
+    .inner_table td{
+      vertical-align: middle;
+    }
+
+    #disbursement_total{
+        width: 150px;
+      }
+
+    .disbursement_form{
+      input[type=text], textarea{
+        width: 350px;
+      }
+
+      select{
+        width: 320px;
+      }
+
+      input.city, input.state{
+        width: 125px;
+      }
+
+      input.zip{
+        width: 82px;
+      }
+
+      #check_total{
+        width: 150px;
+      }
+    }
+
+    input#check_working_purpose_value{
+      width: 125px;
+    }
+
+    h2{
+      margin: 0 5px;
+    }
+
+    .inner_table{
+      max-height: 100px;
+    }
+
+    .w100{
+      width: 100%;
+    }
+
+    #sheet_view{
+      float: left;
+      width: 73%;
+      margin-right: 10px;
+    }
+
+    #receipt_results{
+      float: left;
+      width: 25%;
+
+      td:last-child{
+        padding-right: 5px;
+      }
+    }
+
+    #disbursement_info select{
+      width: 150px;
+    }
+  }
+
+  .payment_disbursement_info{
+    ul{
+      list-style-type: disc;
+      padding-left: 15px;
+    }
+  }
+}

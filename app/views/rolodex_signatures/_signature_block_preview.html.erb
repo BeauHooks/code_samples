@@ -1,0 +1,7 @@
+<div id="preview">
+<% if @signature.block_text == nil %>
+	<%= generate_signature_tree(@signature).html_safe %>
+<% else %>
+	<%= @signature.block_text.to_s.html_safe %>
+<% end %>
+</div>

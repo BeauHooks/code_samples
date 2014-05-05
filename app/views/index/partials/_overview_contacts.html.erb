@@ -1,0 +1,23 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_contacts sortable">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="name"><div>Contacts <%= link_to image_tag("plus.png", class: "icon"), file_entities_overlay_path(@file.ID), remote: true %></div></th>
+          <th class="position"><div>Position</div></th>
+          <th class="pr"><div>PR</div></th>
+          <th class="pr"><div>CPL</div></th>
+          <th class="pr"><div>HUD</div></th>
+          <th class="phone"><div>Phone</div></th>
+          <th class="email"><div>Email</div></th>
+          <th class="send"><div>Send</div></th>
+          <th class="fedex"><div>Ship</div></th>
+        </tr>
+      </thead>
+      <tbody id="file_entities_list" class="highlight">
+        <%= render 'file_entities/partials/overview_contacts', file: @file, file_user_types: @file_user_types %>
+      </tbody>
+    </table>
+  </div>
+</div>

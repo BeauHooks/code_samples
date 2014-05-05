@@ -1,0 +1,23 @@
+<div id="show_bulletin" class="show_bulletin">
+  <div class="overlay_header">
+    <h2 style="margin: 0;">Bulletin</h2>
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+    </div>
+  </div>
+  <div class="overlay_content">
+    <h3>Title: <%= @bulletin.title %></h3>
+    <h4>By: <%= @bulletin.author %> on <%= @bulletin.created_at.strftime("%B %d, %Y") %></h4>
+    <div style="width: 600px; max-height: 400px; overflow-y: auto; margin-top: .25em;">
+      <%= @bulletin.body.to_s.html_safe %>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <span>
+      <%= submit_tag "Close", type: "button", onclick: "closeOverlay('show_bulletin');" %>
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+	openOverlay("show_bulletin");
+</script>

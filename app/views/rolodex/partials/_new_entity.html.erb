@@ -1,0 +1,92 @@
+<% content_for :overlay_title do %>
+  New Contact
+<% end %>
+<% content_for :overlay do %>
+  <%= form_for @entity, url: rolodex_index_path, method: :post, remote: true do |f| %>
+    <div id="rolodex_form_errors" class="flash_error hide"></div>
+    <div class="overlay_content">
+      <p><span class="label type_select">Entity Category:</span>
+          <%= select :entity, :IndCorp, options_for_select([["Company", "Company"], ["Corporation", "Corporation"], ["Financial Institution", "Financial Institution"], ["Individual", "Individual"], ["LLC", "LLC"], ["Organization", "Organization"], ["Trust", "Trust"], ["Partnership", "Partnership"]], "Individual"), {:include_blank => false}, { :data => {:remote => true, :url => url_for(:controller => "rolodex",
+          :action => "show_entity_by_type")}} %></p>
+    <hr />
+    <div id="entity_info">
+      <%= render "rolodex/partials/entity_form", :locals => { customer_type: "Individual" } %>
+    </div>
+      <hr />
+      <div id="contact_row">
+        <table id="new_rolodex_contact_info" class="new_rolodex_info">
+          <tr>
+            <td class="label primary">Primary</td>
+            <td class="label type">Type</td>
+            <td class="label info">Contact Info<%= link_to image_tag("plus.png", class: "icon trigger" ), "rolodex/add_contact_to_new_entity", remote: true %></td>
+            <td class="label description">Description</td>
+          </tr>
+          <% n = 0 %>
+          <% ["Home", "Cell", "Office", "Fax", "Email"].each do |type| %>
+            <% n += 1 %>
+            <%= render "rolodex/partials/contact_info_row", type: type, n: n %>
+          <% end %>
+        </table>
+      </div>
+      <hr />
+      <div id="contact_row">
+        <table id="new_rolodex_address_info" class="new_rolodex_info">
+          <tr>
+            <td class="label primary">Primary</td>
+            <td class="label type">Type</td>
+            <td class="label info">Address<%= link_to image_tag("plus.png", class: "icon trigger" ), "rolodex/add_address_to_new_entity", remote: true %></td>
+            <td class="label">County</td>
+            <td class="label description">Description</td>
+          </tr>
+          <%= render "rolodex/partials/address_row" %>
+        </table>
+      </div>
+      <hr />
+      <div id="affiliations">
+        <table id="new_rolodex_affiliations">
+          <tr data-section="affiliation">
+            <td class="label primary">Primary</td>
+            <td class="label entity">Affiliation Entity <%= link_to image_tag("search.png", class: "icon"), "rolodex/show_overlay?overlay=Affiliation", remote: true %></td>
+            <td class="label info">Phone</td>
+            <td class="label info">Email</td>
+            <td class="label info">Address</td>
+            <td class="label info">City</td>
+            <td class="label info">State</td>
+            <td class="label relationship">Relationship</td>
+          </tr>
+        </table>
+      </div>
+      <hr />
+      <div id="notes" >
+        <table id="new_rolodex_note">
+          <tr>
+            <td class="label note">Note<%= link_to image_tag("plus.png", class: "icon trigger" ), "rolodex/add_note_to_new_entity", remote: true %></td>
+            <td class="label from">From</td>
+            <td class="label to">To</td>
+            <td class="label remind">Remind</td>
+          </tr>
+          <%= render "rolodex/partials/note_row" %>
+        </table>
+      </div>
+      <hr class="hide" />
+      <div id="activities" class="activities hide">
+        <table>
+          <tr>
+            <td class="label">Activity</td>
+            <td class="label">Deadline Date</td>
+            <td class="label">Contact</td>
+            <td class="label">Action</td>
+            <td class="label">Complete Activity</td>
+          </tr>
+          <tr>
+            <td>Seller Disclosure Reminder</td>
+            <td><input type="text" /><%= link_to image_tag("calendar.png", class: "calendar") %></td>
+            <td><select><option>David Byars</option></select></td>
+            <td><select><option>Remind Closer</option></select></td>
+            <td><select><option>3 Days Before</option></select></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  <% end %>
+<% end %>

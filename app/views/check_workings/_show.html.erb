@@ -1,0 +1,19 @@
+<div id="disbursement_management">
+  <div class="overlay_header">
+    <h2>Disbursements</h2>
+  </div>
+
+  <%= render partial: "check_workings/form" %>
+
+  <div class="overlay_footer">
+    <span class="button">
+      <input type="button" value="Close" data-remote="true" onclick="closeOverlay('disbursements');" />
+    </span>
+  </div>
+</div>
+
+<!-- <div class="overlay" id="overlay_create_receipt"></div> -->
+
+<script type="text/javascript">
+  openOverlay("disbursements");
+</script>

@@ -1,0 +1,8 @@
+<h4>Closers <%= image_tag "plus.png", class: "icon trigger", onclick: "create('#{file_employees_path(file_id: @file.FileID, position: 3, form: 'file_product')}');" %></h4>	
+<% @file.closers.each do |file_employee| %>
+	<div style="padding: 2px;">
+		<%= image_tag "redx.png", class: "trigger", onclick: "destroy('#{file_employee_path(id: file_employee.ID)}', $(this).closest('div'));" %>
+		<%= select :file_employee, :EmployeeID, options_for_select(Employee.closers, file_employee.EmployeeID), {include_blank: true}, {style: "width: 150px", name: "EmployeeID", onchange: "update('#{file_employee_path(id: file_employee.ID, form: 'file_product')}', this);"} %>
+		<%= select "file_employee_type", "ID", options_for_select(FileEmployeeType.where("TypeDescription LIKE 'Closer%'").collect{|p| [p.TypeDescription, p.TypeDescription]}, file_employee.Position), { :include_blank => (file_employee.Position != nil ? false : file_employee.Position || ""), selected: file_employee.Position }, onchange: "update('#{file_employee_path(id: file_employee.ID, form: 'file_product')}', this);", style: "width: 110px;", name: "Position" %>
+	</div>
+<% end %>

@@ -1,0 +1,35 @@
+$(".disbursement_options").replaceWith("<%= j(select_tag :disbursement_id, options_for_select(@file.existing_disbursement_options()), class: "disbursement_options").html_safe %>");
+$("div#payment_balance_summary").html("<%= j(render "check_workings/partials/payment_balance_summary").html_safe %>");
+
+if($("#disbursement_sheet").is(":visible")){
+  $('#disbursement_results').html('<%= j(render 'check_workings/partials/results').html_safe %>');
+  $('#poc_results').html('<%= j(render 'payment_disbursements/poc_results').html_safe %>');
+}
+
+// $(".tru_payment_summary[data-id=<%#= @line.id %>]").html("<%#= j(render "balance").html_safe %>");
+
+// <%# if @line.payment_amount > 0 %>
+//   <%# balance = @line.payment_amount - @line.payment_disbursements.sum("amount") %>
+//   <%# if balance == 0 %>
+//     $("#line_<%#= @line.id %> .line_number").removeClass("red");
+//     $("#line_<%#= @line.id %> .line_number").addClass("green");
+//     if($("#payment_line_<%#= @line.id %>").length > 0){
+//       $("#payment_line_<%#= @line.id %>").removeClass("red");
+//       $("#payment_line_<%#= @line.id %>").addClass("green");
+//     };
+//   <%# else %>
+//     $("#line_<%#= @line.id %> .line_number").addClass("red");
+//     $("#line_<%#= @line.id %> .line_number").removeClass("green");
+//     if($("#payment_line_<%#= @line.id %>").length > 0){
+//       $("#payment_line_<%#= @line.id %>").addClass("red");
+//       $("#payment_line_<%#= @line.id %>").removeClass("green");
+//     };
+//   <%# end %>
+// <%# else %>
+//   $("#line_<%#= @line.id %> .line_number").removeClass("red");
+//   $("#line_<%#= @line.id %> .line_number").removeClass("green");
+//   if($("#payment_line_<%#= @line.id %>").length > 0){
+//     $("#payment_line_<%#= @line.id %>").removeClass("red");
+//     $("#payment_line_<%#= @line.id %>").removeClass("green");
+//   };
+// <%# end %>

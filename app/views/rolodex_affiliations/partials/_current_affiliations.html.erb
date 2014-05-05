@@ -1,0 +1,51 @@
+<% hash = Hash.new %>
+<% list_1 = @entity.affiliations_as_entity_1 + @entity.affiliations_as_contact_1 %>
+<% list_2 = @entity.affiliations_as_entity_2 + @entity.affiliations_as_contact_2 %>
+<% hash["1"] = list_1 %>
+<% hash["2"] = list_2 %>
+<% c = 0 %>
+<% hash.each do |key, list| %>
+  <% list.each do |i| %>
+    <% c += 1 %>
+    <% if key == "1" %>
+      <% affiliate = i.entity_2 != nil ? i.entity_2 : i.contact_2 != nil ? i.contact_2 : nil %>
+    <% else %>
+      <% affiliate = i.entity_1 != nil ? i.entity_1 : i.contact_1 != nil ? i.contact_1 : nil %>
+    <% end %>
+    <% next if affiliate == nil %>
+
+    <tr>
+      <td class="action w60 padding_left_5">
+        <%= button_to("Remove", rolodex_affiliation_path(i.ID, entity_id: i.EntityID1), method: :delete, remote: true) %>
+      </td>
+
+      <td class="w95 padding_left_5">
+        <%= hint_truncate(link_to(affiliate.name_last_first, rolodex_path(affiliate.EntityID), method: :get, target: "_blank"), 16, true) %>
+      </td>
+
+      <td class="w95">
+        <%= hint_truncate(affiliate.primary_phone_number, 16) %>
+      </td>
+
+      <td class="w95">
+        <%= hint_truncate(mail_to(affiliate.Email), 16, true) %>
+      </td>
+
+      <td class="w95">
+        <%= affiliate.primary_address.Address %>
+      </td>
+
+      <td class="w95">
+        <%= hint_truncate(affiliate.primary_city, 15) %>
+      </td>
+
+      <td class="w95">
+        <%= affiliate.primary_state %>
+      </td>
+
+      <td class="w95">
+        <%= hint_truncate(i.Relationship, 22) %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

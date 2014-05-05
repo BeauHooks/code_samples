@@ -1,0 +1,42 @@
+<div id="fp_exception">
+  <div class="overlay_header">
+    <h2>New Exception</h2>
+  </div>
+  <%= form_for @exception, remote: true do %>
+    <div class="overlay_content" style="width: 250px;">
+      <%= hidden_field_tag :exception_template_id, "" %>
+      <%= hidden_field_tag :file_product_id, @file_product.id %>
+      <table>
+        <tr>
+          <td class="label" style="padding-right: 5px;">Entry #:</td>
+          <td><%= text_field_tag :entry_number, "", onchange: "getExceptionNumber();", style: "width: 150px;", onkeydown: "numbersOnly(event);"  %></td>
+        </tr>
+        <tr id="">
+          <td class="label">Type:</td>
+          <td><%= text_field_tag :exception_type, "", onchange: "getExceptionNumber();", style: "width: 150px;" %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <span style="float: right;">
+        <%= submit_tag "Save" %>
+        <%= submit_tag "Close", onclick: "closeOverlay('fp_exception');", type: "button" %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	openOverlay("fp_exception");
+  $("#entry_number").focus();
+
+  function getExceptionNumber(){
+    var tail = new Array();
+    tail.push($("input#exception_type").val() != "" ? "&exception_type=" + $("input#exception_type").val() : "" );
+    tail.push($("input#entry_number").val() != "" ? "&entry_number=" + $("input#entry_number").val() : "" );
+
+    if(tail.length > 0){
+      $.get("<%= fp_exceptions_get_exception_number_path(file_product_id: @file_product.id) %>" + tail.join("") );
+    }
+  }
+</script>

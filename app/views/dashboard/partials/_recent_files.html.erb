@@ -1,0 +1,69 @@
+<div class="box_header">
+  <p class="title">My Recently Opened Files</p>
+</div>
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div class="dash_results">
+    <table class="sortable">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="file"><div>File #</div></th>
+          <th class="buyer"><div>Buyer</div></th>
+          <th class="seller"><div>Seller</div></th>
+          <th class="lender"><div>Lender</div></th>
+          <th class="type"><div>Type</div></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% if @files.size == 0 %>
+        <tr><td colspan="5" class="no_result">No results</td></tr>
+      <% else %>
+        <% @files.each do |file| %>
+          <tr>
+            <td class="file"><%= link_to file.DisplayFileID, "index?file_id=#{file.FileID}" %></td>
+            <% name = file.buyer_1 != nil ? file.buyer_1.name_last_first : "" %>
+            <% if name.length > 14 %>
+              <td class="buyer hint">
+                <span><%= link_to name, "rolodex?entity_id=#{file.Buyer1}" %></span>
+                <%= link_to truncate(name, :length => 14), "rolodex?entity_id=#{file.Buyer1}" %>
+              </td>
+            <% else %>
+              <td class="buyer"><%= link_to name, "rolodex?entity_id=#{file.Buyer1}" if !file.Buyer1.blank? %></td>
+            <% end %>
+
+            <% name = file.seller_1 != nil ? file.seller_1.name_last_first : "" %>
+            <% if name.length > 14 %>
+              <td class="seller hint">
+                <span><%= link_to name, "rolodex?entity_id=#{file.Seller1}" %></span>
+                <%= link_to truncate(name, :length => 14), "rolodex?entity_id=#{file.Seller1}" %>
+              </td>
+            <% else %>
+              <td class="seller"><%= link_to name, "rolodex?entity_id=#{file.Seller1}" if !file.Seller1.blank? %></td>
+            <% end %>
+
+            <% name = file.lender != nil ? file.lender.name_last_first : "" %>
+            <% if name.length > 14 %>
+              <td class="lender hint">
+                <span><%= link_to name, "rolodex?entity_id=#{file.lender.EntityID}" %></span>
+                <%= link_to truncate(name, :length => 14), "rolodex?entity_id=#{file.lender.EntityID}" %>
+              </td>
+            <% else %>
+              <td class="lender"><%= link_to name, "rolodex?entity_id=#{file.lender.EntityID}" if file.lender != nil %></td>
+            <% end %>
+
+            <% type = file.TransactionDescription1.to_s %>
+            <% if type.length > 14 %>
+              <td class="hint">
+                <span><%= type %></span>
+                <%= truncate(type, :length => 14) %>
+              </td>
+            <% else %>
+              <td><%= type %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

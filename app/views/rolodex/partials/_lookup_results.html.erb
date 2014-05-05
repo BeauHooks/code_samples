@@ -1,0 +1,45 @@
+<table id="grid_results" tabindex="0">
+  <% @search_results.enumerator_with_index(1).each do |i, index| %>
+    <% c = index %>
+    <tr>
+      <td class="name hint">
+        <span><%= i.try(:name_last_first) %></span>
+        <div><%= truncate(i.name_last_first, length: 17) %></div></td>
+      <td class="phone<%=" hint" unless i.entity_contacts.phones_callable.first.nil? %>">
+        <div>
+          <% phone = i.entity_contacts.try(:primary_phone) %>
+          <span><%= "#{phone.ContactDesc}: #{phone.Contact}" %></span>
+          <%= truncate("#{phone.ContactDesc}: #{phone.Contact}", length: 25) %>
+        </div>
+      </td>
+        <td class="email hint">
+          <% email = i.entity_contacts.try(:primary_email) %>
+          <span><%= mail_to email.Contact, email.Contact.downcase %></span>
+          <div>
+            <%= mail_to email.Contact, email.Contact.downcase %>
+          </div>
+        </td>
+      <% else %>
+        <td class="email">
+        <div>
+      <% end -%>
+        </div>
+      </td>
+      <td class="rolodex_address <%= "hint" unless i.address[0].nil? %>"><span><%= i.address[0] unless i.address[0].nil? %></span><div><%= truncate(i.address[0], :length => 35) unless i.address[0].nil? %></div></td>
+      <td class="city"><div><%= truncate(i.address[1], :length => 17) unless i.address[1].nil? %></div></td>
+      <td class="state center"><%= i.address[2] unless i.address[2].nil? %></td>
+      <td class="action"><%= submit_tag "Add", type: "button", onclick: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: @signature_entity.id, field: "name", value: i.full_name, entity_id: i.EntityID)}}', type: 'PUT'); $('#signatures_info .active_row:first').click();  closeOverlay('entity_lookup');" %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%# OPTIMIZE: Easier way to inject js? %>
+<% if c > 8 %>
+  <script type="text/javascript">
+    addWidth('entity_lookup', 75);
+  </script>
+<% else %>
+  <script type="text/javascript">
+    fixWidth('entity_lookup', 75);
+  </script>
+<% end %>

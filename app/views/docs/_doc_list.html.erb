@@ -1,0 +1,45 @@
+<% c = 0 %>
+<% @doc_list.each do |d| %>
+  <% c += 1 %>
+  <tr id="doclist_<%= d.id %>" data-docid="<%= d.id %>" class="trigger" title="<%= d.doc_template.short_name.upcase %> - <%= d.description %>.&nbsp;&#013;Last Modified by <%= d.update_employee.FullName %> on <%= d.updated_at.strftime('%m/%d/%Y') %>." data-name="<%= d.doc_template.short_name.upcase %> - <%= d.description %>">
+    <td class="selected">
+      <input id="doc<%= d.id %>" type="checkbox" onchange="selectDoc(this, 'select_all_docs');" onclick="event.stopPropagation();" data-doc="<%= @file.TransactionDescription1 == "Refinance" ? "#{d.doc_template.short_name}_Refinance" : d.doc_template.short_name %>"></td>
+    <td class="name no_select" ondblclick="$.get('docs/<%= d.id %>/edit_description');"><%= d.doc_template.short_name.upcase %> - <%= truncate(d.description, length: 28) %></td>
+  </tr>
+<% end %>
+
+<script type="text/javascript">
+	// TODO: Move to a JS file
+    $("[id^=doclist_]").click(function(){
+      if ($(this).hasClass("active_row") == false){
+        doc_request($(this).data("docid"));
+        $("[id^=doclist_]").removeClass("active_row");
+        $(this).addClass("active_row");
+      }
+    });
+  <% if @doc.blank? %>
+    $("[id^=doclist_]").first().click();
+  <% end %>
+
+  var requests = [];
+
+  function doc_request(doc_id){
+    $("div#doc_content").html("<%= j(render "docs/loading").html_safe %>");
+
+    for(var i = 0; i < requests.length; i++)
+      requests[i].abort();
+
+    var xhr = $.ajax({
+      url: 'docs/' + doc_id + '/show_doc',
+      type: "get",
+      beforeSend: function(){
+        $("div#doc_content").hide(); $("div#loading_doc").show();
+      },
+      complete: function(){
+        $("div#loading_doc").hide(); $("div#doc_content").show();
+      }
+    });
+
+    requests.push(xhr);
+  }
+</script>

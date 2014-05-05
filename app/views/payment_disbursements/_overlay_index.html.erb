@@ -1,0 +1,21 @@
+<div id="payment_sheet" class="w100">
+  <div class="box">
+    <div class="box_header">
+      <p class="title">Payments</p>
+      <div class="tools">
+        <%= link_to "<span class=\"ui-icon ui-icon-info\"></span>".html_safe, payment_disbursement_info_overlays_path(), remote: true %>
+      </div>
+    </div>
+    <div id="payment_results">
+      <% @file.payment_lines.each do |payment_line| %>
+        <% balance = payment_line.payment_amount - payment_line.payment_disbursements.sum("amount") %>
+        <div id="payment_line_<%= payment_line.id %>" data-id="<%= payment_line.id %>" class="label payment_result border-bottom trigger <%= balance != 0 ? "red" : "green" %>" onclick="toggle_payment_window(this, <%= payment_line.id %>, '<%= payment_line.class.table_name %>');">
+        <div class="info number"><%= payment_line.number %></div>
+        <div class="info name"><%= "#{payment_line.get("name")} - " unless payment_line.get("name").blank? %><%= payment_line.get("payee_name") %></div>
+        <div class="info amount"><%= number_to_currency(payment_line.payment_amount, unit: "$") %></div>
+        <div class="clear"></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<% if @field.gsub("global_", "").gsub("custom_", "").upcase == "CLOSING_DATE" && @doc.doc_template.short_name == "HUD" %>
+	<% change = "$('input#start_date_901').val( $(this).val() ).change();" %>
+<% else %>
+	<% change = "" %>
+<% end %>
+
+<%= form_tag create_custom_docs_path(field: @field, file_id: @file.ID, doc_id: @doc.id), {remote: true, style: " text-align: center; padding: 5px;"} do %>
+  <span class="label"><%= @field.gsub("global_", "").gsub("custom_", "").titleize %></span>
+  <%= link_to (image_tag "left.png", class: "icon", title: "Revert to default value" ), revert_to_global_docs_path(doc_id: @doc.id, file_id: @file.ID, field: @field.gsub("global_", "").gsub("custom_", "")), {remote: true, id: "#{@field}_button", onclick: "return revertToGlobal(this, '#{@file.ID.to_s}', '#{@doc.id.to_s}');"} %>
+  <br />
+  <%= text_area_tag "value", @value, id: @field, style: "resize: resize;", onchange: "#{change} return updateCustomField(this, '#{@field}', '#{@doc.id}', '#{@file.ID}');", onkeydown: "if(event.keyCode == 27){this.parentNode.parentNode.innerHTML = $('#field_placeholder').html(); }" %>
+  <%= submit_tag "Save", type: "submit", id: "submit#{@field}", style: "display: none;" %>
+<% end %>

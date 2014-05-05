@@ -1,0 +1,2 @@
+$("#preferences_list").prepend("<%= j(render "admin/site_preferences/partials/preference_row", preference: @preference).html_safe %>");
+$("#preference_<%= @preference.id %>").click();

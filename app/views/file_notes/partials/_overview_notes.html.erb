@@ -1,0 +1,23 @@
+<% @file.file_notes.each do |i| %>
+  <tr>
+    <td class="from">
+      <%= hint_truncate(i.entered_by_name, 15) %>
+    </td>
+
+    <td class="to">
+      <%= hint_truncate(i.tickled_by_name, 15) %>
+    </td>
+
+    <td class="entered">
+      <%= i.NoteDT.nil? ? "" : i.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p') %>
+    </td>
+
+    <td class="remind">
+      <%= i.TickleDate.nil? ? "" : i.TickleDate.strftime('%-1m/%-1d/%Y - %-1I:%M %p') %>
+    </td>
+
+    <td class="note">
+      <%= hint_truncate(i.NoteText.to_s.gsub(/\w+[.a-zA-Z0-9.][.a-zA-Z0-9.]+@[a-zA-Z0-9]+.[a-zA-Z]+/) {mail_to $&, $&, body: "#{@file.company.DirName} ##{@file.DisplayFileID}"}, 25, true) %>
+    </td>
+  </tr>
+<% end %>

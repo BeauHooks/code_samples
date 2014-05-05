@@ -1,0 +1,13 @@
+<% update = "update('#{fp_requirement_path(id: requirement.id, view: view)}', this);" %>
+<!-- <div contenteditable="true" class="box first" style="width: 560px; min-height: 45px; padding: 5px; max-height: 90px; overflow-y: auto; float: left;" name="content" onfocus="$(this).data('before', $(this).html());" onblur="<%#= update %>" id="fp_requirement_content_<%#= requirement.id %>">
+	<%#= requirement.content.to_s.gsub(/\n/, "<br />").html_safe %>
+</div> -->
+<%= text_area_tag :content, requirement.content, onchange: update, style: "width: 560px; height: 75px; padding: 5px; overflow-y: auto; float: left;", id: "fp_requirement_content_#{requirement.id}", class: "first" %>
+<% unless requirement.new_record? %>
+	<div style="float: left; margin-left: 5px; width: 100px;">
+		<p style="padding: 2px 0px;"><span class="link trigger destroy" style="margin-right: 10px;" onclick="$.ajax({url: '<%= fp_requirement_path(id: requirement.id, removed_by: current_user.employee_id, view: view) %>', type: 'PUT'});">Remove</span></p>
+		<!-- <p><%#= link_to "Edit HTML", fp_requirements_editor_path(id: requirement.id, view: view), remote: true, id: "requirement_text_#{requirement.id}", class: "editor_link" %></p> -->
+		<p style="padding: 2px 0px;"><%= requirement.fp_exception != nil ? link_to("Exception:", fp_exceptions_path(id: requirement.fp_exception.id, view: view), remote: true) : "Exception:" %> <%= select :fp_exception, :id, options_for_select(@file_product.exception_collection, requirement.fp_exception_id), {include_blank: true}, {style: "width: 45px; float: right;", name: "fp_exception_id", onchange: update} %>
+		</p>
+	</div>
+<% end %>

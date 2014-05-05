@@ -1,0 +1,90 @@
+<div id="info">
+  <div class="box_header">
+    <p class="title">Info</p>
+    <div class="tools">
+      <ul class="margin_right_15">
+        <li class="menu_item"><span class="trigger link">File Tools</span>
+          <ul class="submenu w90" style="left: -15px;">
+            <li><%= link_to "FedEx History", "#", onclick: "window.open('/shipments?company_id=#{@file.Company}&file_id=#{@file.DisplayFileID}');" %></li>
+            <li><%= link_to "Confirmation", show_resend_confirmation_overlay_path(@file), remote: true %></li>
+            <% if @permission_create_docs %>
+              <li><%= link_to "Receipt Funds", "#", onclick: "addToQueue('add_receipt', 'check_workings/create_receipt_overlay?file_id=#{@file.FileID}&view=funding');" %></li>
+              <li><%= link_to "Disbursement", "#", onclick: "addToQueue('print_disbursement', 'index/#{@file.ID}/print_disbursement_sheet');" %></li>
+              <% if @file.Underwriter == 6 && @permission_can_create_cpl %>
+                <li>
+                  <%= link_to "Order New CPL", cpl_new_overlay_path(@file.ID), remote: true, method: :get %>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <table class="file_info">
+    <tr>
+      <td class="label w70">File:</td>
+      <td id="file_id"><%= @file.DisplayFileID %></td>
+
+      <td class="label">Sale Amount:</td>
+      <td id="info_sale">
+        <% (@file.SalesPrice != nil && @file.SalesPrice != "" && @file.SalesPrice > 0) ? value = "#{number_to_currency @file.SalesPrice}" : value = "Add" %>
+        <%= link_to value, "/index/#{@file.ID}/edit_file_info?type=SalesPrice", {:remote => true} %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Type:</td>
+      <td id="info_transaction">
+  	    <% (@file.TransactionDescription1 != nil && @file.TransactionDescription1 != "") ? value = "#{@file.TransactionDescription1}" : value = "Add" %>
+  	    <%= link_to value, "/index/#{@file.ID}/edit_file_info?type=TransactionDescription", {:remote => true} %>
+  	  </td>
+
+      <td class="label">Loan Amount:</td>
+      <td id="info_loan">
+        <% (@file.LoanAmount != nil && @file.LoanAmount != "" && @file.LoanAmount > 0) ? value = "#{number_to_currency @file.LoanAmount}" : value = "Add" %>
+        <%= link_to value, "/index/#{@file.ID}/edit_file_info?type=LoanAmount", {:remote => true} %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label w70">Opened By:</td>
+      <td><%= @file.order_taken_by != nil ? @file.order_taken_by.FullName : "-" %></td>
+
+      <td class="label">2nd:</td>
+      <td id="info_second_loan">
+        <% (@file.SecondLoan != nil && @file.SecondLoan != "" && @file.SecondLoan > 0) ? value = "#{number_to_currency @file.SecondLoan}" : value = "Add" %>
+        <%= link_to value, "/index/#{@file.ID}/edit_file_info?type=SecondLoan", {:remote => true} %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Opened:</td>
+      <td><%= @file.Opened.strftime('%m/%d/%Y') if @file.Opened != nil %></td>
+
+      <td class="label">Loan #:</td>
+      <td id="info_loan_number">
+        <% (@file.LoanNum != nil && @file.LoanNum != "") ? value = "#{@file.LoanNum}" : value = "Add" %>
+        <%= link_to value, "/index/#{@file.ID}/edit_file_info?type=LoanNum", {:remote => true} %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Closing:</td>
+      <td id="info_closing">
+  	    <% (@file.COEDate != nil && @file.COEDate != "") ? value = "#{@file.COEDate.strftime('%m/%d/%Y')}" : value = "Add" %>
+  	    <%= link_to value, "/index/#{@file.ID}/edit_file_info?type=COEDate", {:remote => true} %>
+      </td>
+
+      <td class="label">Underwriter:</td>
+      <td id="info_underwriter">
+        <% (@file.underwriter != nil) ? value = "#{@file.underwriter.Underwriter}" : value = "Add" %>
+        <%= link_to value, "/index/#{@file.ID}/edit_file_info?type=Underwriter", {:remote => true} %>
+        <% if (@file.Underwriter == 6 || @file.Underwriter == 8) && @permission_can_create_cpl %>
+          <%= link_to "CPL", cpl_overlay_path(@file), remote: true, method: :get %>
+        <% else %>
+          <%= link_to "CPL", @file.underwriter.CPLWebsite, target: '_blank', class: 'margin_left_5' if @file.underwriter != nil && @file.underwriter.CPLWebsite %>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+  <div id="overview_rules" class="overview_rules">
+    <%= render 'index/partials/overview_rules', file: @file %>
+  </div>
+</div>

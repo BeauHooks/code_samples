@@ -1,0 +1,97 @@
+  <table>
+    <tbody id="hud_section_2000">
+    <tr>
+      <td class="label local_header" colspan="2">Comparison of Good Faith Estimate (GFE) and HUD-1 Charges
+        <% total_lines = @hud.hud_lines.where("number >= 2000 AND number <= 2020") %>
+        <% total_lines.count > 20 ? style = "style='display: none;'" : style = "" %>
+        <div class="tools non-printable" <%= style %> >
+          <% post = "/hud_lines/create?hud_id=#{@hud.id}&section=2000&type=m_normal" %>
+          <%= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('create_hud_line', '#{post}');" %>
+          <%#= link_to image_tag("plus.png", class: "icon"), "/hud_lines/new?section=2000&type=m&hud_id=#{@hud.id}", remote: true %>
+        </div>
+      </td>
+      <td class="spacer"></td>
+      <td class="label local_header" style="text-align: center">Good Faith Estimate</td><td style="text-align: center"  class="label local_header">HUD-1</td>
+    </tr>
+    <tr>
+      <td class="label hud_description description">Charges That Cannot Increase</td>
+      <td class="label hud_number description">HUD-1 Line Number</td>
+      <td class="spacer"></td>
+      <td style="background-color:#666;">&nbsp;</td><td style="background-color:#666;">&nbsp;</td>
+    </tr>
+    <% @hud.hud_lines.where("number >= 2000 and number < 2100").each do |builder| %>
+      <tr id= "hud_row_<%= builder.number %>" class="<%= builder.type != nil ? builder.type.gsub("_custom", "") : "m_none" %>">
+          <%= render 'huds/partials/comparison-line', builder:  builder %>
+          <td class="spacer"></td>
+          <%= render 'huds/partials/comparison-amounts', builder:  builder %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table><br />
+
+  <table>
+    <tbody id="hud_section_2100">
+    <tr>
+      <td class="label local_header" colspan="2">Charges That In Total Cannot Increase More Than 10%
+        <% total_lines = @hud.hud_lines.where("number >= 2100 AND number <= 2120") %>
+        <% total_lines.count > 20 ? style = "style='display: none;'" : style = "" %>
+        <div class="tools non-printable" <%= style %>>
+          <% post = "/hud_lines/create?hud_id=#{@hud.id}&section=2100&type=m_normal" %>
+          <%= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('create_hud_line', '#{post}');" %>
+          <%#= link_to image_tag("plus.png", class: "icon"), "/hud_lines/new?section=2100&type=m&hud_id=#{@hud.id}", remote: true %>
+        </div>
+      </td>
+      <td class="spacer"></td>
+      <td class="label description local_header" style="text-align: center">Good Faith Estimate</td><td style="text-align: center" class="label local_header">HUD-1</td>
+    </tr>
+    <% @hud.hud_lines.where("number >= 2100 and number < 2200").each do |builder| %>
+      <tr id= "hud_row_<%= builder.number %>" class="<%= builder.type != nil ? builder.type.gsub("_custom", "") : "m_none" %>">
+          <%= render 'huds/partials/comparison-line', builder:  builder %>
+          <td class="spacer"></td>
+          <%= render 'huds/partials/comparison-amounts', builder:  builder %>
+      </tr>
+    <% end %>
+    </tbody>
+    <tr>
+      <td style="text-align:right; padding-right:10px;" class="label local_header" colspan="2">Total</td>
+      <td class="spacer"></td>
+      <td class="hud_line_total description<%= ' disabled' if @print == nil %>"><%= text_field_tag :gfe_total, number_with_precision(@hud.gfe_total, precision: 2, delimeter: ',', separator: '.'), disabled: @print == nil %></td>
+      <td class="hud_line_total description<%= ' disabled' if @print == nil %>"><%= text_field_tag :hud_total, number_with_precision(@hud.hud_total, precision: 2, delimeter: ',', separator: '.'), disabled: @print == nil %></td>
+    </tr>
+    <tr>
+      <td style="text-align:right; padding-right:10px;" class="label local_header" colspan="2">Increase between GFE and HUD-1 Charges</td>
+      <td class="spacer"></td>
+
+      <% if @hud.gfe_total != 0.00 && @hud.gfe_total != nil && @hud.hud_total != 0.00 && @hud.hud_total != nil %>
+        <td colspan="2" class="hud_overall_total<%= ' disabled' if @print == nil %>">$ <%= text_field_tag :overall_total, number_with_precision(@hud.hud_total-@hud.gfe_total, precision: 2, delimeter: ',', separator: '.'), disabled: @print == nil %> or <%= text_field_tag :overall_percentage, number_with_precision(100*(@hud.hud_total-@hud.gfe_total)/@hud.gfe_total, precision:4, delimeter: ',', separator: '.').to_s + "%", disabled: @print == nil%></td>
+      <% else %>
+        <td colspan="2" class="hud_overall_total<%= ' disabled' if @print == nil %>">$ <%= text_field_tag :overall_total, 0.00, disabled: true %> or <%= text_field_tag :overall_percentage, "0.0000%", style: "text-align:center;", disabled: true %></td>
+      <% end %>
+
+    </tr>
+  </table><br />
+
+  <table>
+    <tbody id="hud_section_2200">
+    <tr>
+      <td class="label local_header" colspan="2">Charges That Can Change
+        <% total_lines = @hud.hud_lines.where("number >= 2200 AND number <= 2220") %>
+        <% total_lines.count > 20 ? style = "style='display: none;'" : style = "" %>
+        <div class="tools non-printable" <%= style %>>
+          <% post = "/hud_lines/create?hud_id=#{@hud.id}&section=2200&type=m_normal" %>
+          <%= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('create_hud_line', '#{post}');" %>
+          <%#= link_to image_tag("plus.png", class: "icon"), "/hud_lines/new?section=2200&type=m&hud_id=#{@hud.id}", remote: true %>
+        </div>
+      </td>
+      <td class="spacer"></td>
+      <td class="label description local_header" style="text-align: center">Good Faith Estimate</td><td style="text-align: center" class="label local_header">HUD-1</td>
+    </tr>
+    <% @hud.hud_lines.where("number >= 2200 and number < 2300").each do |builder| %>
+      <tr id= "hud_row_<%= builder.number %>" class="<%= builder.type != nil ? builder.type.gsub("_custom", "") : "m_none" %>">
+          <%= render 'huds/partials/comparison-line', builder:  builder %>
+          <td class="spacer"></td>
+          <%= render 'huds/partials/comparison-amounts', builder:  builder %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>

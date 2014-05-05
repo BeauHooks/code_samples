@@ -1,0 +1,25 @@
+<form id="search_form" name="search_form" action="/rolodex/display_search_results" data-remote="true" method="get" onsubmit="clearSorting('#search_results');">
+  <div>
+    <div class="expand_toggle">
+      <span><%= link_to "&#x25BC;".html_safe, "#", id: "search_expanded", onclick: "$('#search_results').toggle(); $('#search_expanded').toggle(); $('#search_collapsed').toggle();" %></span>
+      <span><%= link_to "&#x25B6;".html_safe, "#", id: "search_collapsed", onclick: "$('#search_results').toggle(); $('#search_collapsed').toggle(); $('#search_expanded').toggle();", class: "hide" %></span>
+    </div>
+    <div class="search_control">
+      Search: <%= select "type", nil, Entity::SEARCH_OPTIONS, selected: params[:type] %>
+    </div>
+    <div class="search_control">
+      <input name="search" type="text" value="<%= @search_entity_name != nil ? @search_entity_name : params[:search] %>"  id="search_box" placeholder="Begin typing here..." />
+      <%= image_tag "loading.gif", id: "spinner", class: 'spinner' %><span id="searching_text" class="hide">Searching...</span>
+      <%= image_submit_tag "search.png", class: "icon", id: "search_button", onclick: "$('#search_results').show(); $('#search_collapsed').hide(); $('#search_expanded').show(); $('#search_box').attr('readonly', true); $('#search_button').hide(); $('#include_closed_control').hide(); $('#spinner').show(); $('#searching_text').show();" %>
+    </div>
+    <div class="search_control">
+      <span id="include_closed_control" class="include_inactive"><label><input type="checkbox" class="include_inactive" name="include_inactive" value="checked" id="include_closed" <%= params[:include_inactive] %> /> Include Inactive</label></span>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+  if(<%= params[:submit] || false %>){
+    $("#search_form").submit();
+  }
+</script>

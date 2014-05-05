@@ -1,0 +1,73 @@
+<div id="rules_view">
+  <div style="margin-bottom: .25em;">
+    <%= form_for 'search_form', :url => "admin/rules/search", html: {:name => 'search_form', onsubmit: "showSearchSpinner('rules_search_result'); $('#rules_show').html('<p class=\\\'no_result\\\'>No rule selected.</p>');", remote: true, class: "float_left"} do %>
+
+      <span class="label">Search:</span>
+      <%= select(:search_type, :type, options_from_collection_for_select(SearchType.where("SearchType = 'Rules'").order("SearchField"), "ID", "SearchField", "52"), {include_blank: false}, {id: "search_type", name: "search_type", class: "w110", onchange: "check_type();"} ) %>
+
+      <span id="main_search_input" class="hide">
+        <%= text_field_tag :search, params[:search], placeholder: "Begin typing here..." %>
+      </span>
+
+      <span id="main_search_dates" class="hide">
+        <%= text_field_tag :from, "", onchange: "validateDate(this);", class: "w75", placeholder: "From" %>
+        <%= text_field_tag :to, "", onchange: "validateDate(this);", class: "w75", placeholder: "To" %>
+      </span>
+      <%= image_submit_tag "search.png", id: "search_button", class: "icon" %>
+      <%= link_to image_tag("plus.png", class: "icon trigger"), new_rule_overlays_path, remote: true %>
+    <% end %>
+    <div class="float_right">
+      <%= form_for 'test', :url => "admin/rules/test", html: { name: 'test', remote: true } do %>
+        <span class="label">Test:</span>
+        <%= select(:search_type, :type, options_for_select([["Entity ID", "Entity ID"], ["Name", "Name"]]), {include_blank: false}, {name: "type", class: "w110"} ) %>
+        <%= text_field_tag :value, "", placeholder: "Value", class: "w110" %>
+        <%= select(:search_type, :trigger, options_for_select(get_trigger_options()), {include_blank: "All Triggers"}, {name: "trigger", class: "w110"} ) %>
+        <%= hidden_field :test, true %>
+        <%= submit_tag "Run" %>
+      <% end %>
+    </div>
+    <p class="clear_fix"></p>
+  </div>
+  <div class="outer_table box w960">
+    <div class="grid_header"></div>
+    <div class="inner_table" style="max-height: none; height: 200px;">
+      <table>
+        <thead class="grid_header_font">
+          <tr>
+            <th class="rule_text"><div>Rule Text</div></th>
+            <th class="names"><div>Names</div></th>
+            <th class="modified_date"><div>Modified</div></th>
+            <th class="modified_by"><div>Modified By</div></th>
+            <th class="reviewed_date" id="rule_header_last"><div>Reviewed</div></th>
+          </tr>
+        </thead>
+        <tbody id="rules_search_result">
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="rules_show" class="border_all_1 box w950 padding_all_5">
+    <p class="no_result">No rule selected.</p>
+  </div>
+  <!-- <div id="overlay_new_rule" class="overlay"></div> -->
+</div>
+
+<script type="text/javascript">
+  check_type();
+  initSearchDates();
+  showZeroResults("rules_search_result");
+
+  function updateNameType(object){
+    var row = $(object).closest('tr');
+    if($(object).find(":selected").text() == "Individual"){
+      $(row).find("span.rule_name_other").eq(0).hide();
+      $(row).find("span.rule_name_other").eq(0).find('input').val('');
+      $(row).find("span.rule_name_individual").eq(0).show();
+    }
+    else{
+      $(row).find("span.rule_name_individual").eq(0).hide();
+      $(row).find("span.rule_name_individual").eq(0).find('input').val('');
+      $(row).find("span.rule_name_other").eq(0).show();
+    }
+  }
+</script>

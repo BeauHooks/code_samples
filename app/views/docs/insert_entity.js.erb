@@ -1,0 +1,52 @@
+$("#<%= @section %>_entities #blank_<%= @section %>").replaceWith("<%= j(render :partial => "docs/entity").html_safe %>");
+$("#add_<%= @section %>_entities").show();
+
+<% if @doc_id == 0 %>
+  var style = ""
+  //Load Entities
+  <% @file.file_doc_entities.where("tag = '#{@section.upcase}' AND doc_id = 0 AND is_active = 1").each do |doc_entity| %>
+    <% @doc_entity = doc_entity %>
+    <% @type = @doc_entity.entity.IndCorp %>
+    <% @doc_id = 0 %>
+    style = $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style");
+    $("div#doc_entity_<%= @doc_entity.id %>_container").remove();
+    $("div#<%= @section %>_entities").append("<%= j(render :partial => "docs/entity").html_safe %>");
+    $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style", style);
+  <% end %>
+    // Update Vesting - REMOVED 8/19/2013 - Changed this to be activated by user instead.
+    //   var value = $("#<%#= @section %>_names").val();
+    //   if(value != ""){
+    //     value += " and <%#= @doc_entity.entity.name.html_safe %>";
+    //   }
+    //   else{
+    //     value += "<%#= @doc_entity.entity.name.html_safe %>";
+    //   }
+
+    //   // Update Notary Vesting
+    //   <%# section = @doc_entity.tag.downcase %>
+    //   <%# value = FileDocField.where("file_id = #{@doc_entity.file_id} AND tag = '#{section.upcase}_NOTARY_VESTING' AND doc_id=0").first.value %>
+    //   <%# if value != "" && value != nil %>
+    //     $("#<%#= section %>_notary_vesting").val("<%#= value.html_safe %>").change();
+    //   <%# end %>
+
+    // $("textarea#<%#= @section %>_names").val(value).change();
+    // $("textarea#<%#= @section %>_vesting").val(value).change();
+  $("tbody#all_docs .active_row a").click();
+<% else %>
+  <% @doc_id = @doc_entity.doc_id %>
+  var style = ""
+  //Load Entities
+  <% @file.file_doc_entities.where("tag = '#{@doc_entity.tag}' AND doc_id = #{@doc_id} AND is_active = 1").each do |doc_entity| %>
+    <% @doc_entity = doc_entity %>
+    <% @type = @doc_entity.entity.IndCorp %>
+    style = $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style");
+    $("div#doc_entity_<%= @doc_entity.id %>_container").remove();
+    $("div#manage_<%= @doc_entity.tag.downcase %>_entities").append("<%= j(render :partial => "docs/entity").html_safe %>");
+    $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style", style);
+  <% end %>
+
+  $("#preview_link").click();
+<% end %>
+
+initializer();
+

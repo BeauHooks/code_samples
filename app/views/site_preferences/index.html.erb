@@ -1,0 +1,36 @@
+<div>
+  <div id="tabs" class="tabs_container">
+    <ul>
+      <li><%= link_to "Style", "#style_preferences" %></li>
+      <li><%= link_to "Navigation", "#navigation_preferences" %></li>
+    </ul>
+    <div id="navigation_preferences" class="pref_box">
+      <h3 class="italic">You must refresh in order for changes to take effect</h3><br />
+      <% SitePreference.navigation.each do |site_preference| %>
+        <h4><%= site_preference.question %></h4>
+        <% site_preference.site_preference_options.each do |option| %>
+          <div class="pref_option clear_fix">
+            <label><%= radio_button_tag site_preference.name, option.setting, current_user.users_preferences[site_preference.name] == option.setting, class: "pref" %>
+            <%= option.description.html_safe %></label>
+          </div>
+        <% end %>
+        <br />
+      <% end %>
+    </div>
+    <div id="style_preferences" class="pref_box">
+      <h3 class="italic">You must refresh in order for changes to take effect</h3><br />
+      <% SitePreference.style.each do |site_preference| %>
+        <h4 class="clear_fix"><%= site_preference.question %></h4>
+        <% site_preference.site_preference_options.each do |option| %>
+          <div class="pref_option clear_fix">
+            <label><%= radio_button_tag site_preference.name, option.setting, current_user.users_preferences[site_preference.name] == option.setting, class: "pref float_left" %>
+            <%= option.description.html_safe %></label>
+          </div>
+        <% end %>
+        <p class="clear_fix"></p>
+      <% end %>
+    </div>
+  </div>
+  <div id="tab_content" class="pref_tab_content">
+  </div>
+</div>

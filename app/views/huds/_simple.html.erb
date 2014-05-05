@@ -1,0 +1,46 @@
+<% @hud.hud_lines.order("number ASC").each do |line| %>
+  <% if line.number == 100 %>
+    <table id="simple_view" id="tbl<%= line.number %>">
+    <tr>
+      <td class="section_header" colspan="5">J. Summary of Borrower's Transaction</td>
+    </tr>
+  <% elsif line.number == 400 %>
+    </table>
+    <table class="simple_view" id="tbl<%= line.number %>">
+      <tr>
+        <td class="section_header" colspan="5">K. Summary of Seller's Transaction</td>
+      </tr>
+  <% elsif line.number == 700 %>
+    </table>
+    <table class="simple_view" id="tbl<%= line.number %>">
+      <tr>
+        <td class="section_header" colspan="5">L. Settlement Charges</td>
+      </tr>
+  <% elsif line.number.to_s[-2..-1] == "00" %>
+    </table>
+    <table class="simple_view" id="tbl<%= line.number %>">
+  <% end %>
+    <tr>
+      <td class="line_number"><%= line.number %>.</td>
+      <td class="line_description">
+        <% type = line.type.to_s rescue "" %>
+        <%= (type.include?("custom")) ? text_field_tag(:name, line.name) : line.name %>
+      </td>
+      <td class="line_extras">
+        <% type = line.type.gsub("_custom") rescue "" %>
+        <% case type %>
+        <% when "nothing" %>
+        <% else %>
+        <% end %>
+      </td>
+      <td class="line_total">
+        <% type = line.type.split("_")[0] rescue "" %>
+        <% case type %>
+        <% when "nothing" %>
+        <% else %>
+          <%= text_field_tag :amount, line.borrower_amount %><%= text_field_tag :amount, line.seller_amount %>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
+</table>

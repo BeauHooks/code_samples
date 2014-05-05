@@ -1,0 +1,58 @@
+<div id="send_doc">
+	<div class="overlay_header">
+		<h2>Send Documents</h2>
+	</div>
+	<div class="overlay_content">
+		<div id="recipients">
+			<table>
+				<tr>
+					<td class="checkbox"><input type="checkbox" /></td>
+					<td class="name label">Recipient</td>
+					<td class="position label">Position</td>
+					<td class="send label">Send</td>
+				</tr>
+				<% 5.times do %>
+				<tr>
+					<td class="checkbox"><input type="checkbox" /></td>
+					<td class="name">Dave Byars</td>
+					<td class="position">Buyer</td>
+					<td class="send"><select><option>Email</option><option>Fax</option><option>Courier</option></select></td>
+				</tr>
+				<% end %>
+			</table>
+		</div>
+		<div id="documents">
+			<table>
+				<tr>
+					<td class="checkbox"><input type="checkbox" /></td>
+					<td class="name label">Document</td>
+					<td class="modify_date label">Modify Date</td>
+					<td class="modify_user label">Modified By</td>
+				</tr>
+				<% 3.times do |n| %>
+				<tr>
+					<td class="checkbox"><input type="checkbox" /></td>
+					<td class="name label complete">HUD <%= n+1 %></td>
+					<td class="modify_date label">5/15/12 - 10:15 AM</td>
+					<td class="modify_user label">Milo Siner</td>
+				</tr>
+				<% end %>
+				<tr>
+					<td class="checkbox"><input type="checkbox" /></td>
+					<td class="name label error">Quit Claim Deed</td>
+					<td class="modify_date label">5/15/12 - 10:15 AM</td>
+					<td class="modify_user label">Milo Siner</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div id="message_content">
+			<p><span class="label">Subject*:</span><br /><input type="text" value="Requested Documents" /></p>
+			<p><span class="label">Message*:</span><br /><textarea>Here are some docs!</textarea></p>
+		</div>
+	</div>
+	<div class="overlay_footer">
+		<input type="submit" value="Cancel" class="button close" />
+		<input type="submit" value="Send" class="button close" />
+	</div>
+</div>

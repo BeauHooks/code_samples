@@ -1,0 +1,9 @@
+<% num = @search_results.length %>
+<% if num == 100 %>
+  <%= num %> Results Returned **Narrow Search**
+ <% elsif num == 1 %>
+  <%= num %> Result Returned
+<% else %>
+  <%= num %> Results Returned
+<% end %>
+<%= link_to image_tag("/assets/plus.png", class: "icon trigger"), check_in_progress_new_orders_path, id: "open_new_order", remote: true %>

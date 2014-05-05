@@ -1,0 +1,46 @@
+<% content_for :overlay_class do %>
+  doc_manage_signatures
+<% end %>
+
+<% content_for :overlay_title do %>
+  Manage Signatures - <%= @doc.doc_template.short_name %>/<%= truncate(@doc.description, length: 25) %>
+<% end %>
+
+<% content_for :overlay do %>
+  <div>
+    <% grantor_select, position_select = get_doc_signature_type(@doc) %>
+    Signers: <%= select :doc_template, :Signers, options_for_select([["Grantor", "grantor"], ["Grantee", "grantee"], ["Both", "both"]], grantor_select), {:include_blank => false}, {id: "signature_signer", name: "signature_block", onchange: "changeFormatOptions(this); $.ajax({url: '#{change_signature_block_docs_path(id: @doc.id)}&signer=' + $(this).val() + '&format=' + $('#signature_format').val(), type: 'PUT'}); $('#preview_link').click();"} %>&nbsp;&nbsp;&nbsp;&nbsp;
+    Signature Position:
+    <% if grantor_select == "both" %>
+      <%= select :doc_template, :Signers, options_for_select([["Grantor First", "grantorfirst"], ["Grantee First", "granteefirst"]], position_select), {:include_blank => false}, {id: "signature_format", name: "signature_block", onchange: "$.ajax({url: '#{change_signature_block_docs_path(id: @doc.id)}&signer=' + $('#signature_signer').val() + '&format=' + $(this).val(), type: 'PUT'}); $('#preview_link').click();"} %>
+    <% else %>
+      <%= select :doc_template, :Signers, options_for_select([["Left", "left"], ["Right", "right"], ["Both", "both"]], position_select), {:include_blank => false}, {id: "signature_format", name: "signature_block", onchange: "$.ajax({url: '#{change_signature_block_docs_path(id: @doc.id)}&signer=' + $('#signature_signer').val() + '&format=' + $(this).val(), type: 'PUT'}); $('#preview_link').click();"} %>
+    <% end %>
+    <div class="preview"><%= button_to "Preview", "", remote: true, style: "display: none" %><%= link_to "", "docs/#{@doc.id}/signature_preview", remote: true, style: "display: none;", id: "preview_link" %></div>
+    <hr />
+    <div id="entities">
+      <h4>Grantor Entities
+      <a href="docs/add_entity?section=manage_grantor&file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>" data-remote="true" id="add_manage_grantor_entities"><img src="/assets/plus.png"  class="trigger icon"  /></a></h4>
+        <div id="manage_grantor_entities">
+
+        </div>
+        <hr />
+      <h4>Grantee Entities
+      <a href="docs/add_entity?section=manage_grantee&file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>" data-remote="true" id="add_manage_grantee_entities"><img src="/assets/plus.png"  class="trigger icon"  /></a></h4>
+        <div id="manage_grantee_entities">
+
+        </div>
+    </div>
+    <div id="signature_preview_container">
+      <h4>Signature Preview</h4>
+      <div id="signature_preview" class="border">
+        <%= generate_signature_block(@doc).html_safe %>
+      </div>
+    </div>
+      <p class="clear"></p>
+  </div>
+<% end %>
+
+<% content_for :overlay_footer do %>
+    <input type="button" value="Close" class="button" onclick="var row = $('#all_docs').find('.active_row').eq(0); $(row).removeClass('active_row'); $(row).click(); $(this).closest('.overlay').remove();" />
+<% end %>

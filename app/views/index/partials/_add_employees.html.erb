@@ -1,0 +1,41 @@
+<div id="add_employee">
+  <div class="overlay_header">
+    <h2>Add Employees</h2>
+  </div>
+  <div class="overlay_content">
+    <%= form_for 'search_form', name: 'search_form', method: :get, remote: true, controller: 'index', action: 'file_employees' do %>
+      <h4>Search: <input type="text" id="search" placeholder="Begin Typing Here..."><%= image_submit_tag("search.png", id: "search_button") %> <span class="right">Displaying 100 Results</span></h4>
+    <% end %>
+    <div class="border">
+      <table class="grid_header">
+        <tr>
+          <td class="name">Name</td>
+          <td class="position">Position</td>
+          <td class="email">Email</td>
+          <td class="spacer_15"></td>
+        </tr>
+      </table>
+      <div id="result">
+        <table>
+          <% @employees.each do |e| %>
+            <tr>
+              <td class="name"><%= e.FullName %></td>
+              <td class="position">
+                <select>
+                  <option>Buyer</option>
+                  <option>Seller</option>
+                  <option>Lender</option>
+                </select>
+              </td>
+              <td class="email"><%= link_to e.Email %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <input type="submit" value="Cancel" class="button close" />
+    <input type="submit" value="Save" class="button close" /></p>
+  </div>
+</div>

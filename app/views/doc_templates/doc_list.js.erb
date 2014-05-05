@@ -1,0 +1,8 @@
+$("div#docs").html("<%= j(render :partial => "doc_templates/docs_list").html_safe %>");
+
+<% if @notice != nil %>
+  $("#flash").html("<h3 class='flash_notice'><%= @notice %></h3>");
+  $('div#flash').delay(500).fadeIn('normal', function() {
+    $(this).delay(2500).fadeOut();
+  });
+<% end %>

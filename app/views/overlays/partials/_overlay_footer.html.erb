@@ -1,0 +1,6 @@
+<%= button_tag "Send", class: "button", onclick: "$('##{identifier}').find('form').first().submit(); $('[id^=#{identifier}]').remove();" if @buttons.include?("send") %>
+<%= button_tag "Save", class: "button", onclick: "$('##{identifier}').find('form').first().submit(); $('[id^=#{identifier}]').remove();" if @buttons.include?("save") %>
+<%= button_tag "Continue", class: "button", onclick: "$('##{identifier}').find('form').first().submit(); $('[id^=#{identifier}]').remove();" if @buttons.include?("continue") %>
+<%= button_tag "Save and Copy", class: "button", onclick: "$('##{identifier}').find('form').first().submit(); $('[id^=#{identifier}]').remove();" if @buttons.include?("save_and_copy") %>
+<%= button_tag "Cancel", class: "button close", onclick: "$('[id^=#{identifier}]').remove();" if @buttons.include?("cancel") %>
+<%= button_tag "Close", class: "button close", onclick: "$('[id^=#{identifier}]').remove();" if @buttons.include?("close") %>

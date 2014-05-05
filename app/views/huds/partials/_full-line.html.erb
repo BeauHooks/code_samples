@@ -1,0 +1,423 @@
+<% type = builder.type.gsub("_custom", "") rescue "" %>
+<% case type %>
+<% when "l_disbursement" %>
+  <% if builder.number < 1109 || builder.number >= 1200 %>
+    <td class="description" colspan="<%= 3 if builder.number > 800 %>" >
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", placeholder: ("Description" if @print == nil ), style: "width: 25.5%;" %>
+      <%= text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", placeholder: ("Payee" if @print == nil ), style: "width: 28%;" %>
+      <span style="float: right; text-align: right; width: 40%;">
+        <%= text_field_tag :amount, number_to_currency(builder.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount'); toUSD(this);", placeholder: ("Amount" if @print == nil ), style: "width: 40%; text-align: right;" %>
+        <%= text_field_tag :poc, builder.poc, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','poc');", placeholder: ("POC" if @print == nil ), onclick: "if($(this).val() == ''){$(this).val('POC').change(); }", style: "width: 21%;" %>
+        <%=  text_field_tag :description,  builder.description, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','description');", placeholder: ("GFE #" if @print == nil), style: "text-align: right; width: 30%; float:right;", onclick: "if($(this).val() == ''){$(this).val('(from GFE #3)').change(); }" if builder.number > 800 && builder.number < 900 %>
+        <% if builder.number > 1100 && builder.number < 1400 %>
+          <%= select :invoice_category, :invoice_category, options_for_select([["Cancellation Fee", "CancelFee"], ["Closing Fee", "ClosingFee"], ["CPL Endorsement", "CPLEndorsement"],["Delivery/Wire Fee", "FedEx"],["Document Preparation", "DocPrep"],["Foreclosure", "Forclose"],["Endorsements", "Endorsements"],["Escrow Collection", "EscrowCol"],["Exchange Fee", "ExchangeFee"],["Junior Policy", "JuniorPol"],["Lender Policy", "LenderPol"],["Limited Report", "LimRpt"],["Miscellaneous", "PlatFee"],["Owner Policy", "OwnerPol"],["Recording Fee", "RecFee"],["Reconveyance Fee", "Recon"],["Transfer Tax", "TransferTax"],["TSG/Litigation", "Lit"]], builder.invoice_category), {:include_blank => true}, {style: "width: 28%; height: 1.45em; font-size: 1em; font-family: Arial, sans-serif", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','invoice_category');", name: "invoice_category", placeholder: "Invoice Category"} if @print == nil %>
+        <% end %>
+      </span>
+    </td>
+    <td  class="line_total"><%=  text_field_tag :borrower_amount, number_to_currency(builder.borrower_amount, unit: ""), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_to_currency(builder.seller_amount, unit: ""), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% else %>
+   <td class="description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", placeholder: ("Description" if @print == nil ), style: "width: 38.5%;" %>
+    <%= text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", placeholder: ("Payee" if @print == nil ), style: "width: 50%;" %>
+   </td>
+    <td class="description" style="width: 30%; text-align: right;" colspan="2">
+      <%= text_field_tag :amount, number_to_currency(builder.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount'); toUSD(this);", placeholder: ("Amount" if @print == nil ), style: "width: 40%; text-align: right;" %>
+      <%= text_field_tag :poc, builder.poc, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','poc');", placeholder: ("POC" if @print == nil ), onclick: "if($(this).val() == ''){$(this).val('POC').change(); }", style: "width: 20%;" %>
+      <%= select :invoice_category, :invoice_category, options_for_select([["Cancellation Fee", "CancelFee"], ["Closing Fee", "ClosingFee"], ["CPL Endorsement", "CPLEndorsement"],["Delivery/Wire Fee", "FedEx"],["Document Preparation", "DocPrep"],["Foreclosure", "Forclose"],["Endorsements", "Endorsements"],["Escrow Collection", "EscrowCol"],["Exchange Fee", "ExchangeFee"],["Junior Policy", "JuniorPol"],["Lender Policy", "LenderPol"],["Limited Report", "LimRpt"],["Miscellaneous", "PlatFee"],["Owner Policy", "OwnerPol"],["Recording Fee", "RecFee"],["Reconveyance Fee", "Recon"],["Transfer Tax", "TransferTax"],["TSG/Litigation", "Lit"]], builder.invoice_category), {:include_blank => true}, {style: "width: 30%; height: 1.45em; font-size: 1em; font-family: Arial, sans-serif; float: right;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','invoice_category');", name: "invoice_category", placeholder: "Invoice Category"} if @print == nil %>
+    </td>
+    <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% end %>
+
+<% when "l_header"%>
+<%# Header %>
+<% total_lines = @hud.hud_lines.where("number >= #{builder.number} AND number <= #{builder.number + 20}") %>
+  <td class="local_header label" colspan="5">
+    <%=  label :number, builder.number %>.
+    <%=  label :name, builder.name %>
+    <div class="tools non-printable" style="float: right; text-align: right;" id="hud_tools_<%= builder.number %>">
+      <% if builder.number == 800 && @print == nil %>
+        Origination Fee: $<%= text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimeter: ',', separator: '.'), onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", style: "background-color: #FFFF00; color: #464646; text-align: left;", placeholder: "Amount" %>
+        or
+        <%= text_field_tag :percent, number_with_precision(builder.percent, precision: 3, delimeter: ',', separator: '.'), onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','percent');", placeholder: "Percent", style: "background-color: #FFFF00; color: #464646; text-align: right;" %>%
+      <% end %>
+      <% post = "/hud_lines/create?hud_id=#{@hud.id}&section=#{builder.number}&type=#{builder.type.split("_")[0]}_disbursement" %>
+      <%= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('create_hud_line', '#{post}');" if total_lines.count < 20 %>
+      <%#= link_to image_tag("plus.png", class: "icon"), "/hud_lines/new?section=#{builder.number}&type=#{builder.type.split("_")[0]}&hud_id=#{@hud.id}", remote: true %>
+    </div>
+  </td>
+
+<% when "l_main_header" %>
+<%# Main Header %>
+<td class="local_header label">
+    <% total_lines = @hud.hud_lines.where("number >= #{builder.number} AND number <= #{builder.number + 20}") %>
+  <% total_lines.count > 20 ? style = "style='display: none;'" : style = "" %>
+    <%=  label :number,  builder.number %>.
+    <%=  builder.name %>
+    <div class="tools non-printable" id="hud_tools_<%= builder.number %>" <%= style %>>
+      <% post = "/hud_lines/create?hud_id=#{@hud.id}&section=#{builder.number}&type=#{builder.type.split("_")[0]}_disbursement" %>
+      <%= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('create_hud_line', '#{post}');" %>
+      <%#= link_to image_tag("plus.png", class: "icon"), "/hud_lines/new?section=#{builder.number}&type=#{builder.type.split("_")[0]}&hud_id=#{@hud.id}", remote: true %>
+    </div>
+    &nbsp;&nbsp;&nbsp;<%= @print == nil ? "Commission Sales Price: $" : "" %><%= text_field_tag :comm_sales_price, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", placeholder: "Sales Price" if @print == nil %>
+  </td>
+  <% if  builder.number == 700 %>
+    <td  rowspan="4" style="text-align:center;" class="line_total local_header">Paid From Borrower's Funds at Settlement</td>
+    <td  rowspan="4" style="text-align:center;" class="line_total local_header">Paid From Seller's Funds at Settlement</td>
+  </tr>
+  <tr>
+    <td style="padding-left:33px;" class="description">
+      Division of commission (line 700) as follows:
+      <!--<br /> on price -->
+      <!--<%#= text_field_tag "700_price", nil, style: "text-align:center;" %> @ <%#= text_field_tag "700_percent", nil, style: "text-align:right;" %>%
+      = $<%#= text_field_tag "700_total", nil, :readonly => true %>-->
+    </td>
+  </tr>
+  <% end %>
+<% when "l_main_payee" %>
+<%# Main Payee %>
+  <td class="description"><%= render "/huds/partials/flyout", builder: builder %>
+    $<%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", class: "amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event); ", placeholder: ("Amount" if @print == nil) %>
+    to <%=  text_field_tag :payee_name, builder.payee_name, class: "name", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", placeholder: ("Payee" if @print == nil) %>
+    <%=  text_field_tag :description, builder.description, class: "payee_description", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','description');", placeholder: ("Notes" if @print == nil) %>
+    <span class="non-printable"><%= text_field_tag :comm_percent, number_with_precision(builder.percent, precision: 3, delimeter: ',', separator: '.'), onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','percent');", placeholder: ("0.000" if @print == nil), class: "comm_percent" %>%</span>
+  </td>
+
+<%# Payee %>
+<% when "l_payee" %>
+  <td colspan="2" class="payee_name description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!-- . -->
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+    <%=  text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", placeholder: ("Payee" if @print == nil), style: "width: 30%;" %>
+    <span style="text-align: right; float: right; width: 30%;">
+      <%=  text_field_tag :amount, number_to_currency(builder.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount'); toUSD(this);", placeholder: ("Amount" if @print == nil), style: "width: 75%; text-align: right;" %>
+      <%=  text_field_tag :poc, builder.poc, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','poc');", placeholder: ("POC" if @print == nil), style: "width: 20%;", onclick: "if($(this).val() == ''){$(this).val('POC').change()}" %>
+    </span>
+  </td>
+  <td class="gfe description">
+    <%= builder.description %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# Payee Amount %>
+<% when "l_payee_amount" %>
+    <% if  builder.number > 800 && builder.number < 900 %>
+      <td class="description name">
+        <%= render "/huds/partials/flyout", builder: builder %>
+        <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil), style: "width: 35%;" %>
+        <%= text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", remote: true, placeholder: ("Payee" if @print == nil), style: "width: 35%;" %>
+      </td>
+      <td class="amount description">
+        <%= label_tag "$", nil %><%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>
+      </td>
+      <td class="gfe description">
+        <span style="float: right;"><%=  builder.description %></span>
+    <% elsif  builder.number > 1100 && builder.number < 1200 %>
+      <td class="description">
+        <%= render "/huds/partials/flyout", builder: builder %>
+        <%#=  label :number,  builder.number %><!-- .  -->
+        <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+        <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+      </td>
+      <td colspan="2" class="description">
+        <%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", style: "float:right; width: 95px;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %><%= label_tag "$", nil, style: "float:right;" %>
+    <% else %>
+      <td>
+        <%= render "/huds/partials/flyout", builder: builder %>
+      <%#=  label :number,  builder.number %><!-- .
+ -->      <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+    <% end %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# Amount %>
+<% when "l_amount" %>
+  <% if builder.number == 1104 %>
+    <td class="description">
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil), style: "width: 38.5%" %>
+      <%= text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", remote: true, placeholder: ("Payee" if @print == nil),
+      style: ( (1100..1199).include?(builder.number) ? "width: 50%;" : "width: 30%;") %>
+    </td>
+    <td class="description">
+      <%= label_tag "$", nil, placeholder: ("Amount" if @print == nil) %><%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", style: "width: 4em;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>
+    </td>
+    <td class="description">
+      <%= label_tag "$", nil, placeholder: ("Amount" if @print == nil) if @print == nil || (@print != nil && builder.endorsement_amount != nil) %><%=  text_field_tag :endorsement_amount, number_with_precision(builder.endorsement_amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_endorsement_amount", style: "width: 4em;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','endorsement_amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>
+      <%=  text_field_tag :description, builder.description, id: "#{builder.number}_description", style: "width: 10em;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','description');", placeholder: ("Endorsements" if @print == nil) %>
+    </td>
+    <td  class="line_total"><%= text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+    <td  class="line_total"><%= text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% else %>
+    <td class="description">
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil), style: "width: 38.5%" %>
+      <%= text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", remote: true, placeholder: ("Payee" if @print == nil),
+      style: ( (1100..1199).include?(builder.number) ? "width: 50%;" : "width: 30%;") %>
+    </td>
+    <td colspan="2" class="description">
+      <%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", style: "float:right; width:95px;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %><%= label_tag "$", nil, style: "float:right;", placeholder: ("Amount" if @print == nil) %>
+    </td>
+    <td  class="line_total"><%= text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+    <td  class="line_total"><%= text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% end %>
+
+<%# Amount Desc %>
+<% when "l_amount_desc" %>
+    <% if  builder.number > 800 && builder.number < 900  %>
+    <td class="description name">
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%#=  label :number,  builder.number %><!-- .  -->
+      <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+    </td>
+    <td class="amount description">
+      <%= label_tag "$", nil %><%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>
+    </td>
+    <td class="description">
+      <span style="float: right;"><%= builder.description %></span>
+    <% elsif  builder.number > 1100 &&  builder.number < 1200 %>
+    <td colspan="3" class="description">
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%#=  label :number,  builder.number %><!-- . -->
+      <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+      <%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", style: "float:right; width: 95px;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %><%= label_tag "$", nil, style: "float:right;" %>
+    <% else %>
+    <td class="description">
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%#=  label :number,  builder.number %><!-- .  -->
+      <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+    <% end %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# Descriptive %>
+<% when "l_descriptive" %>
+  <% if builder.number != 1103 %>
+    <% if builder.number != 705 %>
+      <td colspan="3" class="description" >
+    <% else %>
+      <td class="description" >
+    <% end %>
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <% if builder.number == 1103 %>
+        <% width = "width: 26.25%" %>
+      <% elsif builder.number == 1101 %>
+        <% width = "width: 40%" %>
+      <% else %>
+        <% width = "width: 80%" %>
+      <% end %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil), style: width %>
+      <%= text_field_tag(:payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", remote: true, placeholder: ("Payee" if @print == nil), style: "width: 30%") if builder.number == 1103 || builder.number == 1101 %>
+      <span style="float: right;"><%= builder.description %></span>
+    </td>
+
+    <% calc_list = [803,1001,1101,1201,1203, 1301] %>
+    <% if calc_list.include?(builder.number) && @print == nil && builder.group == nil %>
+      <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: (calc_list.include?(builder.number) ? "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','borrower_amount');" : "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');"), ondblclick: (calc_list.include?(builder.number) ? "revertCalculated(this,'#{builder.id}','#{@hud.id}','borrower_amount');" : ""), class: "print_buyer calc" %></td>
+    <% elsif calc_list.include?(builder.number) && @print == nil && builder.group == "custom" %>
+      <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: (calc_list.include?(builder.number) ? "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','borrower_amount');" : "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');"), ondblclick: (calc_list.include?(builder.number) ? "revertCalculated(this,'#{builder.id}','#{@hud.id}','borrower_amount');" : ""), class: "print_buyer calc_custom" %></td>
+    <% else %>
+      <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+    <% end %>
+
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% else %>
+    <td class="description" >
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil), style: "width: 38.5%;" %>
+      <%= text_field_tag(:payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", remote: true, placeholder: ("Payee" if @print == nil), style: "width: 50%") %>
+    </td>
+    <td class="description" colspan="2" style="text-align: right;">
+      <%= builder.description %>
+    </td>
+    <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% end %>
+
+<%# Daily Int %>
+<% when "l_daily_int" %>
+  <td colspan="2" class="daily_int description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!--.   -->
+    <%#= builder.type.include?("custom") ? text_field_tag(:name, builder.name) : builder.name %>
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+
+    <% date = builder.start_date.to_s.split("-") if builder.start_date != nil %>
+    <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if builder.start_date != nil %>
+    <%= text_field_tag :start_date, date, style: "text-align:center;", id: "start_date_#{builder.number}", class: "date_short", onchange: "validateDate(this); updateLine(this,'#{builder.id}','#{@hud.id}','start_date');", placeholder: ("Start Date" if @print == nil) %> to
+
+    <% date = "" %>
+    <% date = builder.end_date.to_s.split("-") if builder.end_date != nil %>
+    <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if builder.end_date != nil %>
+    <%= text_field_tag :end_date, date, style: "text-align:center;", :id => "end_date_#{builder.number}", class: "date_short", onchange: "validateDate(this); updateLine(this,'#{builder.id}','#{@hud.id}','end_date');", placeholder: ("End Date" if @print == nil) %> @ $
+    <%= text_field_tag :daily_interest, number_with_precision(builder.daily_interest, precision: 4, delimiter: ',', separator: '.'), id: "#{builder.number}_daily_interest", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','daily_interest');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %> /day
+
+    <script type="text/javascript">
+      $( "input#start_date_<%= builder.number %>").datepicker({
+        changeMonth: true,
+        changeYear: true
+      });
+
+      $( "input#end_date_<%= builder.number %>").datepicker({
+        changeMonth: true,
+        changeYear: true
+      });
+    </script>
+  </td>
+  <td class="gfe description">
+    <%= builder.description %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: ([901].include?(builder.number) ? "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','borrower_amount');" : "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');"), ondblclick: ([901].include?(builder.number) ? "revertCalculated(this,'#{builder.id}','#{@hud.id}','borrower_amount');" : ""), onkeydown: "numbersOnly(event);", class: ([901].include?(builder.number) && @print == nil && builder.group == nil ? "print_buyer calc" : "print_buyer calc_custom") %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# Mort Ins %>
+<% when "l_mort_ins" %>
+  <td colspan="2" class="description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!-- . -->
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+    <%=  text_field_tag :periods, builder.periods, style: "text-align:right;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','periods');", onkeydown: "numbersOnly(event);", placeholder: ("Months" if @print == nil) %> months to <%=  text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", placeholder: ("Payee" if @print == nil) %>
+  </td>
+  <td class="gfe description">
+    <%= builder.description %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# Home Ins %>
+<% when "l_home_ins" %>
+  <td colspan="2" class="description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!-- . -->
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+    <%=  text_field_tag :periods, builder.periods, style: "text-align:right;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','periods');", onkeydown: "numbersOnly(event);", placeholder: ("Years" if @print == nil) %> years to
+    <%=  text_field_tag :payee_name, builder.payee_name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','payee_name');", placeholder: ("Payee" if @print == nil) %>
+  </td>
+  <td class="gfe description">
+    <%= builder.description %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# Periodic %>
+<% when "l_periodic" %>
+  <td class="periodic_label description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#= label :number,  builder.number %><!-- . -->
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+  </td>
+  <td colspan="2" class="periodic_amount description">
+    <%=  text_field_tag :periods, builder.periods, style: "text-align:right;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','periods');", placeholder: ("Months" if @print == nil) %> months @ $
+    <%=  text_field_tag :periodic_amount, number_with_precision(builder.periodic_amount, precision: 2, delimeter: ',', separator: '.'), id: "#{builder.number}_periodic_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','periodic_amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>per month
+    $<%=  text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);" %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# DMR %>
+<% when "l_dmr" %>
+  <td colspan="3" class="description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!-- . -->
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    Deed $<%=  text_field_tag :deed_amount, number_with_precision(builder.deed_amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_deed_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','deed_amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %> Mortgage $
+    <%=  text_field_tag :mortgage_amount, number_with_precision(builder.mortgage_amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_mortgage_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','mortgage_amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %> Release $<%=  text_field_tag :releases_amount, number_with_precision(builder.releases_amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_releases_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','releases_amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>
+  </td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','seller_amount');", ondblclick: "revertCalculated(this,'#{builder.id}','#{@hud.id}','seller_amount');", onkeydown: "numbersOnly(event);", class: (@print == nil && builder.group == "custom" ? "print_seller calc_custom" : "print_seller calc") %></td>
+
+<%# DM %>
+<% when "l_dm" %>
+  <td colspan="2" class="description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!-- . -->
+    <%#= builder.type.include?("custom") ? text_field_tag(:name, builder.name) : builder.name %>
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+  </td>
+  <td class="description">Deed $<%=  text_field_tag :deed_amount, number_with_precision(builder.deed_amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_deed_amount", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','deed_amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>
+    Mortgage $<%=  text_field_tag :mortgage_amount, number_with_precision(builder.mortgage_amount, precision: 2, delimiter: ',', separator: '.'), onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','mortgage_amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %>
+  </td>
+<td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+<td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# Inverse %>
+<% when "l_inverse" %>
+  <td colspan="3" class="description">
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!-- . -->
+    <%#= builder.type.include?("custom") ? text_field_tag(:name, builder.name) : builder.name %>
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %>
+    <%= text_field_tag :amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_amount", style: "float:right;", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','amount');", onkeydown: "numbersOnly(event);", placeholder: ("Amount" if @print == nil) %><%= label_tag "-$", nil, style: "float:right" %>
+  </td>
+  <td  class="line_total"> <%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+  <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+
+<%# L Footer %>
+<% when "l_footer" %>
+  <td class="hud_header">
+    <h2><%=  label :number,  builder.number %>.
+    <%=  label :name, builder.name,  builder.name %></h2>
+  </td>
+  <td class="line_total<%= ' disabled' if @print == nil %>" style="font-weight: bold;">
+    <%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: ([1400].include?(builder.number) ? "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','borrower_amount');" : "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');"), ondblclick: ([1400].include?(builder.number) ? "revertCalculated(this,'#{builder.id}','#{@hud.id}','borrower_amount');" : ""), onkeydown: "numbersOnly(event);", class: "print_buyer", disabled: ([1400].include?(builder.number) && @print == nil) %>
+  </td>
+  <td class="line_total<%= ' disabled' if @print == nil %>" style="font-weight: bold;">
+    <%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: ([1400].include?(builder.number) ? "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','seller_amount');" : "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');"), ondblclick: ([1400].include?(builder.number) ? "revertCalculated(this,'#{builder.id}','#{@hud.id}','borrower_amount');" : ""), class: "print_seller", disabled: ([1400].include?(builder.number) && @print == nil) %>
+  </td>
+
+<% when "l_normal" %>
+  <td class="description" colspan="<%= '3' if builder.number > 800 %>" >
+    <%= render "/huds/partials/flyout", builder: builder %>
+    <%#=  label :number,  builder.number %><!-- . -->
+    <%#= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+    <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true, placeholder: ("Description" if @print == nil) %></td>
+  <td  class="line_total"><%=  text_field_tag :borrower_amount, number_to_currency(builder.borrower_amount, unit: ''), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+
+  <% if [703].include?(builder.number) && @print == nil && builder.group == nil %>
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_to_currency(builder.seller_amount, unit: ''), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','seller_amount');", ondblclick: "revertCalculated(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller calc" %></td>
+  <% elsif [703].include?(builder.number) && @print == nil && builder.group == "custom" %>
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_to_currency(builder.seller_amount, unit: ''), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateCalculated('custom',this,'#{builder.id}','#{@hud.id}','seller_amount');", ondblclick: "revertCalculated(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller calc_custom" %></td>
+  <% else %>
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_to_currency(builder.seller_amount, unit: ''), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% end %>
+<% else %>
+  <% if builder.number < 800 %>
+    <td class="description">
+      <%= render "/huds/partials/flyout", builder: builder %>
+      <%#=  label :number,  builder.number %><!-- . --> </td>
+    <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+    <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+  <% else %>
+    <% if @hud_type == "SS" || @hud_type == "LSS" %>
+      <td class="name">&nbsp;<%#= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", remote: true %></td>
+      <td class="line_total">&nbsp;
+        <%#=  text_field_tag :charges, number_to_currency(builder.charges, precision: 2, separator: '.', delimeter: ',', unit: ""), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','charges');", onkeydown: "numbersOnly(event);", class: "print_seller" %></td>
+      <td class="line_total">&nbsp;
+        <%#=  text_field_tag :credits, number_to_currency(builder.credits, precision: 2, delimeter: ',', separator: '.', unit: ""), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','credits');", onkeydown: "numbersOnly(event);", class: "print_seller" %></td>
+    <% else %>
+      <td colspan="3" class="description">
+        <%= render "/huds/partials/flyout", builder: builder %>
+      <%#=  label :number,  builder.number %><!-- . --> </td>
+      <td  class="line_total"><%=  text_field_tag :borrower_amount, number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.'), id: "line_#{ builder.number}_buyer", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','borrower_amount');", onkeydown: "numbersOnly(event);", class: "print_buyer" %></td>
+      <td  class="line_total"><%=  text_field_tag :seller_amount, number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'), id: "line_#{ builder.number}_seller", onkeydown: "numbersOnly(event);", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','seller_amount');", class: "print_seller" %></td>
+    <%end %>
+  <% end %>
+<% end %>

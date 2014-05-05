@@ -1,0 +1,61 @@
+<% if @rule != nil %>
+	<%= render "/admin/rules/form" %>
+	<script type="text/javascript">
+	  function updateRule(object){
+	  	$.ajax({
+	      url: "/admin/rules/<%= @rule.id %>?" + $(object).attr('name') + "=" + encodeURIComponent($(object).val()),
+	      type: "PUT"
+	    });
+	  }
+
+	  function updateRuleName(object){
+	    $.ajax({
+	      url: '/admin/rule_names/' + $(object).closest('tr').attr('id') + "?" + $(object).attr('field') + "=" + encodeURIComponent($(object).val()),
+	      type: "PUT"
+	    });
+	  }
+
+	  function destroyRule(object){
+	    $.ajax({
+	      url: '/admin/rules/' + $(object).closest('tr').attr('id').replace(/rule_/, ""),
+	      type: "DELETE",
+	      success: $(object).closest('tr').remove()
+	    });
+	  }
+
+	  function destroyRuleName(object){
+	    $.ajax({
+	      url: '/admin/rule_names/' + $(object).closest('tr').attr('id'),
+	      type: "DELETE",
+	      success: $(object).closest('tr').remove()
+	    });
+	  }
+
+	  function updateRuleException(object){
+	  	$.ajax({
+	      url: '/admin/rule_exceptions/' + $(object).closest('tr').attr('id') + "?" + $(object).attr('name') + "=" + encodeURIComponent($(object).val()),
+	      type: "PUT"
+	    });
+	  }
+
+	  function destroyRuleException(object){
+	    $.ajax({
+	      url: '/admin/rule_exceptions/' + $(object).closest('tr').attr('id'),
+	      type: "DELETE",
+	      success: $(object).closest('tr').remove()
+	    });
+	  }
+
+	  function updateRuleTrigger(object){
+	  	$.ajax({
+	      url: "/admin/rule_triggers?trigger=" + $(object).val() + "&rule_id=<%= @rule.id %>",
+	      type: "POST"
+	    });
+	  }
+
+	  initializer();
+	</script>
+	<p class="clear_fix"></p>
+<% else %>
+	<p class="no_result">No rule selected.</p>
+<% end %>

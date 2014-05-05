@@ -1,0 +1,5 @@
+<% if @properties.size == 0 %>
+  $("#property_lookup_results").html("<p style='font-style: italic; color: #9B9B9B; padding-left: 5px; margin-top: 5px;'>0 results.</p>");
+<% else %>
+	$("#property_lookup_results").html("<%= j(render 'file_properties/partials/search_properties', properties: @properties, file_properties: @file_properties).html_safe %>");
+<% end %>

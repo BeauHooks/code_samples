@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= favicon_link_tag '/favicon.ico' %>
+    <title>Filetrak - <%= page_name %></title>
+    <%= user_styles.html_safe %>
+    <%= stylesheet_link_tag    "/assets/themes/#{current_user.users_preferences[:theme]}" %>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= yield :head %>
+
+    <!-- Load special character text replacement list -->
+    <script type="text/javascript">
+      var tags = {<%= doc_tags() %>};
+      var alth = {
+        <% Alth.all.each do |a| %>
+          "<%= a.Shortcut.to_s.downcase %>" : "<%= a.Response.to_s.gsub("\r\n", "<br />") %>",
+        <% end %>
+      }
+
+      $(document).ajaxComplete(function() {
+        $(':input(:text, textarea)').unbind('keyup')
+        $(':input(:text, textarea)').bind('keyup', function(e){
+          if(e.keyCode == 186 || e.keyCode == 59){
+            for(var index in alth) {
+              $(this).val($(this).val().replace("&" + index + ";", alth[index]));
+              this.scrollTop = this.scrollHeight;
+            }
+          }
+        });
+      });
+    </script>
+    <%= csrf_meta_tags %>
+    <link href='http://fonts.googleapis.com/css?family=Cabin:400,600' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div id="wrapper" class="wrapper">
+      <%= flash.count > 0 ? flash_message : "" %>
+
+      <div id="content" class="content">
+        <%= yield %>
+      </div>
+    </div>
+
+    <!-- Overlays -->
+    <!-- New Contact -->
+    <div class="overlay" id="overlay_new_rolodex">
+    </div>
+
+    <!-- New Order -->
+    <div class="overlay" id="overlay_new_file">
+    </div>
+
+    <!-- Admin View -->
+    <div class="overlay" id="overlay_admin">
+    </div>
+
+    <!-- Remove Alert -->
+    <div class="overlay" id="overlay_remove_alert">
+    </div>
+
+    <div class="overlay overlay_flash_notice" id="overlay_flash_notice">
+    </div>
+
+    <div class="overlay" id="overlay_large_text">
+    </div>
+
+    <!-- Feedback -->
+    <div class="overlay" id="overlay_bug_report">
+    </div>
+
+    <div class="overlay" id="overlay_feature_request">
+    </div>
+
+    <!-- Entity Lookup -->
+    <div class="overlay" id="overlay_entity_lookup">
+    </div>
+
+    <!-- Index Overlays -->
+    <div class="overlay" id="overlay_new_contact"></div>
+    <div class="overlay" id="overlay_new_employee"></div>
+    <div class="overlay" id="overlay_new_property"></div>
+    <div class="overlay" id="overlay_new_index_note"></div>
+
+    <!-- Rolodex Overlays -->
+    <div class="overlay" id="overlay_rolodex_affiliation"></div>
+    <div class="overlay" id="overlay_new_rolodex"></div>
+    <div class="overlay" id="overlay_new_contact_info"></div>
+    <div class="overlay" id="overlay_new_note"></div>
+    <div class="overlay" id="overlay_new_rule"></div>
+    <div class="overlay" id="overlay_new_affiliation"></div>
+
+    <!-- Print -->
+    <div id="print_box" class="hide"></div>
+
+    <!-- File Product -->
+    <div class="overlay" id="overlay_file_product"></div>
+  </body>
+</html>

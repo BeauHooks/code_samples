@@ -1,0 +1,7 @@
+<%= form_tag save_template_doc_path(id: @doc.id), remote: true do |f| %>
+  <div style="width: 100%; background: #F0F0EE;"><%= submit_tag "Save" %>
+    <!-- <input type="button" value="Cancel" onclick="$('#doc_<%= @doc.id %> a:first').click();" /></div> -->
+    <input type="button" value="Cancel" onclick="$('#edit_doc').show(); $('div#doc_content').attr('class', 'doc'); $('#doc_content').html($('#temp_doc').html()); $('#temp_doc').html('')" /></div>
+  <%= text_area_tag :editor, "#{@doc.template_text.to_s.html_safe}", id: "tinymce", class: "tinymce", style: "width: 100%; height: 841px;", name: "text"  %>
+  <%= tinymce :content_css => asset_path("doc_themes/#{current_user.users_preferences[:docs_theme]}.css") %>
+<% end %>

@@ -1,0 +1,5 @@
+document.title = "Filetrak - Rolodex: <%= @entity.EntityID.to_s %>";
+$("#rolodex_overview").html("<%= j(render 'rolodex/partials/overview').html_safe %>");
+// $("#rolodex_attachments").html("<%#= j(render 'rolodex/partials/attachments' ).html_safe %>");
+
+bindRowUpdater()

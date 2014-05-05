@@ -1,0 +1,68 @@
+<% content_for :overlay_class do %>
+  file_entities
+<% end %>
+
+<% content_for :overlay_title do %>
+  Add Contacts
+<% end %>
+
+<% content_for :overlay do %>
+  <div id="add_contact">
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+      <span id="new_contact_spinner" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Saving...</span>
+    </div>
+    <%= form_for :file_entities_search, url: search_file_entities_path, remote: true, method: :get do %>
+      <div style="margin-bottom: .25em;">
+        <span class="label">Search:</span> <%= text_field_tag :term, nil, placeholder: "Begin Typing Here..." %>
+        <%= image_submit_tag "search.png", class: "icon" %>
+        <%= link_to image_tag("plus.png", class: "icon trigger"), new_contact_overlays_path %>
+      </div>
+    <% end %>
+    <div class="outer_table box">
+      <div class="grid_header"></div>
+      <div class="inner_table h100">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="add_link"><div>Actions</div></th>
+              <th class="name"><div>Name</div></th>
+              <th class="description"><div>Description</div></th>
+              <th class="affiliation"><div>Affiliation</div></th>
+              <th class="phone"><div>Phone</div></th>
+              <th class="email"><div>Email</div></th>
+              <th class="files"><div>Files</div></th>
+              <th class="used"><div>Used</div></th>
+              <th class="modified"><div>Modified</div></th>
+            </tr>
+          </thead>
+          <tbody id="entity_results" class="highlight">
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <h3 class="margin_top">Contacts on New Order</h3>
+    <div class="outer_table box">
+      <div class="grid_header"></div>
+      <div class="inner_table h100">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="add_link"><div>Actions</div></th>
+              <th class="name"><div>Name</div></th>
+              <th class="position"><div>Position</div></th>
+              <th class="name"><div>Description</div></th>
+              <th class="name"><div>Affiliation</div></th>
+              <th class="phone"><div>Phone</div></th>
+              <th class="email"><div>Email</div></th>
+              <th class="files"><div>Files</div></th>
+              <th class="used"><div>Used</div></th>
+              <th class="modified"><div>Modified</div></th>
+            </tr>
+          </thead>
+          <tbody id="new_order_contacts" class="results">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>

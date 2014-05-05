@@ -1,0 +1,30 @@
+<tr id="new_property_<%= random_string(5) %>">
+	<td class="no_wrap">
+		<%= link_to image_tag("redx.png", class: "trigger"), new_order_file_property_path(@file.ID, @file_property.ID), class: "remove_row", data: {remote: true, method: :delete} %>
+		<%= select_tag :CountyID, options_from_collection_for_select(@counties, :CountyID, :CountyName, @default_county), include_blank: false, class: "w45 w100p" %>
+	</td>
+	<td>
+    <%= text_field_tag :TaxID, nil, class: "w65", data: {field: "serialnum"} %>
+	</td>
+	<td>
+    <%= text_field_tag :AccountID, nil, class: "w65", data: {field: "accountnum"} %>
+  </td>
+	<td>
+    <%= text_field_tag :PropertyAddress, nil, class: "w115" %>
+  </td>
+	<td>
+    <%= text_field_tag :City, nil, class: "w75" %>
+  </td>
+	<td>
+    <%= text_field_tag :State, nil, class: "w50" %>
+  </td>
+	<td>
+    <%= text_field_tag :Zip, nil, class: "w50" %> <%= image_tag "/assets/notice.png", class: "trigger icon", onclick: "searchProperty(this);" %>
+  </td>
+	<td>
+    <%= text_field_tag :LegalDescription, nil, class: "w135" %>
+  </td>
+  <td>
+    <%= text_field_tag :owner, nil, class: "w100", disabled: "disabled" %>
+  </td>
+</tr>

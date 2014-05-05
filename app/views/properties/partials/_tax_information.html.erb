@@ -1,0 +1,25 @@
+<div class="result_container">
+  <div class="box_header">
+    <p class="title">Tax Information</p>
+  </div>
+  <div>
+    <div class="label float_left w130">Tax Serial Num:</div>
+    <div class="float_left"><%= @detail.assessment.serialnum %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w130">Account Number:</div>
+    <div class="float_left"><%= @detail.accountnum %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w130">Taxable Value:</div>
+    <div class="float_left"><%= number_to_currency(@detail.assessment.TaxableValue) %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w130">Collection Balance Due:</div>
+    <div class="float_left"><%= number_to_currency(@detail.assessment.CollectionBalanceDue) %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w130">Total Assessed Value:</div>
+    <div class="float_left"><%= number_to_currency(@detail.assessment.TotalValuation) %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w130">Taxes for 2011:</div>
+    <div class="float_left"><%= number_to_currency(@detail.assessment.Taxes2007) %></div>
+    <div class="clear_fix" />
+  </div>
+</div>

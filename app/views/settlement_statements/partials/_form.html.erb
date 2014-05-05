@@ -1,0 +1,25 @@
+<div id="section_<%= f.object.ss_type.downcase %>" class="section">
+  <div class="spinner_cover"><span>Updating...</span></div>
+  <%= f.fields_for :ss_sections, f.object.ordered_sections do |section_f| %>
+    <%= section_f.fields_for :ss_lines, section_f.object.ordered_lines do |line_f| %>
+      <% is_footer = line_f.object.line_type == "footer" && @print.blank? %>
+      <div class="tru_new_line" id="line_<%= line_f.object.id %>" data-id="<%= line_f.object.id %>">
+        <%= is_footer ? "<div class='tru_line_number'>#{line_f.options[:child_index]}</div>".html_safe : render("settlement_statements/partials/flyout", line: line_f).html_safe %>
+        <%= line_f.fields_for :ss_line_cells, line_f.object.ordered_cells do |cell_f| %>
+          <div class="<%= cell_f.object.css_attributes %>">
+            <%= cell_f.text_field :cell_value,
+              value: format_value_for_display(cell_f.object.data_type, cell_f.object.cell_value, is_footer ? "$" : ""),
+              placeholder: placeholder(cell_f.object),
+              "data-id" => cell_f.object.id,
+              "data-type" => cell_f.object.cell_name,
+              disabled: is_footer %>
+          </div>
+          <% if cell_f.object.is_resizable? %>
+            <div class="tru_resize_slider"></div>
+          <% end %>
+        <% end %>
+        <div class="tru_clear"></div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

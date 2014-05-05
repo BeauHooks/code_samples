@@ -1,0 +1,107 @@
+<% update = "updateLineTotal(this); if($(this).closest('td').attr('class') == 'price'){if($(this).val() == ''){$(this).val('0.0')} toUSD(this);}" %>
+<div id="hud_fees" style="width: 800px">
+  <form action="invoice/update_hud_invoice" method="post" data-remote="true">
+    <div class="overlay_header">
+      <h2>Hud Fees for Invoice</h2>
+    </div>
+    <div class="overlay_content">
+      <% sides = ["buyer", "seller"] %>
+      <% sides.each do |side| %>
+        <% side == "buyer" ? fees = @buyer_fees : fees = @seller_fees %>
+        <div style="float: left;<%= 'padding-left: 20px;' if side == 'seller' %>">
+          <p><span style="text-decoration: underline; font-weight: bold;"><%= side.titleize %> Charges</span></p>
+          <table style="border-collapse: separate;" id="<%= side %>_table">
+            <tr>
+              <td class="label" style="width: 150px;">Description</td>
+              <td class="label" style="width: 50px; text-align: center;">Units</td>
+              <td class="label" style="width: 50px; text-align: center;">Price</td>
+              <td class="label" style="width: 100px; text-align: right;">Charge</td>
+            </tr>
+            <% total = 0.0 %>
+            <% fees.each do |fee| %>
+              <% total += fee.total || 0.0 %>
+              <tr id="<%= fee.id %>" data-side="<%= side %>">
+                <td><%= fee.hud_invoice_default_fee.label %>: </td>
+                <td style="text-align: center" class="units"><%= text_field_tag :units, fee.units, onchange: update, style: "width: 50px; text-align: right;", name: "#{side}[#{fee.id}[units]]"   %></td>
+                <td style="text-align: center" class="price"><%= text_field_tag :price, number_to_currency(fee.price, unit: ""), onchange: update, style: "width: 50px; text-align: right;", name: "#{side}[#{fee.id}[price]]" %></td>
+                <td style="text-align: right" class="total"><%= number_to_currency(fee.total || 0.0, unit: "$") %></td>
+              </tr>
+            <% end %>
+            <tr><td colspan="4"><hr style="background-color: #CCC;"></td></tr>
+            <tr>
+              <td colspan="3" style="text-align: right;" class="label">Total</td>
+              <td id="<%= side %>_total" style="text-align: right;" class="label"><%= number_to_currency(total || 0.0, unit: "$") %></td>
+            </tr>
+          </table>
+        </div>
+      <% end %>
+      <p style="clear: both;"></p>
+    </div>
+    <div class="overlay_footer">
+      <%= hidden_field_tag :hud_id, @hud.id %>
+      <%= hidden_field_tag :invoice_id, @invoice.InvoiceID %>
+      <span class="button">
+        <input type="button" value="Save" onclick="$(this).closest('form').submit(); closeOverlay('hud_fees');" />
+        <input type="button" value="Cancel" class="close" onclick="closeOverlay('hud_fees')" />
+      </span>
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript">
+  openOverlay('hud_fees');
+
+  function updateLineTotal(object){
+    var row = $(object).closest("tr");
+    var num = 0;
+    var units = 0;
+    var price = 0;
+
+    num = Number( $("#" + $(row).attr("id") + " .units input").val().replace(/,/g, "") ) ;
+    if (!isNaN(num)){
+      units = num;
+    }
+
+    num = Number( $("#" + $(row).attr("id") + " .price input").val().replace(/,/g, "") ) ;
+    if (!isNaN(num)){
+      price = num * 100;
+    }
+
+    var amount = units * price;
+    amount = amountToUSD(amount / 100);
+
+    if(amount == undefined){
+      amount = "0.00"
+    }
+
+    $("#" + $(row).attr("id") + " .total").html( "$" + amount );
+
+    var total = 0.0;
+    var side = $(row).data("side");
+    $("#" + side + "_table .total").each( function(){
+      value = $(this).html().replace(/,/g, "");
+      value = value.replace("$", "");
+      num = Number( value ) ;
+      if (isNaN(num)){
+        num = "0"
+      }
+      else{
+        num = num * 100
+      }
+
+      total += num;
+    });
+
+    if (isNaN(total) || total == undefined || total == 0){
+      total = "0.00";
+    }
+    else{
+      total /= 100;
+      total = amountToUSD(total);
+    }
+
+
+
+    $("#" + side + "_total").html( "$" + total );
+  }
+</script>

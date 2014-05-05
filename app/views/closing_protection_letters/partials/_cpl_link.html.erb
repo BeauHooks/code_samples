@@ -1,0 +1,29 @@
+<div class="padding_left">
+  <span class="label">Current CPL Status:</span>
+  <%= @cpl.cpl_status %><br />
+  <% if @cpl.cpl_sent? %>
+    <span class="label">Last Updated with Underwriter:</span>
+    <%= @cpl.cpl_updated_at.to_s(:db) %>
+  <% end %>
+</div>
+<div class="padding_left">
+  <% if @cpl.valid_to_send? %>
+    <% request_wording = @cpl.cpl_sent? ? "Generate Updated CPL" : "Generate New CPL" %>
+    <%= link_to request_wording, cpl_request_overlay_path(@cpl), onclick: "$('[id^=#{@identifier}]').remove();", remote: true, method: :get %>
+    <%= link_to request_wording, fatco_rate_request_overlay_path(@cpl), onclick: "$('[id^=#{@identifier}]').remove();", remote: true, method: :get %>
+    <br /><br />
+    Warning: The following actions cannot be undone.<br />
+    <%= link_to "Cancel CPL", cpl_cancel_overlay_path(@cpl), type: "button", onclick: "$('[id^=#{@identifier}]').remove();", remote: true %><br />
+    <%= link_to "Close CPL", cpl_close_overlay_path(@cpl), type: "button", onclick: "$('[id^=#{@identifier}]').remove();", remote: true %>
+  <% else %>
+    <% if @cpl.canceled? %>
+      <span class="red">The CPL has been Canceled. This CPL request cannot be sent.</span><br />
+    <% else %>
+      The CPL cannot be sent because of the following: <br />
+      <% @cpl.errors.map do |key,value| %>
+        <span class="red"><%= link_to "#{key.to_s.titleize} #{value}", '#', cpl_name: "closing_protection_letter_#{key}", class: "red cpl_error" %></span><br />
+      <% end %>
+      <%= link_to "Cancel CPL", cpl_cancel_overlay_path(@cpl), type: "button", onclick: "$('[id^=#{@identifier}]').remove();", remote: true %><br />
+    <% end %>
+  <% end %>
+</div>

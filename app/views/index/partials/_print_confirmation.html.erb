@@ -1,0 +1,13 @@
+<% confirmation = print_confirmation() %>
+
+<a id="get_confirmation" target="_blank" href="/index/<%= @file.ID %>/display_confirmation?content=<%= confirmation %>"></a>
+
+<script type="text/javascript">
+	<% if confirmation == "ERROR" %>
+		addToQueue('send_error', 'application/flash_notice?title=Send Error&notice=There was an error printing your confirmation. Please contact tech support if you continue to receive this message.');
+	<% else %>
+		document.getElementById("get_confirmation").click(function(){});
+	<% end %>
+
+  $("div#print_box").html("");
+</script>

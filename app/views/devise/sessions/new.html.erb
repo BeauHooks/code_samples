@@ -1,0 +1,68 @@
+<div id="sign_in">
+  <center id="expire" style="display: none; margin-bottom: 5px;">
+    <span style="color:red;">Logged out due to inactivity or session expired</span>
+  </center>
+
+  <div id="logo">
+    <img src="/assets/logo.png" />
+  </div>
+  <div id="sign_in_content">
+    <div id="form">
+      <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+      <div><p class="label"><%= f.label :email %>:</p>
+      <p><%= f.email_field :email, :size => '22' %></p></div>
+      <div class="label"><%= f.label :password %>:</div>
+      <div><%= f.password_field :password, :size => '22' %></div>
+
+      <% if devise_mapping.rememberable? -%>
+        <div><%= f.check_box :remember_me %> <span class="label"><%= f.label :remember_me %></span></div>
+      <% end -%>
+      <div id="submit"><%= f.submit "Sign in" %></div>
+      <% end %>
+      <div id="links"><%= render "links" %></div>
+      <p style="clear: both"></p>
+    </div>
+
+  </div>
+
+  <% if Rails.env.staging? %>
+    <br />
+    <div id="logo">
+      <h2 style="padding-top:12px;">Demo Login</h2>
+    </div>
+    <div id="sign_in_content">
+      <div id="form">
+        <table>
+          <tr>
+            <td style="text-align:right;"><b>Email:</b></td>
+            <td>steam@efusionpro.com</td>
+          </tr>
+          <tr>
+            <td style="text-align:right;"><b>Password:</b></td>
+            <td>red123</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  // $("input#user_email").focus();
+
+  // function getIEVersion(){
+  //   var agent = navigator.userAgent;
+  //   var reg = /MSIE\s?(\d+)(?:\.(\d+))?/i;
+  //   var matches = agent.match(reg);
+  //   if (matches != null) {
+  //       return { major: matches[1], minor: matches[2] };
+  //   }
+  //   return { major: "-1", minor: "-1" };
+  // }
+
+  // var ie_version =  getIEVersion();
+
+  // if(window.location.hash.substring(1) == "expired=true"){
+  //   $("#expire").show();
+  // }
+</script>

@@ -1,0 +1,7 @@
+<% @entity_contacts.each do |i| %>
+  <% if i.active? %>
+    <%= render "entity_contacts/partials/active_contact_row", i: i %>
+  <% else %>
+    <%= render "entity_contacts/partials/inactive_contact_row", i: i %>
+  <% end %>
+<% end %>

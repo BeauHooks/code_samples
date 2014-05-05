@@ -1,0 +1,73 @@
+#header {
+  height: 180px;
+}
+
+#logo {
+  float: left;
+  width: 250px;
+  height: 170px;
+  border: 0px;
+}
+
+#title {
+  float: left;
+}
+
+#content {
+  height: 280px;
+}
+
+#images {
+  /*height: 290px;*/
+}
+
+#left_col {
+  float: left;
+  font-size: 10px;
+  width: 230px;
+}
+
+#middle_col {
+  float: left;
+}
+
+#right_col {
+  float: left;
+}
+
+td.header {
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+td.right_align {
+  text-align: right;
+}
+
+td {
+  font-size: 10pt;
+}
+
+.photo {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.sketch {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.plat {
+  margin-top: 10px;
+  margin-left: 90px;
+}
+
+.footer_text {
+  font-size: 8pt;
+}
+
+hr{
+  clear: both;
+}

@@ -1,0 +1,5 @@
+<% render "new_orders/partials/new_order_overlay" %>
+$("#overlay_list").append("<%= j(render 'overlays/partials/overlay', buttons: @buttons, identifier: @identifer).html_safe %>");
+
+// Run any setup JS
+$(".auto_select").select2();

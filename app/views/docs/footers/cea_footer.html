@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function subst() {
+        var vars={};
+        var x=document.location.search.substring(1).split('&');
+        for(var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        var x=['doctitle', 'frompage','topage','page','webpage','section','subsection','subsubsection'];
+
+        if(parseInt(vars['page']) >= parseInt(vars['topage']) - 1){
+          document.getElementById("container").innerHTML = "";
+        }
+        
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }
+    </script>
+
+    <style>
+      table{ width: 100%; font-size: .5em !important; }
+      <td{width: 30%;}
+      hr{border-top: 1px solid #000; border-bottom: none; border-right: none; border-left: none; width: 50px; display: inline;}
+    </style>
+  </head>
+  <body style="margin: 0;" onload="subst();" class="hud_footer">
+    <div id="container">
+      <table style="position: relative; top: 10px;">
+        <tr>
+          <td>Grantee's Initials:
+            <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            /
+            <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          </td>
+          <td style="text-align: center; font-weight: bold;"><!-- <span class="page"></span> - <span class="doctitle"></span> --></td>
+          <td style="text-align: right;">Grantor's Initials:
+            <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            /
+            <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

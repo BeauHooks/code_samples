@@ -1,0 +1,93 @@
+<% content_for :overlay_class do %>
+  add_affiliation
+<% end %>
+
+<% content_for :overlay_title do %>
+  Add Affiliation
+<% end %>
+
+<% content_for :overlay do %>
+  <% (@entity != "" && @entity != nil) ? action = "rolodex_affiliations/display_search_results?overlay=Affiliation&entity=#{@entity.EntityID}" : action = "rolodex_affiliations/display_search_results" %>
+  <%= form_tag("#{action}", {onsubmit: "$('#new_affiliation').html(\"<p class='margin_top_5 padding_left_5'><img src='assets/loading.gif' class='margin_right_5 w15 pos_relative top_4' />Searching...</p>\");", :remote => true}) do |f| %>
+    <div><div class="float_left">Search:</div><div class="float_left"><%= text_field_tag "search_value", params[:search_value] %></div><div class="float_left"><%= image_submit_tag("search.png", :class => 'icon') %></div></div>
+  <% end %>
+  <div class="clear_fix"></div>
+  <div class="outer_table">
+    <div class="box margin_top_10 results_container">
+      <div class="grid_header"></div>
+      <div class="inner_table">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="action w40 padding_left_5"><div>Action</div></th>
+              <th class="w95 padding_left_5"><div>Name</div></th>
+              <th class="w95"><div>Type</div></th>
+              <th class="w95"><div>Phone</div></th>
+              <th class="w95"><div>Email</div></th>
+              <th class="w95"><div>Address</div></th>
+              <th class="w95"><div>City</div></th>
+              <th class="w95"><div>State</div></th>
+              <th class="w95"><div>Relationship</div></th>
+            </tr>
+          </thead>
+          <tbody id="new_affiliation" class="results">
+            <%= render "rolodex_affiliations/partials/search_results" %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <% if @entity != nil %>
+    <h3 class="margin_top_5">Affiliations On File</h3>
+    <div class="outer_table">
+      <div class="box results_container">
+        <div class="grid_header"></div>
+        <div class="inner_table">
+          <table>
+            <thead class="grid_header_font">
+              <tr>
+                <th class="action w60 padding_left_5"><div>Actions</div></th>
+                <th class="w95 padding_left_5"><div>Entity</div></th>
+                <th class="w95"><div>Phone</div></th>
+                <th class="w95"><div>Email</div></th>
+                <th class="w95"><div>Address</div></th>
+                <th class="w95"><div>City</div></th>
+                <th class="w95"><div>State</div></th>
+                <th class="w95"><div>Relationship</div></th>
+              </tr>
+            </thead>
+            <tbody id="current_affiliations" class="results">
+              <%= render 'rolodex_affiliations/partials/current_affiliations' %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <h3 class="margin_top_5">Affiliations On New Contact</h3>
+    <div class="outer_table">
+      <div class="box results_container">
+        <div class="grid_header"></div>
+        <div class="inner_table">
+          <table>
+            <thead class="grid_header_font">
+              <tr>
+                <th class="action w60 padding_left_5"><div>Actions</div></th>
+                <th class="w95 padding_left_5"><div>Entity</div></th>
+                <th class="w95"><div>Phone</div></th>
+                <th class="w95"><div>Email</div></th>
+                <th class="w95"><div>Address</div></th>
+                <th class="w95"><div>City</div></th>
+                <th class="w95"><div>State</div></th>
+                <th class="w95"><div>Relationship</div></th>
+              </tr>
+            </thead>
+            <tbody id="affiliations_on_new_contact" class="results">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

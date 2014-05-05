@@ -1,0 +1,8 @@
+<tr>
+  <td>
+  	<%= link_to image_tag("redx.png"), admin_site_preference_option_path(id: option.id), method: :delete, remote: true, onclick: "if($(this).next().attr('checked') != 'checked'){$(this).closest('tr').remove();}" %> 
+  	<%= check_box_tag :default, true, option.site_preference.default == option.id.to_s, onchange: "selectIndividual(this); $.ajax({url: '#{admin_site_preference_path(id: option.site_preference.id, "preference[default]" => option.id)}', type: 'put'});" %>
+  	<%= text_field_tag :description, option.description, onchange: "$.ajax({url: \"#{admin_site_preference_option_path(id: option.id).html_safe}?option[description]=\" + $(this).val(), type: 'put'});"  %>
+  </td>
+  <td><%= text_field_tag :setting, option.setting, onchange: "$.ajax({url: \"#{admin_site_preference_option_path(id: option.id).html_safe}?option[setting]=\" + $(this).val(), type: 'put'});" %></td>
+</tr>

@@ -1,0 +1,2 @@
+$("a#fp_exceptions_text_<%= @exception.id %>").hide();
+$("div#fp_exceptions_text_<%= @exception.id %>_<%= @view %>").html("<%= j(render "editor", exception: @exception).html_safe %>");

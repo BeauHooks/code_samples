@@ -1,0 +1,9 @@
+<% content_for :overlay_class do %>
+  new_order
+<% end %>
+<% content_for :overlay_title do %>
+  New Order - <%= Company.find(session[:company]).CompanyName %>
+<% end %>
+<% content_for :overlay do %>
+  <%= render 'new_orders/partials/form' %>
+<% end %>

@@ -1,0 +1,8 @@
+<% content_for :overlay_title do %>
+  New User
+<% end %>
+<% content_for :overlay do %>
+  <%= form_tag admin_users_path, remote: true do %>
+    <p><span class="label">Employee:</span>&nbsp;<%= select_tag "employee", options_from_collection_for_select(Employee.no_user, "ID", "FullName") %></p>
+  <% end %>
+<% end %>

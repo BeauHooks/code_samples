@@ -1,0 +1,30 @@
+<% unless @update_content.blank? || @value.blank?  %>
+	$("#fp_exception_content_<%= @exception.id %>").val("<%= j(@value).html_safe %>");
+<% end %>
+
+<% unless @stop_refresh %>
+	$("#exceptions_content").html("<%= j(render "index").html_safe %>");
+	$("#exceptions_content").find(".sb_container").eq(0).find(".first").eq(0).focus();
+<% end %>
+
+$("#requirements_content").html("<%= j(render "fp_requirements/index").html_safe %>");
+
+<% unless @requirement_template_code.blank? %>
+	$.get("<%= new_fp_requirement_path(file_product_id: @file_product.id, fp_exception_id: @fp_exception_id, requirement_template_code: @requirement_template_code, entry_number: @entry_number) %>");
+<% end %>
+
+<% if @view == "overlay" %>
+	<% if @exception.removed_by != nil %>
+		closeOverlay("fp_exception");
+	<% else %>
+		$("#exception_container_<%= @exception.id %>_overlay").html("<%= j(render "show", exception: @exception, view: @view).html_safe %>");
+	<% end %>
+<% end %>
+
+<% if @create %>
+	if($("#overlay_fp_exception").is(":visible")){
+		closeOverlay("fp_exception");
+	}
+<% end %>
+
+fileProductInitializer();

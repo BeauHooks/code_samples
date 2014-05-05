@@ -1,0 +1,65 @@
+<form action="docs/send_docs" data-remote="true" method="post" onsubmit="verifySendDocs(this);">
+<div id="send_doc">
+	<div class="overlay_header">
+		<h2>Send Documents</h2>
+	</div>
+	<div id="send_docs_form_errors" class="flash_error" style="display:none">
+	</div>
+	<div class="overlay_content">
+		<div id="recipients">
+			<table>
+				<tr>
+					<td class="checkbox"><input type="checkbox" onchange="selectAll(this, 'all_recipients');" id="select_all_recipients" /></td>
+					<td class="name label">Recipient</td>
+					<td class="position label">Position</td>
+					<td class="send label">Send</td>
+				</tr>
+			</table>
+			<table id="all_recipients">
+				<% @file.file_entities.each do |r| %>
+				<tr>
+					<% (r.entity.Email == "" || r.entity.Email == nil) ? disable_check = "disabled='disabled'" : disable_check = "" %>
+					<td class="checkbox"><input id="recipient<%= r.ID %>" type="checkbox" onchange="selectDoc(this, 'select_all_recipients');" <%= disable_check %> /></td>
+					<td class="name"><%= truncate("#{r.entity.FirstName} #{r.entity.LastName}", length: 15) %></td>
+					<td class="position"><%= r.user_type.TypeDescription if r.user_type != nil %></td>
+					<td class="send<%= (r.entity.Email == '' || r.entity.Email == nil) ? " error" : " hint" %>"><span><%= mail_to r.entity.Email %></span><%= (r.entity.Email == "" || r.entity.Email == nil) ? "no email" : truncate(r.entity.Email, length: 12) %></td>
+				</tr>
+				<% end %>
+			</table>
+		</div>
+		<div id="documents">
+			<table>
+				<tr>
+					<td class="checkbox"><input type="checkbox" onchange="selectAll(this, 'all_docs_to_send');" id="select_all_docs_to_send" /></td>
+					<td class="name label">Document</td>
+					<td class="modify_date label">Modify Date</td>
+					<td class="modify_user label">Modified By</td>
+				</tr>
+			</table>
+			<table id="all_docs_to_send">
+				<% @docs.each do |d| %>
+				<tr>
+					<td class="checkbox"><input type="checkbox"  onchange="selectDoc(this, 'select_all_docs_to_send');" id="doc<%= d.id %>" /></td>
+					<td class="name complete"><%= d.doc_template.short_name %></td>
+					<td class="modify_date"><%= d.updated_at.strftime('%m/%d/%Y') %></td>
+					<td class="modify_user"><%= d.update_employee.FullName %></td>
+				</tr>
+				<% end %>
+			</table>
+		</div>
+		<hr />
+		<div id="message_content">
+			<p><span class="label">Subject*:</span><br /><input type="text" value="Document Delivery From Southern Utah Title" id="doc_subject" name="doc_subject" /></p>
+			<p><span class="label">Message*:</span><br /><textarea placeholder="Message to be sent with documents" id="doc_message" name="doc_message"></textarea></p>
+		</div>
+	</div>
+	<div class="overlay_footer">
+		<input type="button" value="Cancel" class="button close" onclick="closeOverlay('send');" />
+		<input type="submit" value="Send" class="button close" />
+	</div>
+</div>
+</form>
+
+<script type="text/javascript">
+	openOverlay("send");
+</script>

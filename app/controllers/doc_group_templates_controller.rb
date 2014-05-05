@@ -1,0 +1,3 @@
+class DocGroupTemplatesController < ApplicationController
+
+end

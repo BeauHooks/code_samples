@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function subst() {
+        var vars={};
+        var x=document.location.search.substring(1).split('&');
+        for(var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        var x=['frompage','topage','page'];
+
+        if(vars['page'] == "1"){
+          document.getElementById("container").innerHTML = "";
+        }
+        
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+
+        var cookies = document.cookie;
+        var keyPairs = cookies.split("**");
+        var vars = {};
+        for(var i in keyPairs) {var z=keyPairs[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        // document.getElementById("container").innerHTML = cookies; 
+
+        var x=['doc_name', 'grantor_vesting', 'grantee_vesting', 'file_id_number', 'property_tax_id'];
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }      
+    </script>
+
+    <style>
+      body{
+        height: 1.3in;
+        border: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      #container{
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body onload="subst();">
+    <div style="position: relative; font-size: 9pt;" id="container">
+      <p>Attachment to that certain <span class="doc_name"></span> executed by <span class="grantor_vesting"></span> grantor(s), to <span class="grantee_vesting"></span> grantee(s).<br /><br />
+        Order No. <span class="file_id_number"></span><br />
+        Tax I.D. No. <span class="property_tax_id"></span></p>
+    </div>
+  </body>
+</html>

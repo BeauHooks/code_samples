@@ -1,0 +1,23 @@
+<div style="width:300px;">
+  <div>Name:</div>
+  <div><%= f.text_field :name, size: 40 %></div>
+</div>
+<div style="width:300px;">
+  <div>Category:</div>
+  <div><%= f.text_field :category, size: 30 %></div>
+</div>
+<div style="width:300px;">
+  <div>Question:</div>
+  <div><%= f.text_field :question, size: 75 %></div>
+</div>
+<div>
+<br />
+<h2>Preference Options</h2>
+<br />
+</div>
+<div>
+  <%= f.fields_for :site_preference_options do |builder| %>
+    <%= render 'site_preference_option_fields', f: builder %>
+  <% end %>
+</div>
+<%= link_to_add_fields "Add Option", f, :site_preference_options %>

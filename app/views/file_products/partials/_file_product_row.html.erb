@@ -1,0 +1,120 @@
+<tr class='record trigger' id="file_product_row_<%= i.id %>">
+  <td class="file_product">
+      <%= link_to "", result_detail_file_product_path(i), id: 'index_row', style: "display: none;", remote: true %>
+      <%= link_to i.index.DisplayFileID, result_detail_file_product_path(i), remote: true %>
+  </td>
+
+  <% buyer = !i.index.buyer_1.nil? ? i.index.buyer_1.name_last_first.to_s : "" %> 
+  <% if buyer.length > 18 %>
+    <td class="buyer hint">
+      <span>
+        <%= link_to buyer, "rolodex?entity_id=#{i.index.Buyer1}", onclick: "event.stopPropagation();", target: "_blank" %>
+      </span>
+
+        <%= link_to truncate(buyer, :length => 18), "rolodex?entity_id=#{i.index.Buyer1}", target: "_blank" %>
+      
+    </td>
+  <% else %>
+    <td class="buyer">
+
+        <%= link_to buyer, "rolodex?entity_id=#{i.index.Buyer1}", onclick: "event.stopPropagation();", target: "_blank" if buyer != "" %>
+      
+    </td>
+  <% end %>
+
+  <% seller = !i.index.seller_1.nil? ? i.index.seller_1.name_last_first.to_s : "" %> 
+  <% if seller.length > 18 %>
+    <td class="seller hint">
+      <span>
+        <%= link_to seller, "rolodex?entity_id=#{i.index.Seller1}", onclick: "event.stopPropagation();", target: "_blank" %>
+      </span>
+
+        <%= link_to truncate(seller, :length => 18), "rolodex?entity_id=#{i.index.Seller1}", target: "_blank" %>
+      
+    </td>
+  <% else %>
+    <td class="seller">
+
+        <%= link_to seller, "rolodex?entity_id=#{i.index.Seller1}", onclick: "event.stopPropagation();", target: "_blank" if seller != "" %>
+      
+    </td>
+  <% end %>
+
+  <% lender = !i.index.lender.nil? ? i.index.lender.name_last_first.to_s : "" %> 
+  <% if lender.length > 18 %>
+    <td class="lender hint">
+      <span>
+        <%= link_to lender, "rolodex?entity_id=#{i.index.lender.EntityID}", onclick: "event.stopPropagation();", target: "_blank" %>
+      </span>
+
+        <%= link_to truncate(lender, :length => 18), "rolodex?entity_id=#{i.index.lender.EntityID}", target: "_blank" %>
+      
+    </td>
+  <% else %>
+    <td class="lender">
+
+        <%= link_to lender, "rolodex?entity_id=#{i.index.lender.EntityID}", onclick: "event.stopPropagation();", target: "_blank" if lender != "" %>
+      
+    </td>
+  <% end %>
+
+  <% closer = i.index.CloserName.to_s %> 
+  <% if closer.length > 18  %>
+    <td class="closer hint">
+      <span>
+        <%=  closer %>
+      </span>
+
+        <%=  truncate(closer, :length => 18) %>
+      
+    </td>
+  <% else %>
+    <td class="closer">
+
+        <%=  closer %>
+      
+    </td>
+  <% end %>
+
+  <td class="type">
+      <%= i.index.TransactionDescription1 %>
+    
+  </td>
+
+  <% address = i.index.Address1.to_s %> 
+  <% if address.length > 18  %>
+    <td class="address hint">
+      <span>
+        <%=  address %>
+      </span>
+      <%=  truncate(address, :length => 18) %>
+    </td>
+  <% else %>
+    <td class="address">
+      <%=  address %>
+    </td>
+  <% end %>
+
+  <td class="stage">
+      <%= i.index.stage %><%#= i.Opened.strftime("%m/%d/%Y") if i.Opened != nil %>
+    
+  </td>
+
+  <% taxid = i.index.TaxID1.to_s %> 
+  <% if taxid.length > 18  %>
+    <td class="taxid hint">
+      <span>
+        <%=  taxid %>
+      </span>
+
+        <%=  truncate(taxid, :length => 18) %>
+      
+    </td>
+  <% else %>
+    <td class="taxid">
+
+        <%=  taxid %>
+      
+    </td>
+  <% end %>
+</tr>

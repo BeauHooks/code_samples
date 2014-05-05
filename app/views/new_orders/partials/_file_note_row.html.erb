@@ -1,0 +1,10 @@
+<tr id="new_note_row_BLANK" data-section="note">
+  <td class="note" style="width: 380px;">
+  	<%= image_tag "redx.png", class: "trigger", onclick: "refreshIndexFormPosition($(this).closest('tr'));" %>
+  	<input type="text" data-field="Note" />
+  </td>
+  <td class="from" style="width: 135px;"><%= select :note, :From, current_user.employee.collect{|from| [from.FullName, from.ID]}, {include_blank: false, selected: current_user.employee_id}, {disabled: :disabled,  data: {field: "From"}} %></td>
+  <td class="to" style="width: 135px;"><%= select :note, :To, Employee.find(:all, :conditions => ["IsActive = 'True' AND ID NOT IN (190, 119, 95, 157, 327) "], :order => "FullName ASC").collect{|to| [to.FullName, to.ID]}, {:include_blank => true, :selected => "#{current_user.employee_id}"},  {"data-field" => "To"} %></td>
+  <td class="date" style="width: 135px;"><input class="note_remind" type="text" data-field="Remind" placeholder="mm/dd/yyyy"></td>
+  <td style="text-align: center;" style="width: 70px;"><input type="checkbox" value="true" data-field="IsPrivate" /></td>
+</tr>

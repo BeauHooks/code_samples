@@ -1,0 +1,13 @@
+<% update = "update('#{fp_requirement_path(id: requirement.id, view: view)}', this);" %>
+<div id="requirement_container_<%= requirement.id %>_<%= view %>" class="sb_container" data-record="<%= requirement.id %>">
+	<div style="margin-bottom: 5px;">
+		<div style="min-width: 680px;">
+			<p class="label"></p>
+		</div>
+		<%= text_field_tag :sort_order, requirement.sort_order, onchange: update, style: "width: 15px; margin-right: 10px; float: left;" %>
+		<div id="requirement_text_<%= requirement.id %>_<%= view %>" style="float: left; width: 680px;">
+			<%= render "fp_requirements/text", requirement: requirement, view: view %>
+		</div>
+		<p style="clear: both;"></p>
+	</div>
+</div>

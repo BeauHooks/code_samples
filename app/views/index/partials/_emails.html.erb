@@ -1,0 +1,35 @@
+<div id="emails" class="file_emails">
+  <div id="emails" class="emails box">
+    <div class="box_header">
+      <p class="title">Emails</p>
+    </div>
+    <div class="result_container">
+      <div class="grid_header"></div>
+      <div>
+        <table class="w100p sortable">
+          <thead class="grid_header_font">
+            <tr>
+              <th class="w25"><div><img src="/assets/attach.png" /></div></th>
+              <th class="w145 padding_left_9"><div>From</div></th>
+              <th class="w175"><div>To</div></th>
+              <th class="w100"><div>Sent</div></th>
+              <th class="w300" id="attachments_email_last"><div>Subject</div></th>
+            </tr>
+          </thead>
+          <tbody class="grid_results highlight">
+            <%# FIXME: Need to make these accessible to ADMIN Users %>
+            <% @emails.each do |i| %>
+              <tr>
+                <td class="w25"><%= link_to image_tag("attach.png", class: "icon"), :action => 'file_email', :id => @file.ID, :message_id => i.message_id %></td>
+                <td class="w145 padding_left_9"><div><%= i.message.from unless i.message == nil %></div></td>
+                <td class="w175"><div><%= i.recipients %></div></td>
+                <td class="w100"><%= i.message.sent_at.strftime('%-1m/%-1d/%Y %l:%M %p') unless i.message == nil %></td>
+                <td class="w300"><%= truncate(i.message.subject, :length => 70) unless i.message == nil %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<% if params[:overlay] != "" %>
+	<% if @affiliations.size == 0 %>
+		$("#new_affiliation").html("<p style='font-style: italic; color: #9B9B9B; padding-left: 5px; margin-top: 5px;'>Search returned 0 results.</p>");
+	<% else %>
+		// If being called from the overview
+		$("#new_affiliation").html("<%= j(render 'rolodex_affiliations/partials/search_results').html_safe %>");
+	<% end %>
+<% else %>
+	<% if @affiliations.size == 0 %>
+		$("#new_affiliation").html("<p style='font-style: italic; color: #9B9B9B; padding-left: 5px; margin-top: 5px;'>Search returned 0 results.</p>");
+	<% else %>
+		// If being called from the new contact screen
+	$("div#new_rolodex_affiliation").html("<%= j(render 'rolodex_affiliations/partials/search_results').html_safe %>");
+	<% end %>
+<% end %>

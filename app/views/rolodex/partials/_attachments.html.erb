@@ -1,0 +1,34 @@
+<div id="rolodex_attachments" class="rolodex_attachments">
+  <div id="attachments" class="box">
+    <div class="box_header">
+      <p class="title">Attachments</p>
+      <div class="tools">
+        <%= link_to image_tag("upload.png"), "rolodex_attachments/load_process_images?entity_id=#{@entity.EntityID}", remote: true %>
+        <%= link_to image_tag("refresh.png", class: "icon"), "rolodex_attachments/reload_entity_images?entity_id=#{@entity.EntityID}", remote: true, id: "refresh_link", onclick: "$('#refresh_link').hide(); $('#loading_small').show();" %>
+        <%= image_tag "loading_small.gif", id: "loading_small", class: "hide margin_right" %>
+      </div>
+    </div>
+
+    <div class="result_container">
+      <div class="grid_header"></div>
+      <div>
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="private"><div>Private</div></th>
+              <th class="type"><div>Type</div></th>
+              <th class="modify_date"><div>Scan Date</div></th>
+              <th class="notes"><div>Notes</div></th>
+            </tr>
+          </thead>
+          <tbody id="attachments_info" class="results highlight"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overlays -->
+<!-- Add Attachment -->
+<div class="overlay" id="overlay_new_user_image">
+</div>

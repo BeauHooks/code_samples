@@ -1,0 +1,35 @@
+<div id="loading_cover" class="loading_cover hide"><p>Loading</p></div>
+<div class="margin_left_10 margin_bottom_5">
+  <h2>Entry #<span><%= @detail.entrynumber.to_i %></span></h2>
+</div>
+<div class="clear_fix" />
+<div>
+  <div class="w32p float_left margin_sides_10 box">
+    <%= render "recording_entries/partials/taxid" %>
+  </div>
+  <div class="w32p float_left margin_right_10 box">
+    <%= render "recording_entries/partials/subdivision" %>
+  </div>
+  <div class="w32p float_left box margin_right_10">
+    <%= render "recording_entries/partials/section" %>
+  </div>
+  <div class="clear_fix" />
+</div>
+<div>
+  <div class="w32p float_left box margin_sides_10">
+    <%= render "recording_entries/partials/fromparty" %>
+  </div>
+  <div class="w32p float_left margin_right_10 box">
+    <%= render "recording_entries/partials/toparty" %>
+  </div>
+  <div class="w32p float_left margin_right_10 box">
+    <%= render "recording_entries/partials/info" %>
+  </div>
+  <div class="clear_fix" />
+</div>
+<div>
+  <div class="w98p box margin_sides_10">
+    <%= render "recording_entries/partials/affiliations" %>
+  </div>
+  <div class="clear_fix" />
+</div>

@@ -1,0 +1,8 @@
+<% num = @file_products.size %>
+<% if num == 100 %>
+  <%= num %> Results Returned **Narrow Search**
+ <% elsif num == 1 %>
+  <%= num %> Result Returned
+<% else %>
+  <%= num %> Results Returned
+<% end %>

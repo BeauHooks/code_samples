@@ -1,0 +1,24 @@
+<% @file.file_properties.each do |i| %>
+  <tr>
+    <td class="sort">
+      <%= link_to image_tag("redx.png", class: "trigger"), file_property_path(id: i.ID), remote: true, method: :delete, class: "margin_right_2" %>
+      <%= i.ParcelNum %>
+    </td>
+
+    <td class="taxid">
+      <%= hint_truncate(link_to(i.TaxID, properties_path(search_field: "Tax ID", search: i.TaxID), target: :blank), 25, true) %>
+    </td>
+
+    <td class="account">
+      <%= hint_truncate(i.AccountID, 25) %>
+    </td>
+
+    <td class="address">
+      <%= text_field_tag :PropertyAddress, i.PropertyAddress, data: {remote: true, url: file_property_path(i.ID), method: :put} %> <%= link_to image_tag("/assets/notice.png", class: "icon"), build_usps_url(i.TaxID, i.PropertyAddress, nil, i.City, i.State, i.Zip), target: "_blank" %>
+    </td>
+
+    <td class="legal">
+      <%= hint_truncate(i.LegalDescription, 50) %>
+    </td>
+  </tr>
+<% end %>

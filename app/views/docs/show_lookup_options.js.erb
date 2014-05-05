@@ -1,0 +1,20 @@
+$("div#doc_lookup").html("<%= j(render :partial => "docs/lookup_options").html_safe %>");
+$("form#doc_lookup_form").attr("action", $("form#doc_lookup_form").attr("action").split("&")[0] + "&type=<%= @type %>");
+
+<% if @type == "doc" %>
+	$("form#doc_lookup_form").attr("onsubmit", "$('#doc_search_result').html('<p style=\\\'padding:5px;\\\'><img src=\\\'assets/loading.gif\\\' style=\\\'margin-right: 5px; width: 15px; position: relative; top: 4px;\\\' />Searching...</p>');");
+<% else %>
+	$("form#doc_lookup_form").attr("onsubmit", "$('#group_search_result').html('<p style=\\\'padding:5px;\\\'><img src=\\\'assets/loading.gif\\\' style=\\\'margin-right: 5px; width: 15px; position: relative; top: 4px;\\\' />Searching...</p>');");
+<% end %>
+//$("#doc_search").val("").change();
+$("#doc_search_button").click();
+<% if @option == "2" %>
+  // $("input#doc_search").attr("style", "display:none;");
+  // $("#doc_search_button").attr("style", "display:none;");
+  // $("select#group_search").attr("style", "display: inline; margin-right: 10px;")
+<% else %>
+  //$("#add_group").hide();
+  // $("input#doc_search").attr("style", "");
+  // $("#doc_search_button").attr("style", "");
+  // $("select#group_search").attr("style", "display:none;")
+<% end %>

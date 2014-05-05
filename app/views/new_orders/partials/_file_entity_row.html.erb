@@ -1,0 +1,40 @@
+<% update = "addToQueue('update_rolodex_convenience_field', 'rolodex/#{file_entity.EntityID}/update_convenience_field?type=CONTACT&value=' + $(this).val() + '&field=' + $(this).closest('td').data('field'));" %>
+<tr id="new_contact_row<%= file_entity.EntityID %>" data-section="contact">
+	<% if file_entity.name.length > 15 %>
+		<td class="hint w110" data-field="ContactName">
+			<span><%= image_tag "redx.png", class: "trigger", onclick: "refreshIndexFormPosition($(this).closest('tr'));" %><%= link_to file_entity.name, "rolodex?entity_id=#{file_entity.EntityID}", target: "_blank" %></span>
+			<%= image_tag "redx.png", class: "trigger", onclick: "refreshIndexFormPosition($(this).closest('tr'));" %>
+			<%= link_to truncate(file_entity.name, length: 15), "rolodex?entity_id=#{file_entity.EntityID}", target: "_blank"  %>
+			<input type='hidden' value='<%= file_entity.EntityID %>' data-field="EntityID" />
+		</td>
+	<% else %>
+		<td data-field="ContactName" class="w110">
+			<%= image_tag "redx.png", class: "trigger", onclick: "refreshIndexFormPosition($(this).closest('tr'));" %>
+			<%= link_to file_entity.name, "rolodex?entity_id=#{file_entity.EntityID}", target: "_blank" %>
+			<input type='hidden' value='<%= file_entity.EntityID %>' data-field="EntityID" />
+		</td>
+	<% end %>
+
+	<td class="w120"><%= select FileEntity, :Position, FileUserType.find(:all, conditions: ["TypeDescription != 'Disbursement Entity'"], :order => "TypeDescription ASC").collect {|p| [p.TypeDescription, p.ID]}, {selected: @position}, {"data-field" => "Position"} %></td>
+
+	<td data-field="HomePhone" class="w95">
+		<%= text_field_tag :HomePhone, file_entity.HomePhone, onchange: update, class: "w85", "data-field" => "HomePhone" %>
+	</td>
+
+	<td data-field="WorkPhone" class="w95">
+		<%= text_field_tag :WorkPhone, file_entity.WorkPhone, onchange: update, class: "w85", "data-field" => "WorkPhone" %>
+	</td>
+
+	<td data-field="CellPhone" class="w95">
+		<%= text_field_tag :CellPhone, file_entity.CellPhone, onchange: update, class: "w85", "data-field" => "CellPhone" %>
+	</td>
+
+	<td data-field="Email" class="w95">
+		<%= text_field_tag :Email, file_entity.Email, onchange: "#{update} var checkbox = $(this).closest('tr').find('input[type=checkbox]:last'); if( $.trim($(this).val()) != '' ){$(checkbox).removeAttr('disabled'); }else{ $(checkbox).attr('disabled', 'disabled'); $(checkbox).removeAttr('checked');}", class: "w85", "data-field" => "Email" %>
+	</td>
+
+	<td class="center w45"><input type="checkbox" name="" value="PR" data-field="PR" /></td>
+	<td class="center w45"><input type="checkbox" name="" value="SendCPL" data-field="SendCPL" /></td>
+	<td class="center w45"><input type="checkbox" name="" value="SendPreHud" data-field="SendPreHud" /></td>
+	<td class="center w110"><input type="checkbox" name="" value="Confirmation" data-field="Confirmation" class="send_confirmation_cb" <%= "disabled='disabled'" if (file_entity.Email == nil || file_entity.Email == "") %> <%#= "disabled='disabled'" if email == "-" %> /></td>
+</tr>

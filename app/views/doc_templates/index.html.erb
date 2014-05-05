@@ -1,0 +1,38 @@
+<div id="doc_templates">
+  <div id="left">
+    <div id="list" class="box">
+      <div class="box_header">
+        <p class="title">Templates - <%= select :doc_template, :state, options_for_select([["No Filter", "All"],["Arizona", "Arizona"], ["Nevada", "Nevada"], ["Utah", "Utah"]], "All"), {:include_blank => false}, {onChange: "$.get('/doc_templates/filter_by_state?state=' + $(this).val() );", style: "width: 150px;"} %></p>
+        <div class="tools">
+          <%= link_to "Copy", "doc_templates/new?copy=", remote: true, onclick: "clearActive();", id: "copy_doc", class: "margin_right" %>
+          <%= link_to image_tag("plus.png"), {action: "new", controller: "doc_templates"}, {remote: true, onclick: "clearActive();"} %>
+          <%#= link_to "hi", doc_list_doc_templates_path(), remote: true, style: "display: none", id: "show_doc_list" %>
+        </div>
+      </div>
+      <div class="grid_header">
+      <table>
+        <tr>
+          <td class="name">Name</td>
+          <td class="version">Version</td>
+          <td class="modified_date">Modify Date</td>
+          <td class="modified_by" id="template_last">Modified By</td>
+        </tr>
+      </table>
+    </div>
+      <div id="docs" class="results">
+        <%= render "doc_templates/docs_list" %>
+      </div>
+    </div>
+    <div id="doc_info" class="box">
+    </div>
+  </div>
+  <div id="right">
+    <div id="editor">
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("#doc_template_state").val("All");
+</script>

@@ -1,0 +1,39 @@
+<% content_for :overlay_class do %>
+    choose_side
+  <% end %>
+
+<% if @only_hud %>
+  <% content_for :overlay_title do %>
+    Choose Option(s)
+  <% end %>
+
+  <% content_for :overlay do %>
+    <div>
+      <%= form_tag "#{@action}", remote: true do %>
+        Is Preliminary HUD?:
+          <%= check_box_tag :pre_hud %><br /><br />
+
+        Select side to print of HUD:
+        <%= select_tag :side, options_for_select([["Both", "Both"], ["Buyer", "Buyer"], ["Seller", "Seller"]], "Both"), {:include_blank => false, :remote => true, id: "print_side"} %>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <% content_for :overlay_title do %>
+    Choose Side
+  <% end %>
+  <% content_for :overlay do %>
+    <div>
+      <%= form_tag "#{@action}", remote: true do %>
+
+        Select side to print of HUD:
+          <%= select_tag :side, options_for_select([["Both", "Both"], ["Buyer", "Buyer"], ["Seller", "Seller"]], "Both"), {:include_blank => false, :remote => true, id: "print_side"} %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<% content_for :overlay_footer do %>
+    <%= button_tag "Continue", onclick: "$(this).closest('.overlay').find('form:first').submit(); $(this).closest('.overlay').remove();" %>
+    <%= button_tag "Cancel", onclick: "print_doc_done(); $(this).closest('.overlay').remove();" %>
+<% end %>

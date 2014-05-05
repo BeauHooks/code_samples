@@ -1,0 +1,82 @@
+<% if @tab == "load_attachments" %>
+  // Attachments Tab
+  $("#rolodex_attachments").       html("<%= j(render "rolodex/partials/attachments",            rolodex: @rolodex_entity ).html_safe %>");
+  $("#attachments_info").          html("<%= j(render "rolodex/partials/attachments_info",       rolodex: @rolodex_entity ).html_safe %>");
+  $("a.attachments").attr("onclick", "");
+<% elsif @tab == "load_signatures" %>
+  // Signatures Tab
+  $("#rolodex_signatures").       html("<%= j(render "rolodex/partials/signatures",            rolodex: @rolodex_entity ).html_safe %>");
+  $("#signatures_info").           html("<%= j(render "rolodex/partials/signatures_info",        rolodex: @rolodex_entity ).html_safe %>");
+<% else %>
+// Overview Tab
+  <% case @type %>
+  <% when "Contact Info" %>
+    <% @overlay = "Contact Info" %>
+    <% if !@do_not_refresh_overview %>
+      clearSorting('#overview_contact_info_results');
+      $("table#overview_contact_info_results").html("<%= j(render "entity_contacts/contact_results", rolodex: @rolodex_entity ).html_safe %>");
+    <% end %>
+    $("#row<%= @rolodex_entity.EntityID %>").replaceWith("<%= j(render "rolodex/partials/entity_row", i: entity).html_safe %>");
+    if($("#grid_results tr.active_row").html() == undefined){
+      $("#row<%= @rolodex_entity.EntityID %>").addClass("active_row");
+    }
+  <% when "Address" %>
+    <% @overlay = "Address" %>
+    <% if !@do_not_refresh_overview %>
+      $("#overview_address_info_results").html("<%= j(render "entity_contacts/address_results", rolodex: @rolodex_entity ).html_safe %>");
+    <% end %>
+    $("#row<%= @rolodex_entity.EntityID %>").replaceWith("<%= j(render "rolodex/partials/entity_row", i: entity).html_safe %>");
+    if($("#grid_results tr.active_row").html() == undefined){
+      $("#row<%= @rolodex_entity.EntityID %>").addClass("active_row");
+    }
+  <% when "Rule" %>
+    $("#overview_rules").            html("<%= j(render "rolodex/partials/overview_rules",         rolodex: @rolodex_entity ).html_safe %>");
+  <% when "Affiliation" %>
+    $("#overview_affiliations").html("<%= j(render "rolodex/partials/overview_affiliations",  rolodex: @rolodex_entity ).html_safe %>");
+    if($("#current_affiliations") != undefined){
+      clearSorting("#current_affiliations_box");
+      $("#current_affiliations").html("<%= j(render "rolodex_affiliations/current_affiliations").html_safe %>")
+    }
+    $("#row<%= @rolodex_entity.EntityID %>").replaceWith("<%= j(render "rolodex/partials/entity_row", i: entity).html_safe %>");
+    if($("#grid_results tr.active_row").html() == undefined){
+      $("#row<%= @rolodex_entity.EntityID %>").addClass("active_row");
+    }
+  <% when "Signature" %>
+     // Signatures Tab
+    $("#rolodex_signatures").       html("<%= j(render "rolodex/partials/signatures",            rolodex: @rolodex_entity ).html_safe %>");
+    $("#signatures_info").           html("<%= j(render "rolodex/partials/signatures_info",        rolodex: @rolodex_entity ).html_safe %>");
+  <% when "Info" %>
+    $("#info").                      html("<%= j(render "rolodex/partials/overview_info",          rolodex: @rolodex_entity ).html_safe %>");
+    $("#contact_header").html("<%= @rolodex_entity.name %>");
+    $("#row<%= @rolodex_entity.EntityID %>").replaceWith("<%= j(render "rolodex/partials/entity_row", i: entity).html_safe %>");
+    if($("#grid_results tr.active_row").html() == undefined){
+      $("#row<%= @rolodex_entity.EntityID %>").addClass("active_row");
+    }
+  <% when "update_line" %>
+    $("#row<%= @rolodex_entity.EntityID %>").replaceWith("<%= j(render "rolodex/partials/entity_row", i: entity).html_safe %>");
+    if($("#grid_results tr.active_row").html() == undefined){
+      $("#row<%= @rolodex_entity.EntityID %>").addClass("active_row");
+    }
+  <% else %>
+    $("#contact_header").       html("<%= @rolodex_entity.name %>");
+    $("#overview_contacts").    html("<%= j(render "rolodex/partials/overview_contacts", rolodex: @rolodex_entity ).html_safe %>");
+    $("#overview_addresses").html("<%= j(render "rolodex/partials/overview_addresses" ).html_safe %>");
+    $("#overview_notes").       html("<%= j(render "rolodex/partials/overview_notes",         rolodex: @rolodex_entity ).html_safe %>");
+    $("#overview_info").        html("<%= j(render "rolodex/partials/overview_info",          rolodex: @rolodex_entity ).html_safe %>");
+    $("#overview_affiliations").html("<%= j(render "rolodex/partials/overview_affiliations",  rolodex: @rolodex_entity ).html_safe %>");
+    $("#overview_files").       html("<%= j(render "rolodex/partials/overview_files",         rolodex: @rolodex_entity ).html_safe %>");
+
+    // Change attachments tab onclick event and for overview tab to display
+    $("a.attachments").attr("onclick", "$.get('/rolodex/<%= @rolodex_entity.EntityID %>/show_contact?tab=load_attachments');");
+    $("a.signatures").attr("onclick", "$.get('/rolodex/<%= @rolodex_entity.EntityID %>/show_contact?tab=load_signatures');");
+
+    <% if @rolodex_entity != nil %>
+      $("#attachments_tab").show();
+    <% end %>
+
+    $("a.overview").click();
+    document.title = "Filetrak - Rolodex: <%= @rolodex_entity.name.html_safe %>";
+  <% end %>
+<% end %>
+
+initializer()

@@ -1,0 +1,9 @@
+closeOverlay('create_receipt');
+clearSorting("div#receipts");
+$('#receipt_results').html("<%= j(render 'check_workings/receipt_results').html_safe %>");
+$("div#anticipated_disbursement_summary").html("<%= j(render "check_workings/anticipated_disbursement_summary").html_safe %>");
+$("div#disbursement_summary").html("<%= j(render "check_workings/disbursement_summary").html_safe %>");
+
+<% if @receipt != nil && !["1", "6"].include?(@receipt.PaymentMethod) %>
+	addToQueue("print_receipt", "check_workings/print_receipt?id=<%= @receipt.ReceiptID %>");
+<% end %>

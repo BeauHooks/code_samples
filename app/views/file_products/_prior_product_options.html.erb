@@ -1,0 +1,6 @@
+<%= select :prior_file_product, :id, options_for_select(@prior != nil ? @file_products : [[]] ), {include_blank: false}, {style: "width: 254px;", name: "prior_file_product_id", id: "prior_file_product_id", disabled: @prior == nil } %>
+<%= hidden_field_tag :collection_type, @collection_type %>
+
+<script type="text/javascript">
+	$("#prior_file_product_id").focus();
+</script>

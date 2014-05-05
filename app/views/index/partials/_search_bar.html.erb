@@ -1,0 +1,31 @@
+<%= form_for :search_form, url: display_search_results_index_index_path, remote: true, onsubmit: "clearSorting('#search_results');" do %>
+  <div>
+    <div class="expand_toggle">
+      <span><%= link_to "&#x25BC;".html_safe, "#", id: "search_expanded", onclick: "$('#search_results').toggle(); $('#search_expanded').toggle(); $('#search_collapsed').toggle();" %></span>
+      <span><%= link_to "&#x25B6;".html_safe, "#", id: "search_collapsed", onclick: "$('#search_results').toggle(); $('#search_collapsed').toggle(); $('#search_expanded').toggle();", style: "display:none;" %></span>
+    </div>
+    <div class="search_control">
+      Search: <%= select(:search_type, :type, options_for_select(Index.search_types.sort {|a,b| a <=> b}, selected: "file_number"), {include_blank: false}, {id: :search_type, name: :search_type, style: "width: 110px;", onchange: "check_type();"} ) %>
+    </div>
+    <div class="search_control">
+      <span id="main_search_input" class="hide">
+        <input type="text" name="search" placeholder="Begin typing here..." id="search_box" value="<%= params[:file_id] != nil && params[:file_id] != "" ? params[:file_id][3..-1] : params[:search] %>" >
+      </span>
+    </div>
+    <div class="search_control">
+      <span id="main_search_dates" class="hide">
+        <%= text_field_tag :from, "", onchange: "validateDate(this);", class: "w75", placeholder: "From" %>
+        <%= text_field_tag :to, "", onchange: "validateDate(this);", class: "w75", placeholder: "To" %>
+      </span>
+    </div>
+    <div class="search_control">
+      <%= image_tag "loading.gif", id: "spinner", class: 'spinner' %><span id="searching_text" style="display:none;">Searching...</span>
+      <%= image_submit_tag "search.png", class: "icon trigger", id: "search_button", onclick: "if(!submitSearch()){return false;}" %>
+    </div>
+    <div class="search_control">
+      <span id="include_closed_control"><label>&nbsp;&nbsp;<%= check_box_tag :include_closed, true, current_user.users_preferences[:include_closed_files] == "-1", onchange: "$('#search_button').click();", style: "position: relative; top: 3px;" %> Include Closed Files</label></span>
+      <span id="smart_text_notice" class="smart_text_notice red hide">*Smart Text search doesn't search same day files right now</span>
+      <input type="hidden" name="company" value="<%= session[:company] %>" />
+    </div>
+  </div>
+<% end %>

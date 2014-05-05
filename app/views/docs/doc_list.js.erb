@@ -1,0 +1,86 @@
+<% if @save_hud == true %>
+  addToQueue('cancel_remove_doc', 'application/flash_notice?title=Cancelling Remove Doc&notice=Settlement statements cannot be deleted after file has been sent for funding.');
+<% elsif @save_invoice == true %>
+  addToQueue('cancel_remove_doc', 'application/flash_notice?title=Cancelling Remove Doc&notice=Invoice cannot be deleted because it is linked to a settlement statement.');
+<% elsif @save_1099 == true %>
+  addToQueue('cancel_remove_doc', 'application/flash_notice?title=Cancelling Remove Doc&notice=1099s cannot be deleted after file has been sent for funding.');
+<% end %>
+
+<% selected = @doc.id if @doc != nil %>
+$("div#doc_content").html("");
+$("div#doc_tools").html("");
+$("div#doc_input_fields").html("");
+$("#file_docs_list").html("");
+$("span#reset_fields").hide();
+$("#select_all_docs").attr("checked", false);
+
+$("tbody#all_docs").html("<%= j(render 'docs/doc_list').html_safe %>");
+
+<% if selected != nil %>
+  $("#doclist_<%= selected %>").click();
+<% else %>
+  if(document.getElementById("all_docs").getElementsByTagName("tr")[0] != "undefined"){
+      document.getElementById("all_docs").getElementsByTagName("tr")[0].click();
+  }
+<% end %>
+
+if($("#file_docs_list") != undefined){
+  clearSorting("#file_docs");
+  $("#file_docs_list").html("<%= j(render :partial => "docs/file_docs_list").html_safe %>");
+  $('#adding_new_docs').hide();
+}
+
+<% if @file.docs.where("is_active = -1").size > 0 %>
+  $("div#doc_input_fields").html("<%= j(render :partial => "docs/input_fields").html_safe %>");
+  <% @section = "" %>
+
+  //Load Entities
+  <% @file.file_doc_entities.where("doc_id = 0 AND is_active = 1").each do |doc_entity| %>
+    <% @doc_entity = doc_entity %>
+    <% @type = @doc_entity.entity.IndCorp %>
+    <% @doc_id = 0 %>
+    <% @section = @doc_entity.tag.downcase %>
+    //$("table#<%= @section %>_entities").append("<%= j(render :partial => "docs/entity").html_safe %>");
+    $("div#<%= @section %>_entities").append("<%= j(render :partial => "docs/entity").html_safe %>");
+  <% end %>
+
+  if($('#all_docs').html() != ''){
+    <% if ["Refinance", "Construction Loan"].include?(@file.TransactionDescription1) %>
+      $("#grantor_container").hide();
+    <% else %>
+      $("#grantor_container").show();
+    <% end %>
+    <% if @file.TransactionDescription1 == "Cash Purchase" %>
+      $("#lender_container").hide();
+    <% else %>
+      $("#lender_container").show();
+    <% end %>
+  }
+<% end %>
+$("div#loading_doc").hide(); $("div#doc_content").show();
+
+<% if @run_1099 != nil %>
+  <% if @template != nil %>
+    <% if @template.is_entity_doc == 0 %>
+      $.post("docs/create?type=Template&file_id=<%= @file.FileID %>&quickadd=<%= @template.id %>");
+    <% else %>
+      <% if @file.file_doc_entities.where("is_active = 1 AND doc_id = 0").count > 0 %>
+        request("overlays/choose_doc_entity?file_id=<%= @file.FileID %>&template=<%= @template.id %>");
+      <% else %>
+        <% message =  "The document you searched for requires entities to already have been added to the document set. Please add some entities and try again." %>
+        <% title = "Entities Not Found" %>
+        request('application/flash_notice?title=<%= title %>&notice=<%= message %>');
+      <% end %>
+    <% end %>
+  <% else %>
+    <% message =  "Your request returned 0 results. Remember to use the document\\\'s short name when using the Quick Add method. (i.e. WD, 1099, etc.)" %>
+    <% title = "Doc Not Found" %>
+    request('application/flash_notice?title=<%= title %>&notice=<%= message %>');
+  <% end %>
+<% end %>
+
+<% if @cannot_create == true %>
+  addToQueue('cancel_add_doc', 'application/flash_notice?title=Cancelling Add Doc&notice=One or more of your documents could not be created. File has already been sent for funding.');
+<% end %>
+
+countMissingFields();

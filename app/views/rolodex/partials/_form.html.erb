@@ -1,0 +1,499 @@
+<% url = "rolodex/create?page=#{@page}&form=#{@form}" %>
+<% url += "&file_id=#{@file_id}" if @file_id != nil %>
+<% url += "&check_id=#{@check.id}" if @check != nil %>
+<% url += "&section=#{@section}&doc_id=#{@doc_id}" if @form == "doc" %>
+
+<%= form_for @entity, { url: url, html: {onsubmit: "$('#checking_for_duplicates').hide(); $('#saving_new_contact').show();", method: :post, remote: true }} do |f|%>
+	<div id="rolodex_form_errors" class="flash_error hide">
+	</div>
+	<div class="overlay_content">
+		<p><span class="label type_select">Entity Category:</span>
+				<%= select :entity, :IndCorp, options_for_select([["Company", "Company"], ["Corporation", "Corporation"], ["Financial Institution", "Financial Institution"], ["Individual", "Individual"], ["LLC", "LLC"], ["Organization", "Organization"], ["Trust", "Trust"], ["Partnership", "Partnership"]], "Individual"), {:include_blank => false}, { :data => {:remote => true, :url => url_for(:controller => "rolodex",
+				:action => "show_entity_by_type")}} %></p>
+	<hr />
+	<div id="entity_info">
+		<%= render "rolodex/partials/entity_form", :locals => { :customer_type: "Individual" } %>
+	</div>
+		<hr />
+		<div id="contact_row">
+			<table id="new_rolodex_contact_info" class="new_rolodex_info">
+				<tr>
+					<td class="label primary">Primary</td>
+					<td class="label type">Type</td>
+					<td class="label info">Contact Info<%= link_to image_tag("plus.png", class: "icon trigger" ), "rolodex/add_contact_to_new_entity", remote: true %></td>
+					<td class="label description">Description</td>
+				</tr>
+				<% n = 0 %>
+				<% ["Home", "Cell", "Office", "Fax", "Email"].each do |type| %>
+					<% n += 1 %>
+					<%= render "rolodex/partials/contact_info_row", type: type, n: n %>
+				<% end %>
+			</table>
+		</div>
+		<hr />
+		<div id="contact_row">
+			<table id="new_rolodex_address_info" class="new_rolodex_info">
+				<tr>
+					<td class="label primary">Primary</td>
+					<td class="label type">Type</td>
+					<td class="label info">Address<%= link_to image_tag("plus.png", class: "icon trigger" ), "rolodex/add_address_to_new_entity", remote: true %></td>
+					<td class="label county">County</td>
+					<td class="label description">Description</td>
+				</tr>
+				<%= render "rolodex/partials/address_row" %>
+			</table>
+		</div>
+		<hr />
+		<div id="affiliations" class="affiliations">
+			<table id="new_rolodex_affiliations">
+				<tr data-section="affiliation">
+					<td class="label primary">Primary</td>
+					<td class="label entity">Affiliation Entity <%= link_to image_tag("search.png", class: "icon"), "rolodex/show_overlay?overlay=Affiliation", remote: true %></td>
+          <td class="label info">Phone</td>
+          <td class="label info">Email</td>
+          <td class="label info">Address</td>
+          <td class="label info">City</td>
+          <td class="label info">State</td>
+					<td class="label relationship">Relationship</td>
+				</tr>
+			</table>
+		</div>
+		<hr />
+		<div id="notes">
+			<table id="new_rolodex_note">
+				<tr>
+					<td class="label note">Note<%= link_to image_tag("plus.png", class: "icon trigger" ), "rolodex/add_note_to_new_entity", remote: true %></td>
+					<td class="label from">From</td>
+					<td class="label to">To</td>
+					<td class="label remind">Remind</td>
+				</tr>
+				<%= render "rolodex/partials/note_row" %>
+			</table>
+		</div>
+		<hr class="hide" />
+		<div id="activities" class="activities hide">
+			<table>
+				<tr>
+					<td class="label">Activity</td>
+					<td class="label">Deadline Date</td>
+					<td class="label">Contact</td>
+					<td class="label">Action</td>
+					<td class="label">Complete Activity</td>
+				</tr>
+				<tr>
+					<td>Seller Disclosure Reminder</td>
+					<td><input type="text" /><%= link_to image_tag("calendar.png", class: "calendar") %></td>
+					<td><select><option>David Byars</option></select></td>
+					<td><select><option>Remind Closer</option></select></td>
+					<td><select><option>3 Days Before</option></select></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="overlay_footer">
+		<span class="float_right">
+      <%= f.submit "Save", class: "close", onclick: "if(validateRolodexForm(event)){$('#new_rolodex_commit').val('Save'); $(this).closest('form').submit();} event.preventDefault(); return false;" %>
+			<%= f.submit "Save and Copy", class: "close", onclick: "if(validateRolodexForm(event)){$('#new_rolodex_commit').val('Save and Copy'); $(this).closest('form').submit(); $('#new_rolodex_commit').val(''); } event.preventDefault(); return false;" %>
+      <% cancel_action = "" %>
+      <% cancel_action += "$('#blank_#{@section} img').click();" if @form == "doc" %>
+			<input type="button" value="Cancel" class="close" onclick="<%= cancel_action %> closeOverlay('new_rolodex')" />
+      <input type="hidden" name="commit_value" id="new_rolodex_commit" value="" >
+      <input type="hidden" name="company" id="new_rolodex_company" value="" >
+		</span>
+	</div>
+<% end %>
+<input type="hidden" name="no_show" value="false" />
+<div class="overlay" id="overlay_rolodex_duplicates"></div>
+
+<script type="text/javascript">
+	function clearRolodexFormForNew(){
+		if($("#entity_IndCorp").val() != "Individual"){
+			$("form#new_entity").find("#entity_FullName").val('');
+			$("form#new_entity").find("input[name=entity[EffectiveDate]]").val('');
+			$("form#new_entity").find("#entity_TaxID").val('');
+		}
+		else{
+			$("form#new_entity").find("#entity_FirstName").val('');
+			$("form#new_entity").find("#entity_MiddleInitial").val('');
+			$("form#new_entity").find("#entity_TaxID").val('');
+			$("form#new_entity").find("#entity_Prefix").val('');
+			$("form#new_entity").find("#entity_Suffix").val('');
+			$("#secondary_info").find(".datepicker").val('');
+		}
+	}
+
+  function validateRolodexForm(event, form){
+	  var save = true;
+	  var name = ""
+	  var description = document.getElementById("entity_Description").value;
+	  var contactTableRows = document.getElementById("new_rolodex_contact_info").getElementsByTagName("tr");
+	  var addressTableRows = document.getElementById("new_rolodex_address_info").getElementsByTagName("tr");
+	  var affiliationTableRows = document.getElementById("new_rolodex_affiliations").getElementsByTagName("tr");
+	  var noteTableRows = document.getElementById("new_rolodex_note").getElementsByTagName("tr");
+	  var value = "";
+	  var count = 0;
+	  var html = "";
+	  var errorDiv = document.getElementById("rolodex_form_errors");
+
+	  errorDiv.innerHTML = "";
+	  errorDiv.style.display = "none";
+
+	  if(document.getElementById("entity_FirstName") == undefined){
+	    name = document.getElementById("entity_FullName").value;
+	    nameValue = "Name";
+	  }
+	  else{
+	    name = document.getElementById("entity_FirstName").value;
+	    nameValue = "First Name";
+	  }
+
+	  if( name == ""){
+	    save = false;
+	    count += 1;
+	    html += "<h4>" + count + ") " + nameValue + " cannot be left blank.</h4>";
+	  }
+
+	  if( description == ""){
+	    description.value = "NONE";
+	  }
+
+	  if(affiliationTableRows.length > 1){
+	    for( i=1; i < affiliationTableRows.length; i++){
+	      value = affiliationTableRows[i].getElementsByTagName("input")[1].value
+	      if(value == ""){
+	        save = false;
+	        count += 1;
+	        html += "<h4>" + count + ") Relationship cannot be left blank.</h4>";
+	      }
+	    }
+	  }
+
+	  if(count > 0){
+	    errorDiv.innerHTML = "<h4 style='text-decoration: underline'>The following errors occurred with your entry.</h4>" + html;
+	    errorDiv.style.display = "";
+	  }
+
+	  return save;
+	}
+
+	function initRolodexFormPosition(object){
+    var table = $(object).closest('table');
+    var section = $(object).data('section');
+    var count = 0;
+    var field = "";
+    var name = "";
+    var id = "";
+    var plural = "";
+
+    if(section == "contact_info" || section == "address"){
+      plural = section;
+      section = "contact";
+    }
+    else if(section == "affiliation"){
+    	plural = section;
+    	section = "entity"
+    }
+    else{
+      plural = section + "s";
+    }
+
+    $(table).find('tr').each(function(){
+      // Check to make sure that we're not on header row
+      if($(this).attr('id') != undefined){
+        // Update blank rows
+        if($(this).attr('id').indexOf('_BLANK') != -1){
+          $(this).attr('id', $(this).attr('id').replace( /[0-9]/g, String(count) ) );
+        }
+
+        // Update all inputs and selects so they are grouped correctly when it comes time to save
+        $(this).find('select, input').each(function(){
+          field = $(this).data('field');
+          name = plural + "[" + section + String(count) + "[" + field + "]]" ;
+          $(this).attr('name', name);
+        });
+
+        // Update all inputs and selects so they are grouped correctly when it comes time to save
+        $(this).find('input[type=checkbox]').each(function(){
+          name = "primary" + String(count);
+          $(this).attr('id', name);
+
+          if($(table).find("input[type=checkbox]").length == 1){
+          	$(this).attr("checked", "checked");
+          }
+        });
+      }
+      count += 1;
+    });
+  }
+
+  function refreshRolodexFormPosition(object){
+    var table = $(object).closest('table');
+    var section = $(object).data('section');
+    var count = 0;
+    var field = "";
+    var name = "";
+    var id = "";
+    var plural = "";
+
+    if(section == "contact_info" || section == "address"){
+      plural = section;
+      section = "contact";
+    }
+    else if(section == "affiliation"){
+    	plural = section;
+    	section = "entity"
+    }
+    else{
+      plural = section + "s";
+    }
+
+    $(object).remove();
+
+    $(table).find('tr').each(function(){
+      // Check to make sure that we're not on header row
+      if($(this).attr('id') != undefined){
+        // Update blank rows
+        if($(this).attr('id').indexOf('_BLANK') != -1){
+          $(this).attr('id', $(this).attr('id').replace( /[0-9]/g, String(count) ) );
+        }
+
+        // Update all inputs and selects so they are grouped correctly when it comes time to save
+        $(this).find('select, input').each(function(){
+          field = $(this).data('field');
+          name = plural + "[" + section + String(count) + "[" + field + "]]" ;
+          $(this).attr('name', name);
+        });
+      }
+      count += 1;
+    });
+  }
+
+   function updateRolodexFormCurrent(view){
+    var name = "";
+    var position = "";
+    var id = "";
+    var row = "";
+    var click = "";
+    var length = 15;
+    var full_id = "";
+
+    switch(view){
+      case "affiliations":
+        if($("#affiliations_on_new_contact").html() != undefined){
+          $("#affiliations_on_new_contact").html('');
+          if($("#new_rolodex_affiliations").find('tr').length > 5){
+            addWidth('affiliations_on_new_contact', 95);
+          }
+          else{
+            fixWidth('affiliations_on_new_contact', 95);
+          }
+        }
+
+        if($("#new_rolodex_affiliations").find('tr').length > 1){
+          var phone = "";
+          var email = "";
+          var address = "";
+          var city = "";
+          var state = "";
+          var relationship = "";
+
+          $("#new_rolodex_affiliations").find('tr').each(function(){
+            $(this).find('td').each(function(){
+              if($(this).data("field") != undefined){
+                if($(this).data("field") == "Name"){
+                  if($(this).find('span').html() == undefined){
+                    name = $.trim($(this).text());
+                  }
+                  else{
+                    name = $.trim($(this).find('span').text());
+                  }
+                  id = $(this).find('input[type=hidden]').val();
+                  $("#affiliation_button_" + id).attr('disabled', 'disabled').val('Added');
+                }
+                else if($(this).data("field") == "Phone"){
+                  if($(this).find('span').html() == undefined){
+                    phone = $.trim($(this).text());
+                  }
+                  else{
+                    phone = $.trim($(this).find('span').text());
+                  }
+                }
+                else if($(this).data("field") == "Email"){
+                  if($(this).find('span').html() == undefined){
+                    email = $.trim($(this).text());
+                  }
+                  else{
+                    email = $.trim($(this).find('span').text());
+                  }
+                }
+                else if($(this).data("field") == "Address"){
+                  if($(this).find('span').html() == undefined){
+                    address = $.trim($(this).text());
+                  }
+                  else{
+                    address = $.trim($(this).find('span').text());
+                  }
+                }
+                else if($(this).data("field") == "City"){
+                  if($(this).find('span').html() == undefined){
+                    city = $.trim($(this).text());
+                  }
+                  else{
+                    city = $.trim($(this).find('span').text());
+                  }
+                }
+                else if($(this).data("field") == "State"){
+                  if($(this).find('span').html() == undefined){
+                    state = $.trim($(this).text());
+                  }
+                  else{
+                    state = $.trim($(this).find('span').text());
+                  }
+                }
+                else if($(this).data("field") == "Relationship"){
+                  relationship = $(this).find('input').val();
+                }
+              }
+            });
+
+            if($("#affiliations_on_new_contact").html() != undefined && id != ""){
+              row = "$('tr#affiliation" + id + "')";
+              click = "refreshRolodexFormPosition(" + row + "); $('#affiliation_button_" + id + "').prop('disabled', false).val('Add'); updateRolodexFormCurrent('affiliations'); //$(this).closest('tr').remove();";
+
+              // name = evalLengthRolodexForm(name);
+              name = $.trim(name);
+              if(name.length > length){
+                name = "<td class='hint padding_left_5 w95'><span><a href='rolodex?entity_id=" + id + "' target='_blank'>" + name + "</a></span><a href='rolodex?entity_id=" + id + "' target='_blank'>" + name.slice(0, length - 3) + "...</a></td>";
+              }
+              else{
+                name = "<td class='padding_left_5 w95'><a href='rolodex?entity_id=" + id + "' target='_blank'>" + name + "</a></td>";
+              }
+              phone = evalLengthRolodexForm(phone);
+              address = evalLengthRolodexForm(address);
+              city = evalLengthRolodexForm(city);
+              state = evalLengthRolodexForm(state);
+              email = evalLengthRolodexForm(email);
+              relationship = evalLengthRolodexForm(relationship);
+
+              $("#affiliations_on_new_contact").append("<tr><td class='w60 padding_left_5'><input type='button' value='Remove' onclick=\"" +  click + "\" /></td>" + name + phone + email + address + city +  state +  relationship + "</tr>");
+            }
+          });
+
+					if($("#affiliations_on_new_contact").find('tr').length > 4){
+						addWidth('affiliations_on_new_contact', 95);
+					}
+					else{
+						fixWidth('affiliations_on_new_contact', 95);
+					}
+
+          initRolodexFormPosition( $("#new_rolodex_affiliations").find('tr:first') );
+        }
+        break;
+    }
+  }
+
+  function evalLengthRolodexForm(string){
+    var length = 15;
+    string = $.trim(string);
+    if(string.length > length){
+      return "<td class='hint padding_left_5 w95'><span>" + string + "</span>" + string.slice(0, length - 3) + "...</td>";
+    }
+    else{
+      return "<td class='padding_left_5 w95'>" + string + "</td>";
+    }
+  }
+
+  function checkForDuplicates(object){
+    var type = "&type=" + $(object).data('check');
+
+    if($(object).val().trim() != "" && $("#overlay_new_rolodex input[name=no_show]").val() != "true"){
+      var tax_id = "&tax_id=" + encodeURIComponent($("#overlay_new_rolodex #entity_TaxID").val().trim());
+      var emails = "";
+      var phones = "";
+      var check = true;
+
+      if($("#overlay_new_rolodex #entity_IndCorp").val() == "Individual"){
+        var ind_corp = "ind_corp=Individual";
+        var name = "";
+        name += "&last_name=" + encodeURIComponent($("#overlay_new_rolodex #entity_LastName").val().trim());
+        name += "&first_name=" + encodeURIComponent($("#overlay_new_rolodex #entity_FirstName").val().trim());
+        //name += "&middle_initial=" + encodeURIComponent($("#overlay_new_rolodex #entity_MiddleInitial").val().trim());
+
+        $("#new_rolodex_contact_info").find("select").each(function(){
+          if($(this).val() == "Email"){
+            value = $(this).closest('tr').find('input[type=text]:first').val().trim();
+            if(value != ""){
+              emails += "&emails[]=" + encodeURIComponent(value);
+            }
+          }
+          else if($(this).val() == "Home" || $(this).val() == "Cell"){
+            value = $(this).closest('tr').find('input[type=text]:first').val().trim();
+            if(value != ""){
+              phones += "&phones[]=" + encodeURIComponent(value);
+            }
+          }
+        });
+      }
+      else{
+        var ind_corp = "ind_corp=Other";
+        name = "&name=" + encodeURIComponent($("#overlay_new_rolodex #entity_FullName").val().trim());
+
+        $("#new_rolodex_contact_info").find("select").each(function(){
+          if($(this).val() == "Email"){
+            value = $(this).closest('tr').find('input[type=text]:first').val().trim();
+            if(value != ""){
+              emails += "&emails[]=" + encodeURIComponent(value);
+            }
+          }
+          else if($(this).val() == "Office"){
+            value = $(this).closest('tr').find('input[type=text]:first').val().trim();
+            if(value != ""){
+              phones += "&phones[]=" + encodeURIComponent(value);
+            }
+          }
+        });
+      }
+
+      if( ($(object).attr('id') == "entity_LastName" && $("#overlay_new_rolodex #entity_FirstName").val().trim() == "") || ($(object).attr('id') == "entity_FirstName" && $("#overlay_new_rolodex #entity_LastName").val().trim() == "") ){
+        check = false;
+      }
+
+      if(check == true){
+        $("span#checking_for_duplicates").show();
+        <% extras = "" %>
+        <% extras += "&form=#{@form}" if @form != nil %>
+        <% extras += "&file_id=#{@file_id}" if @file_id != nil %>
+        <% extras += "&check_id=#{@check.id}" if @check != nil %>
+        <% extras += "&section=#{@section}&doc_id=#{@doc_id}" if @form == "doc" %>
+        extras = "<%= extras.html_safe %>";
+        addToQueue("check_for_duplicates", "rolodex/check_for_duplicates?" + ind_corp + tax_id + name + emails + phones + type + extras + "&no_show=" + $("#overlay_new_rolodex input[name=no_show]").val() );
+      }
+    }
+  }
+
+  $("#overlay_new_rolodex input").keydown(function(event){
+    if(event.which == 13){
+      event.preventDefault();
+    }
+  });
+
+  function searchAddress(sender){
+    var parent = $(sender).closest('tr');
+    var address = encodeURIComponent( $(parent).find('.addr1').eq(0).val()).replace(/\s/g, "+");
+    var city = encodeURIComponent( $(parent).find('.city').eq(0).val()).replace(/\s/g, "+");
+    var state = encodeURIComponent( $(parent).find('.state').eq(0).val()).replace(/\s/g, "+");
+    var zip = encodeURIComponent( $(parent).find('.zip').eq(0).val()).replace(/\s/g, "+");
+
+    params = [];
+    address != "" ? params.push("address1=" + address) : "";
+    city != "" ? params.push("city=" + city) : "";
+    state != "" ? params.push("state=" + state) : "";
+    zip != "" ? params.push("zip=" + zip) : "";
+
+    $.post('application/usps?' + params.join("&") );
+  }
+
+  initRolodexFormPosition( $("#new_rolodex_contact_info").find('tr:last') );
+  var company = $("#page_company_id").val();
+  $("#new_rolodex_company").val(company);
+</script>

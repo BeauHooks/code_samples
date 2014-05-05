@@ -1,0 +1,152 @@
+<% @class == "complete" ? global = "global" : global = "custom" %>
+<% if @type == "SSN" %>
+    <span id="<%= global %>_w9_ssn_<%= @doc.doc_entity_id %>" name="<%= global %>_w9_ssn_<%= @doc.doc_entity_id %>" %>
+    
+    <% ssn = @tax_id.split("-").join.split(//) %>
+    <% while ssn.count < 9 %>
+      <% ssn << "" %>
+    <% end %>
+    <table class="ssn_w9" style="margin-bottom: 5px;">
+    <tbody>
+    <tr>
+    <td style="font-size: 8px; padding: 3px;  " colspan="11"><strong>Social security number</strong></td>
+    </tr>
+  </tbody>
+  </table>
+    <table class="<%= @class %> ssn_w9" style="width: 250px; border-collapse: collapse;" onclick = "if($('span.document_focus').html() != undefined){var e = jQuery.Event('keydown'); e.keyCode = 27; $('span.document_focus').children('form:first').children('textarea:first').trigger(e); $('span.document_focus').attr('class', '');} this.parentNode.className = 'document_focus'; $.post('docs/edit_custom_field?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=<%= global %>_w9_ssn_<%= @doc.doc_entity_id %>&value=<%= @tax_id %>');">
+      <tbody>
+    <tr style="text-align: center;">
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= ssn[0] %></div>
+    </td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= ssn[1] %></div>
+    </td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px; height: 30px;  "><%= ssn[2] %></div>
+    </td>
+    <td style="border-bottom: none; border-top: none; width: 20px;">-</td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= ssn[3] %></div>
+    </td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px; height: 30px;  "><%= ssn[4] %></div>
+    </td>
+    <td style="border-bottom: none; border-top: none; width: 20px;">-</td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= ssn[5] %></div>
+    </td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= ssn[6] %></div>
+    </td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= ssn[7] %></div>
+    </td>
+    <td style="padding-top: 2px; width: 20px;">
+    <div style="overflow-x: hidden; width: 20px; height: 30px;  "><%= ssn[8] %></div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+  </span>
+<% elsif @type == "TAX_ID" %>
+<span id="<%= global %>_w9_tax_id_<%= @doc.doc_entity_id %>" name="<%= global %>_w9_tax_id_<%= @doc.doc_entity_id %>" %>
+    <% tax = @tax_id.split("-").join.split(//) %>
+    <% while tax.count < 9 %>
+      <% tax << "" %>
+    <% end %>
+<table class="ssn_w9" style="margin-bottom: 5px;">
+<tr>
+<td style="font-size: 8px; padding: 3px;  " colspan="10"><strong>Employer identification number</strong></td>
+</tr>
+</table>
+<table class="<%= @class %> ssn_w9" style="border-collapse: collapse;" onclick = "if($('span.document_focus').html() != undefined){var e = jQuery.Event('keydown'); e.keyCode = 27; $('span.document_focus').children('form:first').children('textarea:first').trigger(e); $('span.document_focus').attr('class', '');} this.parentNode.className = 'document_focus'; $.post('docs/edit_custom_field?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=<%= global %>_w9_tax_id_<%= @doc.doc_entity_id %>&value=<%= @tax_id %>');">
+<tbody>
+<tr style="text-align: center;">
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px; border-right: none;"><%= tax[0] %></div>
+</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= tax[1] %></div>
+</td>
+<td style="border-bottom: none; border-top: none; width: 20px;">-</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px; border-right: none;"><%= tax[2] %></div>
+</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px; border-right: none;"><%= tax[3] %></div>
+</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px; border-right: none;"><%= tax[4] %></div>
+</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px; border-right: none;"><%= tax[5] %></div>
+</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px; border-right: none;"><%= tax[6] %></div>
+</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px; border-right: none;"><%= tax[7] %></div>
+</td>
+<td style="padding-top: 2px; width: 20px;">
+<div style="overflow-x: hidden; width: 20px;   height: 30px;"><%= tax[8] %></div>
+</td>
+</tr>
+</tbody>
+</table>
+</span>
+<% elsif @type == "TAX_CLASS" %>
+<label>
+  <% @tax == "Individual/sole proprietor" ? checked = "checked='checked'" : checked = "" %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_tax_class_option_<%= @doc.doc_entity_id %>&value=Individual/sole proprietor'); $( ' tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> Individual/sole proprietor
+</label> 
+<label>
+  <% @tax == "C Corporation" ? checked = "checked='checked'" : checked = ""  %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_tax_class_option_<%= @doc.doc_entity_id %>&value=C Corporation'); $('tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> C Corporation
+</label> 
+<label>
+  <% @tax == "S Corporation" ? checked = "checked='checked'" : checked = ""  %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_tax_class_option_<%= @doc.doc_entity_id %>&value=S Corporation'); $('tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> S Corporation
+</label> 
+<label>
+  <% @tax == "Partnership" ? checked = "checked='checked'" : checked = ""  %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_tax_class_option_<%= @doc.doc_entity_id %>&value=Partnership'); $('tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> Partnership
+</label> 
+<label>
+  <% @tax == "Trust/estate" ? checked = "checked='checked'" : checked = ""  %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_tax_class_option_<%= @doc.doc_entity_id %>&value=Trust/estate'); $('tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> Trust/estate
+</label>
+<br /> 
+<label>
+  <% @tax == "Limited liability company" ? checked = "checked='checked'" : checked = ""  %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_tax_class_option_<%= @doc.doc_entity_id %>&value=Limited liability company'); $('tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> Limited liability company. Enter the tax classification (C=C corporation, S=S corporation, P=partnership &nbsp;
+</label><span style="text-decoration: underline;"><%= @tax == "Limited liability company" ? "{{W9_TAX_CLASS}}" : "" %></span>
+<br /> 
+<label>
+  <% @tax == "Other" ? checked = "checked='checked'" : checked = ""  %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_tax_class_option_<%= @doc.doc_entity_id %>&value=Other'); $('tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> Other (see instructions) &nbsp;
+</label>
+<span style="text-decoration: underline;"><%= @tax == "Other" ? "{{W9_TAX_CLASS_OTHER}}" : "" %></span>
+<% elsif @type == "EXEMPT_PAYEE" %>
+<label>
+  <% @tax == "Yes" ? checked = "checked='checked'" : checked = "" %>
+  <% @tax == "Yes" ? value = "No" : value = "Yes" %>
+  <input type="checkbox" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=w9_exempt_payee_<%= @doc.doc_entity_id %>&value=<%= value %>'); $( ' tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();" <%= checked %> /> Exempt Payee
+</label> 
+<% elsif @type == "checkbox" %>
+  <% if @tag.split("_")[0...-1].join("_") == "CB_1099_REVIEWED" %>
+    <% if @print == nil %>
+      <label><input type="checkbox" data-box="<%= @box %>" class="<%= @tag.downcase %>" name="<%= @key %>" value="<%= @value %>" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=<%= @tag.downcase %>&value=' + $(this).val() ); updateCheckedBox(this);" style="position: relative; top: 2px;" <%= @checked %> /> I have thoroughly reviewed this 1099.</label>
+    <% end %>
+  <% else %>
+    <input type="checkbox" data-box="<%= @box %>" class="<%= @tag.downcase %>" name="<%= @key %>" value="<%= @value %>" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=<%= @tag.downcase %>&value=' + $(this).val() ); updateCheckedBox(this);" <%= @checked %> />
+  <% end %>
+<% elsif @type == "option" %>
+  <% if @print == nil || (@print != nil && @checked != "") %><div style="margin: 0;"><% if @print == nil %><label style="margin-right: 5px;" class="label"><input type="checkbox" data-box="<%= @box %>" class="<%= @tag.downcase %>" name="<%= @key %>" value="<%= @value %>" onchange="$.post('docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc.id %>&field=<%= @tag.downcase %>&value=' + $(this).val() ); updateCheckedBox(this);" style="margin-right: 5px;" <%= @checked %> /><% label = @key.split("_") %><%= label[1...-1].join(" ") %> OPTION <%= label[-1] %>:</label><% end %><%= @option_text.html_safe %></div><% end %>
+<% elsif @type == "text" %>
+  <% if @print.nil? %>
+    <%= text_area_tag(@tag, @value, onchange: "$.post('docs/create_custom?file_id=#{@file.ID}&doc_id=#{@doc.id}&field=#{@tag.downcase}&value=' + encodeURIComponent($(this).val()) );", style: "width: 100%; height: 1.25em;", onfocus: "$(this).select();") %>
+  <% else %>
+    <span style="padding-left: 2px;"><%= @value.gsub(/\n/, "<br />").html_safe %></span>
+  <% end %>
+<% end %>

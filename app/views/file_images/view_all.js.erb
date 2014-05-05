@@ -1,0 +1,5 @@
+<% if @created %>
+	$("div#attachments").append("<%= j(render "file_images/tmp_holder").html_safe %>");
+<% else %>
+	addToQueue("image_failure", "application/flash_notice?title=Image Fail&notice=One or more of the images you tried to access was either corrupt or not found.");
+<% end %>

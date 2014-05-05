@@ -1,0 +1,23 @@
+<% update = "update('#{fp_exception_path(id: exception.id)}', this);" %>
+<!-- <div contenteditable="true" class="box first" style="width: 560px; max-height: 90px; min-height: 50px; overflow-y: auto; padding: 5px; float: left;" onfocus="$(this).data('before', $(this).html());" onblur="<%#= update %>" name="content" id="fp_exception_content_<%#= exception.id %>">
+	<%#= exception.content.to_s.gsub(/\n/, "<br />").html_safe %>
+</div> -->
+<%= text_area_tag :content, exception.content, onchange: update, style: "width: 560px; height: 75px; padding: 5px; overflow-y: auto; float: left;", id: "fp_exception_content_#{exception.id}", class: "first" %>
+<div style="float: left; margin-left: 5px; width: 100px;">
+	<p style="padding: 2px 0px;"><span class="link trigger destroy" style="margin-right: 10px;" onclick="$.ajax({url: '<%= fp_exception_path(id: exception.id, removed_by: current_user.employee_id, view: view) %>', type: 'PUT'});">Remove</span></p>
+	<!-- <p><%#= link_to "Edit HTML", fp_exceptions_editor_path(id: exception.id, view: view), remote: true, id: "fp_exceptions_text_#{exception.id}", tabindex: "-1", class: "editor_link" %></p> -->
+	<p style="padding: 2px 0px;">
+		Requirements: <%= image_tag "plus.png", class: "icon trigger", onclick: "$.get('#{new_fp_requirement_path(file_product_id: @file_product.id ,fp_exception_id: exception.id)}');", style: "float: right;", tabindex: "-1" %><br />
+		<% i = 0 %>
+		<% requirements = exception.fp_requirements %>
+		<% size = requirements.size %>
+		<% if size == 0 %>
+			<span class="no_result">No requirements</span>
+		<% else %>
+			<% requirements.each do |r| %>
+				<% i += 1 %>
+				<%= link_to r.sort_order, fp_requirements_path(id: r.id), remote: true %><%= ", " if i < size %>
+			<% end %>
+		<% end %>
+	</p>
+</div>

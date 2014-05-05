@@ -1,0 +1,27 @@
+<% case @type %>
+<% when "TransactionDescription" %>
+	$("#info_transaction").html("<%= j(render 'index/partials/info_field').html_safe %>");
+<% when "Underwriter" %>
+	$("#info_underwriter").html("<%= j(render 'index/partials/info_field').html_safe %>");
+<% when "COEDate" %>
+	$("#info_closing").html("<%= j(render 'index/partials/info_field').html_safe %>");
+  $( "#info_focus" ).datepicker({
+      minDate: 0,
+      yearRange: "+0:+10",
+      changeMonth: true,
+      changeYear: true,
+      showOn: "button",
+      buttonImage: "/assets/calendar.png",
+      buttonImageOnly: true
+    });
+<% when "SalesPrice" %>
+	$("#info_sale").html("<%= j(render 'index/partials/info_field').html_safe %>");
+<% when "LoanAmount" %>
+	$("#info_loan").html("<%= j(render 'index/partials/info_field').html_safe %>");
+<% when "SecondLoan" %>
+	$("#info_second_loan").html("<%= j(render 'index/partials/info_field').html_safe %>");
+<% when "LoanNum" %>
+	$("#info_loan_number").html("<%= j(render 'index/partials/info_field').html_safe %>");
+<% end %>
+
+$("#info_focus").focus();

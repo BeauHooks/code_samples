@@ -1,0 +1,8 @@
+<% p = @file_property %>
+<tr class="row_<%= p.ID %>">
+  <td class="tax_id"><%= p.TaxID %></td>
+  <td class="account"><%= p.AccountID %></td>
+  <td class="address<%= " hint" if p.PropertyAddress != nil %>"><span><%= p.PropertyAddress if p.PropertyAddress != nil %></span><div><%= truncate "#{p.PropertyAddress}", length: 15 %></div></td>
+  <td class="legal hint"><span><%= p.LegalDescription %></span><%= truncate "#{p.LegalDescription}", length: 30 %></td>
+  <td class="add_link"><%= button_to 'Remove', file_property_path(id: p.ID), method: :delete, remote: true, onclick: "$('tr.row_#{p.ID}').hide();" %></td>
+</tr>

@@ -1,0 +1,48 @@
+<div id="search_bar" class="search_bar">
+  <div id="search" class="search">
+    <%= render "rolodex/partials/search_bar" %>
+  </div>
+  <div id="search_nav" class="search_nav">
+    <%= render "shared/search_results_count" %>
+  </div>
+</div>
+
+<div class="result_container margin_bottom_10">
+  <div class="grid_header"></div>
+  <div id="search_results" class="search_results h<%= current_user.users_preferences[:index_result_count].to_i * 23 %>" style="position: static;">
+    <table class="w100p sortable">
+      <thead class="grid_header_font">
+        <%= render "shared/thead_row" %>
+      </thead>
+      <tbody id="rolodex_results" class="grid_results">
+        <%= render 'shared/result_row' %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="tabs" class="tabs_container no_border hide">
+  <ul class="tabs">
+    <li><%= link_to "Overview", "#rolodex_overview", class: "overview tab" %></li>
+    <!-- <li id="attachments_tab"><%#= link_to "Attachments", "#rolodex_attachments", class: "attachments tab" %></li> -->
+    <%# if @permission_manage_entity_signatures %>
+      <!-- <li id="signatures_tab"><%#= link_to "Signatures", "#rolodex_signatures", class: "signatures tab" %></li> -->
+    <%# end %>
+  </ul>
+  <div id="rolodex_overview">
+    <%= render "rolodex/partials/overview" %>
+  </div>
+  <div id="rolodex_attachments"></div>
+  <% if @permission_manage_entity_signatures %>
+    <div id="rolodex_signatures"></div>
+  <% end %>
+</div>
+
+<div id="tab_content" class="tab_content">
+  <center>
+    <b>No Entity Selected</b>
+  </center>
+</div>
+
+<!-- Process User Images -->
+<div class="overlay" id="overlay_process_user_images"></div>

@@ -1,0 +1,14 @@
+<tr id="BLANK" data-section="address">
+  <td class="primary"><img src="/assets/redx.png" onclick="removeAddress(this)" class="trigger" /><input type="checkbox" onclick="updateRolodexPrimary(this.id)" id="" /></td>
+  <td class="type"><%= select :entity_contact, :ContactDesc, options_for_select([["Billing", "Billing"], ["Home", "Home"], ["Mailing", "Mailing"], ["Office", "Office"]], "Home"), { include_blank: false } %></td>
+  <td class="info">
+    <input type="text" class="w100" placeholder="Address 1" />
+    <input type="text" class="w65" placeholder="City" />
+    <%= text_field_tag :state, "", class: "w25", placeholder: "State" %>
+    <input type="text" class="w40" placeholder="Zip" /> <%= image_tag "/assets/notice.png", class: "trigger icon", onclick: "searchAddress(this);" %>
+    </td>
+    <td>
+      <%= text_field_tag :county, "", class: "w95" %>
+    </td>
+  <td class="description"><input type="text" /></td>
+</tr>

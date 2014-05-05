@@ -1,0 +1,18 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_notes">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="from"><div>From <%= link_to image_tag("plus.png", class: "icon"), new_entity_note_overlay_path(@entity), remote: true %></div></th>
+          <th class="to"><div>To</div></th>
+          <th class="entered"><div>Entered Date</div></th>
+          <th class="note"><div>Note</div></th>
+        </tr>
+      </thead>
+      <tbody id="entity_note_results" class="results highlight">
+        <%= render 'entity_notes/partials/note_results' %>
+      </tbody>
+    </table>
+  </div>
+</div>

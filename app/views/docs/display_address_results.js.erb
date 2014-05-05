@@ -1,0 +1,2 @@
+$("#address_select").replaceWith("<%= j(render :partial => "docs/display_address_results").html_safe %>");
+$('#address_select').val($('#address_select option:first').val()).change();

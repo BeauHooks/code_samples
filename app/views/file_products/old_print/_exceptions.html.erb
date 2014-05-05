@@ -1,0 +1,15 @@
+<%# This is for the print view %>
+<div class="file_product_wrapper">
+	<p style="margin-bottom: 1em; text-align: center; font-weight: bold;">Schedule B - Section 2 "Exceptions"</p>
+	<p style="margin-bottom: 1em;">Schedule B of the policy or policies to be issued will contain exceptions to the following matters unless the same are disposed of to the satisfaction of the Company:</p>
+	<ol style="margin: 0em 2em;">
+		<% @exceptions.each do |exception| %>
+			<li style="padding-left: 1.5em;"><%= exception.content %></li>
+		<% end %>
+	</ol>
+	<p style="text-align: center; margin-top: 2em;">***</p>
+	<div style="border: 1px solid #000000; padding: .5em; margin-bottom: 1em;">
+		<span style="font-size: .75em; font-weight: bold;">Note:</span> <span style="font-size: .75em;">Notwithstanding anything to the contrary in this Commitment, if the policy to be issued is other than an ALTA Owner's Policy (6/17/06) or ALTA Loan Policy (6/17/06), the policy may not contain an arbitration clause, or the terms of the arbitration clause may be different from those set forth in this Commitment. If the policy does contain an arbitration clause, and the Amount of Insurance is less than the amount, if any, set forth in the arbitration clause, all arbitrable matters shall be arbitrated at the option of either the Company or the Insured as the exclusive remedy of the parties.</span>
+	</div>
+	<p style="font-weight: bold; font-size: .75em;">* A search and examination fee of not less than $120.00 and not more than 50% of the proposed premium will be charged. This amount will be wholly credited against title insurance fees should Southern Utah Title Company issue a policy.</p>
+</div>

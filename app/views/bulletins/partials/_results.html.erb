@@ -1,0 +1,7 @@
+<% @bulletins.each do |bulletin| %>
+  <h4>
+    <% date = bulletin.created_at > DateTime.now.beginning_of_day ? "Today" : bulletin.created_at > (DateTime.now.beginning_of_day - 6.days) ? bulletin.created_at.strftime("%A") : bulletin.created_at.strftime("%B %d, %Y") %>
+    <%= link_to "#{date} - #{bulletin.title}", bulletin_path(bulletin.id), remote: true %><%= link_to image_tag("/assets/edit.png", class: "icon"), edit_bulletin_path(bulletin.id), remote: true if @permission_can_create_bulletins %>
+  </h4>
+  <div class="bulletin_text" id="<%= bulletin.id %>"><%= bulletin.body.to_s.html_safe %></div>
+<% end %>

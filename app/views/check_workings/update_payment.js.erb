@@ -1,0 +1,3 @@
+$("#check_total").val("<%= number_to_currency(@check.amount || 0.0, precision: 2, unit: '') %>");
+$("#disbursement_<%= @check.id %> .amount").html("<%= number_to_currency(@check.amount || 0.0, precision: 2, unit: '$') %>");
+addToQueue("update_summary", "check_workings/update_summary?file_id=<%= @check.file_id %>&check_id=<%= @check.id %>");

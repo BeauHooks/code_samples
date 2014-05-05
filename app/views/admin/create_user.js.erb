@@ -1,0 +1,4 @@
+$("#search_nav").html("<%= j(render "shared/search_results_count").html_safe %>");
+$("#user_results").html("<%= j(render "shared/result_row").html_safe %>");
+$("#user_detail").html("<p class='no_result'>Loading User...</p>");
+$("#user_results tr:first").click();

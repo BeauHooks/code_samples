@@ -1,0 +1,11 @@
+<li class="menu_item">
+  <div class="label"><%= @page_name %></div>
+  <ul class="submenu navigation_menu">
+    <li><%= link_to "Dashboard".html_safe,  main_app.dashboard_index_path, :class => active("dashboard") %></li>
+    <li><%= link_to "File Index", main_app.index_index_path, :class => active("index"), target: "#{current_user.users_preferences[:option1]}" %></li>
+    <li><%= link_to "Rolodex", main_app.rolodex_index_path, :class => active("rolodex"), target: "#{current_user.users_preferences[:option1]}" %></li>
+    <li><%= link_to "Property Lookup", main_app.properties_path, :class => active("properties"), target: "#{current_user.users_preferences[:option1]}" %></li>
+    <% target = "_blank" unless controller_name == 'recording_entries' %>
+    <li><%= link_to "Recorder Lookup", main_app.recording_entries_path, :class => active("recording_entries"), target: "#{current_user.users_preferences[:option1]}" if @permission_view_recorder_lookup %></li>
+  </ul>
+</li>

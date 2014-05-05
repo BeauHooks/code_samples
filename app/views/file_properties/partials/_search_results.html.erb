@@ -1,0 +1,15 @@
+<table>
+  <% @properties.each do |i| %>
+    <tr id="search_property<%= i.accountnum %>">
+      <td class="tax_id<%= " hint" if i.serialnum != nil %>"><span><%= i.serialnum %></span><div><%= truncate(i.serialnum, length: 25) if i.serialnum != nil %></div></td>
+      <td class="owner<%= " hint" if i.OwnerName != nil %>"><span><%= i.OwnerName %></span><div><%= truncate(i.OwnerName, length: 15)  if i.OwnerName != nil %></div></td>
+      <td class="acres"><div><%= i.Acres %></div></td>
+      <% if i.PropertyAddress.length > 18 %>
+          <td class="address hint"><span><%= i.PropertyAddress %></span><%= truncate(i.PropertyAddress, length: 18) %></td>
+      <% else %>
+          <td class="address"><%= i.PropertyAddress %></td>
+      <% end %>
+      <td class="actions"><a class="trigger" href="index/add_property_to_new_file/?property_id=<%= i.ID%>" data-remote="true">Add</a></td>
+    </tr>
+  <% end %>
+</table>

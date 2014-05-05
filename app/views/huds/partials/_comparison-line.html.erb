@@ -1,0 +1,18 @@
+<% if builder.type == "m_periodic" %>
+  <td class="hud_description description">
+  <%#= render("/huds/partials/flyout", builder: builder) if builder.type != nil %>
+  <%= text_field_tag :name, builder.name  %> $<%= text_field_tag :daily_interest, number_with_precision(builder.daily_interest, precision: 4, delimiter: ',', separator: '.'), id: "#{builder.number}_daily_interest", onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','daily_interest');", onkeydown: "numbersOnly(event);" %>/day
+  </td>
+  <td class="hud_number description">
+  # <%= text_field_tag :description, builder.description, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');", style: "width: 75px;" %>
+  </td>
+<% else %>
+  <td class="hud_description description">
+  <%#= render("/huds/partials/flyout", builder: builder) if builder.type != nil %>
+  <%= link_to(image_tag("redx.png", class: "icon"), "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true, class: "non-printable") if builder.type != nil && builder.type.include?("_custom") %>
+  <%= text_field_tag :name, builder.name, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','name');" %>
+  </td>
+  <td class="hud_number description">
+  # <%= text_field_tag :description, builder.description, onchange: "updateLine(this,'#{builder.id}','#{@hud.id}','description');", style: "width: 75px;" %>
+  </td>
+<% end %>

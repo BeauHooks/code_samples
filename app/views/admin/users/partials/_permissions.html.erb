@@ -1,0 +1,37 @@
+<% if global %>
+  <% categories = {} %>
+  <% Permission.select("*").where("category = 'application'").order("category ASC").each do |p| %>
+    <% categories[p.category] ||= [] %>
+    <% categories[p.category] += [p.name => p.description] %>
+  <% end %>
+
+  <div style="text-align: left;">
+    <% categories.each do |k,v| %>
+    <h3><%= k.titleize %></h3>
+      <% v.each do |i| %>
+        <% i.each do |key,val| %>
+          <%= check_box_tag key, key, @user.has_permission?(key), onclick: "editPermission(#{@user.id}, 'NULL', this)" %>
+          <%= label_tag val, nil, style: "position: relative; left: 3px; top: -3px;" %><br />
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <% categories = {} %>
+  <% Permission.select("*").where("category != 'application'").order("category ASC").each do |p| %>
+    <% categories[p.category] ||= [] %>
+    <% categories[p.category] += [p.name => p.description] %>
+  <% end %>
+
+  <div style="text-align: left;">
+    <% categories.each do |k,v| %>
+      <h3><%= k.titleize %></h3>
+      <% v.each do |i| %>
+        <% i.each do |key,val| %>
+          <%= check_box_tag key, key, @user.has_permission?(key, company: company), onclick: "editPermission(#{@user.id}, #{company}, this)" %>
+          <%= label_tag val, nil, style: "position: relative; left: 3px; top: -3px;" %><br />
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

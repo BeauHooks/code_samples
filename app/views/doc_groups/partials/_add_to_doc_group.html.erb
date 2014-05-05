@@ -1,0 +1,60 @@
+<% content_for :overlay_title do %>
+  Manage <%= @group.name %>
+<% end %>
+<% content_for :overlay do %>
+  <form action="<%= display_templates_not_in_group_doc_group_path(id: @group.id) %>" method="get" data-remote="true">
+  <h4 style="margin-bottom: 5px;" class="label">
+    Search:
+    <%= text_field_tag :group_search, "", style: "width: 150px" %> <span style="margin-left: 10px;">
+    Filter:
+    <%= select :doc_groups, :state, options_for_select([["All", "All"],["Arizona", "Arizona"], ["Nevada", "Nevada"], ["Utah", "Utah"]], @group.state), {:include_blank => false}, {style: "width: 150px;", name: "state", onchange: "$('#search_templates_not_in_group').click();"} %></span>
+    <%= image_tag "search.png", class: "icon trigger", onclick: "$(this).parents('form:first').submit()", id: "search_templates_not_in_group" %></h4>
+  </form>
+  <div class="manage_doc_group">
+    <div class="left">
+      <h3>Search Results</h3>
+      <div class="result_container box">
+        <div class="grid_header"></div>
+        <div class="results">
+          <table style="width: 100%;">
+            <thead class="grid_header_font">
+              <tr>
+                <th class="name"><div>Name</div></th>
+                <th class="version"><div>V.</div></th>
+                <th class="state"><div>State</div></th>
+                <th class="actions"><div></div></th>
+              </tr>
+            </thead>
+            <tbody class="highlight" id="templates_not_in_group">
+            </tbody>
+          </table>
+        </div>
+      </div>      
+    </div>
+    <div class="right">
+      <h3>Docs In Group</h3>
+      <div class="result_container box">
+        <div class="grid_header"></div>
+        <div class="results">
+          <table style="width: 100%;">
+            <thead class="grid_header_font">
+              <tr>
+                <th class="name"><div>Name</div></th>
+                <th class="version"><div>V.</div></th>
+                <th class="state"><div>State</div></th>
+                <th class="actions"><div></div></th>
+              </tr>
+            </thead>
+            <tbody class="highlight" id="templates_in_group">
+            </tbody>
+          </table>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <p style="clear: both;"></p>
+
+  <script type="text/javascript">
+    $("#search_templates_not_in_group").click();
+  </script>
+<% end %>

@@ -1,0 +1,11 @@
+<li class="menu_item"><%= link_to "#{current_user.first_name} #{current_user.last_name}", "", onclick: "return false;" %>
+  <ul class="submenu">
+    <li><%= link_to "Report a Bug", bug_report_overlays_path, remote: true %></li>
+    <li><%= link_to "Feature Request", feature_request_overlays_path, remote: true %></li>
+    <% if @permission_view_admin %>
+      <li><%= link_to "Admin","/admin" %></li>
+    <% end %>
+    <li><%= link_to "Preferences", main_app.site_preferences_path %></li>
+    <li><%= link_to "Log Off", main_app.destroy_user_session_path, :rel => nil, :method => :delete %></li>
+  </ul>
+</li>

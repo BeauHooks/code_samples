@@ -1,0 +1,2 @@
+// Display master entity's children when expanded
+$(".open_container").html("<%= j(render "rolodex/children", :locals => { :rolodex => @rolodex_master }).html_safe %>");

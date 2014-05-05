@@ -1,0 +1,77 @@
+<tr class="grid_header grid_header_font">
+  <td class="step">Recording Prep</td>
+  <td class="date" colspan="2">Complete</td>
+</tr>
+
+<tr id='date_down' class="date_down">
+    <td class="<%= 'hint' unless @file.DateDownEntered.blank? %>">Sent for Date Down:
+      <% unless @file.DateDownEntered.blank? %>
+        <span>
+          <p>Sent for Date Down by <%= @file.date_down_entered_by.FullName %> - <%= @file.DateDownEntered.strftime('%-1m/%-1d/%Y at %l:%M %p') %></p>
+          <% unless @file.DatedDown.blank? %>
+            <p>Dated Down by <%= @file.dated_down_by.FullName %> - <%= @file.DatedDown.strftime('%-1m/%-1d/%Y at %l:%M %p') %></p>
+          <% end %>
+        </span>
+      <% end %>
+    </td>
+    <td style="padding: 0 0 4px;">
+      <%= text_field_tag :DateDownEntered, @file.DateDownEntered.blank? ? nil : @file.DateDownEntered.strftime("%m/%d/%Y %l:%M %p").gsub(/\s\s/, " "), placeholder: "mm/dd/yyyy hh:mm AM", style: "width: 115px;", tabindex: "-1" %>
+    </td>
+  </tr>
+  <tr>
+    <td >Dated Down:</td>
+    <td><%= @file.DatedDown.blank? ? "-" : @file.DatedDown.strftime('%-1m/%-1d/%Y at %l:%M %p') %></td>
+  </tr>
+
+  <tr>
+    <td>Reviewer:</td>
+    <td>
+      <%= @file.FileReviewedBy.blank? ? "-" : @file.reviewer %>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Reviewed:</td>
+    <td>
+      <%= @file.FileReviewed.blank? ? "-" : @file.FileReviewed.strftime('%-1m/%-1d/%Y at %l:%M %p') %>
+    </td>
+  </tr>
+
+  <tr id='funding' >
+    <td class="<%= 'hint' unless @file.SentForFunding.blank? %>">Sent for Funding:
+      <% if @file.SentForFunding != nil %>
+        <span>
+          <p>Sent for Funding - <%= @file.SentForFunding.strftime('%-1m/%-1d/%Y at %l:%M %p') %></p>
+          <% if @file.Funded != nil %>
+            <p>Funded By <%= @file.funded_by.FullName %> - <%= @file.Funded.strftime('%-1m/%-1d/%Y at %l:%M %p') %></p>
+          <% end %>
+        </span>
+      <% end %>
+    </td>
+    <td style="<%= "padding: 0 0 4px;" if @file.SentForFunding.blank? %>">
+      <%= @file.SentForFunding == nil && (current_user.has_permission?(:can_fund, company: session[:company])) ? submit_tag("Send", onclick: "sendForFunding(); $(this).attr('disabled', 'disabled'); $(this).val('Sending...');", class: "send_funding") : (@file.SentForFunding != nil ? @file.SentForFunding.strftime('%-1m/%-1d/%Y at %l:%M %p') : "-") %>
+      <script type="text/javascript">
+        function sendForFunding(skip_balance_step){
+          var post = "index/<%= @file.ID %>/update_file_stage?type=Funding";
+
+          if($("#no_disbursement").val() != undefined && $("#no_disbursement").is(':hidden') == false && $("#no_disbursement").attr('checked') == 'checked'){
+            post += "&no_disbursements=true";
+          }
+
+          if($("#no_1099").val() != undefined && $("#no_1099").is(':hidden') == false && $("#no_1099").attr('checked') == 'checked'){
+            post += "&no_1099s=true";
+          }
+
+          if(typeof skip_balance_step !== 'undefined'){
+            post += "&skip_warnings=true";
+          }
+
+          addToQueue('update_file_stage', post);
+        }
+      </script>
+    </td>
+  </tr>
+  <tr>
+    <td>Funded:</a></td>
+    <td><%= @file.Funded != nil ? @file.Funded.strftime('%-1m/%-1m/%Y at %l:%M %p') : "-" %></td>
+  </tr>

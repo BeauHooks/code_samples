@@ -1,0 +1,7 @@
+<% content = get_confirmation_html %>
+<a id="display_confirmation" target="_blank" href="/check_workings/display_confirmation?content=<%= content %>"></a>
+
+<script type="text/javascript">
+  document.getElementById("display_confirmation").click(function(){});
+  $("div#print_box").html("");
+</script>

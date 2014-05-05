@@ -1,0 +1,25 @@
+<div id="bulletin" class="box bulletin margin_all">
+    <%= render 'dashboard/partials/bulletins' %>
+</div>
+<div class="two_column margin_left">
+  <div id="recent_files" class="recent_files box">
+    <%= render 'dashboard/partials/recent_files' %>
+  </div>
+  <div id="contact_list" class="contact_list box">
+    <%= render 'dashboard/partials/favorites' %>
+  </div>
+</div>
+
+<!-- <div id="overlay_new_bulletin" class="overlay"></div>
+<div id="overlay_show_bulletin" class="overlay"></div>
+ -->
+<script type="text/javascript">
+  $(".bulletin_text").each(function(){
+    if($(this).html().length > 500){
+      var html = $(this).html().substring(0, 500);
+      $(this).html(html + "... <a href='/bulletins/" + $(this).attr('id') + "' data-remote='true'>[Read More]</a>");
+    }
+  });
+
+  initializer();
+</script>

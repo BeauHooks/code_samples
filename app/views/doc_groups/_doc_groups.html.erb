@@ -1,0 +1,38 @@
+<table>
+    <tr>
+      <td class="label" colspan="2" style="height: 20px;"><span style="text-decoration: underline;">Groups<%= " <em>(Auto Save)</em> ".html_safe unless @template.blank? || @template.new_record? %>:</span>
+        <%= link_to("Manage Groups", doc_groups_overlays_path, remote: true) unless @template.blank? || @template.new_record? %></td>
+    </tr>
+    <% list = ["Arizona", "Nevada", "Utah", "Other"] %>
+    <% list.each do |state| %>
+      <tr>
+        <td style="text-decoration: underline;" colspan="2"><%= state %></td>
+      </tr>
+      <tr>
+        <td>
+          <% state != "Other" ? condition = " AND state = '#{state}' " : condition = " AND state IS NULL" %>
+          <% group_list = DocGroup.where("is_active = -1 #{condition} ") %>
+          <% n = group_list.count %>
+
+          <% if n == 0 %>
+            <label style="color: #CCC"><%= check_box_tag "", "", false, disabled: true %> (Empty)</label>
+          <% end %>
+
+          <% n%2 == 0 ? n = (n- 1)/2  : n = n/2 %>
+          <% template_id = !@template.blank? && !@template.new_record? ? @template.id : 0 %>
+          <% group_list[0..n].each do |group| %>
+            <% DocGroupTemplate.where("doc_group_id=#{group.id} AND doc_template_id=#{template_id}").first != nil ? in_group = true : in_group = false %>
+           <% @template.new_record? ? click = "if(this.value == 'true'){this.value= false;}else{this.value=true;}; updateTemplate(this);" : click =  "$.ajax({url: '#{toggle_group_doc_template_path(id: @template.id, group: group.id)}', type: 'PUT'});" %>
+            <label><%= check_box_tag "group_#{group.id}", "#{in_group}", in_group, onclick: click, id: "form_group[#{group.id}]" %> <%= group.name %></label><br />
+          <% end %>
+        </td>
+        <td style="padding-left: 20px;">
+           <% group_list[n+1..-1].each do |group| %>
+           <% DocGroupTemplate.where("doc_group_id=#{group.id} AND doc_template_id=#{template_id}").first != nil ? in_group = true : in_group = false %>
+           <% @template.new_record? ? click = "if(this.value == 'true'){this.value= false;}else{this.value=true;}; updateTemplate(this);" : click =  "$.ajax({url: '#{toggle_group_doc_template_path(id: @template.id, group: group.id)}', type: 'PUT'});" %>
+            <label><%= check_box_tag "group_#{group.id}", "#{in_group}", in_group, onclick: click, id: "form_group[#{group.id}]" %> <%= group.name %></label><br />
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>

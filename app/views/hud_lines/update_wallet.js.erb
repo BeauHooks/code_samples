@@ -1,0 +1,38 @@
+$("table#line_totals").html("<%= j(render "hud_lines/line_totals").html_safe %>");
+
+<% if @line.number > 3000 %>
+	$("#line_info .charges").val("<%= number_to_currency(@line.charges, unit: "") %>");
+	$("#line_info .credits").val("<%= number_to_currency(@line.credits, unit: "") %>");
+
+	// if($("#comm_total_<%= @line.number %>").html() != undefined){
+	// 	$("#comm_total_<%= @line.number %>").val("<%= number_to_currency(@line.amount, unit: "") %>")
+	// }
+<% else %>
+	// if($("#total_<%= @line.number %>").html() != undefined){
+	// 	$("#total_<%= @line.number %>").val("<%= number_to_currency((@line.borrower_amount || 0.0) + (@line.seller_amount || 0.0), unit: "") %>");
+	// }
+
+	<% case @line.number %>
+	<% when 100..399 %>
+		$("#line_info .borrower_amount").val("<%= number_to_currency(@line.borrower_amount, unit: "") %>");
+	<% when 400..699 %>
+		$("#line_info .seller_amount").val("<%= number_to_currency(@line.seller_amount, unit: "") %>");
+	<% when 700..1400 %>
+		$("#line_info .borrower_amount").val("<%= number_to_currency(@line.borrower_amount, unit: "") %>");
+		$("#line_info .seller_amount").val("<%= number_to_currency(@line.seller_amount, unit: "") %>");
+	<% end %>
+
+	<% if @line.number == 1001 %>
+		<% lines = [1002, 1003, 1004, 1005, 1006] %>
+    <% group = [] %>
+    <% lines.each do |number| %>
+      <% line = @hud.hud_lines.where("number = #{number}").first %>
+      <% if line != nil %>
+        $("#line_info_row_<%= line.number %> input[name=amount]").val("<%= number_to_currency(line.amount || 0.0, unit: "") %>");
+      <% end %>
+    <% end %>
+    //$("#total_1001").val("<%= number_to_currency(@line.borrower_amount, unit: "") %>");
+	<% end %>
+<% end %>
+
+$("div#line_payments").html("<%= j(render "hud_lines/line_payments" ).html_safe %>");

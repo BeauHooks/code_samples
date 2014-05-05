@@ -1,0 +1,17 @@
+<% content_for :overlay_class do %>
+  payment_disbursement_info
+<% end %>
+
+<% content_for :overlay_title do %>
+  Info
+<% end %>
+
+<% content_for :overlay do %>
+  <div>
+    <ul>
+      <li>Click on a line to expand payments. Click again to collapse.</li>
+      <li><span class="red">Red</span> - Payment is not balanced.</li>
+      <li><span class="green">Green</span> - Payment is balanced.</li>
+    </ul>
+  </div>
+<% end %>

@@ -1,0 +1,43 @@
+<% if company_logo != "" %>
+	<img src="<%= Rails.root %>/public/images/<%= company_logo %>" style="float: left; height: 2.25em; margin-right: 1em;" />
+<% end %> 
+<h1><%= @file.company.CompanyName %></h1>
+<h3 style="text-decoration: underline; clear: both;">Wire Out Confirmation</h3>
+<table>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">File #:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;"><%= @file.DisplayFileID %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Amount:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;"><%= number_to_currency(live.Amount, unit: '$') %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Issue Date:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;"><%= live.IssueDate.strftime("%-1m/%d/%Y at %l:%M %p") %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Fed Ref #:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;"><%= live.wire_ConfirmationNumber %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Account Name:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;"><%= live.wire_BeneficiaryName %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Account #:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;">*<%= live.wire_BeneficiaryAccountNumber.to_s[-4..-1] %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Bank Name:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;"><%= live.wire_BeneficiaryBankName %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Routing #:</td>
+    <td style="padding-bottom: 5px; vertical-align: top;">*<%= live.wire_BeneficiaryBankRoutingNum.to_s[-4..-1] %></td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold; white-space: nowrap; padding-right: 5px; vertical-align: top;">Memo:</td>
+    <td style="vertical-align: top;"><%= live.wire_B2BInformationMessage %></td>
+  </tr>
+</table>

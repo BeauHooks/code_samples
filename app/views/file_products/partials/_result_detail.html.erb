@@ -1,0 +1,89 @@
+<div class="tab_content">
+<% if @detail %>
+  <div class="detail_number">
+    <h2>Entry #<span><%= @detail.entrynumber.to_i %></span></h2>
+  </div>
+  <div class="detail_row">
+    <div class="three_column">
+      <%= render "recording_module/recording_entries/partials/taxid" %>
+    </div>
+    <div class="three_column">
+      <%= render "recording_module/recording_entries/partials/subdivision" %>
+    </div>
+    <div class="three_column">
+      <%= render "recording_module/recording_entries/partials/section" %>
+    </div>
+  </div>
+  <div class="detail_row">
+    <div class="three_column">
+      <%= render "recording_module/recording_entries/partials/fromparty" %>
+    </div>
+    <div class="three_column">
+      <%= render "recording_module/recording_entries/partials/toparty" %>
+    </div>
+    <div class="three_column">
+      <%= render "recording_module/recording_entries/partials/info" %>
+    </div>
+  </div>
+  <div class="detail_row">
+    <div class="one_column">
+      <%= render "recording_module/recording_entries/partials/affiliations" %>
+    </div>
+  </div>
+<% else %>
+  <div class="empty_tab">
+    <center>
+      <b>No File Product Selected</b>
+    </center>
+  </div>
+<% end %>
+</div>
+
+
+<div id="tabs" class="tabs_container">
+  <div id="file_number" class="file_number hide">
+    <% if @file_product != nil %>
+      <%= render "file_products/partials/file_number" %>
+    <% end %>
+  </div>
+  <ul>
+    <li><%= link_to "Schedule A", "#schedule_a", onclick: "", class: "overview" %></li>
+    <li id="docs_tab"><%= link_to "Policies", "#policies", onclick: "", class: "docs" %></li>
+    <li id="requirements_tab"><a href="#requirements" class="attachments">Requirements</a></li>
+    <li id="exceptions_tab"><a href="#exceptions" class="recording">Exceptions</a></li>
+    <li id="attachments_tab"><a href="#file_attachments" class="emails">Attachments</a></li>
+  </ul>
+  <div id="schedule_a" class="schedule_a">
+    <% if @file_product != nil %>
+      <%= render "file_products/partials/review_schedule_a" %>
+    <% end %>
+  </div>
+  <div id="policies" class="policies">
+    <% if @file_product != nil %>
+      <%= render "file_products/partials/review_policies" %>
+    <% end %>
+  </div>
+  <div id="requirements" class="requirements">
+    <% if @file_product != nil %>
+      <%= render "file_products/partials/review_requirements" %>
+    <% end %>
+  </div>
+  <div id="exceptions" class="exceptions">
+    <% if @file_product != nil %>
+      <%= render "file_products/partials/review_exceptions" %>
+    <% end %>
+  </div>
+  <div id="file_attachments" class="file_attachments">
+    <% if @file_product != nil %>
+      <%= render "file_products/partials/review_attachments" %>
+    <% end %>
+  </div>
+</div>
+
+<div id="tab_content" class="tab_content hide">
+  <center>
+    <b>No File Selected</b>
+  </center>
+</div>
+</div>
+

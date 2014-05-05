@@ -1,0 +1,20 @@
+<div class="box_header">
+  <span class="title">Document Information</span>
+</div>
+<div class="margin_all_5">
+  <div class="label w80 float_left">Entry Number:</div>
+  <div class="float_left">
+    <% if @detail.get_file %>
+      <%= link_to "#{@detail.entrynumber.to_i}", show_file_recording_entry_path(@detail), target: "ViewEntry", onclick: "openEntryNumber('#{show_file_recording_entry_path(@detail)}', '#{@detail.entrynumber.to_i}');" %>
+    <% else %>
+      <%= "#{@detail.entrynumber.to_i} (file view not found)" %>
+    <% end %>
+  </div>
+  <div class="clear_fix" />
+  <div class="label w80 float_left">Type:</div>
+  <div class="float_left" ><%= @detail.recording_koi.description %></div>
+  <div class="clear_fix" />
+  <div class="label w80 float_left">Date:</div>
+  <div class="float_left"><%= @detail.filingdate.to_date %></div>
+  <div class="clear_fix" />
+</div>

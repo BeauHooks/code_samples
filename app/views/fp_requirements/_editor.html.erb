@@ -1,0 +1,6 @@
+<%= form_for requirement, html: {:remote => true} do %>
+	<%= hidden_field_tag :view, @view %>
+  <div style="padding: 2px; width: 672px; background-color: #F0F0EE; border-top: 1px solid #CCCCCC; border-left: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC;"><%= submit_tag "Save", name: "confirm" %><%= submit_tag "Cancel", name: "confirm" %></div>
+  <%= text_area_tag :editor, requirement.content, id: "requirementmce_#{requirement.id}", class: "tinymce", style: "width: 300px; height: 350px;", name: "content"  %>
+  <%= tinymce :content_css => "#{asset_path    "application.css"},#{asset_path    "themes/#{current_user.users_preferences[:theme]}.css"}"  %>
+<% end %>

@@ -1,0 +1,2 @@
+$("a#requirement_text_<%= @requirement.id %>").hide();
+$("div#requirement_text_<%= @requirement.id %>_<%= @view %>").html("<%= j(render "editor", requirement: @requirement).html_safe %>");

@@ -1,0 +1,73 @@
+<% margin = @signature_entity.margin %>
+<% if @signature_entity.relationship == "parent" %>
+  <% if RolodexSignatureEntity.where("parent_id = #{@signature_entity.id}").count > 0 %>
+    <hr />
+    <p style="font-weight: bold; margin-bottom: 5px; margin-left: 2px;">Check to split individual signatures from notary</p>
+  <% end %>
+<% elsif @signature_entity.relationship == "child" %>
+<table style="margin-left: <%= margin - 10 %>px; width: 175px;">
+  <tr>
+    <td style="vertical-align: top; width: 15px;" >By:</td>
+    <td><%= @signature_entity.name.gsub(/\r?\n/, "<br />").html_safe if @signature_entity.name != nil %></td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top;">Its:</td>
+    <td><%= @signature_entity.title %></td>
+  </tr>
+</table>
+<% elsif @signature_entity.relationship == "signature" %>
+  <% if @signature_entity.parent_id == 0 %>
+    <table style="margin-left: <%= margin %>px; width: 175px;">
+      <tr>
+        <td class="signature_line" style="vertical-align: bottom;"><hr style="margin: 20px 0px 0px;"  /></td>
+      </tr>
+      <tr>
+        <td><%= @signature_entity.name.gsub(/\r?\n/, "<br />").html_safe if @signature_entity.name != nil %><%= ", #{@signature_entity.title}" if @signature_entity.title != nil %></td>
+      </tr>
+  <% else %>
+    <table style="margin-left: <%= margin - 10 %>px; width: 175px;">
+      <tr>
+        <td rowspan="2" style="vertical-align: top; width: 15px;" >
+          <% @file.file_doc_fields.where("doc_id = #{@doc_entity.doc_id} AND is_active = 1 AND tag LIKE '#{@doc_entity.tag}_NOTARY_%_TREE#{@signature_entity.id}' ").count > 0 ? split = true : split = false %>
+          <%= check_box_tag "split_notary", "split", split, onclick: "checkSplitParent('#{@doc_entity.id}'); $.ajax({url: '#{toggle_split_notary_docs_path(id: @signature_entity.id, type: "tree_signature", doc_entity: @doc_entity.id)}', type: 'PUT'}); event.stopPropagation();" %>
+        </td>
+        <td style="vertical-align: top; padding-left: 2px; width: 15px;">By:</td>
+        <td class="signature_line" style="vertical-align: bottom;"><hr  /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><%= @signature_entity.name.gsub(/\r?\n/, "<br />").html_safe if @signature_entity.name != nil %><%= ", #{@signature_entity.title}" if @signature_entity.title != nil %></td>
+      </tr>
+    <% end %>
+
+  <% if split %>
+    <tr>
+        <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_VESTING_#{@doc_entity.id}_TREE#{@signature_entity.id}' ").first.value %>
+        <% (value == nil || value == "") ? error = "error" : error = ""  %>
+        <% @doc_entity.doc_id == 0 ? click = "updateDocField(this); $('#all_docs .active_row:first a:first').click();" : click = "$('#preview_link').click();" %>
+        <% @doc_entity.doc_id == 0 ? type = "global" : type = "custom" %>
+        <td class="label top <%= error %>" colspan="2">Notary:</td>
+        <td colspan="3"><textarea id='<%= @doc_entity.tag.downcase %>_notary_vesting_<%= @doc_entity.id %>_tree<%= @signature_entity.id %>' class="<%= error %>" rows="3" cols="23" onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=<%= type %>_<%= @doc_entity.tag %>_NOTARY_VESTING_<%= "#{@doc_entity.id}_TREE#{@signature_entity.id}" %>&value=' + encodeURIComponent(this.value)); <%= click %>" placeholder="This section will automatically be updated as you add signatures."><%= value %></textarea></td>
+      </tr>
+      <tr>
+        <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_DATE_#{@doc_entity.id}_TREE#{@signature_entity.id}' ").first.value rescue nil %>
+        <% (value == nil || value == "") ? error = "error" : error = ""  %>
+        <td class="label top <%= error %>" colspan="2">Date:</td>
+        <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>" id='<%= @doc_entity.tag.downcase %>_notary_date_<%= @doc_entity.id %>_tree<%= @signature_entity.id %>' onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=<%= type %>_<%= @doc_entity.tag %>_NOTARY_DATE_<%= "#{@doc_entity.id}_TREE#{@signature_entity.id}" %>&value=' + encodeURIComponent(this.value)); <%= click %>"/></td>
+      </tr>
+      <tr>
+        <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_STATE_#{@doc_entity.id}_TREE#{@signature_entity.id}' ").first.value rescue nil %>
+        <% (value == nil || value == "") ? error = "error" : error = ""  %>
+        <td class="label top <%= error %>" colspan="2">State:</td>
+        <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>" id='<%= @doc_entity.tag.downcase %>_notary_state_<%= @doc_entity.id %>_tree<%= @signature_entity.id %>' onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=<%= type %>_<%= @doc_entity.tag %>_NOTARY_STATE_<%= "#{@doc_entity.id}_TREE#{@signature_entity.id}" %>&value=' + encodeURIComponent(this.value)); <%= click %>"/></td>
+      </tr>
+      <tr>
+        <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_COUNTY_#{@doc_entity.id}_TREE#{@signature_entity.id}' ").first.value rescue nil %>
+        <% (value == nil || value == "") ? error = "error" : error = ""  %>
+        <td class="label <%= error %>" colspan="2">County:</td>
+        <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>"  id='<%= @doc_entity.tag.downcase %>_notary_county_<%= @doc_entity.id %>_tree<%= @signature_entity.id %>' onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=<%= type %>_<%= @doc_entity.tag %>_NOTARY_COUNTY_<%= "#{@doc_entity.id}_TREE#{@signature_entity.id}" %>&value=' + encodeURIComponent(this.value)); <%= click %>" /></td>
+      </tr>
+<% end %>
+
+</table>
+<% end %>

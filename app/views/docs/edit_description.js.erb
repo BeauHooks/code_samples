@@ -1,0 +1,7 @@
+if($("#doc_focus").val() != undefined){
+  var e = jQuery.Event("keydown");
+  e.keyCode = 27;
+  $("input#doc_focus").trigger(e);
+}
+
+$("tr#doclist_<%= @doc.id %> td:nth-child(2)").html("<%= j(render :partial => "docs/edit_in_place").html_safe %>");

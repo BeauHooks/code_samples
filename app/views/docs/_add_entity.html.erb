@@ -1,0 +1,23 @@
+<% doc_entity = get_doc_entity(@doc_id) %>
+<% doc_entity == nil ? entity_condition = "" : entity_condition = "AND id = #{doc_entity.id}" %>
+
+<div  class="grid_header trigger" id="blank_<%= @section %>">
+    <table>
+      <tbody>
+        <tr>
+          <td class="entity">
+            <% doc_entities = get_doc_entities(@doc_id, @file.ID) %>
+            <% doc_entities = doc_entities.gsub(", )", ")") %>
+            <% if @doc_id != 0 %>
+              <%= select :doc_entity, :entity_id, FileDocEntity.find(:all, :conditions => ["file_id = #{@file.FileID} AND is_active = 1 AND entity_id NOT IN (0#{doc_entities}) AND doc_id = 0 "]).collect{|e| [e.entity.full_name, e.entity_id]} + [["New", "new"]], {include_blank: true}, {onchange: "$.post('#{create_entity_docs_path(file_id: @file.ID, section: @section, doc_id: @doc_id)}&entity_id=' + $(this).val()); $('#add_manage_#{@type}_entities').show();", :remote => true, :class => "entity_select"} %>
+            <% else %>
+              <%= select :doc_entity, :entity_id, FileEntity.find(:all, :conditions => ["FileID = ? AND EntityID NOT IN (0#{doc_entities})", @file.FileID], order: "Position ASC").collect{|e| [e.entity.full_name, e.EntityID]} + [["New", "new"]], {include_blank: true}, {onchange: "$.post('#{create_entity_docs_path(file_id: @file.ID, section: @section, doc_id: @doc_id)}&entity_id=' + $(this).val()); #{ @doc_id = 0 ? "$('#add_#{@type}_entities').show();" : "$('#add_manage_#{@type}_entities').show();" }", :remote => true, :class => "entity_select"} %>
+            <% end %>
+          </td>
+          <td>
+            <%= image_tag("redx.png", :class => "trigger", onclick: "$('#add_#{@section}_entities').show(); $('div#blank_#{@section}').remove(); ") %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

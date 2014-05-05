@@ -1,0 +1,7 @@
+<% content = get_receipt_html %>
+<a id="display_receipt" target="_blank" href="/check_workings/display_receipt?content=<%= content %>"></a>
+
+<script type="text/javascript">
+  document.getElementById("display_receipt").click(function(){});
+  $("div#print_box").html("");
+</script>

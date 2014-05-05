@@ -1,0 +1,29 @@
+<div id="policy">
+  <div class="overlay_header">
+    <h2>Helper</h2>
+  </div>
+  <%= form_for :file_products, url: file_products_policy_path, method: "PUT", remote: true do %>
+    <%= hidden_field_tag :container, @container %>
+    <%= hidden_field_tag :start, @start %>
+    <%= hidden_field_tag :end, @end %>
+    <div class="overlay_content" style="width: 250px;">
+      <table style="margin-top: 5px;">
+        <tr>
+          <td class="label" style="padding-right: 5px;">Code:</td>
+          <td><%= text_field_tag :Shortcut, "", style: "width: 150px;"  %> <%= image_tag "notice.png", class: "trigger icon", onclick: "toggleInfo();" %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <span style="float: right;">
+        <%= submit_tag "Save" %>
+        <%= submit_tag "Close", onclick: "closeOverlay('policy');", type: "button" %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	openOverlay("policy");
+  $("#Shortcut").focus();
+</script>

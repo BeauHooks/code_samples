@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Filetrak</title>
+  <%= stylesheet_link_tag    "huds", :media => "all" %>
+  <%= javascript_include_tag "huds" %>
+  <%= csrf_meta_tags %>
+  <link href='http://fonts.googleapis.com/css?family=Cabin:400,600' rel='stylesheet' type='text/css'>
+</head>
+<body id="sign_in_body" class="sign_in_body">
+  <div id="container">
+    <div id="box">
+	  <% if flash[:notice] %>
+		<h3 class="flash_notice"><%= flash[:notice] %></h3>
+	  <% end %>
+	  <% if flash[:error] %>
+		<h3 class="flash_error"><%= flash[:error] %></h3>
+	  <% end %>
+      <%= yield %>
+    </div>
+  </div>
+</body>
+</html>

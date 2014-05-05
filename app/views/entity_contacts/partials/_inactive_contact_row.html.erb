@@ -1,0 +1,24 @@
+<tr data-url="<%= rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: 'contact') %>">
+  <td class="actions">
+    <%= link_to(image_tag('/assets/plus.png', class: "icon"), activate_entity_contact_path(i.ContactID), class: "trigger", remote: true) %>
+  </td>
+
+  <td class="is_primary">
+    <%= check_box_tag 'IsPrimary', -1, i.IsPrimary != 0, class: "primary", disabled: true, data: {remote: true, method: :put, url: rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "contact")} %>
+  </td>
+
+  <td class="type">
+    <%= i.type %>
+  </td>
+
+  <td class="info">
+    <%= hint_truncate(i.Contact, 15) %>
+  </td>
+
+  <td class="description">
+    <%= hint_truncate(i.Description, 15) %>
+  </td>
+
+  <td class="modify_date"><%= i.modify_date %></td>
+  <td class="modify_user"><%= i.modify_user %></td>
+</tr>

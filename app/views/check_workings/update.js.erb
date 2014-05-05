@@ -1,0 +1,41 @@
+// $("div#anticipated_disbursement_summary").html("<%#= j(render "check_workings/anticipated_disbursement_summary").html_safe %>");
+// $("div#disbursement_summary").html("<%#= j(render "check_workings/disbursement_summary").html_safe %>");
+$("div#payment_balance_summary").html("<%= j(render "check_workings/partials/payment_balance_summary").html_safe %>");
+$('#disbursement_results').html('<%= j(render 'check_workings/partials/results').html_safe %>');
+$('#poc_results').html('<%= j(render 'payment_disbursements/poc_results').html_safe %>');
+
+<% if @refresh %>
+  if ($("#disbursement_results").find("tr.active_row").attr("id") == "disbursement_<%= @disbursement.id %>") {
+    $('#disbursement_view').html('<%= j(render 'check_workings/partials/show').html_safe %>');
+  };
+<% elsif !@disbursement.blank? %>
+  <% @file.SentForFunding == nil && @disbursement.check_number == nil && @disbursement.check_id == nil ? disabled = false : disabled = true %>
+  <% update = "updateCheck(this);" %>
+  $("#warnings").html("<%= j(render "check_workings/partials/rules", disbursement: @disbursement, disabled: disabled, update: update).html_safe %>");
+<% end %>
+
+<% unless @update_fields.blank? || @disbursement.blank? %>
+  if($("#disbursement_results").find('tr.active_row').attr("id") == "disbursement_<%= @disbursement.id %>"){
+    <% @update_fields.each do |key| %>
+      $("#check_working_<%= key %>").val("<%= @disbursement.send(key) %>");
+    <% end %>
+  }
+<% end %>
+
+<% unless @refresh_payment_lines.blank? %>
+  <% @refresh_payment_lines.each do |ss_line| %>
+    <% has_payment = ss_line.payment_amount != 0 %>
+    <% balanced = (ss_line.payment_amount - ss_line.payment_disbursements.sum("amount") == 0) || (ss_line.payment_amount == 0 && ss_line.payment_disbursements.size == 0) %>
+    $(".tru_container .tru_payment_window[data-id=<%= ss_line.id %>]").each(function(){
+      $.get("/ss_lines/<%= ss_line.id %>/view_payments?view=settlement_statement");
+    });
+
+    $("#payment_sheet .tru_payment_window[data-id=<%= ss_line.id %>]").each(function(){
+      $.get("/ss_lines/<%= ss_line.id %>/view_payments?view=overlay");
+    });
+
+    update_payments_colors("<%= ss_line.id %>", <%= has_payment %>, <%= balanced %>);
+  <% end %>
+<% end %>
+
+set_disbursement_autocomplete();

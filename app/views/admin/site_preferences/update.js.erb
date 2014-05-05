@@ -1,0 +1,4 @@
+$("#preference_<%= @preference.id %>").replaceWith("<%= j(render "admin/site_preferences/partials/preference_row", preference: @preference).html_safe %>");
+if($("#preferences_list").find(".active_row").length == 0){
+	$("#preference_<%= @preference.id %>").addClass("active_row");
+}

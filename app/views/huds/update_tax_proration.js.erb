@@ -1,0 +1,21 @@
+<% case @hud.hud_type %>
+<% when "standard" %>
+	<% @tax_lines.each do |number| %>
+		<% line = @hud.hud_lines.where("number = #{number}").first %>
+		$("tr#hud_row_<%= line.number %>").replaceWith("<%= j(render "huds/partials/half-line", builder: line ).html_safe %>");
+	<% end %>
+
+	<% [120, 220, 301, 302, 303, 420, 520, 601, 602, 603].each do |number| %>
+	<% line = @hud.hud_lines.where("number = #{number}").first %>
+		$("tr#hud_row_<%= line.number %>").replaceWith("<%= j(render "huds/partials/half-line", builder: line ).html_safe %>");
+	<% end %>
+
+	<% line = @hud.hud_lines.where("number = 901").first %>
+	$("tr#hud_row_<%= line.number %>").html("<%= j(render "huds/partials/full-line", builder: line ).html_safe %>");
+<% when "in-house" %>
+	<% @tax_lines.each do |number| %>
+		<% line = @hud.hud_lines.where("number = #{number}").first %>
+		$("tr#hud_row_<%= line.number %>").html("<%= j(render "huds/partials/full-line", builder: line ).html_safe %>");
+	<% end %>
+<% else %>
+<% end %>

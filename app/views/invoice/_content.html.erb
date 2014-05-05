@@ -1,0 +1,125 @@
+<% update = "updateInvoice(this);" %>
+
+<div id="invoice_wrapper">
+	<div style="float: right;">
+		<h1 style="text-align: right; font-size: 1.2em !important;">Invoice #<%= @invoice.InvoiceID %></h1>
+		<p style="text-align: right;">
+			<span class="label">File:</span> <%= @print == nil ? text_field_tag("DisplayFileID", @invoice.DisplayFileID, onchange: "#{update}", style: "width: 125px;") : "##{@invoice.DisplayFileID}" %><br />
+			<% date = @invoice.InvDate.strftime('%m/%d/%Y') if @invoice.InvDate != nil && @invoice.InvDate != "" %> 
+			<span class="label">Date:</span> 
+			<%= @print == nil ? text_field_tag("InvDate", date, onchange: "validateDate(this); #{update}", class: "date", style: @invoice.InvDate != nil ? "width: 125px;" : "width: 94px;", disabled: true) : date %>
+			<%= submit_tag "Set", type: "button", onclick: "addToQueue('set_invoice_date', 'invoice/#{@invoice.InvoiceID}/set_invoice_date');" if @invoice.InvDate == nil && @print == nil %>
+				<br />
+			<% employee_name = @invoice.employee.FullName if @invoice.employee != nil || @invoice.employee != "" %>
+			<span class="label">Employee:</span> <%= @print == nil ? select(:employee, :InvoiceEmployeeID, Employee.find(:all, :conditions => ["IsActive = 'True' AND ID NOT IN (190, 119, 95, 157, 327) "], :order => "FullName ASC").collect{|e| [e.FullName, e.ID]}, {:include_blank => true, selected: @invoice.InvoiceEmployeeID}, {onchange: "#{update}", name: "InvoiceEmployeeID", style: "width: 129px;"}) : employee_name %>
+			<%#= @print == nil ? text_field_tag("InvoiceEmployeeID", employee_name, onchange: "#{update}") : employee_name %>
+		</p>
+	</div>
+	<p style="margin-top: 0em; font-size: 1.2em; font-weight: bold;">
+		{{COMPANY_NAME}}<br />
+		{{COMPANY_ADDRESS}}<br />
+		{{COMPANY_CITY}}, {{COMPANY_STATE}} {{COMPANY_ZIP}}<br />
+		<% company = Company.find session[:company] %>
+		<%= "#{company.CompanyPhone}  Fax: #{company.CompanyFax}" %>
+	</p>
+	<table style="clear: both; margin-top: 10px; width: 65%;" class="bill_to">
+		<tr>
+			<td class="label" style="width: 4.8em; vertical-align: top; padding-right: 5px;">Bill To:</td>
+			<td><%= @print == nil ? text_field_tag("BillToName", @invoice.BillToName, onchange: "#{update}", class: "info", placeholder: "Name") : @invoice.BillToName %><br />
+				<% (@invoice.BillToAddr2 != nil && @invoice.BillToAddr2 != "") ? address = "#{@invoice.BillToAddr1}<br />#{@invoice.BillToAddr2}".html_safe : address = @invoice.BillToAddr1 %>
+				<%= @print == nil ? text_field_tag("BillToAddr1", @invoice.BillToAddr1, onchange: "#{update}", class: "info", placeholder: "Address 1") : address %><br />
+				<%= @print == nil ? "#{text_field_tag("BillToAddr2", @invoice.BillToAddr2, onchange: "#{update}", class: "info", placeholder: "Address 2")}<br />".html_safe : "" %>
+				<%= @print == nil ? text_field_tag("BillToCSZip", @invoice.BillToCSZip, onchange: "#{update}", class: "info", placeholder: "City, State Zip") : @invoice.BillToCSZip %>
+			</td>
+		</tr>
+		<tr>
+			<td class="label" style="padding-top: 5px; vertical-align: top;">Property:</td>
+			<td style="padding-top: 5px;"><%= @print == nil ? text_field_tag("PropertyID", @invoice.PropertyID, onchange: "#{update}", class: "info", placeholder: "Property Info") : @invoice.PropertyID %></td>
+		</tr>
+		<tr>
+			<td class="label" style="vertical-align: top;">Owner:</td>
+			<td><%= @print == nil ? text_field_tag("Owner", @invoice.Owner, onchange: "#{update}", class: "info", placeholder: "Property Owner") : @invoice.Owner %></td>
+		</tr>
+	<table>
+	<table style="width: 100%;" class="invoice_amounts">
+		<tr class="invoice_header">
+			<td>Description</td>
+			<td style="width: 20%;">Charge</td>
+		</tr>
+		<% fields = Hash["Lender Policy" => "LenderPol",
+											"Owner Policy" => "OwnerPol",
+											"Junior Policy" => "JuniorPol",
+											"Recording Fee" => "RecFee",
+											"Closing Fee" => "ClosingFee",
+											"Endorsements" => "Endorsements",
+											"Doc Prep" => "DocPrep",
+											"Miscellaneous" => "PlatFee",
+											"Escrow Collection" => "EscrowCol",
+											"Wire Fee / Courier" => "FedEx",
+											"TSG / Litigation" => "Lit",
+											"Recon" => "Recon",
+											"Limited Report" => "LimRpt",
+											"Cancellation Fee" => "CancelFee",
+											"Foreclosure" => "Forclose",
+											"Exchange Fee" => "ExchangeFee",
+											"Transfer Tax" => "TransferTax",
+											"CPL Endorsement" => "CPLEndorsement"] %>
+		<% c = 0 %>
+    <% fields.each do |label, field| %>
+    	<% value = @invoice.send("#{field}".to_sym) %>
+    	<% if @print == nil || (@print != nil && value != 0) %>
+    		<% c += 1 %>
+				<tr class="charge">
+					<td><%= label %></td>
+					<td class="amount"><%= @print == nil ? text_field_tag(field, number_to_currency(value, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);") : number_to_currency(value) %></td>
+				</tr>
+			<% end %>
+		<% end %>
+
+		<% (17 - c).times do |i| %>
+			<tr class="charge">
+				<td class="label">&nbsp;</td>
+				<td class="amount">&nbsp;</td>
+			</tr>
+		<% end %>
+
+		<tr>
+			<td class="label" style="text-align: right;">Total Due:</td>
+			<td class="amount label"><span class="invoice_total"><%= number_to_currency(@invoice.InvoiceTotal) %></span></td>
+		</tr>
+	</table>
+	<div style="margin-top: 5px;">
+		<p style="text-decoration: underline; font-weight: bold; margin: 0em;">Memo:</p>
+		<p style="margin-top: 0em;"><%= @print == nil ? text_area_tag(:Notes, @invoice.Notes, onchange: "#{update}", style: "width: 100%;") : @invoice.Notes %></p>
+		<p>Thank you for the opportunity to be of service. If you have any questions please do not hesitate to give us a call.<br /><span style="font-weight: bold;">Note:</span> Payments not received within 30 days shall accrue interest at 1.5% per month.</p>
+	</div>
+	<div style="margin-top: 10px; padding: 10px; border-top: 1px dashed #CCC; ">
+		<p style="text-align: right; float: right;">
+			<span class="label">Invoice: #<%= @invoice.InvoiceID %></span><br />
+			<span class="label">Total Due: <span class="invoice_total"><%= number_to_currency(@invoice.InvoiceTotal) %></span></span><br /><br />
+			Please write the Invoice # in the memo section of your check.
+		</p>
+		<p class="label">Please make check payable to:<br />
+			{{COMPANY_NAME}}<br />
+			{{COMPANY_ADDRESS}}<br />
+			{{COMPANY_CITY}}, {{COMPANY_STATE}} {{COMPANY_ZIP}}<br />
+		</p>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function updateInvoice(object){
+		$.post('invoice/<%= @invoice.InvoiceID %>/update?field=' + $(object).attr('name') + '&value=' + $(object).val() );
+	}
+
+  $( "#invoice_wrapper .date").datepicker({
+    changeMonth: true,
+    changeYear: true
+  });
+
+  <% if @invoice.InvDate != nil %>
+  	$("#invoice_wrapper").find("input, select, textarea").each(function(){
+  		$(this).attr("disabled", true);
+  	});
+  <% end %>
+</script>

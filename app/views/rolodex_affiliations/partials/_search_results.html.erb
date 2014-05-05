@@ -1,0 +1,79 @@
+<% c = 0 %>
+<% if @entity != nil %>
+  <% rolodex_affiliations1 = @entity.affiliations_as_entity_1 + @entity.affiliations_as_contact_1 %>
+  <% rolodex_affiliations2 = @entity.affiliations_as_entity_2 + @entity.affiliations_as_contact_2 %>
+<% end %>
+<% options, collection = relationship_list() %>
+
+<% @affiliations.each do |i| %>
+	<% c += 1 %>
+	<tr id="new_affiliation<%= i.EntityID %>">
+		<td class="action w60 padding_left_5">
+  		<% if @entity != nil %>
+        <%= button_to "Add", rolodex_affiliations_path(entity_id: @entity.EntityID, affiliation: i.EntityID, relationship: ""), id: "entity_#{i.EntityID}", remote: true %>
+  		<% else %>
+  			<input type="button" onclick="addToQueue('create_rolodex_affiliation', 'rolodex/add_affiliation_to_new_entity?affiliation=<%= i.EntityID %>&relationship=' + $('#relationship_<%= i.EntityID %>').val() ); $(this).val('Added').change(); $(this).attr('disabled', 'disabled');" value="Add" data-remote="true" id="affiliation_button_<%= i.EntityID %>" />
+  		<% end %>
+		</td>
+
+		<td class="w95 padding_left_5">
+		  <%= hint_truncate(link_to(i.name_last_first, rolodex_path(i.EntityID), target: "_blank", method: :get), 13, true) %>
+		</td>
+
+		<td class="w95">
+      <%= i.IndCorp %>
+    </td>
+
+    <td class="w95">
+      <%= hint_truncate(i.primary_phone_number, 16) %>
+    </td>
+
+    <td class="w95">
+      <%= hint_truncate(mail_to(i.Email), 16, true) %>
+    </td>
+
+    <td class="w95">
+      <%= hint_truncate(i.primary_address.Address, 16) %>
+    </td>
+
+    <td class="w95">
+      <%= hint_truncate(i.primary_city, 16) %>
+    </td>
+
+    <td class="w95">
+      <%= i.primary_state %>
+    </td>
+
+	  <td class="w95">
+	  	<%= select :rolodex_affiliation, :Relationship, options_for_select(collection), {include_blank: true}, {name: "relationship", class: "w85", id: "relationship_#{i.EntityID}", onchange: "updateAddLink(this, '#{i.EntityID}');"} %>
+	  </td>
+	</tr>
+<% end %>
+
+<%# OPTIMIZE: Easier way to inject js? %>
+<script type="text/javascript">
+  function updateAddLink(object, entity_id){
+    var button = $('#entity_' + entity_id).closest('form');
+    var link   = button.attr("action");
+    var new_link = link.replace(link.substring(link.indexOf("relationship="), link.length), "relationship=" + $(object).val());
+    button.attr("action", new_link);
+  }
+
+	<% if @entity != nil %>
+		<% rolodex_affiliations1.each do |affiliation| %>
+			if($("#add_affiliation_button_<%= affiliation.EntityID2 %>").val() != undefined){
+				$("#add_affiliation_button_<%= affiliation.EntityID2 %>").val('Added');
+				$("#add_affiliation_button_<%= affiliation.EntityID2 %>").attr('disabled', 'disabled');
+			}
+		<% end %>
+
+		<% rolodex_affiliations2.each do |affiliation| %>
+			if($("#add_affiliation_button_<%= affiliation.EntityID1 %>").val() != undefined){
+				$("#add_affiliation_button_<%= affiliation.EntityID1 %>").val('Added');
+				$("#add_affiliation_button_<%= affiliation.EntityID1 %>").attr('disabled', 'disabled');
+			}
+		<% end %>
+	<% else %>
+		updateRolodexFormCurrent("affiliations");
+	<% end %>
+</script>

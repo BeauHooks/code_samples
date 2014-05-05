@@ -1,0 +1,12 @@
+<%= yield %>
+
+// Bind datepicker
+$(".datepicker").datepicker({});
+
+var overlay = $("#<%= @identifier %>");
+var overlay_width = overlay.width();
+var document_width = $(document).width();
+var position = (document_width/2) - (overlay_width/2);
+
+overlay.css("left", position + "px");
+overlay.addClass("bring_to_front");

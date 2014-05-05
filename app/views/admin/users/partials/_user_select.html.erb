@@ -1,0 +1,5 @@
+<div class='field'>
+  <span class='label'>Select Employee</span>
+  <%= select :entity, :FullName, Employee.find(:all, :conditions => ['IsActive = ?', 'True'], :order => 'FullName ASC').collect{|e| [e.FullName, e.ID]}, {:include_blank => false}, {:name => 'employee'} %>
+  <%= f.submit %>
+</div>

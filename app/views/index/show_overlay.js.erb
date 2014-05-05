@@ -1,0 +1,22 @@
+// Display new file form
+<% case @overlay %>
+<% when "File Employees" %>
+  $("#overlay_new_employee").html("<%= j(render :template => "file_employees/employee_lookup").html_safe %>");
+<% when "File Properties" %>
+  $("#overlay_new_property").html("<%= j(render :template => "file_properties/property_lookup").html_safe %>");
+<% when "File Attachments" %>
+  $("#overlay_new_file_attachment").html("<%= j(render :template => "file_images/new").html_safe %>");
+<% when "cpl" %>
+  $("#overlay_cpl").html("<%= j(render "closing_protection_letters/form").html_safe %>");
+<% when "cpl_new" %>
+  $("#overlay_cpl").html("<%= j(render "closing_protection_letters/form").html_safe %>");
+<% when "cpl_show" %>
+  $("#overlay_cpl").html("<%= j(render "closing_protection_letters/form").html_safe %>");
+<% when "cpl_request" %>
+  $("#overlay_cpl").html("<%= j(render "closing_protection_letters/form").html_safe %>");
+<% when "cpl_close" %>
+  $("#overlay_cpl").html("<%= j(render "closing_protection_letters/form").html_safe %>");
+<% when "cpl_cancel" %>
+  $("#overlay_cpl").html("<%= j(render "closing_protection_letters/form").html_safe %>");
+<% else %>
+<% end %>

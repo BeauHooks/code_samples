@@ -1,0 +1,101 @@
+<% case @line.number %>
+<% when 700..2999 %>
+
+  <% label_1 = "Buyer Amount: " %>
+  <% field_1 = "borrower_amount" %>
+  <% label_2 = "Seller Amount: " %>
+  <% field_2 = "seller_amount" %>
+  <% suffix1 = "_buyer" %>
+  <% suffix2 = "_seller" %>
+
+<% when 3000..5999 %>
+
+  <% label_1 = "Charges: " %>
+  <% field_1 = "charges" %>
+  <% label_2 = "Credits: " %>
+  <% field_2 = "credits" %>
+  <% suffix1 = "_#{field_1}" %>
+  <% suffix2 = "_#{field_2}" %>
+
+<% end %>
+
+<div id="split">
+  <div class="overlay_header">
+    <h2>Split</h2>
+  </div>
+  <div class="overlay_content">
+    <p><span class="label">Percent:</span>&nbsp;
+      <input type="text" value="" onkeydown="numbersOnly(event);" onchange="split();" style="width: 35px;" id="split_percent" />
+      &nbsp;&nbsp;<span class="label">To:</span>
+      <select onchange="split();" style="width: 125px;" id="split_to"><option value="split_1">Buyer</option><option value="split_2">Seller</option></select>
+      <input type="button" value="Split" onclick="split();" />
+    </p>
+    <hr />
+    <table>
+      <tr>
+        <td class="label" style="padding-right: 5px;">Buyer:</td>
+        <td><%= text_field_tag "split_1", number_to_currency((@line.send("#{field_1}".to_sym) || 0.0), unit: ""), onkeydown: "numbersOnly(event);", onchange: "splitSister(this.id); toUSD(this);", readonly: ["ss_commission_total"].include?(@line.type.gsub("_custom", "")), style: "width: 150px; text-align: right;" %></td>
+      </tr>
+      <tr>
+        <td class="label">Seller:</td>
+        <td><%= text_field_tag "split_2", number_to_currency((@line.send("#{field_2}".to_sym) || 0.0), unit: ""), onkeydown: "numbersOnly(event);", onchange: "splitSister(this.id); toUSD(this);", readonly: ["ss_commission_total"].include?(@line.type.gsub("_custom", "")), style: "width: 150px; text-align: right;" %></td>
+      </tr>
+      <tr>
+        <td class="label">Total:</td>
+        <td><%= text_field_tag :split_total, number_to_currency( (@line.send("#{field_1}".to_sym) || 0.0) + (@line.send("#{field_2}".to_sym) || 0.0) , unit: ""), onkeydown: "numbersOnly(event);", onchange: "splitTotal(); toUSD(this);", style: "width: 150px; text-align: right;" %></td>
+      </tr>
+    </table>
+  </div>
+  <div class="overlay_footer">
+    <span class="button">
+      <% post = "$.post('hud_lines/#{@line.id}/update_wallet?hud_id=#{@line.hud_id}&#{field_1}=' + $('#split_1').val() + '&#{field_2}=' + $('#split_2').val());" %>
+      <input type="button" value="Close" class="close" onclick="$('#line_<%= @line.number %><%= suffix1 %>').val($('#split_1').val()).change(); $('#line_<%= @line.number %><%= suffix2 %>').val($('#split_2').val()).change(); <%= post %> closeOverlay('split')" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  openOverlay('split');
+
+  function split(){
+    if($("#split_percent").val() != "" && $("#split_to").val() != "" && $("#split_total").val() != ""){
+      var split = Math.round( Number( $("#split_total").val().replace(/,/g, "") ) * Number( $("#split_percent").val().replace(/,/g, "") ) )/100;
+      var split_to = $("#split_to").val();
+      $("#" + split_to).val(split).change();
+      //splitSister(split_to);
+    }
+  }
+
+  function splitSister(splitter){
+    var sister_amount = 0;
+    var sister = "";
+    var change = Math.round( (Number( $("#split_total").val().replace(/,/g, "") )*100 - Number( $("#" + splitter).val().replace(/,/g, "") )*100 ) )/100;
+
+    if(splitter == "split_1"){
+      sister = "#split_2";
+      sister_amount = Math.round(Number( $("#split_2").val().replace(/,/g, "") ) * 100)/100;
+    }
+    else{
+      sister = "#split_1";
+      sister_amount = Math.round(Number( $("#split_1").val().replace(/,/g, "") ) * 100)/100;
+    }
+
+    if(change != sister_amount){
+      $(sister).val(change);
+      toUSD( document.getElementById(sister.replace("#", "")) );
+    }
+  }
+
+  function splitTotal(){
+    var val_1 = Number($("#split_1").val().replace(/,/g, ""));
+    var val_2 = Number($("#split_2").val().replace(/,/g, ""));
+    var total = val_1 + val_2;
+
+    if(total != 0){
+      var percent = val_1 / total;
+      var split_1 = percent * Number($("#split_total").val().replace(/,/g, ""));
+
+      $("#split_1").val(split_1).change();
+    }
+  }
+</script>

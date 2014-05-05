@@ -1,0 +1,100 @@
+<div style="width:600px;">
+  <table border="1" width="630" style="text-align:left;">
+    <tr style="height:25px; background-color:#ccc;">
+      <td><b>Comparison of Good Faith Estimate (GFE) and HUD-1 Charges</b></td>
+    </tr>
+    <tr>
+      <td height="21"><b>Charges That Cannot Increase<div style="float:right; width:200px;">HUD-1 Line Number</div></b></td>
+    </tr>
+    <%= f.fields_for :hud_lines do |builder| %>
+      <tr>
+        <% if builder.object.number >= 2000 && builder.object.number <= 2003 %>
+          <%= render 'huds/partials/comparison-line', :f => builder %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table><br />
+
+  <table border="1" width="630" style="text-align:left;">
+    <tr style="height:25px; background-color:#ccc;">
+      <td><b>Charges That In Total Cannot Increase More Than 10%</b></td>
+    </tr>
+    <%= f.fields_for :hud_lines do |builder| %>
+      <tr>
+        <% if builder.object.number >= 2100 && builder.object.number <= 2107 %>
+          <%= render 'huds/partials/comparison-line', :f => builder %>
+        <% end %>
+      </tr>
+    <% end %>
+    <tr style="background-color:#ccc;">
+      <td style="text-align:right; padding-right:10px; height:21px;"><b>Total</b></td>
+    </tr>
+    <tr style="background-color:#ccc;">
+      <td style="text-align:right; padding-right:10px; height:21px;"><b>Increase between GFE and HUD-1 Charges</b></td>
+    </tr>
+  </table><br />
+
+  <table border="1" width="630" style="text-align:left;">
+    <tr style="height:25px; background-color:#ccc;">
+      <td><b>Charges That Can Change</b></td>
+    </tr>
+    <%= f.fields_for :hud_lines do |builder| %>
+      <tr>
+        <% if builder.object.number >= 2200 && builder.object.number <= 2205 %>
+          <%= render 'huds/partials/comparison-line', :f => builder %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<div style="width:270px; position:absolute; left:637px; top:3159px;">
+  <table border="1" width="270" class="compare-amount">
+    <tr style="height:25px; text-align:center; font-weight:bold; font-size:0.9em; background-color:#ccc;" width="270">
+      <td width="150">Good Faith Estimate</td><td width="150">HUD-1</td>
+    </tr>
+    <tr width="270" style="background-color:#666;">
+      <td width="1350" height="21">&nbsp;</td><td width="135" height="21">&nbsp;</td>
+    </tr>
+    <%= f.fields_for :hud_lines do |builder| %>
+      <tr>
+        <% if builder.object.number >= 2000 && builder.object.number <= 2003 %>
+          <%= render 'huds/partials/comparison-amounts', :f => builder %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table><br />
+
+  <table border="1" width="270" class="compare-amount">
+    <tr style="height:25px; text-align:center; font-weight:bold; font-size:0.9em; background-color:#ccc;" width="270">
+      <td width="135">Good Faith Estimate</td><td width="135">HUD-1</td>
+    </tr>
+    <%= f.fields_for :hud_lines do |builder| %>
+      <tr>
+        <% if builder.object.number >= 2100 && builder.object.number <= 2107 %>
+          <%= render 'huds/partials/comparison-amounts', :f => builder %>
+        <% end %>
+      </tr>
+    <% end %>
+    <tr>
+      <td><%= f.text_field :gfe_total, :style => 'width:134px' %></td>
+      <td><%= f.text_field :hud_total, :style => 'width:134px' %></td>
+    </tr>
+    <tr>
+      <td colspan="2" height="21"></td>
+    </tr>
+  </table><br />
+
+  <table border="1" width="270" class="compare-amount">
+    <tr style="height:25px; text-align:center; font-weight:bold; font-size:0.9em; background-color:#ccc;" width="270">
+      <td width="135">Good Faith Estimate</td><td width="135">HUD-1</td>
+    </tr>
+    <%= f.fields_for :hud_lines do |builder| %>
+      <tr>
+        <% if builder.object.number >= 2200 && builder.object.number <= 2205 %>
+          <%= render 'huds/partials/comparison-amounts', :f => builder %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table><br />
+</div>
+

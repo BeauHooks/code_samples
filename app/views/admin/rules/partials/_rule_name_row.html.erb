@@ -1,0 +1,25 @@
+<% if @rule_name.new_record? %>
+	<% update = "" %>
+	<% destroy = "remove_rule_name_exception(this, 'Names');" %>
+<% else %>
+	<% update = "updateRuleName(this);" %>
+	<% destroy = "destroyRuleName(this);" %>
+<% end %>
+
+<tr id="<%= @rule_name.id unless @rule_name.new_record? %>">
+	<td>
+		<%= image_tag "redx.png", class: "trigger", onclick: destroy %>
+		<%= select_tag :name_type, options_for_select(Entity.ind_corp_options, @rule_name.name_type), {style: "width: 8em;", onchange: "updateNameType(this); #{update}", field: "name_type"} %>
+	</td>
+	<td style="white-space: nowrap;">
+		<span class="rule_name_individual" style="<%= 'display: none;' if @rule_name.name_type != "Individual" %>">
+			<%= text_field_tag "rule_names[#{@rule_name.id}[first_name]]", @rule_name.first_name, style: "width: 7em; margin: .25em 0em;", placeholder: "First Name", onchange: update, field: "first_name" %>
+			<%= text_field_tag "rule_names[#{@rule_name.id}[middle_name]]", @rule_name.middle_name, style: "width: 7em; margin: .25em 0em;", placeholder: "Middle Name", onchange: update, field: "middle_name" %>
+			<%= text_field_tag "rule_names[#{@rule_name.id}[last_name]]", @rule_name.last_name, style: "width: 7em; margin: .25em 0em;", placeholder: "Last Name", onchange: update, field: "last_name" %>
+		</span>
+
+		<span class="rule_name_other" style="<%= 'display: none;' if @rule_name.name_type == "Individual" %>">
+			<%= text_field_tag "rule_names[#{@rule_name.id}[full_name]]", @rule_name.full_name, style: "display: block; width: 22.3em; margin: .25em 0em;", placeholder: "Full Name", onchange: update, field: "full_name" %>
+		</span>
+	</td>
+</tr>

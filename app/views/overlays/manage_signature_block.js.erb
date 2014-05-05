@@ -1,0 +1,8 @@
+<% render "docs/manage_signature_block" %>
+$("#overlay_list").append("<%= j(render 'overlays/partials/overlay').html_safe %>");
+
+if($("#doc_entity_<%= @doc_entity.id %>_container").html() != undefined){
+	$("#doc_entity_<%= @doc_entity.id %>_container").replaceWith("<%= j(render :partial => "docs/entity").html_safe %>");
+}
+
+$("div#signatures_info").           html("<%= j(render "rolodex/partials/signatures_info",        rolodex: @rolodex_entity ).html_safe %>");

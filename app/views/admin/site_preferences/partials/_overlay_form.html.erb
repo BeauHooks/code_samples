@@ -1,0 +1,15 @@
+<% content_for :overlay_class do %>
+	new_preference
+<% end %>
+
+<% content_for :overlay_title do %>
+	New Preference
+<% end %>
+
+<% content_for :overlay do %>
+	<%= form_for @preference, url:  admin_site_preferences_path, method: :post, remote: true do |f| %>
+	  <div class="clear"><%= f.text_field :name %><br /><span class="form_label">Name</span></div>
+	  <div><%= f.select :category, options_for_select([["Navigation", "navigation"], ["Style",  "style"]], @preference.category) %><br /><span class="form_label">Category</span></div>
+	  <div><%= f.text_area :question %><br /><span class="form_label">Question</span></div>
+	<% end %>
+<% end %>

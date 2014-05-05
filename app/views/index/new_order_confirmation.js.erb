@@ -1,0 +1,43 @@
+<% if @page == "index" && @commit == "Save" %>
+  closeOverlay('new_file'); 
+  $('#search_type').val('5').change(); 
+  $('#search_box').val('<%= @file.DisplayFileID %>'); 
+  $('#search_button').click();
+<% elsif @commit == "Save and New" %>
+  $('#new_order_menu_item').click();
+<% elsif @commit == "Save and Copy" %>
+  $('#search_type').val('5').change(); 
+  $('#search_box').val('<%= @file.DisplayFileID %>'); 
+  $('#search_button').click();
+  $('#saving_new_order').hide();
+  $('div#property_flash').hide();
+  $("#new_file_properties").find("tr").each(function(){
+    if($(this).attr('id') != undefined){
+      $(this).remove();
+    }
+  });
+  $("#new_file_properties").append("<%= j(render "index/partials/property_row").html_safe %>");
+  $("#index_SalesPrice").val('');
+  $("#index_LoanAmount").val('');
+  $("#index_SecondLoan").val('');
+  $("#index_LoanNum").val('');
+  $("#index_TransactionType").val('2').change();
+  $("#datepickerCOEDate").val('');
+  $('#new_order_button_container').find('input').attr('disabled', false);
+<% else %>
+  <% if @failures.size == 0 %> 
+    document.location.href = "/index?file_id=<%= @file.FileID %>";
+  <% else %>
+    closeOverlay('new_file');
+  <% end %>
+<% end %>
+
+<% if @failures.size > 0 %>
+  <% list = "" %>
+  <% @failures.each do |f| %>
+    <% list += "&list[]=#{f}" %>
+  <% end %>
+  addToQueue('new_order_confirmation_failures', 'application/flash_notice?title=Errors Sending Confirmation&notice=The following email confirmations were not sent due to error:<%= list %>');
+<% else %>
+  addToQueue('new_order_confirmation_success', "application/flash_notice?title=Success!&type=confirmation&notice=You have opened a new order. Order No. <%= @file.DisplayFileID %>.");
+<% end %>

@@ -1,0 +1,79 @@
+<div class="file_product_wrapper" style="position: relative;">
+	<div style="float: left;">
+		<h3><%= @company.CompanyName %></h3>
+		<p style="font-weight: bold;">
+			<%= @office != nil ? "#{@office.OfficeAddress1}#{ " #{@office.OfficeAddress2}" if !@office.OfficeAddress2.blank?}, #{@office.OfficeCity}, #{@office.OfficeState} #{@office.OfficeZip}" : "#{@company.CompanyAddress} #{@company.CompanyCSZ}" %>
+			<br />
+			<%= @closer != nil ? "PH: #{number_to_phone(@closer.DirectPhone)} FAX: #{number_to_phone(@closer.DirectFax)}" : "PH:#{@company.CompanyPhone} FAX:#{@company.CompanyFax}" %>
+		</p>
+	</div>
+	<%= image_tag @logo, alt: "", style: "float: right;" %>
+	<p style="clear:both; text-align: right; margin-bottom: 1em; font-weight: bold;">COMMITMENT FOR TITLE INSURANCE</p>
+	<p style="text-align: center; position: relative; font-weight: bold;">
+		SCHEDULE A
+		<span style="position: absolute; right: 0px; text-align: left;">
+			<%= @company.DirName %> File No. <%= !@schedule_a.amended.nil? ? "#{@file.DisplayFileID}-#{@schedule_a.amended}" : @file.DisplayFileID %><br />
+			Page No. 1
+		</span>
+	</p>
+	<p>&nbsp;</p>
+	<div style="margin-bottom: 1em;">
+		<% policies = @file_product.policies %>
+		<% policies.each do |policy| %>
+			<p style="font-weight: bold;"><%= policy.type.upcase %> PREMIUM: <%= number_to_currency(policy.premium, unit: "$") %></p>
+		<% end %>
+		<% if @schedule_a.policy_endorsements.size > 0 %>
+			<p style="font-weight: bold;">Endorsements: <%= @schedule_a.policy_endorsement_list %> <%= number_to_currency(@schedule_a.policy_endorsements.sum("amount"), unit: "$") %></p>
+		<% end %>
+	</div>
+
+	<p style="margin-bottom: 1em;">1. Effective Date: <span style="font-weight: bold;"><%= @schedule_a.effective_at.nil? ? "" : @schedule_a.effective_at.strftime("%B %e, %Y AT %l:%M %p").upcase %></span></p>
+	<table style="width: 100%; border-collapse: collapse; margin-bottom: 1em;">
+		<tr>
+			<td style="width: 60%; padding-bottom: 1em; padding-left: 0px;">2. Policy or Policies to be issued:</td>
+			<td style="padding-bottom: 1em;">Amount</td>
+		</tr>
+		<% policies.each do |policy| %>
+			<tr>
+				<td>(a)[] <%= policy.type %></td>
+				<td style="font-weight: bold;"><%= number_to_currency(policy.amount, unit: "$") %></td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding-bottom: 1em;">Proposed Insured: <%= policy.proposed_insured.to_s.gsub(/\n/, "<br>").html_safe %></td>
+			</tr>
+		<% end %>
+	</table>
+	<p style="margin-bottom: 1em;">3. The estate or interest in the land described or referred to in this Commitment is <span style="font-weight: bold;"><%= @schedule_a.vesting_type %></span>.</p>
+	<p style="margin-bottom: 1em;">4. Title to the <%= @schedule_a.vesting_type %> estate or interest in the land is at the Effective Date vested in:</p>
+	<p style="margin-bottom: 1em; padding: 0em 2em;">
+	<% if @schedule_a.use_vesting_exhibit_a? %>
+		<p style="margin-bottom: 1em; text-align: center;">SEE ATTACHED EXHIBIT "A" - VESTING<br />***</p>
+	<% else %>
+		<p style="margin-bottom: 1em; padding: 0em 2em;"><%= @schedule_a.vesting.to_s.gsub(/\n/, "<br>").html_safe %></p>
+	<% end %>
+	</p>
+	<p style="margin-bottom: 1em;">5. The land referred to in this Commitment is situated in the County of <%= @schedule_a.county %>, State of <%= @schedule_a.state %>, and described as follows:</p>
+	<% if @schedule_a.use_legal_exhibit_a? %>
+		<p style="margin-bottom: 1em; text-align: center;">SEE ATTACHED EXHIBIT "A" - LEGAL DESCRIPTION<br />***</p>
+	<% else %>
+		<p style="margin-bottom: 1em; padding: 0em 2em;"><%= @schedule_a.legal_description.to_s.gsub(/\n/, "<br>").html_safe %></p>
+	<% end %>
+	<p style="margin-bottom: 1em; font-weight: bold;">NOTE: The names above have been checked for Judgements and any matters thereon are shown on Schedule “B” of this Commitment.</p>
+	<p style="font-weight: bold;">The address of said <%= @schedule_a.land_type %>:<br /><%= "#{@schedule_a.land_address}, #{@schedule_a.land_city}, #{@schedule_a.state} #{@schedule_a.land_zip_code}" %></p>
+
+	<% if @schedule_a.use_vesting_exhibit_a? %>
+		<div style='page-break-before:always;'>
+			<p style="margin-bottom: 1em; font-weight: bold; text-align: center;">EXHIBIT "A" - VESTING</p>
+			<p style="margin-bottom: 1em; font-weight: bold;"><%= @schedule_a.vesting.to_s.gsub(/\n/, "<br>").html_safe %></p>
+			<p style="text-align: center">***</p>
+		</div>
+	<% end %>
+
+	<% if @schedule_a.use_legal_exhibit_a? %>
+		<div style='page-break-before:always;'>
+			<p style="margin-bottom: 1em; font-weight: bold; text-align: center;">EXHIBIT "A" - LEGAL DESCRIPTION</p>
+			<p style="margin-bottom: 1em; font-weight: bold;"><%= @schedule_a.legal_description.to_s.gsub(/\n/, "<br>").html_safe %></p>
+			<p style="text-align: center">***</p>
+		</div>
+	<% end %>
+</div>

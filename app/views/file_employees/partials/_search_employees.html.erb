@@ -1,0 +1,47 @@
+<% options = FileEmployeeType.all.collect {|t| [ t.TypeDescription, t.ID ] } %>
+<% n = 0 %>
+<% @employees.each do |e| %>
+  <% n += 1 %>
+  <tr>
+    <td class="add_link" id="add_link_<%= n %>" style="padding-left: 5px;">
+      <% if @file != nil %>
+      <%= button_to 'Add', file_employees_path(id: @file.ID,
+                                             FileID: @file.FileID,
+                                             DisplayFileID: @file.DisplayFileID,
+                                             EmployeeID: e.ID,
+                                             position: 3),
+                                             :remote => true,
+                                             :method => :post,
+                                             :id     => "employee_result_#{e.ID}",
+                                             onclick: "$(this).val('Added'); $(this).attr('disabled', 'disabled');"  %>
+        <% else %>
+          <input type="button" onclick="$.post('index/add_employee_to_new_file/?employee_id=<%= e.ID %>&position=' + $('#position_<%= n %> option:selected').val() ); $(this).val('Added').change(); $(this).attr('disabled', 'disabled');" data-remote="true" value="Add" id="employee_button_<%= e.ID %>">
+        <% end %>
+    </td>
+    <td class="name hint" id="name_<%= n %>">
+    <% if e.FullName.size > 17 %>
+      <span><%= e.FullName %></span>
+      <%= truncate(e.FullName, :length => 17) %>
+    <% else %>
+      <%= e.FullName %>
+    <% end %>
+    </td>
+    <td class="position" id="position_<%= n %>">
+      <% if @file != nil %>
+      <%= select("file_employee_type", "ID", options, { :include_blank => false }, :onchange => "update_position(#{n}, this.value);") %>
+      <% else %>
+      <%= select("file_employee_type", "ID", options, { :include_blank => false }, id: "position_#{n}") %>
+      <% end %>
+    </td>
+    <% if e.Email != nil && e.Email.length > 30 %>
+      <td class="email hint" id="email_<%= n %>">
+		    <span><%= e.Email %></span>
+        <%= truncate(e.Email.downcase, :length => 30) %>
+      </td>
+    <% else %>
+      <td class="email" id="email_<%= n %>">
+        <%= e.Email %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>

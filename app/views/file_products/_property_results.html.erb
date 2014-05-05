@@ -1,0 +1,42 @@
+<table>
+	<% properties = @file.file_properties %>
+	<% if properties.size == 0 %>
+		<tr>
+			<td class="no_result">No File Properties</td>
+		</tr>
+	<% else %>
+		<% properties.each do |property| %>
+			<tr>
+				<% tax_id = property.TaxID.to_s %>
+				<td class="w75 <%= "hint" if tax_id.length > 10 %>">
+					<% if tax_id.length > 10 %><span><%= image_tag "redx.png", onclick: "destroy('#{file_property_path(id: property.ID, form: 'file_product')}', $(this).closest('tr') );", class: "trigger" %><%= tax_id %></span><% end %>
+					<% checked = !property.PropertyCheckedDT.blank? %>
+					<% update_property = "update('#{file_property_path(id: property.ID)}', this);" %>
+					<%= image_tag "redx.png", onclick: "destroy('#{file_property_path(id: property.ID, form: 'file_product')}', $(this).closest('tr') );", class: "trigger" %>
+					<%= checked ? truncate(tax_id, length: 10) : text_field_tag(:TaxID, tax_id, onchange: update_property, placeholder: "Tax ID", class: "w65") %>
+				</td>
+
+				<% if checked %>
+					<% address = property.full_address %>
+					<% if address.length > 40 %>
+						<td class="hint w215">
+							<span><%= address %></span>
+							<%= truncate(address, length: 40) %>
+					<% else %>
+						<td class="w215">
+							<%= address %>
+					<% end %>
+				<% else %>
+					<td class="w215">
+						<%= text_field_tag :PropertyAddress, property.PropertyAddress, onchange: update_property, placeholder: "Address", class: "w65" %>
+						<%= text_field_tag :City, property.City, onchange: update_property, placeholder: "City", class: "w50" %>
+						<%= text_field_tag :State, property.State, onchange: update_property, placeholder: "State", class: "w50" %>
+						<%= text_field_tag :Zip, property.Zip, onchange: update_property, placeholder: "Zip", class: "w50" %>
+				<% end %>
+				</td>
+				<td style="width: 200px;">
+					<%= check_box_tag :PropertyCheckedBy, current_user.employee_id, checked, onchange: "update('#{file_property_path(id: property.ID, form: 'file_product')}', this); $(this).prop('disabled', true);", disabled: checked, class: "margin_right_5" %><%= "#{property.PropertyCheckedDT.strftime("%-1m/%d/%Y %l:%M%p")} by #{property.property_checked_by}" if checked %></td>
+			</tr>
+		<% end %>
+	<% end %>
+</table>

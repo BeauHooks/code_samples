@@ -1,0 +1,23 @@
+<div class="outer_table">
+  <div class="grid_header"></div>
+  <div class="inner_table box">
+    <table>
+      <thead class="grid_header_font">
+        <tr>
+           <th><div>Name <%= link_to image_tag("plus.png", class: "icon trigger"), new_site_preference_overlays_path, remote: true %></div></th>
+          <th><div>Category</div></th>
+          <th><div>Modified</div></th>
+        </tr>
+      </thead>
+      <tbody id="preferences_list">
+        <% SitePreference.find(:all, order: "name ASC").each do |preference| %>
+          <%= render "admin/site_preferences/partials/preference_row", preference: preference %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="preferences_show" class="border box" style="width: 950px; padding: 5px 5px;">
+  <p class="no_result">No preference selected.</p>
+</div>

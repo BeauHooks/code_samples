@@ -1,0 +1,5 @@
+var viewModel = new window.ss_vm(<%= raw @ss.to_json(include: {ordered_sections: {include: {ordered_lines: {include: [:ordered_cells]}}}}).gsub("</", "<\\/") %>);
+ko.cleanNode($("#ss")[0]);
+ko.applyBindings(viewModel, $("#ss")[0]);
+set_disbursement_autocomplete();
+

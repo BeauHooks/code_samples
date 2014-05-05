@@ -1,0 +1,20 @@
+// Update Document Title
+document.title = "Filetrak - File Index #<%= @file.DisplayFileID %>";
+
+// Click on Overview Tab
+$("#tab_file_id").click();
+
+// Update Tab File Number
+$("#tab_file_id").html("<%= @file.DisplayFileID %>");
+
+// Load Overview Tab
+$("#file_overview").html("<%= j(render 'index/partials/overview', file: @file, employees: @employees, file_user_types: @file_user_types, file_employee_types: @file_employee_types).html_safe %>");
+
+// Load Docs Tab
+$("#docs_tab").attr("onclick", "$.get('/index/<%= @file.ID %>/load_tab?tab=Documents');");
+
+// Load Attachments Tab
+$("#file_attachments").html("<%= j(render 'index/partials/attachments').html_safe %>");
+
+// Load Email Tab
+$("#file_emails").html("<%= j(render 'index/partials/emails').html_safe %>");

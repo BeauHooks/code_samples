@@ -1,0 +1,7 @@
+<table style="border: 1px solid #343434;">
+  <% @hud.hud_lines.where("number = 1400 ").each do |builder| %>
+    <tr>
+      <%= render 'huds/partials/full-line', builder: builder %>
+    </tr>
+  <% end %>
+</table>

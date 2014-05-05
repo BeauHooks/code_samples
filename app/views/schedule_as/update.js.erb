@@ -1,0 +1,9 @@
+<% unless @stop_refresh %>
+	$("#policies_content").html("<%= j(render "policies/index").html_safe %>");
+	$("#effective_at_warning").hide();
+	fileProductInitializer();
+<% end %>
+
+<% unless @container.blank? || @value.blank?  %>
+	$("#<%= @container %>").val("<%= j(@value).html_safe %>");
+<% end %>

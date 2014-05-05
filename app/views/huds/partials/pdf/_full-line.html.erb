@@ -1,0 +1,149 @@
+<% # Header %>
+<% if f.object.type == 'l_header' %>
+  <td colspan="3" style="background-color:#ccc"><%= f.label :number, f.object.number %>. 
+    <%= f.label :name, f.object.name, :style => 'width:400px; background-color:#ccc;' %>
+  </td>
+<% # Main Header %>
+<% elsif f.object.type == 'l_main_header' %>
+  <td style="background-color:#ccc"><%= f.label :number, f.object.number %>. 
+    <%= f.label :name, f.object.name, :style => 'width:400px; background-color:#ccc;' %>
+  </td>
+  <% if f.object.number == 700 %>
+      <td width="90" rowspan="4" style="text-align:center; background-color:#ccc;">Paid From Borrower's Funds at Settlement</td>
+      <td width="90" rowspan="4" style="text-align:center; background-color:#ccc;">Paid From Seller's Funds at Settlement</td>
+    </tr>
+    <tr>
+      <td style="padding-left:33px;">Division of commission (line 700) as follows</td>
+    </tr>
+  <% end %>
+<% # Main Payee %>
+<% elsif f.object.type == 'l_main_payee' %>
+  <td><%= f.label :number, f.object.number %>. 
+    $<%= f.text_field :amount, :style => 'width:110px;' %> to <%= f.text_field :payee_name, :style => 'width:200px;' %>
+  </td>
+<% # Payee %>
+<% elsif f.object.type == 'l_payee' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:400px;' %><%= f.label :description, f.object.description, :style => 'float:right; width:100px;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Payee Amount %>
+<% elsif f.object.type == 'l_payee_amount' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <% if f.object.number == 801 %>
+      <%= f.text_field :name, :style => 'width:400px;' %><%= f.label :description, f.object.description, :style => 'float:right; width:100px;' %>
+      <%= f.text_field :amount, :style => 'width:100px; float:right;' %><%= label_tag '$', nil, :style => 'float:right;' %>
+    <% elsif f.object.number == 1102 %>
+      <%= f.text_field :name, :style => 'width:400px;' %>
+      <%= f.text_field :amount, :style => 'width:200px; float:right;' %><%= label_tag '$', nil, :style => 'float:right;' %>
+    <% else %>
+      <%= f.text_field :name, :style => 'width:400px;' %>
+    <% end %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Amount %>
+<% elsif f.object.type == 'l_amount' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <% if f.object.number == 1104 || f.object.number == 1302 || f.object.number == 1303 %>
+      <%= f.text_field :name, :style => 'width:400px;' %>
+      <%= f.text_field :amount, :style => 'width:200px; float:right;' %><%= label_tag '$', nil, :style => 'float:right;' %>
+    <% else %>
+      <%= f.text_field :name, :style => 'width:400px;' %>
+    <% end %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Amount Desc %>
+<% elsif f.object.type == 'l_amount_desc' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <% if f.object.number == 802 %> 
+      <%= f.text_field :name, :style => 'width:400px;' %><%= f.label :description, f.object.description, :style => 'float:right; width:100px;' %> 
+      <%= f.text_field :amount, :style => 'width:100px; float:right;' %><%= label_tag '$', nil, :style => 'float:right;' %>
+    <% elsif f.object.number == 1107 || f.object.number == 1108 %>
+      <%= f.text_field :name, :style => 'width:400px;' %>
+      <%= f.text_field :amount, :style => 'width:200px; float:right;' %><%= label_tag '$', nil, :style => 'float:right;' %>
+    <% else %>
+      <%= f.text_field :name, :style => 'width:400px;' %>
+    <% end %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Descriptive %>
+<% elsif f.object.type == 'l_descriptive' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:400px;' %><%= f.label :description, f.object.description, :style => 'float:right; width:100px;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Daily Int %>
+<% elsif f.object.type == 'l_daily_int' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:180px;' %><%= f.label :description, f.object.description, :style => 'float:right; width:100px;' %>
+    <%= f.text_field :start_date, :style => 'width:70px; text-align:center;', :id => 'datepicker' %> to 
+    <%= f.text_field :end_date, :style => 'width:70px; text-align:center;', :id => 'datepicker' %> @ $
+    <%= f.text_field :amount, :style => 'width:90px' %> /day
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Mort Ins %>
+<% elsif f.object.type == 'l_mort_ins' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:200px;' %><%= f.label :description, f.object.description, :style => 'float:right; width:100px;' %>
+    <%= f.text_field :periods, :style => 'width:70px; text-align:right;' %> months to <%= f.text_field :payee_name, :style => 'width:235px;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Home Ins %>
+<% elsif f.object.type == 'l_home_ins' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:180px;' %><%= f.label :description, f.object.description, :style => 'float:right; width:100px;' %>
+    <%= f.text_field :periods, :style => 'width:70px; text-align:right;' %> years to <%= f.text_field :payee_name, :style => 'width:240px;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Periodic %>
+<% elsif f.object.type == 'l_periodic' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:200px;' %><%= f.text_field :periods, :style => 'width:100px; text-align:right;' %> months @ $
+    <%= f.text_field :periodic_amount, :style => 'width:100px;' %>per month $<%= f.text_field :amount, :style => 'width:117px;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # DMR %>
+<% elsif f.object.type == 'l_dmr' %>
+  <td><%= f.label :number, f.object.number %>.  
+    Deed $<%= f.text_field :deed_amount, :style => 'width:100px;' %> Mortgage $
+    <%= f.text_field :mortgage_amount, :style => 'width:100px;' %> Release $<%= f.text_field :releases_amount, :style => 'width:100px;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # DM %>
+<% elsif f.object.type == 'l_dm' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:200px;' %> Deed $<%= f.text_field :deed_amount, :style => 'width:100px;' %>
+    Mortgage $<%= f.text_field :mortgage_amount, :style => 'width:100px;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # Inverse %>
+<% elsif f.object.type == 'l_inverse' %>
+  <td><%= f.label :number, f.object.number %>. 
+    <%= f.text_field :name, :style => 'width:200px;' %><%= f.text_field :amount, :style => 'float:right; width:127px;' %><%= label_tag '-$', nil, :style => 'float:right' %>  
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% # L Footer %>
+<% elsif f.object.type == 'l_footer' %>
+  <td style="background-color:#000; color:#fff; border:1px;">
+    <%= f.label :number, f.object.number %>. 
+    <%= f.label :name, f.object.name, :style => 'font-weight:heavy;' %>
+  </td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% else %>
+  <td><%= f.label :number, f.object.number %>. <%= f.text_field :name, :style => 'width:400px;' %></td>
+  <td width="90"><%= f.text_field :borrower_amount, :style => 'width:90px;' %></td>
+  <td width="90"><%= f.text_field :seller_amount, :style => 'width:90px;' %></td>
+<% end %>

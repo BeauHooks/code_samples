@@ -1,0 +1,91 @@
+<% if @line.number < 3000 %>
+  <% case @line.number %>
+  <% when 703 %>
+    <% lines = [703, 701, 702] %>
+  <% when 803 %>
+    <% lines = [803, 801, 802] %>
+  <% when 1001 %>
+    <% lines = [1001, 1002, 1003, 1004, 1005, 1006] %>
+  <% when 1101 %>
+    <% lines = [1101, 1102, 1104] %>
+  <% when 1201 %>
+    <% lines = [1201, 1202] %>
+  <% when 1203 %>
+    <% lines = [1203, 1204, 1205] %>
+  <% when 1301 %>
+    <% lines = [1301, 1302, 1303] %>
+  <% else %>
+    <% lines = [@line.number] %>
+  <% end %>
+<% else %>
+  <% lines = [@line.number] %>
+
+  <% case @line.type.gsub("_custom", "") %>
+  <% when "ss_commission_total" %>
+    <% i = 0 %>
+    <% while true %>
+      <% i += 1 %>
+      <% commission_line = @hud.hud_lines.where("number = #{@line.number - i} AND (type = 'ss_commission' OR type = 'ss_commission_custom') ").first %>
+      <% if commission_line == nil %>
+        <% break %>
+      <% else %>
+        <% lines << commission_line.number %>
+      <% end %>
+    <% end %>
+  <% else %>
+  <% end %>
+<% end %>
+
+<% payments = [] %>
+<% lines.each do |number| %>
+  <% line = @hud.hud_lines.where("number = #{number}").first %>
+  <% if line != nil %>
+    <% line.hud_line_payments.each do |payment| %>
+      <% payments << payment %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<table>
+  <% c = 0 %>
+  <% payments.each do |p| %>
+    <% c += 1 %>
+    <% post = "hud_lines/#{@line.id}/view_check?hud_id=#{@line.hud_id}&payment_id=#{p.id}" %>
+    <tr id="row_<%= p.id %>" onclick="rowSelect(this, '<%= post %>');" class="trigger">
+      <td style="padding-left: 5px; width: 10px;">
+        <%= image_tag("redx.png", onclick: "addToQueue('remove_payment', 'application/flash_notice?confirm=Yes&post=/hud_lines/#{@line.id}/remove_payment?hud_id=#{@line.hud_id}%26line_id=#{@line.id}%26payment_id=#{p.id}'); event.stopPropagation();") %>
+      </td>
+      <td class="payee" style="width: 85px;">
+        <% if p.check_working %>
+          <% name = p.check_working.payee_1 %>
+        <% else %>
+          <% name = "NULL" %>
+        <% end %> 
+        <%= truncate(name, length: 20) %>
+      </td>
+
+      <% if p.purpose != nil && p.purpose.length > 20 %>
+        <td class="purpose hint"><span><%= p.purpose %></span><%= truncate(p.purpose, :length => 20) %></td>
+      <% else %>
+        <td class="purpose"><%= p.purpose %></td>
+      <% end %>
+
+      <% if p.memo_1 != nil && p.memo_1.length > 20 %>
+        <td class="memo hint"><span><%= p.memo_1 %></span><%= truncate(p.memo_1, :length => 20) %></td>
+      <% else %>
+        <td class="memo"><%= p.memo_1 %></td>
+      <% end %>
+
+      <td class="amount"><%= text_field_tag :amount, number_to_currency( (p.amount || 0.0) , unit: ""), style: "text-align: right;", onkeydown: "numbersOnly(event);", onchange: "$.post('hud_lines/#{@line.id}/update_payment?hud_id=#{@line.hud_id}&payment_id=#{p.id}&key=' + $(this).attr('name') + '&value=' + $(this).val() ); toUSD(this);" %></td>
+    </tr>
+  <% end %>
+</table>
+<script type="text/javascript">
+  <% if c > 4 %>
+    addWidth('payments', 105);
+  <% else %>
+    fixWidth('payments', 105);
+  <% end %>
+
+  $("#line_payments tr:first").click();
+</script>

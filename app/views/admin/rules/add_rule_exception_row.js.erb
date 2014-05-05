@@ -1,0 +1,10 @@
+<% if @exception.new_record? %>
+	$("#overlay_rule_exceptions .no_result").remove();
+	$("#overlay_rule_exceptions").prepend("<%= j(render "admin/rules/partials/rule_exception_row").html_safe %>");
+	update_rule_name_exception_position()
+<% else %>
+	$("#rules_show #rule_exceptions .no_result").remove();
+	$("#rules_show #rule_exceptions").prepend("<%= j(render "admin/rules/partials/rule_exception_row").html_safe %>");
+<% end %>
+
+initializer();

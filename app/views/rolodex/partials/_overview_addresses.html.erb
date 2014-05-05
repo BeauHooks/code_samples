@@ -1,0 +1,25 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <%= form_for @entity, url: rolodex_path, method: :put, remote: true do |f| %>
+      <table class="overview_addresses">
+        <thead class="grid_header_font">
+          <tr>
+            <th class="actions"><div>Addresses <%= link_to image_tag("plus.png", class: "icon"), rolodex_entity_contacts_path(@entity.EntityID, type: "address"), method: :post, remote: true %></div></th>
+            <th class="description"><div>Description</div></th>
+            <th class="address1"><div>Address</div></th>
+            <th class="address2"><div>Address 2</div></th>
+            <th class="city"><div>City</div></th>
+            <th class="state"><div>State</div></th>
+            <th class="zip"><div>Zip</div></th>
+            <th class="county"><div>County</div></th>
+            <th class="ship"><div>Ship</div></th>
+          </tr>
+        </thead>
+        <tbody id="entity_address_results" class="results highlight">
+          <%= render 'entity_contacts/partials/address_results' %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>

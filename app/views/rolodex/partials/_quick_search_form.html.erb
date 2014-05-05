@@ -1,0 +1,39 @@
+<div id="quick_search">
+  <div class="overlay_header">
+    <h2><%= @title %></h2>
+   </div>
+  <div class="overlay_content">
+    <%= form_tag("rolodex/display_search_results?type=quick_search", remote: true) do |f| %>
+      <h4>Search: <%= text_field_tag "search", @search_value || "",  class: "search" %><%= image_submit_tag("search.png", class: 'icon', id: "quick_search_submit") %></h4>
+    <% end %>
+    <div class="border">
+      <div class="grid_header">
+        <table>
+          <tr>
+            <td class="name">Name</td>
+            <td class="phone">Phone</td>
+            <td class="email">Email</td>
+            <td class="rolodex_address">Address</td>
+            <td class="city">City</td>
+            <td class="state" id="entity_lookup_last">State</td>
+          </tr>
+        </table>
+      </div>
+      <div class="results" id="entity_lookup_results">
+      </div>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <span class="button">
+      <% if @post %>
+        <input type="button" value="Save" class="close" onclick="$.post('<%= @post %>' + $('#quick_search .active_row').attr('id')); closeOverlay('entity_lookup')" />
+      <% end %>
+      <input type="button" value="Close" class="close" onclick="closeOverlay('entity_lookup')" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("#quick_search_submit").click();
+  openOverlay("entity_lookup");
+</script>

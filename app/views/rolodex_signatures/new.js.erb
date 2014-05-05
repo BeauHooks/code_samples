@@ -1,0 +1,10 @@
+<% if @doc_entity != nil %>
+	if($("#doc_entity_<%= @doc_entity.id %>_container").html() != undefined){
+		<% @doc_entity = FileDocEntity.find @doc_entity.id %>
+		$("#doc_entity_<%= @doc_entity.id %>_container").replaceWith("<%= j(render :partial => "docs/entity").html_safe %>");
+	}
+<% end %>
+
+if($("div#overlay_signature").html() != undefined){
+	$("div#overlay_signature").html("<%= j(render :partial => "rolodex_signatures/new").html_safe %>");
+}

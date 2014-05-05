@@ -1,0 +1,34 @@
+<% case @form %>
+<% when "new_file" %>
+  <% @contact = @entity %>
+  <% @position = 1 %>
+  $("#new_file_contacts").append("<%= j(render "index/partials/contact_row").html_safe %>");
+  updateIndexFormCurrent("contacts");
+<% when "overview_contacts" %>
+  addToQueue('add_file_entity', '/file_entities?DisplayFileID=<%= @file.DisplayFileID %>&entity_id=<%= @entity.EntityID %>&FileID=<%= @file.FileID %>&id=<%= @file.ID %>&position=1');
+<% when "disbursement" %>
+  addToQueue('add_payee', 'check_workings/add_payee?id=<%= @check.id %>&entity_id=<%= @entity.EntityID %>');
+<% when "doc" %>
+  <% position = @section == "grantor" ? "2" : "1" %>
+  addToQueue('add_file_entity', '/file_entities?DisplayFileID=<%= @file.DisplayFileID %>&entity_id=<%= @entity.EntityID %>&FileID=<%= @file.FileID %>&id=<%= @file.ID %>&position=<%= position %>');
+  addToQueue('create_doc_entity', 'docs/create_entity?file_id=<%= @file.ID %>&section=<%= @section %>&doc_id=<%= @doc_id %>&entity_id=<%= @entity.EntityID %>');
+<% when "file_product" %>
+  addToQueue('add_file_entity', '/file_entities?DisplayFileID=<%= @file.DisplayFileID %>&entity_id=<%= @entity.EntityID %>&FileID=<%= @file.FileID %>&id=<%= @file.ID %>&position=1');
+  $("#file_product_entity_results").html("<%= j(render "file_products/entity_results").html_safe %>");
+<% end %>
+
+<% if @commit == "Save" %>
+  <% if @page == "rolodex" %>
+    $("#rolodex #search_box").val("<%= @entity.FullName.html_safe %>");
+    $("#rolodex #search_button").click();
+    closeOverlay('new_rolodex');
+  <% elsif @form != nil %>
+    closeOverlay('new_rolodex');
+  <% else %>
+    document.location.href = "/rolodex?entity_id=<%= @entity.EntityID %>";
+  <% end %>
+<% elsif @commit == "Save and Copy" %>
+  addToQueue('add_affiliation_to_new_entity', 'rolodex/add_affiliation_to_new_entity/?affiliation=<%= @entity.EntityID %>&relationship=Spouse');
+  clearRolodexFormForNew();
+  $('#saving_new_contact').hide();
+<% end %>

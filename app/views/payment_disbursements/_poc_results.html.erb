@@ -1,0 +1,30 @@
+<% disabled = !@file.SentForFunding.blank?%>
+<% @file.poc_payments.each do |payment_disbursement| %>
+  <tr>
+    <% name = payment_disbursement.payee_name.to_s %>
+    <% if name.length > 30 %>
+      <td class="hint ">
+        <span>
+          <%= link_to image_tag("redx.png"), payment_disbursement_path(id: payment_disbursement, refresh_disbursements: true, view: :settlement_statement), method: :delete, onclick: "$(this).closest('tr').remove();", remote: true if !disabled %>
+          <%= name %>
+        </span>
+        <%= link_to image_tag("redx.png"), payment_disbursement_path(id: payment_disbursement, refresh_disbursements: true, view: :settlement_statement), method: :delete, onclick: "$(this).closest('tr').remove();", remote: true if !disabled %>
+        <%= truncate(name, :length => 30) %>
+      </td>
+    <% else %>
+      <td>
+        <%= link_to image_tag("redx.png"), payment_disbursement_path(id: payment_disbursement, refresh_disbursements: true, view: :settlement_statement), method: :delete, onclick: "$(this).closest('tr').remove();", remote: true if !disabled %>
+        <%= name %>
+      </td>
+    <% end %>
+    <td><%= number_to_currency(payment_disbursement.amount.to_f, unit: "$") %></td>
+    <% payment_line = payment_disbursement.line %>
+    <% description = "#{payment_line.number} | #{"#{payment_line.get("name")} " unless payment_line.get("name").blank?}#{payment_line.get("payee_name")}" %>
+    <% if description.length > 30 %>
+      <td class="hint"><span><%= description %></span><%= truncate(description, length: 30) %></td>
+    <% else %>
+      <td><%= description %></td>
+    <% end %>
+    <td><%= number_to_currency(payment_line.payment_amount, unit: "$") %></td>
+  </tr>
+<% end %>

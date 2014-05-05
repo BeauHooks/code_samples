@@ -1,0 +1,76 @@
+<div style="width: 100%;" id="file_product_wrapper">
+  <div style="height: 2em; margin-bottom: 0; padding: 3px 20px 5px;">
+    <%= form_for "search_form", url: file_products_show_options_path, method: "get", remote: true, html: {style: "display: inline;"} do %>
+      Company: <%= select :Company, :id, options_for_select(Company.collection), {include_blank: false}, {style: "width: 230px; margin-right: 1em", name: "Company", id: "Company", onchange: "getProducts(this);"} %>
+      File: <%= text_field_tag :DisplayFileID, "", style: "width: 75px;", onkeydown: "numbersOnly(this);", onchange: "getProducts(this);" %>
+      <%= submit_tag "Get" %>
+    <% end %>
+    <span id="file_product_options" style="margin-left: 1em;">
+      <%= render "options" %>
+    </span>
+  </div>
+  <hr style="margin: 0;">
+  <div id="file_product_nav" class="file_product_nav">
+    <%= render "nav" %>
+  </div>
+  <div id="file_product_content" class="file_product_content border_left">
+    <%= render "content" %>
+  </div>
+  <div id="file_product_hotkeys" class="file_product_hotkeys border_left">
+    <%= render "hotkeys" %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("select#Company").val($("#page_company_id").val());
+
+  function getProducts(sender){
+    var form = $(sender).closest('form');
+    if($(form).find('input[name=DisplayFileID]').eq(0).val() != ""){
+      $(form).submit();
+      $("#file_product_nav").html("");
+      $("#file_product_content").html("");
+      $("#file_product_hotkeys").html("");
+    }
+  }
+
+  function getFileProduct(file_id){
+    var id = $("#file_product_id").val();
+    if(id == ""){
+      if($("#product_type_id").find(":selected").eq(0).text() == "PR"){
+        $.post("/file_products?file_id=" + file_id + "&product_type_id=" + $("#product_type_id").val());
+      }
+      else{
+        alert("TO-DO:Finish writing actions for file products");
+      }
+    }
+    else{
+      $.get("file_products/" + id);
+    }
+  }
+
+  function selectFileProductSection(sender, id){
+    $("#file_product_nav").find('.active').removeClass('active');
+    $(sender).addClass("active");
+    $("#file_product_content").find('.container').hide();
+    $("#" + id).show();
+    $(".hotkey_section").hide();
+    var container = $("#" + id).find(".sb_container").eq(0);
+    $(container).find(".first").eq(0).focus();
+
+    switch(id)
+    {
+    case "policies_content":
+      $("#policies_hotkeys").show();
+      break;
+    case "requirements_content":
+      $("#requirements_hotkeys").show();
+      break;
+    case "exceptions_content":
+      $("#exceptions_hotkeys").show();
+      break;
+    default:
+      //do nothing
+    }
+  }
+</script>

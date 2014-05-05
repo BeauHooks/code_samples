@@ -1,0 +1,150 @@
+<% @reconveyance = ReconTracking.new if @reconveyance == "" || @reconveyance == nil %>
+
+<div id="add_recon">
+  <div class="overlay_header">
+    <h2>Track Reconveyance</h2>
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+      <span id="new_recon_spinner" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Saving...</span>
+    </div>
+  </div>
+  <%= form_tag @reconveyance, remote: true do %>
+	  <div class="overlay_content">
+			<table style="width: 100%;">
+				<tr>
+					<td style="vertical-align: top; width: 20em;">
+						<table class='no_border'>
+							<tr>
+								<td class="label" style="width: 6em;">Tax ID:</td>
+								<td><%= text_field_tag :TaxID, @reconveyance.TaxID %>  <%= text_field_tag :TaxID, "nothing" %></td>
+							</tr>
+							<tr>
+								<td class="label">County:</td>
+								<td><%= select_tag :TrustDeedEntryCounty, options_from_collection_for_select(County.find(:all, order: "CountyName"), "CountyID", "CountyName", @reconveyance.TrustDeedEntryCounty || @file.company.DefaultCounty), style: "width: 134px;" %></td>
+							</tr>
+							<tr>
+								<td class="label">Entry #:</td>
+								<td><%= text_field_tag :TrustDeedEntryNum, @reconveyance.TrustDeedEntryNum, style: "width: 130px;" %>
+									<!-- <input type="button" value="View" onclick="alert('View');" disabled="disabled" /> -->
+								</td>
+							</tr>
+							<tr>
+								<td class="label">Good Thru:</td>
+								<td>
+									<%= text_field_tag :PayoffGoodThruDate, (@reconveyance.PayoffGoodThruDate.strftime('%m/%d/%Y') if @reconveyance.PayoffGoodThruDate != nil), class: "datepicker", style: "width: 130px;" %>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td style="vertical-align: top; padding-left: 5px; width: 21em;">
+						<table class='no_border'>
+							<tr>
+								<td class="label" style="width: 6em;">Beneficiary:</td>
+								<td><%= text_field_tag :Beneficiary, @reconveyance.Beneficiary, style: "width: 150px;", onchange: "checkBeneficiary(this);" %></td>
+							</tr>
+							<tr>
+								<td class="label">Address 1:</td>
+								<td><%= text_field_tag :BeneAddress, @reconveyance.BeneAddress, style: "width: 150px;" %></td>
+							</tr>
+							<tr>
+								<td class="label">Address 2:</td>
+								<td><%= text_field_tag :BeneAddress2, @reconveyance.BeneAddress2, style: "width: 150px;" %></td>
+							</tr>
+							<tr>
+								<td class="label">CSZip:</td>
+								<td><%= text_field_tag :BeneCSZip, @reconveyance.BeneCSZip, style: "width: 150px;" %></td>
+							</tr>
+						</table>
+					</td>
+					<td style="vertical-align: top; padding-left: 5px; width: 15em;">
+						<table class='no_border'>
+							<tr>
+								<td colspan="2"><label><%= check_box_tag :TitleCoNotUs, @reconveyance.TitleCoNotUs == 0 ? -1 : 0, @reconveyance.TitleCoNotUs != 0, style: "margin-right: 5px;"  %>Paid by Other Title Co</label></td>
+							</tr>
+							<tr>
+								<td colspan="2"><label><%= check_box_tag :IsShortSale, @reconveyance.IsShortSale == 0 ? -1 : 0, @reconveyance.IsShortSale != 0, style: "margin-right: 5px;"  %>Short Sale</label></td>
+							</tr>
+							<tr>
+								<td colspan="2"><label><%= check_box_tag :IsFullRecon, @reconveyance.IsFullRecon == 0 ? -1 : 0, @reconveyance.IsFullRecon != 0, style: "margin-right: 5px;"  %>Is Full Recon</label></td>
+							</tr>
+						</table>
+					</td>
+					<td style="vertical-align: top; padding-left: 5px; width: 15em;">
+						<h4 style="margin-bottom: 0px;">File Properties</h4>
+						<div style="height: 65px; overflow-y: auto;" class="box">
+							<table>
+								<% properties = @file.file_properties %>
+								<% if properties.size == 0 %>
+									<tr>
+										<td style="font-style: italic; color: #9B9B9B;">No Properties</td>
+									</tr>
+								<% end %>
+								<% properties.each do |property| %>
+									<tr class="trigger" onclick="fillTaxID('<%= property.TaxID.to_s.html_safe %>');">
+										<% tax_id = property.TaxID.to_s %>
+										<% if tax_id.length > 25 %>
+											<td style="width: 10em;" class="hint"><span><%= tax_id %></span><%= truncate(tax_id, length: 25) %></td>
+										<% else %>
+											<td style="width: 10em;"><%= tax_id %></td>
+										<% end %>
+									</tr>
+								<% end %>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<%= hidden_field_tag :FileID, @file.FileID %>
+		</div>
+		<div class="overlay_footer">
+			<span style="float: right;">
+		    <input type="submit" value="Save" name="commit" onclick="$('#new_recon_spinner').show();" />
+		    <input type="submit" value="Save and Copy" name="commit" onclick="$('#new_recon_spinner').show();" />
+		    <input type="button" value="Close" onclick="closeOverlay('recon_tracking');" />
+		  </span>
+	  </div>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	function fillTaxID(value){
+		$("#add_recon input[type=text]#TaxID").val(value);
+	}
+
+	var tax_ids = [
+    <% @file.file_properties.each do |p| %>
+      "<%= p.TaxID %>",
+    <% end %>
+  ];
+
+  $( "#add_recon input[type=text]#TaxID" ).autocomplete({
+    source: tax_ids
+  });
+
+  <% hash, choices = @file.gather_file_entities %>
+
+  var hash = {};
+  <% hash.each do |key, value| %>
+    hash["<%= key.html_safe %>"] = "<%= value.to_s.html_safe %>";
+  <% end %>
+
+  var file_entities = [
+    <%= choices.html_safe %>
+  ];
+
+  $( "#add_recon input[type=text]#Beneficiary" ).autocomplete({
+    source: file_entities,
+  });
+
+  function checkBeneficiary(object){
+  	if(hash[object.value] != undefined){
+  		addToQueue('get_beneficiary_info', 'recon_trackings/get_beneficiary_info?entity_id=' + hash[object.value]);
+    }
+  }
+
+	$( ".datepicker").datepicker({
+    changeMonth: true,
+    changeYear: true
+  });
+
+  openOverlay("recon_tracking");
+</script>

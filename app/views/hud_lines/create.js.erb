@@ -1,0 +1,82 @@
+<% if @action == "add" %>
+  <% if @line.number < 700 %>
+      $("tbody#hud_section_<%= @section %>").append("<%= j(render "huds/partials/half-line", builder: @line ).html_safe %>");
+      $("tbody#hud_section_<%= @section %> #name").focus();
+    <% elsif @line.number > 2000 && @line.number < 3000 %>
+      $("tbody#hud_section_<%= @section %>").append("<tr id='hud_row_<%= @line.number %>' class='<%= @line.type != nil ? @line.type.gsub('_custom', '') : 'm_none' %>'><%= j(render 'huds/partials/comparison-line', builder:  @line) %><td class='spacer'></td><%= j(render 'huds/partials/comparison-amounts', builder:  @line) %></tr>");
+    <% else %>
+      $("tbody#hud_section_<%= @section %>").append("<tr class='<%= @line.type.gsub('_custom', '') rescue ""  %>' id='hud_row_<%= @line.number %>'><%= j(render "huds/partials/full-line", builder: @line ).html_safe %></tr>");
+      $("tbody#hud_section_<%= @section %> #name").focus();
+      <% if @gfe_line %>
+        $("tbody#hud_section_2100").append("<tr id='hud_row_<%= @gfe_line.number %>' class='<%= @gfe_line.type != nil ? @gfe_line.type.gsub('_custom', '') : 'm_none' %>'><%= j(render 'huds/partials/comparison-line', builder:  @gfe_line) %><td class='spacer'></td><%= j(render 'huds/partials/comparison-amounts', builder:  @gfe_line) %></tr>");
+      <% end %>
+    <% end %>
+<% elsif @line_action == "insert_above" || @line_action == "insert_below" %>
+  $("#hud_section_<%= @line.number.to_s[0] %>000").html("<% @update_lines.each do |l| %><tr id='hud_row_<%= l.number %>' class='<%= l.type %>'><%= j(render "huds/partials/full-line", builder: l ).html_safe %></tr><% end %>");
+<% elsif @line_action.nil? %>
+  <% if @line.number < 700 %>
+    $("tr#hud_row_<%= @line.number %>").replaceWith("<%= j(render "huds/partials/half-line", builder: @line ).html_safe %>");
+    $("tr#hud_row_<%= @line.number %> #name").focus();
+  <% elsif @line.number >= 3000 %>
+    <% if @line.type.start_with?("ss_proration") %>
+      $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+      $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+      <% @line = @hud.hud_lines.where(:number => @line.number - 1).first %>
+      $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+      $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+    <% elsif @line.group == "ss_commission" && @line.type == "ss_commission_total_custom" && @ss_group == true %>
+      $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+      $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+      <% @line = @hud.hud_lines.where(:number => @line.number - 1).first %>
+      $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+      $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+      <% @line = @hud.hud_lines.where(:number => @line.number - 1).first %>
+      $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+      $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+      <% @line = @hud.hud_lines.where(:number => @line.number - 1).first %>
+      $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+      $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+    <% else %>
+      $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type %>");
+      $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+      <% if @line.type == "ss_commission_total_custom" %>
+        <% @line = @hud.hud_lines.where(:number => @line.number - 1).first %>
+        $.ajaxq("hud_lines",{
+          url: "/huds/<%= @hud.id %>/hud_lines/<%= @line.id %>",
+          type: "put"
+        });
+      <% else %>
+        // $.ajaxq("hud_lines",{
+        //   url: "/huds/<%= @hud.id %>/hud_lines/<%= @line.id %>",
+        //   type: "put"
+        // });
+      <% end %>
+    <% end %>
+  <% elsif @line.number > 1400 && @line.number < 3000 %>
+    $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+    $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/comparison-line", builder: @line ).html_safe %>");
+    $("tr#hud_row_<%= @line.number %> #name").focus();
+  <% else %>
+    $("tr#hud_row_<%= @line.number %>").attr("class", "<%= @line.type.gsub('_custom', '') %>");
+    $("tr#hud_row_<%= @line.number %>").html("<%= j(render "huds/partials/full-line", builder: @line ).html_safe %>");
+    $("tr#hud_row_<%= @line.number %> #name").focus();
+  <% end %>
+<% end %>
+$.ajaxq("hud_lines",{
+  url: "/huds/<%= @hud.id %>/hud_lines/<%= @line.id %>",
+  type: "PUT",
+  success: function() {
+    $("tr#hud_row_<%= @line.number %> input:first").focus();
+  }
+});
+
+<% @section != nil ? number = @section.to_i : number = @line.number.to_s[0...-2].to_i * 100 %>
+<% total_lines = @hud.hud_lines.where("number >= #{number} AND number <= #{number + 20}").count %>
+<% if total_lines > 20 %>
+  $("div#hud_tools_<%= number %>").hide();
+<% end %>
+
+$( "#hud input[name='payee_name']" ).autocomplete({
+  source: file_entities,
+});
+initializer();

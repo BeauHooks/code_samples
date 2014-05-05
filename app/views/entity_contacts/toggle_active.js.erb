@@ -1,0 +1,7 @@
+<% if @entity_contact.ContactType.downcase == "contact" %>
+  $("#entity_contact_results").html("<%= j(render 'entity_contacts/partials/contact_results').html_safe %>");
+<% else %>
+  $("#entity_address_results").html("<%= j(render 'entity_contacts/partials/address_results').html_safe %>");
+<% end %>
+
+bindRowUpdater()

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <title>Filetrak - <%= page_name %></title>
+    <%= user_styles.html_safe %>
+    <%= stylesheet_link_tag "/assets/themes/#{current_user.users_preferences[:theme]}" %>
+    <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag "base/#{params[:controller]}" %>
+    <%= javascript_include_tag "application", "overlays" %>
+    <%= javascript_include_tag "#{params[:controller]}" %>
+    <%= yield :head %>
+    <%= csrf_meta_tag %>
+    <link href='http://fonts.googleapis.com/css?family=Cabin:400,600' rel='stylesheet' type='text/css'>
+    <script type="text/javascript">
+        var tags = {<%= doc_tags() %>};
+    </script>
+  </head>
+  <body>
+    <div id="wrapper" class="wrapper">
+      <!-- Company Select, Navigation, ect. -->
+      <%= render "layouts/partials/header" %>
+
+      <div id="content" class="content">
+        <%= yield %>
+      </div>
+    </div>
+
+    <!-- Overlay Div -->
+    <div id="overlay_list"></div>
+
+    <!-- Task Bar -->
+    <%= render "layouts/partials/task_bar" %>
+
+    <!-- Still needed overlay partials -->
+    <div class="overlay hide" id="overlay_flash_notice"></div>
+    <div class="overlay hide" id="overlay_process_file_images"></div>
+    <div id="print_box"></div>
+    <div class="overlay hide" id="overlay_create_receipt"></div>
+  </body>
+</html>

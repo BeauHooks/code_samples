@@ -1,0 +1,57 @@
+<% @lines.each do |line| %>
+	<% if line.number <= 2299 %>
+    $("tr#hud_row_<%= line.number %>").attr("class", "<%= line.type.gsub('_custom', '') %>");
+    $("tr#hud_row_<%= line.number %>").html("<%= j(render "huds/partials/full-line", builder: line ).html_safe %>");
+	<% else %>
+    $("tr#hud_row_<%= line.number %>").attr("class", "<%= line.type.gsub('_custom', '') %>");
+    $("tr#hud_row_<%= line.number %>").html("<%= j(render "huds/partials/full-line", builder: line ).html_safe %>");
+	<% end %>
+<% end %>
+
+<% if @lines.count > 0 && @lines[0].number < 3000 %>
+  <% @hud.hud_lines.where(:number => 303).first.borrower_amount.to_s.start_with?("-") ? check_borrower = false : check_borrower = true %>
+  <% @hud.hud_lines.where(:number => 603).first.seller_amount.to_s.start_with?("-") ? check_seller = true : check_seller = false %>
+
+  $("#2106_hud_amount").val("<%= number_with_precision(@hud.hud_lines.where(:number => 2106).first.hud_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#2107_hud_amount").val("<%= number_with_precision(@hud.hud_lines.where(:number => 2107).first.hud_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#2100_hud_amount").val("<%= number_with_precision(@hud.hud_lines.where(:number => 2100).first.hud_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  
+  $("#line_1400_buyer").val("<%= number_with_precision(@hud.hud_lines.where(:number => 1400).first.borrower_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_1400_seller").val("<%= number_with_precision(@hud.hud_lines.where(:number => 1400).first.seller_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_103").val("<%= number_with_precision(@hud.hud_lines.where(:number => 1400).first.borrower_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_120").val("<%= number_with_precision(@hud.hud_lines.where(:number => 120).first.borrower_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_301").val("<%= number_with_precision(@hud.hud_lines.where(:number => 301).first.borrower_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_303").val("<%= number_with_precision(@hud.hud_lines.where(:number => 303).first.borrower_amount.abs, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_502").val("<%= number_with_precision(@hud.hud_lines.where(:number => 1400).first.seller_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_520").val("<%= number_with_precision(@hud.hud_lines.where(:number => 520).first.seller_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_602").val("<%= number_with_precision(@hud.hud_lines.where(:number => 602).first.seller_amount, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#line_603").val("<%= number_with_precision(@hud.hud_lines.where(:number => 603).first.seller_amount.abs, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#check_from_borrower").prop("checked", <%= check_borrower %>);
+  $("#check_to_borrower").prop("checked", <%= !check_borrower %>);
+  $("#check_from_seller").prop("checked", <%= check_seller %>);
+  $("#check_to_seller").prop("checked", <%= !check_seller %>);
+
+	$("#hud_total").val("<%= number_with_precision(@hud.hud_total, precision: 2, separator: ".", delimiter: ",") %>");
+  $("#overall_total").val("<%= number_with_precision(@hud.hud_total-@hud.gfe_total, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#overall_percentage").val("<%= number_with_precision(100*(@hud.hud_total-@hud.gfe_total)/@hud.gfe_total, precision: 4, separator: '.', delimiter: ',') %>%");
+<% elsif @lines.count > 0 && @lines[0].number > 3000 && @lines.number < 5000 %>
+	$("#line_3096_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 3096).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_3096_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 3096).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_3097_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 3097).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_3097_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 3097).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_3099_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 3099).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_3099_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 3099).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_4096_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 4096).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_4096_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 4096).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_4097_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 4097).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_4097_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 4097).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_4099_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 4099).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_4099_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 4099).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+<% elsif @lines.count > 0 && @lines[0].number > 5000 %>
+	$("#line_5013_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 5013).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_5096_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 5096).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_5096_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 5096).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_5099_charges").val("<%= number_with_precision(@hud.hud_lines.where(:number => 5099).first.charges, precision: 2, separator: '.', delimiter: ',') %>");
+  $("#line_5099_credits").val("<%= number_with_precision(@hud.hud_lines.where(:number => 5099).first.credits, precision: 2, separator: '.', delimiter: ',') %>");
+<% end %>
+initializer();

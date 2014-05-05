@@ -1,0 +1,5 @@
+<%= form_for @preference, url:  edit_admin_site_preference_path(id: @preference), method: :get, remote: true do |f| %>
+  <div class="clear"><%= f.text_field :name %><br /><span class="form_label">Name</span></div>
+  <div><%= f.select :category, options_for_select([["Navigation", "navigation"], ["Style",  "style"]], @preference.category) %><br /><span class="form_label">Category</span></div>
+  <div><%= f.text_area :question %><br /><span class="form_label">Question</span></div>
+<% end %>

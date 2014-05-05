@@ -1,0 +1,192 @@
+<div id="process_file_images">
+  <div class="overlay_header">
+    <h2>Send Images</h2>
+  </div>
+  <div class="overlay_content class w800" style="width: 800px;">
+    <% images = "" %>
+    <% count = 0 %>
+    <% @list.each do |l| %>
+      <% count += 1 %>
+      <% if count == @list.size %>
+        <% images += "list[]=#{l['id']}" %>
+      <% else %>
+        <% images += "list[]=#{l['id']}&" %>
+      <% end %>
+    <% end %>
+    <%= form_tag "file_images/send_images?file_id=#{@file.FileID}&#{images}", id: "send_image_form", remote: true do %>
+    <div class="box">
+      <div class="grid_header">
+        <table>
+          <tr>
+            <td class="padding_left_5 w95">Image</td>
+            <td class="w95">Note</td>
+            <td class="w95">Created By</td>
+            <td class="w95" id="send_images_last">Create Date</td>
+          </tr>
+        </table>
+      </div>
+      <div class="results" id="send_files">
+        <table>
+          <% @c = 0 %>
+          <% @list.each do |image| %>
+            <% @c += 1 %>
+            <tr>
+              <td class="type padding_left_5 w95"><%= image["type"] %></td>
+
+              <% note = image["note"].to_s %>
+              <% if note.length > 15 %>
+                <td class="hint w95"><span><%= note %></span><%= truncate(note, length: 15) %></td>
+              <% else %>
+                <td class="w95"><%= note %></td>
+              <% end %>
+
+              <% create_user = image["create_user"].to_s %>
+              <% if create_user.length > 15 %>
+                <td class="w95 hint"><span><%= create_user %></span><%= truncate(create_user, length: 15) %></td>
+              <% else %>
+                <td class="w95"><%= create_user %></td>
+              <% end %>
+
+              <td class="w95"><%= image["create_date"] %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+    <table class="margin_top_5 w100p">
+      <!-- <tr>
+        <td class="label" style="width: 90px;">Search Recipients:</td>
+        <td>
+          <form method="post" action="file_images/search_entities" data-remote="true">
+            <%#= text_field_tag :search_value, "", style: "width: 150px;", placeholder: "Recipient Name or Email" %>
+            <%#= image_tag "search.png", class: "icon trigger", onclick: "$(this).closest('form').submit();" %>
+            <%#= image_tag "plus.png", class: "icon trigger", onclick: "alert('add' );" %>
+          </form>
+        </td>
+      </tr>
+      <tr> -->
+<!--         <td colspan="2" style="padding-top: 5px;">
+          <div class="box" style="float: left; margin-right: 10px; width: 48%;">
+            <div class="grid_header">
+              <table>
+                <tr>
+                  <td class="action" style="width: 50px;">Action</td>
+                  <td class="name" style="padding-left: 1px; width: 108px;">Name</td>
+                  <td class="email" style="width: 200px;" id="image_entity_search_results_last">Email</td>
+                </tr>
+              </table>
+            </div>
+            <div class="results" id="image_entity_search_results"> -->
+              <!-- Only show entities on the file -->
+              <%#= render "file_images/entity_search_results", entities: @entities %>
+            <!-- </div>
+          </div>
+
+          <div class="box" style="float: right; width: 48%;">
+            <div class="grid_header">
+              <table>
+                <tr>
+                  <td class="action" style="width: 60px;">Action</td>
+                  <td class="name" style="padding-left: 3px; width: 102px;">Name</td>
+                  <td class="email" id="image_entity_search_results_last" style="width: 200px;">Email</td>
+                </tr>
+              </table>
+            </div>
+            <div class="results" id="recipient_list">
+              <table>
+
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr> -->
+    <h4 class="underline">Select contacts to receive images:</h4>
+    <table id="send_confirmation_list" class="float_left">
+      <% @file.file_entities.each do |e| %>
+        <tr>
+          <% entity = e.entity %>
+          <% next if entity.nil? %>
+          <% name = entity.FullName rescue "" %>
+          <% if name.length > 20 %>
+            <td class="padding_right_5 top hint">
+              <label>
+                <span><%= check_box_tag "entity[send]", entity.EntityID, false, class: "margin_right_5 hint_box", onchange: "$(this).closest('label').find('.main_box').attr('checked', $(this).attr('checked') == 'checked'); " %><%= name %></span>
+                <%= check_box_tag "entity[send]", entity.EntityID, false, class: "margin_right_5 float_left main_box" %>
+                <div class="float_left w130"><%= truncate(name, length: 20) %></div>
+              </label>
+            </td>
+          <% else %>
+            <td class="padding_right_5 top">
+              <label><%= check_box_tag "entity[send]", entity.EntityID, false, class: "margin_right_5 float_left main_box" %>
+              <div class="float_left w125"><%= name %></div></label>
+            </td>
+          <% end %>
+          <td class="top"><%= text_field_tag "entity[email_address]", entity.Email, class: "w175" %></td>
+        </tr>
+      <% end %>
+    </table>
+    <table class="float_right">
+      <tr>
+        <td class="label">Subject:</td>
+        <td><%= text_field_tag :subject, nil, class: "w100" %></td>
+      </tr>
+      <tr>
+        <td class="label top">Personal Message:</td>
+        <td><%= text_area_tag :message, "", placeholder: "Write a custom message here.", style: "width: 303px; height: 35px; resize: vertical;" %></td>
+      </tr>
+    </table>
+    <div class="clear_fix"></div>
+    <% end %>
+  </div>
+  <div class="overlay_footer">
+    <span class="float_right">
+      <input type="button" value="Send" onclick="if(validateSendImage() == true){ $('#send_image_form').submit(); closeOverlay('send_images');}" />
+      <input type="button" value="Cancel" onclick="closeOverlay('send_images')" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+$("#subject").val("Secure file download from <%= @file.company.CompanyName %> ");
+$("#message").val("Thank you for the opportunity to be of service!\n<%= @file.company.DirName %> #<%= @file.DisplayFileID %>");
+
+  <%# OPTIMIZE: Easier way to inject js? %>
+  <% if @c > 4 %>
+      addWidth('send_images', 95);
+  <% else %>
+      fixWidth('send_images', 95);
+  <% end %>
+
+  openOverlay("send_images");
+
+  function validateSendImage(){
+    fail = false;
+
+    if($('#send_confirmation_list').find('.main_box:checked').length == 0 && $("#print_copy").attr('checked') != 'checked' ){
+      addToQueue('resend_error', 'application/flash_notice?title=Send Failure&notice=One or more contacts must be selected to send images.');
+      return false;
+    }
+    else{
+      var list = "";
+      var action = $("#send_image_form").attr('action');
+      $('#send_confirmation_list').find('.main_box:checked').each(function(){
+        email = $.trim( $(this).closest('tr').find('input[type=text]').eq(0).val() );
+        if(email != ""){
+          list += "&entity[" + $(this).val() + "]=" + email;
+        }
+        else{
+          addToQueue('resend_error', 'application/flash_notice?title=Send Failure&notice=All selected individuals must have an email address.');
+          fail = true;
+          return false;
+        }
+      });
+
+      if(fail){
+        return false;
+      }
+
+      $("#send_image_form").attr('action', action + list);
+      return true;
+    }
+  }
+</script>

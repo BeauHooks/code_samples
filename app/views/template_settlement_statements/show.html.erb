@@ -1,0 +1,16 @@
+<% @ss = SettlementStatement.find(params[:id]) %>
+<% @doc = Doc.find_by_settlement_statement_id(@ss) %>
+<% @file = @ss.index %>
+<div style="width: 632px; padding: 2px 20px; margin: 20px auto 0; position: relative" class="box">
+  <%= link_to "Get Payments", payments_overlay_path(id: @file.ID) , remote: true %>
+</div>
+<div id="doc_theme_light">
+  <div id="docs" style="height: 869px; overflow-y: auto; overflow-x: hidden; width: 632px; padding: 25px 20px; margin: 0 auto 20px; position: relative" class="box">
+    <div id="fileid" class="hidden" data-fileid="<%= @file.ID %>"></div>
+    <%= get_settlement_statement(@ss.ss_type).html_safe %>
+</div>
+<div class="clear" style="margin-bottom: 20px;"></div>
+
+<script type="text/javascript">
+  set_disbursement_autocomplete();
+</script>

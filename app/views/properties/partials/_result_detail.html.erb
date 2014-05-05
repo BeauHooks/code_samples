@@ -1,0 +1,32 @@
+<div id="loading_cover" class="loading_cover hide"><p>Loading</p></div>
+<div class="detail_number margin_all_5">
+  <h2>Tax ID #<span><%= @detail.serialnum.html_safe %></span></h2>
+</div>
+<div class="clear_fix" />
+<div>
+  <div class="w32p float_left margin_sides_10 box">
+    <%= render "properties/partials/property_information" %>
+  </div>
+  <div class="w32p float_left margin_right_10 box">
+    <%= render "properties/partials/mailing_information" %>
+  </div>
+  <div class="w32p float_left box margin_right_10">
+    <%= render "properties/partials/legal" %>
+  </div>
+  <div class="clear_fix" />
+</div>
+<div class="clear_fix">
+  <div class="w32p float_left box margin_sides_10">
+    <%= render "properties/partials/improvement" %>
+  </div>
+  <div class="w32p float_left margin_right_10 box">
+    <%= render "properties/partials/tax_information" %>
+  </div>
+  <div class="clear_fix" />
+</div>
+<div>
+  <div id="plat" class="w100p box margin_sides_10">
+    <%= render "properties/partials/plat" %>
+  </div>
+  <div class="clear_fix" />
+</div>

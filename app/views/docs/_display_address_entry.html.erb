@@ -1,0 +1,27 @@
+<% change = "checkSelectedAddress();" %>
+<table>
+  <tr>
+    <td class="label" style="width: 95px;">Address 1:</td>
+    <td colspan="3"><%= text_field_tag :address_1, @address[0], style: "width: 200px", onchange: change %></td>
+  </tr>
+  <tr>
+    <td class="label">Address 2:</td>
+    <td colspan="3"><%= text_field_tag :address_2, @address[1], style: "width: 200px", onchange: change %></td>
+  </tr>
+  <tr>
+    <td class="label" style="padding-right: 5px;">City:</td>
+    <td><%= text_field_tag :city, @address[2], style: "width: 200px", onchange: change %></td>
+  </tr>
+  <tr>
+    <td class="label" style="padding-right: 5px;">State:</td>
+    <td><%= text_field_tag :state, @address[3], style: "width: 200px", onchange: change %></td>
+  </tr>
+  <tr>
+    <td class="label" style="padding-right: 5px;">Zip:</td>
+    <td><%= text_field_tag :zip, @address[4], style: "width: 200px;", onchange: change %></td>
+  </tr>
+  <tr>
+    <td class="label">County:</td>
+    <td colspan="3"><%= text_field_tag :county, @address[5] , style: "width: 200px", onchange: change %></td>
+  </tr>
+</table>

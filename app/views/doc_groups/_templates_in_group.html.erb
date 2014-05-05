@@ -1,0 +1,15 @@
+<% templates = @group.doc_group_templates.find(:all,  include: [:doc_template], order: ["doc_templates.short_name ASC"]) %>
+<% if templates.count == 0 %>
+  <tr>
+    <td class="name">This group is empty.</td>
+  </tr>
+<% end %>
+
+<% templates.each do |i| %>
+    <tr>
+      <td class="name <%= "hint" if i.doc_template.description.length > 25 %>"><span><%= i.doc_template.description if i.doc_template.description.length > 25 %></span><a href="doc_templates/<%= i.doc_template.id %>" style="display: none" data-remote="true"></a><%= truncate(i.doc_template.description, length: 25) %></td>
+      <td class="version"><%= i.doc_template.current_version %></td>
+      <td class="state"><%= i.doc_template.state %></td>
+      <td class="actions"><%= button_to "Remove", update_group_doc_group_path(id: @group.id, record: i.id, update: "destroy"), remote: true %></td>
+    </tr>
+<% end %>

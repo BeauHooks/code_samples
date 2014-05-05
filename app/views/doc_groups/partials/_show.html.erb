@@ -1,0 +1,34 @@
+<% content_for :overlay_title do %>
+  Manage Document Groups
+<% end %>
+<% content_for :overlay do %>
+  <form action="doc_groups/display_search_results" method="get" data-remote="true">
+	<h4 style="margin-bottom: 5px;" class="label">Search:
+    <%= text_field_tag :search, "", style: "width: 150px" %> <span style="margin-left: 10px;">Filter:
+    <%= select :doc_groups, :state, options_for_select([["All", "All"],["Arizona", "Arizona"], ["Nevada", "Nevada"], ["Utah", "Utah"]]), {:include_blank => false}, {style: "width: 150px;", name: "state", onchange: "$('#search_groups').click();"} %></span>
+    <%= image_tag "search.png", class: "icon trigger", onclick: "$(this).parents('form:first').submit()", id: "search_groups" %>
+    <%= link_to image_tag("plus.png", class: "icon"), new_doc_group_overlays_path, remote: true %></h4>
+  </form>
+  <div class="result_container box">
+    <div class="grid_header"></div>
+    <div class="results">
+      <table style="width: 100%;">
+        <thead class="grid_header_font">
+          <tr>
+            <th class="name"><div>Description</div></th>
+            <th class="state"><div>State</div></th>
+            <th class="modify_date"><div>Modified Date</div></th>
+            <th class="modify_user"><div>Modified By</div></th>
+          </tr>
+        </thead>
+        <tbody class="highlight" id="doc_group_results">
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p style="margin-top: 5px;">* Click on a row to manage the individual group.</p>
+
+  <script type="text/javascript">
+    $("#search_groups").click();
+  </script>
+<% end %>

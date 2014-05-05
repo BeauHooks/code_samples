@@ -1,0 +1,39 @@
+<% @properties.to_a.each do |p| %>
+  <tr>
+    <td class="add_link padding_left_5">
+      <% if @file != nil %>
+        <% if @file_properties.include?(p.serialnum) %>
+          <%= button_to "Added", index_file_properties_path(index_id: @file.ID, property_id: p.ID), remote: true, method: :post, disabled: :disabled, id: "property_result_#{p.serialnum}", onclick: "$(this).val('Added'); $(this).prop('disabled', true);" %>
+        <% else %>
+          <%= button_to "Add", index_file_properties_path(index_id: @file.ID, property_id: p.ID), remote: true, method: :post, id: "property_result_#{p.serialnum}", onclick: "$(this).val('Added'); $(this).prop('disabled', true);" %>
+        <% end %>
+      <% else %>
+        <%= button_to "Add", index_add_property_to_new_file_path(property_id: p.ID), remote: true %>
+      <% end %>
+    </td>
+
+    <td class="tax_id">
+      <%= hint_truncate(p.OwnerName.to_s, 15) %>
+    </td>
+
+    <td class="tax_id">
+      <%= hint_truncate(p.Address1.to_s, 15) %>
+    </td>
+
+    <td class="tax_id">
+      <%= p.serialnum %>
+    </td>
+
+    <td class="account">
+      <%= p.accountnum %>
+    </td>
+
+    <td class="address">
+      <%= hint_truncate(p.SitusAddress.to_s, 15) %>
+    </td>
+
+    <td class="legal">
+      <%= hint_truncate(p.taxroll2.FullLegal, 35) %>
+    </td>
+  </tr>
+<% end %>

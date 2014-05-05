@@ -1,0 +1,163 @@
+<div id="process_file_images" style="width: 470px;">
+  <div class="overlay_header">
+    <h2>
+      Process File Images - File #<%= @file.DisplayFileID %>
+      <font style="float:right; font-size:12px; padding-top:6px; padding-right:10px; color:green; display:none;" id="success">
+        Sent for processing successfully...
+      </font>
+      <font style="float:right; font-size:12px; padding-top:6px; padding-right:10px; color:red; display:none;" id="failed">
+        Failed to process attachment...
+      </font>
+    </h2>
+  </div>
+
+  <div class="overlay_content">
+    <div class="border">
+      <table class="grid_header" style="width: 100%;">
+        <tr>
+          <td style="width:300px; padding-left: 5px;">File Name</td>
+          <td style="width:125px;" id="process_images_last">Upload Date</td>
+        </tr>
+      </table>
+      <div class="results">
+        <table id="process_image_list" style="width: 100%;">
+          <% files = Dir["tmp/index_dnd/#{current_user.employee_id}/#{@file.Company}/#{@file.DisplayFileID}/*"].sort_by{ |f| File.mtime(f) }.reverse %>
+          <% c = 0 %>
+          <% for file in files %>
+            <% c += 1 %>
+            <tr class="noSelect trigger">
+              <td style="width:300px; padding-left: 5px;"><%= file.split("/").last %></td>
+              <td style="width:125px;"><%= File.mtime(file).strftime("%m/%d/%Y %l:%M") %></td>
+            </tr>
+          <% end %>
+        </table>
+        <%# OPTIMIZE: Easier way to inject js? %>
+        <% if c > 4 %>
+          <script type="text/javascript">
+            addWidth('process_images', 125);
+          </script>
+        <% else %>
+          <script type="text/javascript">
+            fixWidth('process_images', 125);
+          </script>
+        <% end %>
+      </div>
+    </div>
+    <br />
+
+    <%= form_tag :file_image_upload, remote: true do %>
+      <table style="width:100%;">
+        <tr>
+          <td class="col1"><%= label_tag "File:" %></td>
+          <td><%= text_field_tag :file, nil, id: "filename", readonly: true, style: "width: 320px;" %></td>
+        </tr>
+        <tr>
+          <td><%= label_tag "Type:" %></td>
+          <td><%= select_tag :image_type, options_from_collection_for_select(@filebin, "Description", "Description"), include_blank: true, style: "width: 326px;" %>
+          <span id="no_type" style="color:red; display:none;">No Type Selected!</span></td>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align:top;"><%= label_tag "Notes:" %></td>
+          <td><%= text_area_tag :image_notes, nil, rows: 3, style: "width: 320px;" %></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="vertical-align: middle; padding-top: 10px">
+            <span style="float: right"><%= submit_tag "Process", id: "save_form", onclick: "setTimeout($('#reload_images').click(), 1000);" %>
+            <%= button_tag "Delete!", type: "button", onclick: "$.post('file_images/remove_temp?file_id=#{@file.ID}&file=' + $('#process_image_list tr.active_row').children('td:first').html());", style: "margin-right:87px;" %></span>
+            <%= hidden_field_tag :file_id, @file.ID, id: "file_id", style: "display:none;" %></td>
+        </tr>
+      </table>
+    <% end %>
+
+  </div>
+  <div class="overlay_footer">
+    <input type="button" value="Close" class="button close" onclick="$('#reload_images').click(); closeOverlay('process_file_images');" />
+    <%= link_to "Reload File Images", "file_images/reload_file_images?file_id=#{@file.ID}", remote: true, id: "reload_images", style: "display:none;" %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  <% if @pre_hud == "true" %>
+    $("#image_type").val("HUD - Preliminary");
+  <% end %>
+
+  <% if files.size == 0 %>
+    $("#save_form").attr("disabled", "disabled");
+  <% end %>
+  <% if files.size > 5 %>
+    $("#right_header").attr("style", "width:100px; padding-right:25px;");
+  <% else %>
+    $("#right_header").attr("style", "width:100px; padding-right:13px;");
+  <% end %>
+
+
+  $("table#process_image_list tr:first").addClass("active_row");
+  $("#filename").val($("table#process_image_list tr:first").find("td:first").text());
+  $("input#display_file_id").val($("#filename").val().split("_")[1])
+
+  $("table#process_image_list tr").click(function(){
+    $("#process_file_images tr").removeClass("active_row");
+    $(this).addClass("active_row");
+    $("#filename").val($(this).find("td:first").text());
+    $("input#display_file_id").val($("#filename").val().split("_")[1])
+  });
+
+  $("table#process_image_list tr").dblclick(function(){
+    var iframe;
+    var hiddenIFrameID = 'hiddenDownloader';
+    iframe = document.getElementById(hiddenIFrameID);
+    if (iframe === null) {
+      iframe = document.createElement('iframe');
+      iframe.id = hiddenIFrameID;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    iframe.src = "/file_images/request_file?file=" + $(this).find("td:first").text();
+  });
+
+  $(function(){
+    $.extend($.fn.disableTextSelect = function() {
+        return this.each(function(){
+            if($.browser.mozilla){//Firefox
+                $(this).css('MozUserSelect','none');
+            }else if($.browser.msie){//IE
+                $(this).bind('selectstart',function(){return false;});
+            }else{//Opera, etc.
+                $(this).mousedown(function(){return false;});
+            }
+        });
+    });
+    $('.noSelect').disableTextSelect();//No text selection on elements with a class of 'noSelect'
+  });
+
+  $(function() {
+    $('form').each(function() {
+      var $that = $(this);
+      $(this).submit(function(){
+        var submitButton = $that.find("input[type='submit']");
+        btnText = $(submitButton).attr("value");
+        $(submitButton).attr("value", "Please Wait...");
+        $(submitButton).attr("disabled", "true");
+
+        jQuery.ajax({
+          data: $(this).serialize(),
+          url: $(this).attr("action"),
+          type: "post",
+          timeout: 3000,
+          error: function() {
+            $that.find("input[type='submit']").attr("value", "Failed to Submit");
+            $that.find("input[type='submit']").removeAttr('disabled');
+          },
+          success: function(r) {
+            $that.find("input[type='submit']").attr("value", btnText);
+            $that.find("input[type='submit']").removeAttr('disabled');
+          },
+        })
+        return false;
+      })
+    });
+  })
+
+  openOverlay("process_file_images");
+</script>

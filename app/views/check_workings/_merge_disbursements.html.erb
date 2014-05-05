@@ -1,0 +1,73 @@
+<div id="merge_disbursement" style="width: 400px;">
+	<div class="overlay_header">
+	  <h2>Merge Disbursements</h2>
+	</div>
+  <%= form_tag "check_workings/merge?file_id=#{@file.FileID}", id: "merge_disbursements", onsubmit: "closeOverlay('merge_disbursement');", remote: true do %>
+  	<div class="overlay_content">
+      <p><span class="label" style="padding-right: 5px;">Primary Disbursement:</span>
+      <% options = CheckWorking.find(:all, conditions: ["file_id = #{@file.FileID}"], :order => "payee_1 ASC").collect{|c| ["#{c.payee_1} - #{number_to_currency(c.amount, unit: '$')}", c.id]} %>
+      <%= select :check, :id, options, {:include_blank => true}, {style: "width: 200px;", name: "primary_disbursement", onchange: "updateDisbursementList($(this).val());", id: "primary_merge_disbursement"} %></p>
+      <p class="label" style="margin: 10px 0px 5px; text-decoration: underline;">Select disbursements to merge:</p>
+      <div id="merge_disbursment_list">
+        <% CheckWorking.where("file_id = #{@file.FileID}").order("payee_1 ASC").each do |d| %>
+          <p style="padding-left: 5px;"><label><%= check_box_tag :disbursement, d.id, false, name: "to_merge[]", style: "margin-right: 5px; position: relative; top: 2px;", id: d.id, onchange: "enableMerge();", "data-info" => "#{d.payee_1} - #{number_to_currency(d.amount, unit: '$')}" %><%= d.payee_1 %> - <%= number_to_currency(d.amount, unit: '$') %></label></p>
+        <% end %>
+      </div>
+  	</div>
+  	<div class="overlay_footer" style="clear: both;">
+      <span class="button">
+        <input type="button" value="Merge" data-remote="true" disabled="disabled" id="merge_disbursement_submit" onclick="submitMergeDisbursements();" />
+        <input type="button" value="Cancel" data-remote="true" onclick="closeOverlay('merge_disbursement');" />
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  openOverlay("merge_disbursement");
+
+  function submitMergeDisbursements(){
+    list = "&list[]=" + encodeURIComponent($("#primary_merge_disbursement").find(":selected").text());
+    $("#merge_disbursment_list").find("input[type=checkbox]").each(function(){
+      if($(this).attr('checked') == 'checked'){
+        list += "&list[]=" + encodeURIComponent($(this).data('info'));
+      }
+    });
+
+    addToQueue('confirm_merge_disbursement', 'application/flash_notice?&title=Confirm Merge&notice=You are about to merge the following disbursements. This action cannot be undone. Are you sure you want to continue?' + list + '&confirm=Yes&click_action=' + encodeURIComponent('$(\'form#merge_disbursements\').submit();') );
+  }
+
+  function updateDisbursementList(value){
+    $("#merge_disbursment_list").find("input[type=checkbox]").each(function(){
+      if($(this).attr('id') == value){
+        $(this).closest('p').hide();
+        $(this).attr('checked', false);
+      }
+      else{
+        $(this).closest('p').show();
+      }
+    });
+    enableMerge();
+  }
+
+  function enableMerge(){
+    var ready = false;
+
+    $("#merge_disbursment_list").find("input[type=checkbox]").each(function(){
+      if($(this).attr('checked') == 'checked'){
+        ready = true;
+      }
+    });
+
+    if($("#primary_merge_disbursement").val() == ""){
+      ready = false;
+    }
+
+    if(ready){
+      $("#merge_disbursement_submit").attr('disabled', false);
+    }
+    else{
+      $("#merge_disbursement_submit").attr('disabled', true);
+    }
+  }
+</script>

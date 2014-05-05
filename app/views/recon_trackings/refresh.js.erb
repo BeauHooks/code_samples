@@ -1,0 +1,12 @@
+$("#reconveyance_results").html("<%= j(render "recon_trackings/results").html_safe %>");
+
+<% if @commit != nil %>
+	<% case @commit %>
+	<% when "Save" %>
+		closeOverlay("recon_tracking");
+	<% when "Save and Copy" %>
+		$("#overlay_recon_tracking").html("<%= j(render "recon_trackings/form").html_safe %>");
+		$('#new_recon_spinner').hide();
+		$('#overlay_recon_tracking').find('input').attr('disabled', false);
+	<% end %>
+<% end %>

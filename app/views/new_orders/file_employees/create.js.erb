@@ -1,0 +1,5 @@
+// $("#new_order_file_employees").html("<%#= j(render 'new_orders/file_employees/partials/new_order_file_employees').html_safe %>");
+$("#new_order_file_employees").append("<%= j(render 'new_orders/partials/file_employee_row').html_safe %>");
+
+// Run any setup JS
+$("select.auto_select").select2();

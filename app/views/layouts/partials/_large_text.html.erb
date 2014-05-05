@@ -1,0 +1,25 @@
+<div class="show_large_text">
+  <div class="overlay_header">
+    <h2><%= @title %></h2>
+  </div>
+  <div class="overlay_content" >
+    <input type="button" style="margin: 5px 0px  0px 10px;" value="Select All" onclick="$(this.parentNode).children('textarea:first').select();" />
+    <textarea id="large_text_area" <%= @editable %>><%= @text %></textarea>
+  </div>
+  <div class="overlay_footer">
+    <% if @post != nil && @confirm != nil %>
+      <input type="button" value="<%= @close %>" class="button close" onclick="closeOverlay('large_text');" />
+      <input type="submit" value="<%= @confirm %>" class="button close" onclick="<%= @post %> closeOverlay('large_text');" />
+    <% elsif @post == nil && @confirm == nil %>
+      <input type="button" value="Cancel" class="button close" onclick="closeOverlay('large_text');" />
+    <% elsif @post == nil %>
+      <input type="button" value="<%= @confirm %>" class="button close" onclick="closeOverlay('large_text');" />
+    <% elsif @confirm == nil %>
+      <input type="submit" value="Close" class="button close" onclick="<%= @post %> closeOverlay('large_text');" />
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  openOverlay("large_text");
+</script>

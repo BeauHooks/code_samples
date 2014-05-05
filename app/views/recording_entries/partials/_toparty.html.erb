@@ -1,0 +1,10 @@
+<div class="result_container">
+  <div class="box_header">
+    <span class="title">To</span>
+  </div>
+  <div>
+  <% @detail.recording_tos.each do |to| %>
+    <div class="padding_left_5"><%= to.RecordationName %></div>
+  <% end %>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<% @check.payee_1_id.to_s == @check.file_id.to_s[0..2] ? is_company = true : is_company = false %>
+<% @file.SentForFunding == nil && @check.check_number == nil && @check.check_id == nil ? disabled = false : disabled = true %>
+<% size = @check.hud_line_payments.size %>
+<% update = "updateCheck(this);" %>
+
+<% if @check.funds_type.downcase == "check" %>
+  <tr>
+    <td class="label no_wrap padding_right_5 w145">PAY TO THE ORDER OF:</td>
+    <td class="w510 padding_top_2">
+      <%= text_field_tag :payee_1, @check.payee_1, onchange: "#{update}", class: "w99p", placeholder: "Payee 1", disabled: is_company || disabled  %>
+    </td>
+    <td class="w5">&nbsp;</td>
+    <td class="w150 no_wrap">
+      $ <%= text_field_tag :amount, number_to_currency(@check.amount || 0.0, precision: 2, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", disabled: size >= 1 || disabled, id: "check_total", class: "w135" %>
+    </td>
+  </tr>
+  <% if !is_company %>
+    <tr>
+      <td></td>
+      <td class="w510 padding_top_2 padding_bottom_1">
+        <%= text_field_tag :payee_2, @check.payee_2, onchange: "#{update}", class: "w99p", placeholder: "Payee 2", disabled: disabled %>
+      </td>
+      <td colspan="2"></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>
+      <% if !is_company %>
+        <% @check.entity != nil ? address_collection = @check.entity.addresses.collect{|a| [ "#{a.description}", a.ContactID ]} : address_collection = [] %>
+        <%= select(:address, :contact_info, address_collection, {include_blank: "No Address", selected: @check.address_id}, {onchange: update, disabled: disabled, class: "w110 #{'font_color_error italic' if address_collection.size == 0}", name: "address_id"}) %>
+      <% end %>
+    </td>
+    <td class="padding_bottom_1">
+      <%= text_field_tag :address_1, @check.address_1, onchange: "#{update}", class: "w99p", placeholder: "Address 1", disabled: is_company || disabled %>
+    </td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="padding_bottom_1">
+        <%= text_field_tag :address_2, @check.address_2, onchange: "#{update}", class: "w99p", placeholder: "Address 2", disabled: is_company || disabled %>
+    </td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="padding_bottom_1 no_wrap">
+      <%= text_field_tag :city, @check.city, onchange: "#{update}", style: "width: 50%; margin-right: 4px;", placeholder: "City", disabled: is_company || disabled %>
+      <%= text_field_tag :state, @check.state, onchange: "#{update}", style: "width: 15%; margin-right: 3px;", placeholder: "State", disabled: is_company || disabled %>
+      <%= text_field_tag :zip, @check.zip, onchange: "#{update}", style: "width: 28.5%;", placeholder: "Zip", disabled: is_company || disabled %>
+    </td>
+    <td colspan="2"></td>
+  </tr>
+    <tr>
+      <td class="label">Instructions:</td>
+      <td><%= text_field_tag :check_deliver, @check.check_deliver, onchange: "#{update}", class: "w99p", placeholder: "Delivery Instructions", disabled: disabled %></td>
+      <td colspan="2"></td>
+    </tr>
+  <tr>
+    <td class="label top padding_top_1">Memo:<br />
+      <% grantees, grantors, property = get_memo_info(@file) %>
+      <%= submit_tag "Buy", title: "Buyer Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantees}.", disabled: grantees == "" %>
+      <%= submit_tag "Sell", title: "Seller Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantors}.", disabled: grantors == "" %>
+      <%= submit_tag "Prop", title: "Property Address", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{property}.", disabled: property == "" %>
+    </td>
+    <td class="top"><%= text_area_tag :memo_1, @check.memo_1, onchange: "#{update}", class: "w99p memo_field", disabled: disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+
+<% else #If WIRE %>
+  <tr>
+    <td class="label" class="w145 top">Name on Account:</td>
+    <td><%= text_field_tag :beneficiary_name, @check.beneficiary_name, onchange: update, class: "w99p", disabled: is_company || disabled %></td>
+    <td class="w5">&nbsp;</td>
+    <td class="w150 no_wrap">
+      $ <%= text_field_tag :amount, number_to_currency(@check.amount || 0.0, precision: 2, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", disabled: size >= 1 || disabled || is_company, id: "check_total", class: "w135" %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label top">Account Number:</td>
+    <td><%= text_field_tag :beneficiary_account_number, @check.beneficiary_account_number, onchange: update, class: "w99p", disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td class="label w85 top">Bank Name:</td>
+    <td style="max-width: 250px;"><%= text_field_tag :beneficiary_bank_name, @check.beneficiary_bank_name, onchange: update, class: "w99p", disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td class="label top">Bank Routing:</td>
+    <td><%= text_field_tag :beneficiary_bank_routing, @check.beneficiary_bank_routing, onchange: update, class: "w99p", disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td class="label top padding_top_1">
+      Wire Memo:<br />
+      <% grantees, grantors, property = get_memo_info(@file) %>
+      <%= submit_tag "Buy", title: "Buyer Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantees}.", disabled: grantees == "" %>
+      <%= submit_tag "Sell", title: "Seller Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantors}.", disabled: grantors == "" %>
+      <%= submit_tag "Prop", title: "Property Address", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{property}.", disabled: property == "" %>
+    </td>
+    <td class="top"><%= text_area_tag :b2b_information_message, @check.b2b_information_message, onchange: "val = $(this).val().replace(/[^A-Za-z0-9\s]/g, ''); $(this).val(val); #{update}", class: "w99p memo_field", disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+<% end %>

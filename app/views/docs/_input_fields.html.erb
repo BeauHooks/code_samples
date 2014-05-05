@@ -1,0 +1,605 @@
+<% update_field = "updateGlobalField(this);" %>
+<div class="grid_header trigger hide"  id="doc_entity_container" onclick="expandCollapse(this);">
+  <table>
+    <tbody>
+      <tr>
+        <td><%= image_tag("plusgrey.png", class: "expand", id: "doc_entity_container_img")%> Doc Entity Info<span id="doc_entity_missing" class="missing_item"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="contents hide" id="doc_entity_contents">
+
+</div>
+
+<div class="grid_header trigger"  id="doc_specific_container" onclick="expandCollapse(this);">
+  <%= image_tag("minusgrey.png", class: "collapse", id: "doc_specific_container_img")%> Doc Specific Fields*<span id="doc_specific_missing" class="missing_item"></span>
+</div>
+<div class="contents dis_block" id="doc_specific_contents">
+</div>
+
+<div class="grid_header trigger"  id="grantor_container" onclick="expandCollapse(this);">
+  <table>
+    <tbody>
+      <tr>
+        <td><%= image_tag("plusgrey.png", class: "expand")%> Grantor Info<span id="grantor_missing" class="missing_item"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="contents" id="grantor_contents" style="display:none">
+  <h4>Entities
+      <%= link_to image_tag("plus.png", class: "trigger new_entity", alt: "Add Grantor Entity"), add_entity_docs_path(section: "grantor", file_id: @file.ID), remote: true, id: "add_grantor_entities" %>
+      <span class="float_right">Split from Notary/Remove</span></h4>
+      <div id="entities" class="margin_bottom_5">
+        <div id="grantor_entities"></div>
+      </div>
+      <%= link_to "Update Related Fields", "docs/update_related?file_id=#{@file.FileID}&field=grantor_signatures", remote: true %>
+      <hr class="margin_top_5" />
+      <table>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_NAMES") %>
+          <% error = (value == nil || value == "") ? "error" : ""  %>
+          <td class="label top <%= error %>">Grantor Names:</td>
+          <td colspan="3" class="hint">
+            <div style="position: relative;">
+              <%= form_tag large_text_application_index_path(field: "grantor_names", confirm: "Save", editable: "true", title: "Grantor Names"), method: "get", remote: true do %>
+                <span><%= image_tag "expand.jpg", :class => "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+                <%= text_area_tag :grantor_names, value, class: error, onchange: update_field, name: "text" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+       <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_VESTING") %>
+          <% error = (value == nil || value == "") ? "error" : ""  %>
+          <td class="label top <%= error %>">
+            Vesting:
+            <% if @file.has_pr? %>
+              <%= image_tag "down.png", class: "trigger icon", onclick: "addToQueue('import_from_pr', 'docs/import_from_pr?file_id=#{@file.ID}&type=GRANTOR');", title: "Pull in vesting from PR." %>
+            <% end %>
+          </td>
+          <td colspan="3" class="hint">
+            <div class="pos_relative">
+              <%= form_tag large_text_application_index_path(field: "grantor_vesting", confirm: "Save", editable: "true", title: "Grantor Vesting"), method: "get", remote: true do %>
+                <span><%= image_tag "expand.jpg", :class => "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+                <%= text_area_tag :grantor_vesting, value, class: error, onchange: update_field, name: "text" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_ADDRESS_1") %>
+          <% error = (value == nil || value == "") ? "error" : ""  %>
+          <td class="label <%= error %>">Addr:
+            <%= image_tag "search.png", class: "icon trigger", onclick: "$.get('/overlays/edit_address?file_id=#{@file.id}&tag=grantor');", title: "Lookup/Edit/Save Entity Addresses" %>
+            <%= image_tag "/assets/notice.png", class: "icon trigger", onclick: "searchDocAddress('grantor');", title: "USPS Info" %>
+          </td>
+          <td colspan="3">
+            <%= text_field_tag :grantor_address_1, value, class: error, onchange: update_field %>
+          </td>
+        </tr>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_ADDRESS_2")%>
+          <td class="label">Address 2:</td>
+          <td colspan="3"><%= text_field_tag :grantor_address_2, value, class: "skip", onchange: update_field %></td>
+        </tr>
+        <tr>
+          <% city, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_CITY") %>
+          <% state, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_STATE") %>
+          <% zip, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_ZIP") %>
+          <%# (city == "" || state == "" || zip == "") ? error = "error" : error = ""  %>
+          <!-- <td class="label <%#= error %>">City, State Zip:</td> -->
+          <% error = (city == "") ? "error" : ""  %>
+          <td class="label <%= error %>">City:</td>
+          <td><%= text_field_tag :grantor_city, city, class: error, onchange: update_field %></td>
+        </tr>
+        <tr>
+          <% error = (state == "") ? "error" : ""  %>
+          <td class="label <%= error %>">State:</td>
+          <td><%= text_field_tag :grantor_state, state, class: error, onchange: update_field %></td>
+        </tr>
+        <tr>
+          <% error = (zip == "") ? "error" : ""  %>
+          <td class="label <%= error %>">Zip:</td>
+          <td><%= text_field_tag :grantor_zip, zip, class: error, onchange: update_field %></td>
+        </tr>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_COUNTY") %>
+          <% error = (value == nil || value == "") ? "error" : ""  %>
+          <td class="label <%= error %>">County:</td>
+          <td colspan="3"><%= text_field_tag :grantor_county, value, class: error, onchange: update_field %></td>
+        </tr>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_SIGNING_DATE") %>
+          <% error = (value == nil || value == "") ? "error" : "" %>
+          <td class="label <%= error %>">Signing Date:</td>
+          <td colspan="3"><%= text_field_tag :grantor_signing_date, value, class: error, onchange: update_field %></td>
+        </tr>
+      </table>
+      <hr />
+      <table>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_NOTARY_VESTING") %>
+          <% error = (value == nil || value == "") ? "error" : ""  %>
+          <td class="label top <%= error %>">Notary Vesting:</td>
+          <td colspan="3" class="hint">
+            <div class="pos_relative">
+              <%= form_tag large_text_application_index_path(field: "grantor_notary_vesting", confirm: "Save", editable: "true", title: "Grantor Notary Vesting"), method: "get", remote: true do %>
+                <span><%= image_tag "expand.jpg", class: "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+                <%= text_area_tag :grantor_notary_vesting, value, class: error, onchange: update_field, name: "text", placeholder: "This section will automatically be updated as you add signatures." %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_NOTARY_DATE") %>
+          <% error = (value == nil || value == "") ? "error" : "" %>
+          <td class="label top <%= error %>">Notary Date:</td>
+          <td colspan="3"><%= text_field_tag :grantor_notary_date, value, class: error, onchange: update_field %></td>
+        </tr>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_NOTARY_STATE", @file.Company) %>
+          <% error = (value == nil || value == "") ? "error" : "" %>
+          <td class="label top <%= error %>">Notary State:</td>
+          <td colspan="3"><%= text_field_tag :grantor_notary_state, value, class: error, onchange: update_field %></td>
+        </tr>
+        <tr>
+          <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTOR_NOTARY_COUNTY", @file.Company) %>
+          <% error = (value == nil || value == "") ? "error" : "" %>
+          <td class="label <%= error %>">Notary County:</td>
+          <td colspan="3"><%= text_field_tag :grantor_notary_county, value, class: error, onchange: update_field %></td>
+        </tr>
+      </table>
+</div>
+
+
+<div class="grid_header trigger"  id="grantee_container" onclick="expandCollapse(this);">
+  <table>
+    <tbody>
+      <tr>
+        <td><%= image_tag("plusgrey.png", class: "expand")%> Grantee Info<span id="grantee_missing" class="missing_item"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="contents hide" id="grantee_contents">
+  <h4>Entities
+<a href="docs/add_entity?section=grantee&file_id=<%= @file.ID %>" data-remote="true" id="add_grantee_entities"><img src="/assets/plus.png"  class="trigger new_entity"  /></a><span class="float_right">Split from Notary/Remove</span></h4>
+<div id="entities" class="margin_bottom_5">
+  <div id="grantee_entities">
+
+  </div>
+</div>
+<%= link_to "Update Related Fields", "docs/update_related?file_id=#{@file.FileID}&field=grantee_signatures", remote: true %>
+<hr class="margin_top_5" />
+<table>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_NAMES") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label top <%= error %>">Grantee Names:</td>
+    <td colspan="3" class="hint">
+      <div class="pos_relative">
+        <%= form_tag large_text_application_index_path(field: "grantee_names", confirm: "Save", editable: "true", title: "Grantee Names"), method: "get", remote: true do %>
+          <span><%= image_tag "expand.jpg", :class => "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+          <%= text_area_tag :grantee_names, value, class: error, onchange: update_field, name: "text" %>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_VESTING") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label top <%= error %>">
+      Vesting:
+      <% if @file.has_pr? %>
+        <%= image_tag "down.png", class: "trigger icon", onclick: "addToQueue('import_from_pr', 'docs/import_from_pr?file_id=#{@file.ID}&type=GRANTEE');", title: "Pull in vesting from PR." %>
+      <% end %>
+    </td>
+    <td colspan="3" class="hint">
+      <div style="position: relative;">
+        <%= form_tag large_text_application_index_path(field: "grantee_vesting", confirm: "Save", editable: "true", title: "Grantee Vesting"), method: "get", remote: true do %>
+          <span><%= image_tag "expand.jpg", class: "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+          <%= text_area_tag :grantee_vesting, value, class: error, onchange: update_field, name: "text" %>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_ADDRESS_1") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Addr:
+      <%= image_tag "search.png", class: "icon trigger", onclick: "$.get('/overlays/edit_address?file_id=#{@file.id}&tag=grantee');", title: "Lookup/Edit/Save Entity Addresses" %>
+      <%= image_tag "/assets/notice.png", class: "icon trigger", onclick: "searchDocAddress('grantee');", title: "USPS Info" %>
+    </td>
+    <td colspan="3"><%= text_field_tag :grantee_address_1, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_ADDRESS_2") %>
+    <td class="label">Address 2:</td>
+    <td colspan="3"><%= text_field_tag :grantee_address_2, value, class: "skip", onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% city, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_CITY") %>
+    <% state, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_STATE") %>
+    <% zip, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_ZIP") %>
+
+    <% error = (city == "") ? "error" : "" %>
+    <td class="label <%= error %>">City:</td>
+    <td><%= text_field_tag :grantee_city, city, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% error = (state == "") ? "error" : "" %>
+    <td class="label <%= error %>">State:</td>
+    <td><%= text_field_tag :grantee_state, state, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% error = (zip == "") ? "error" : "" %>
+    <td class="label <%= error %>">Zip:</td>
+    <td><%= text_field_tag :grantee_zip, zip, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_COUNTY") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">County:</td>
+    <td colspan="3"><%= text_field_tag :grantee_county, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_SIGNING_DATE") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Signing Date:</td>
+    <td colspan="3"><%= text_field_tag :grantee_signing_date, value, class: error, onchange: update_field %></td>
+  </tr>
+</table>
+<hr />
+<table>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_NOTARY_VESTING") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label top <%= error %>">Notary Vesting:</td>
+    <td colspan="3" class="hint">
+      <div class="pos_relative">
+        <%= form_tag large_text_application_index_path(field: "grantee_notary_vesting", confirm: "Save", editable: "true", title: "Grantee Notary Vesting"), method: "get", remote: true do %>
+          <span><%= image_tag "expand.jpg", class: "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+          <%= text_area_tag :grantee_notary_vesting, value, class: error, onchange: update_field, name: "text" %>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_NOTARY_DATE") %>
+    <% error = (value == nil || value == "") ? "error" : "" %>
+    <td class="label top <%= error %>">Notary Date:</td>
+    <td colspan="3"><%= text_field_tag :grantee_notary_date, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_NOTARY_STATE", @file.Company) %>
+    <% error = (value == nil || value == "") ? "error" : "" %>
+    <td class="label top <%= error %>">Notary State:</td>
+    <td colspan="3"><%= text_field_tag :grantee_notary_state, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "GRANTEE_NOTARY_COUNTY", @file.Company) %>
+    <% error = (value == nil || value == "") ? "error" : "" %>
+    <td class="label <%= error %>">Notary County:</td>
+    <td colspan="3"><%= text_field_tag :grantee_notary_county, value, class: error, onchange: update_field %></td>
+  </tr>
+</table>
+</div>
+
+  <div class="grid_header trigger" id="lender_container" onclick="expandCollapse(this);">
+    <table>
+      <tbody>
+        <tr>
+          <td><%= image_tag("plusgrey.png", class: "expand")%> Lender Info<span id="lender_missing" class="missing_item"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="contents hide" id="lender_contents">
+    <table>
+
+    <tr>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "LENDER_NAME") %>
+      <% error = (value == nil || value == "") ? "error" : "" %>
+      <td class="label <%= error %>">Lender Name:</td>
+      <td><%= text_field_tag :lender_name, value, class: error, onchange: update_field %></td>
+    </tr>
+    <tr>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "LENDER_ADDRESS_1") %>
+      <% error = (value == nil || value == "") ? "error" : "" %>
+      <td class="label <%= error %>">Address 1:</td>
+      <td><%= text_field_tag :lender_address_1, value, class: error, onchange: update_field %></td>
+    </tr>
+    <tr>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "LENDER_ADDRESS_2") %>
+      <% error = (value == nil || value == "") ? "error" : "" %>
+      <td class="label <%= error %>">Address 2:</td>
+      <td><%= text_field_tag :lender_address_2, value, class: error, onchange: update_field %></td>
+    </tr>
+    <tr>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "LENDER_CITY") %>
+      <% error = (value == nil || value == "") ? "error" : "" %>
+      <td class="label <%= error %>">City:</td>
+      <td><%= text_field_tag :lender_city, value, class: error, onchange: update_field %></td>
+    </tr>
+    <tr>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "LENDER_STATE") %>
+      <% error = (value == nil || value == "") ? "error" : "" %>
+      <td class="label <%= error %>">State:</td>
+      <td><%= text_field_tag :lender_state, value, class: error, onchange: update_field %></td>
+    </tr>
+    <tr>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "LENDER_ZIP") %>
+      <% error = (value == nil || value == "") ? "error" : "" %>
+      <td class="label <%= error %>">Zip:</td>
+      <td><%= text_field_tag :lender_zip, value, class: error, onchange: update_field %></td>
+    </tr>
+  </table>
+  </div>
+
+<div class="grid_header trigger"  id="property_container"  onclick="expandCollapse(this);">
+  <table>
+    <tbody>
+      <tr>
+        <td><%= image_tag("plusgrey.png", class: "expand")%> Property Info<span id="property_missing" class="missing_item"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="contents hide" id="property_contents">
+  <table>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMMITMENT_DATE") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label top <%= error %>">PR Date:</td>
+    <td><%= text_field_tag :commitment_date, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMMITMENT_NUMBER") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label top <%= error %>">PR Number:</td>
+    <td><%= text_field_tag :commitment_number, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_LEGAL_DESCRIPTION") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label top <%= error %>">Legal Desc:</td>
+    <td class="hint">
+      <div class="pos_relative">
+        <%= form_tag large_text_application_index_path(field: "property_legal_description", confirm: "Save", editable: "false", title: "Property Legal Description"), method: "get", remote: true do %>
+          <span><%= image_tag "expand.jpg", class: "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+          <%= text_area_tag :property_legal_description, value.to_s.gsub("<br />", "\n").gsub("&#176;", "°"), class: error, onchange: update_field, name: "text", readonly: value != "", style: "overflow: hidden;" %>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_TYPE") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label top <%= error %>">Type:</td>
+    <td><%= text_field_tag :property_type, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_ADDRESS") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Address:</td>
+    <td><%= text_field_tag :property_address, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_CITY") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">City:</td>
+    <td><%= text_field_tag :property_city, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_STATE") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">State:</td>
+    <td><%= text_field_tag :property_state, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_ZIP") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Zip:</td>
+    <td><%= text_field_tag :property_zip, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_COUNTY") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">County:</td>
+    <td><%= text_field_tag :property_county, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "PROPERTY_TAX_ID") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Tax ID #:</td>
+    <td><%= text_field_tag :property_tax_id, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "FULL_PROPERTY_ADDRESS") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <% value = "" if value == nil %>
+    <td class="label top <%= error %>">Full Address:</td>
+    <td colspan="3" class="hint">
+      <div style="position: relative;">
+        <%= form_tag large_text_application_index_path(field: "full_property_address", confirm: "Save", editable: "true", title: "Full Property Address"), method: "get", remote: true do %>
+          <span><%= image_tag "expand.jpg", class: "icon trigger", onclick: "$(this).closest('form').submit();" %></span>
+          <%= text_area_tag :full_property_address, value, class: error, onchange: "#{update_field} updatePropertyAddressChars(this);", onkeyup: "updatePropertyAddressChars(this);", name: "text", placeholder: "This section will automatically be updated as you add signatures." %>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      <p id="full_address_chars" class="<%= value.length > 39 ? "error" : ""  %>" ><%= value.length %> of 39 max characters.</p>
+    </td>
+  </tr>
+</table>
+</div>
+<div class="grid_header trigger"  id="special_container"  onclick="expandCollapse(this);">
+  <table>
+    <tbody>
+      <tr>
+        <td><%= image_tag("plusgrey.png", :class => "expand")%> Company Info<span id="special_missing" class="missing_item"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="contents hide" id="special_contents">
+  <table>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "FILE_ID_NUMBER") if @file.file_doc_fields.count != 0 %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">File #:</td>
+    <td colspan="3"><%= text_field_tag :file_id_number, value, class: error, onchange: update_field %></td>
+  </tr>
+
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "CLOSING_DATE") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Closing Date:</td>
+    <td colspan="3"><%= text_field_tag :closing_date, value, class: error, onchange: "if(validateDate(this)){#{update_field}}" %></td>
+  </tr>
+
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "SETTLEMENT_DATE") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Settlement Date:</td>
+    <td colspan="3"><%= text_field_tag :settlement_date, value, class: error, onchange: "if(validateDate(this)){#{update_field} addToQueue('update_settlement_date', 'application/flash_notice?notice=Would you like to update the main Grantor and Grantee Dates with this value?&post=docs/update_settlement_dates?file_id=#{@file.FileID}%26value=' + this.value +'&confirm=Yes');}" %></td>
+  </tr>
+
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "RECORDING_DATE") %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Recording Date:</td>
+    <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>"  id='recording_date' onkeydown="if(event.keyCode == 27){ $(this).val('<%= value %>') }" onchange="if(validateDate(this) ){ $.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=0&field=global_RECORDING_DATE&value=' + encodeURIComponent(this.value)); updateDocField(this); }" /></td>
+  </tr>
+
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "CLOSER_NAME") if @file.file_doc_fields.count != 0 %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Closer:</td>
+    <td colspan="3"><%= text_field_tag :closer_name, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMPANY_NAME") if @file.file_doc_fields.count != 0 %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Company Name:</td>
+    <td colspan="3"><%= text_field_tag :company_name, value, class: error, onchange: update_field %>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMPANY_TAX_ID") if @file.file_doc_fields.count != 0 %>
+      <input type="hidden" value="<%= value %>" />
+    </td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMPANY_ADDRESS") if @file.file_doc_fields.count != 0 %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Company Addr:</td>
+    <td colspan="3"><%= text_field_tag :company_address, value, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% city, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMPANY_CITY") %>
+    <% state, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMPANY_STATE") %>
+    <% zip, type = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMPANY_ZIP") %>
+    <% error = (city == "" || state == "" || zip == "") ? "error" : ""  %>
+    <!-- <td class="label <%#= error %>">City, State Zip:</td> -->
+    <% error = (city == "") ? "error" : ""  %>
+    <td class="label <%= error %>">City:</td>
+    <td><%= text_field_tag :company_city, city, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% error = (state == "") ? "error" : ""  %>
+    <td class="label <%= error %>">State:</td>
+    <td><%= text_field_tag :company_state, state, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% error = (zip == "") ? "error" : ""  %>
+    <td class="label <%= error %>">Zip:</td>
+    <td><%= text_field_tag :company_zip, zip, class: error, onchange: update_field %></td>
+  </tr>
+  <tr>
+    <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id, "COMPANY_COUNTY") if @file.file_doc_fields.count != 0 %>
+    <% error = (value == nil || value == "") ? "error" : ""  %>
+    <td class="label <%= error %>">County:</td>
+    <td colspan="3"><%= text_field_tag :company_county, value, class: error, onchange: update_field %></td>
+  </tr>
+</table>
+</div>
+
+<script type="text/javascript">
+  function updateGlobalField(object){
+    $.post("<%= create_custom_docs_path(file_id: @file.ID, doc_id: 0) %>&field=global_" + $(object).attr("id").toUpperCase() + "&value=" + encodeURIComponent($(object).val()) );
+    updateDocField(object);
+  }
+
+  var alth_auto = [
+    <% Alth.where(" Response LIKE ', %' AND Shortcut NOT IN ('UN', 'AOP') ").each do |a| %>
+      "<%= a.Response.gsub("\r\n", "<br />") %>",
+    <% end %>
+  ];
+
+  function split(val) {
+      return val.split(/,\s*/);
+  }
+
+  function extractLast(term) {
+      return split(term).pop();
+  }
+
+  $( "#settlement_date, #closing_date" ).datepicker({
+    changeMonth: true,
+    changeYear: true
+  });
+
+  $("#grantor_vesting, #grantee_vesting")
+  // don't navigate away from the field on tab when selecting an item
+  .bind("keydown", function(event) {
+      if (event.keyCode === $.ui.keyCode.TAB && $(this).attr("autocomplete") == "on") {
+          event.preventDefault();
+      }
+  }).autocomplete({
+      minLength: 0,
+      source: function(request, response) {
+          var term = request.term,
+              results = [];
+          if (term.indexOf(",") >= 0) {
+              term = extractLast(request.term);
+              if (term.length > 0) {
+                  results = $.ui.autocomplete.filter(
+                  alth_auto, term);
+              }
+          }
+          response(results);
+      },
+      focus: function() {
+          // prevent value inserted on focus
+          $(this).attr("autocomplete", "on");
+          return false;
+      },
+      blur: function(){
+        $(this).attr("autocomplete", "off");
+      },
+      select: function(event, ui) {
+          var terms = split(this.value);
+
+          // remove the current input
+          terms.pop();
+
+          // add the selected item
+          terms.push(ui.item.value.replace(/,\s/, ""));
+
+          // add placeholder to get the comma-and-space at the end
+          //terms.push("");
+
+          this.value = terms.join(", ");
+          $(this).trigger("change");
+          this.scrollTop = this.scrollHeight;
+          $(this).attr("autocomplete", "off");
+          return false;
+      }
+  });
+
+  initializer();
+</script>
+

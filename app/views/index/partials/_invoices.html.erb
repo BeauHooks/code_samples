@@ -1,0 +1,33 @@
+<div id="file_invoices">
+	<div id="invoices" class="box">
+		<div class="box_header">
+			<p class="title">Invoices <span class="error">***This page is under construction.***</span></p> <%= link_to image_tag("plus.png", :class => "add") %>
+		</div>
+		<div class="grid_header">
+			<table>
+				<tr>
+					<td class="entity">Entity</td>
+					<td class="description">Description</td>
+					<td class="type">Type</td>
+					<td class="modify_date">Modified</td>
+					<td class="modify_user">Modified By</td>
+					<td class="action">Actions</td>
+				</tr>
+			</table>
+		</div>
+		<div class="results">
+			<table>
+				<% 3.times do %>
+				<tr>
+					<td class="entity"><%= link_to "Dave Byars" %></td>
+					<td class="description"><div><%= link_to "Authorization Letter" %></div></td>
+					<td class="type"><div>Loan Doc</div></td>
+					<td class="modify_date">5/15/2012 - 10:15 AM</td>
+					<td class="modify_user"><%= link_to "Milo Siner" %></td>
+					<td class="action"><input type="button" value="Edit" /><input type="button" value="Remove" /></td>
+				</tr>
+				<% end %>
+			</table>
+		</div>
+	</div>
+</div>

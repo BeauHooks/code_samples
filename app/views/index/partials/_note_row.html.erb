@@ -1,0 +1,10 @@
+<tr id="new_note_row_<%= random_string(5) %>">
+  <td class="note">
+  	<%= image_tag "redx.png", class: "trigger", onclick: "refreshIndexFormPosition($(this).closest('tr'));" %>
+  	<input class="note_text" type="text" data-field="Note" />
+  </td>
+  <td class="w135"><%= select :note, :From, Employee.find(:all, :conditions => ["IsActive = ?", "True"], :order => "FullName ASC").collect{|from| [from.FullName, from.ID]}, {:include_blank => false, :selected => "#{current_user.employee_id}"}, {:disabled => "disabled",  "data-field" => "From"} %></td>
+  <td class="w135"><%= select :note, :To, Employee.find(:all, :conditions => ["IsActive = 'True' AND ID NOT IN (190, 119, 95, 157, 327) "], :order => "FullName ASC").collect{|to| [to.FullName, to.ID]}, {:include_blank => true, :selected => "#{current_user.employee_id}"},  {"data-field" => "To"} %></td>
+  <td class="w135"><input class="note_remind" type="text" data-field="Remind" placeholder="mm/dd/yyyy"></td>
+  <td class="center w70"><input type="checkbox" value="true" data-field="IsPrivate" /></td>
+</tr>

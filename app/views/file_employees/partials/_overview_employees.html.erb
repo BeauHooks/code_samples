@@ -1,0 +1,25 @@
+<% can_edit = @file.has_employee?(current_user.employee_id) || @permission_add_employee_to_index %>
+<% @file.file_employees.each do |i| %>
+  <tr>
+    <td class="name">
+      <%= link_to image_tag("redx.png", class: "trigger"), file_employee_path(id: i.ID), remote: true, method: :delete if can_edit %>
+      <%= select_tag :EmployeeID, options_from_collection_for_select(@employees, :ID, :FullName, i.EmployeeID), include_blank: false, data: {remote: true, url: file_employee_path(id: i.ID), method: :put}, style: "width: 120px;", disabled: !can_edit %>
+    </td>
+
+    <td class="position">
+      <%= select_tag :Position, options_from_collection_for_select(@file_employee_types, :TypeDescription, :TypeDescription, i.Position), include_blank: true, data: {remote: true, url: file_employee_path(id: i.ID), method: :put}, style: "width: 115px;" %>
+    </td>
+
+    <td class="phone">
+      <%= link_to number_to_phone(i.employee.DirectPhone), "tel:#{sanitize_phone(i.employee.DirectPhone)}", class: "phone" if i.employee != nil %>
+    </td>
+
+    <td class="fax">
+      <%= number_to_phone(i.employee.DirectFax) if i.employee != nil %>
+    </td>
+
+    <td class="email">
+      <%= hint_truncate(mail_to(i.employee.Email, i.employee.Email, body: "#{@file.company.DirName} ##{@file.DisplayFileID}"), 30, true) if i.employee != nil %>
+    </td>
+  </tr>
+<% end %>

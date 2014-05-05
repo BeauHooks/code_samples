@@ -1,0 +1,24 @@
+<% unless @file_product.nil? %>
+	<%= form_for "view_history_form", url: file_products_view_history_path(id: @file_product.id), method: "get", remote: true, html: {style: "display: inline;"} do %> 
+		History: <%= text_field_tag :history_datetime, @datetime.blank? ? "" : DateTime.parse(@datetime).strftime("%m/%d/%Y %l:%M %p").gsub(/\s\s/, " "), class: "datetime", placeholder: "mm/dd/yyyy hh:mm AM", name: "datetime" %> <%= submit_tag "View", onclick: "if(validateViewHistory()){return true}else{return false}" %>
+	<% end %>
+
+	<script type="text/javascript">
+		$(".datetime").datetimepicker({
+	    changeMonth: true,
+	    changeYear: true,
+	    timeFormat: "h:mm TT",
+	    ampm: true,
+	  });
+
+	  function validateViewHistory(){
+	  	if( validateDateTime( $("#history_datetime") ) ){
+	  		return true;
+	  	}
+	  	else{
+	  		addToQueue("view_history_error", "application/flash_notice?title=Error&notice=Date and time are not valid.");
+	  		return false;
+	  	}
+	  }
+	</script>
+<% end %>

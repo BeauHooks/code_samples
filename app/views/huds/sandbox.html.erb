@@ -1,0 +1,12 @@
+<%# @hud = Hud.find(params[:id]) %>
+<%# @doc = Doc.find_by_hud_id(@hud) %>
+<%# @file = @hud.index %>
+<div style="width: 632px; padding: 2px 20px; margin: 20px auto 0; position: relative" class="box">
+  <%#= link_to "Get Payments", payments_overlay_path(id: @file.ID) , remote: true %><%#= link_to "Export to New", export_to_new_hud_path(id: @doc.hud_id), remote: true, style: "float: right;" %>
+</div>
+<div id="doc_theme_light">
+  <div id="docs" style="height: 869px; overflow-y: auto; overflow-x: hidden; width: 632px; padding: 25px 20px; margin: 0 auto 20px; position: relative" class="box">
+    <div id="fileid" class="hidden" data-fileid="<%#= @file.ID %>"></div>
+    <%= render "settlement_statements/hud" %>
+    <%#= get_settlement_statement(@hud).html_safe %>
+</div>

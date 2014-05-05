@@ -1,0 +1,5 @@
+$("#file_overview").html("<%= j(render :partial => 'recording_entries/partials/result_detail').html_safe -%>");
+document.title = "Filetrak - Recorder: <%= @detail.entrynumber.to_i -%>";
+<% if @detail.get_file && current_user.employee_id = 231 %>
+	openEntryNumber('<%= show_file_recording_entry_path(@detail) %>', '<%= @detail.entrynumber.to_i %>');
+<% end %>

@@ -1,0 +1,52 @@
+<table id="doc_list">
+  <% c = 1 %>
+  <% @templates.each do |i| %>
+    <% c += 1 %>
+    <% unless i.short_name == "HUD" || i.short_name == "SS" || i.short_name == "LSS" || i.short_name == "INV" %>
+      <% destroy = CGI.escape("$.ajax({url: '#{doc_template_path(id: i.id)}', type: 'DELETE'});") %>
+      <tr onclick="selectTemplateRow(this, <%= i.id %>); $.get('<%= doc_template_path(id: i.id) %>');" class="trigger" id="doc_row_<%= i.id %>">
+        <% if i.description.length > 12  %>
+          <td class="name hint">
+            <span>
+              <%= image_tag "redx.png", onclick: "$.post('application/flash_notice?notice=Are you sure you want to remove #{i.description} from templates?&confirm=Yes&click_action=#{destroy}'); event.stopPropagation();", remote: true %>
+              <%= i.description %>
+            </span>
+            <%= image_tag "redx.png", onclick: "$.post('application/flash_notice?notice=Are you sure you want to remove #{i.description} from templates?&confirm=Yes&click_action=#{destroy}'); event.stopPropagation();", remote: true %>
+            <%= truncate(i.description, length: 12) %>
+          </td>
+        <% else %>
+          <td class="name">
+            <%= image_tag "redx.png", onclick: "$.post('application/flash_notice?notice=Are you sure you want to remove #{i.description} from templates?&confirm=Yes&click_action=#{destroy}'); event.stopPropagation();", remote: true %>
+            <%= i.description %>
+          </td>
+        <% end %>
+        <td class="version"><%= i.current_version %></td>
+        <td class="modified_date"><%= i.updated_at.strftime('%m/%d/%Y') %></td>
+        <% latest = i.doc_template_versions.order("version DESC").first %>
+        <% name = latest != nil && latest.update_employee != nil ? latest.update_employee.FullName : "" %>
+        <td class="modified_by no_wrap <%= "hint" if name.length > 12 %>">
+          <% if name.length > 12 %>
+            <span><%= name %></span>
+            <%= truncate(name, length: 12) %>
+          <% else %>
+            <%= name %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
+<script type="text/javascript">
+  <% if @template.blank? %>
+    $("#doc_list").find("tr").eq(0).click();
+  <% else %>
+    $("#doc_row_<%= @template.id %>").click();
+  <% end %>
+
+  <% if c > 12 %>
+    addWidth('template', 90);
+  <% else %>
+    fixWidth('template', 90);
+  <% end %>
+</script>

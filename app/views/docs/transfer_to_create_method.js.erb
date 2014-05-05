@@ -1,0 +1,31 @@
+<% if @template != nil %>
+  <% if @template.is_entity_doc == 0 %>
+    $.post("<%= (docs_path({type: "Template", file_id: @file.FileID, quickadd: @template.id})).html_safe %>");
+  <% else %>
+    <% if @file.file_doc_entities.where("is_active = 1 AND doc_id = 0").count > 0 %>
+      request("overlays/choose_doc_entity?file_id=<%= @file.FileID %>&template=<%= @template.id %>");
+    <% else %>
+      <% message =  "The document you searched for requires entities to already have been added to the document set. Please add some entities and try again." %>
+      <% title = "Entities Not Found" %>
+      request('application/flash_notice?title=<%= title %>&notice=<%= message %>');
+      // alert("The document you searched for requires entities to already have been added to the document set.\nPlease add some entities and try again.");
+    <% end %>
+  <% end %>
+<% else %>
+  <% message =  "Your request returned 0 results. Remember to use the document\\\'s short name when using the Quick Add method. (i.e. WD, 1099, etc.)" %>
+  <% title = "Doc Not Found" %>
+  request('application/flash_notice?title=<%= title %>&notice=<%= message %>');
+  // alert("Your request returned 0 results. Remember to use the document's \"Short Name\" \nwhen using the Quick Add method. (i.e. WD, 1099, etc.)");
+<% end %>
+
+function request(url){
+  $.ajax({
+    url: url,
+    beforeSend: function(){
+      $("div#doc_content").hide(); $("div#loading_doc").show();
+    },
+    complete: function(){
+      $("div#loading_doc").hide(); $("div#doc_content").show();
+    }
+  });
+}

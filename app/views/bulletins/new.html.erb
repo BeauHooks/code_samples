@@ -1,0 +1,38 @@
+<div id="add_bulletin">
+  <div class="overlay_header">
+    <h2 style="margin: 0;"><%= @bulletin.new_record? ? "New" : "Edit" %> Bulletin</h2>
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+      <span id="new_bulletin_spinner" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Saving...</span>
+    </div>
+  </div>
+  <%= form_for @bulletin, html: {:remote => true, onsubmit: "$('#new_bulletin_spinner').show();"} do %>
+    <div class="overlay_content">
+      <table>
+        <tr>
+          <td class="label">Title:</td>
+          <td style="text-align: right;"><%= text_field_tag :title, @bulletin.title, style: "width: 635px;" %></td>
+        </tr>
+        <tr>
+          <td class="label">Type:</td>
+          <td style="text-align: right;"><%= select_tag :category, options_for_select(Bulletin.select_options), include_blank: false, style: "width: 639px;" %></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding-top: .25em;">
+            <%= text_area_tag :editor, @bulletin.body, id: "bulletin_mce", class: "tinymce", style: "width: 300px; height: 350px;", name: "body"  %>
+            <%= tinymce :content_css => "#{asset_path    "application.css"},#{asset_path    "themes/#{current_user.users_preferences[:theme]}.css"}"  %>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <span>
+        <%= submit_tag "Save" %>
+        <%= submit_tag "Cancel", type: "button", onclick: "closeOverlay('new_bulletin');" %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	openOverlay("new_bulletin");
+</script>

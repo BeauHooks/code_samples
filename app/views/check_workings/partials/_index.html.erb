@@ -1,0 +1,61 @@
+<div id="disbursement_sheet" class="w100">
+  <div class="box" id="poc_payments">
+    <div class="box_header">
+      <p class="title">Paid Outside of Closing</p>
+      <div class="tools">
+      </div>
+    </div>
+    <div class="outer_table">
+      <div class="grid_header"></div>
+      <div class="inner_table">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="col_1"><div>Payee</div></th>
+              <th class="col_2"><div>Amount</div></th>
+              <th class="col_3"><div>Line and Description</div></th>
+              <th class="col_4"><div>Line Total Payments</div></th>
+            </tr>
+          </thead>
+          <tbody id="poc_results">
+            <%= render "/payment_disbursements/poc_results" %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="box_header">
+      <p class="title">Disbursements</p>
+      <div class="tools">
+        <%= link_to "Merge", merge_disbursements_overlay_path(@file), remote: true %>
+      </div>
+    </div>
+    <div class="outer_table">
+      <div class="grid_header"></div>
+      <div class="inner_table">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th><div>Payee</div></th>
+              <th><div>Memo</div></th>
+              <th><div>Amount</div></th>
+              <th><div>Type</div></th>
+              <th><div>Hold</div></th>
+              <th><div>Instruct</div></th>
+              <th><div>Print</div></th>
+              <th><div>Ready</div></th>
+            </tr>
+          </thead>
+          <tbody id="disbursement_results">
+            <%= render "/check_workings/partials/results" %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div id="disbursement_view">
+    </div>
+  </div>
+</div>

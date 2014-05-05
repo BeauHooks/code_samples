@@ -1,0 +1,95 @@
+<% content_for :overlay_class do %>
+  doc_lookup
+<% end %>
+
+<% content_for :overlay_title do %>
+  Add Docs
+<% end %>
+
+<% content_for :overlay_tools do %>
+  <span id="adding_new_docs" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Adding...</span>
+<% end %>
+
+<% content_for :overlay do %>
+  <div>
+    <form id="doc_lookup_form" action="docs/display_search_results?file_id=<%= @file.FileID %>&type=doc" method="get" data-remote="true" style="display: inline;" onsubmit="$('#doc_search_result').html('<p style=\'padding: 5px;\'><img src=\'assets/loading.gif\' style=\'margin-right: 5px; width: 15px; position: relative; top: 4px;\' />Searching...</p>\');">
+      <select data-url="docs/show_lookup_options?file_id=<%= @file.FileID %>" style="width:90px; margin-right: 15px;" data-remote="true" name="option" id="doc_lookup_options">
+        <option value="1">Doc Lookup</option>
+        <option value="2">By Group</option>
+      </select>
+
+      Search: <input type="text" id="doc_search" name="search" placeholder="Begin Typing Here..."><%= image_submit_tag("search.png", :id => "doc_search_button", class: "icon", style: "margin-right: 20px;") %>
+
+      <% if @file.PropertyState == "NV" %>
+        <% property_state = "Nevada" %>
+      <% elsif @file.PropertyState == "AZ" %>
+        <% property_state = "Arizona" %>
+      <% elsif @file.PropertyState == "UT" %>
+        <% property_state = "Utah" %>
+      <% else %>
+        <% property_state = @file.PropertyState %>
+      <% end %>
+
+      <span id="doc_state_select">State: <%= select :doc_template, :State, options_for_select([["No Filter", "All"], ["Arizona", "Arizona"], ["Nevada", "Nevada"], ["Utah", "Utah"]], property_state), {:include_blank => false}, name: "state", onchange: "if($('#doc_search_button').attr('style').indexOf('none') == -1){ $('#doc_search_button').click(); }else{ $('#group_search').trigger('change'); }" %></span>
+    </form>
+    <input type="button" onclick="$.post('docs/create?type=Group&file_id=<%= @file.FileID %>&group_id=' + $('#group_search').val()); $('#add_group').hide(); return false;" id="add_group" style="display: none;" value="Add Group" />
+    <div style="height:20px;">
+    <h3  style="margin-top: 5px;">Search Results</h3>
+    <div id="add_what" style="float:right; display:none;">
+      Add What? <%= check_box_tag "docs", "docs", checked: true %> Docs <%= check_box_tag "data", "data", checked: true %> Data
+    </div>
+    </div>
+  	<div id="doc_lookup">
+      <div class="outer_table box">
+        <div class="grid_header"></div>
+        <div class="inner_table">
+          <table>
+            <thead class="grid_header_font">
+              <tr>
+                <th class="action" style="padding-left: 5px;"><div>Actions</div></th>
+                <th class="name"><div>Name</div></th>
+                <th class="version"><div>Version</div></th>
+                <th class="county"><div>State</div></th>
+                <th class="modify_date"><div>Modify Date</div></th>
+                <th class="modify_by" id="doc_search_last"><div>Modified By</div></th>
+              </tr>
+            </thead>
+            <tbody id="doc_search_result">
+          
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <h3 style="margin-top: 10px;">Documents on file</h3>
+    <div id="file_docs">
+      <div class="outer_table box">
+        <div class="grid_header"></div>
+        <div class="inner_table">
+          <table>
+            <thead class="grid_header_font">
+              <tr>
+                <th class="action" style="padding-left: 5px;"><div>Actions</div></th>
+                <th class="name"><div>Name</div></th>
+                <th class="description"><div>Short Name</div></th>
+                <th class="modify_date"><div>Modify Date</div></th>
+                <th class="modify_by" id="file_docs_last"><div>Modified By</div></th>
+              </tr>
+            </thead>
+            <tbody id="file_docs_list">
+              <%= render "docs/file_docs_list" %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      <% if @file.docs.where("is_active = -1").size == 0 %>
+          $('#doc_search').val("<%= @file.TransactionDescription1 %>");
+          $("#doc_lookup_options").val("2").change();
+      <% else %>
+          $("#doc_lookup_options").val("1").change();
+      <% end %>
+    </script>
+  </div>
+<% end %>

@@ -1,0 +1,31 @@
+$('#disbursement_results').html('<%= j(render 'hud_lines/disbursement_results').html_safe %>');
+
+<%# if @type.downcase == "check" %>
+	// $('#disbursement_entity').val('<%#= @entity.EntityID %>');  
+ //  $('#check input[name=payee_1]').val('<%#= @entity.name.to_s.html_safe %>').change();  
+ //  $('#check input[name=payee_1_id]').val('<%#= @entity.EntityID %>').change();
+ //  $('#check input[name=address_1]').val('<%#= @disbursement.address_1 %>');
+ //  $('#check input[name=address_2]').val('<%#= @disbursement.address_2 %>');
+ //  $('#check input[name=city]').val('<%#= @disbursement.city %>');
+ //  $('#check input[name=state]').val('<%#= @disbursement.state %>');
+ //  $('#check input[name=zip]').val('<%#= @disbursement.zip %>');
+<%# else %>
+	// $('#disbursement_entity').val('<%#= @entity.EntityID %>');  
+ //  $('#check input[name=payee_1]').val('<%#= @entity.name.to_s.html_safe %>').change();  
+ //  $('#check input[name=payee_1_id]').val('<%#= @entity.EntityID %>').change();
+ //  $('#check input[name=beneficiary_bank_name]').val('<%#= @disbursement.beneficiary_bank_name %>');
+ //  $('#check input[name=beneficiary_bank_routing]').val('<%#= @disbursement.beneficiary_bank_routing %>');
+ //  $('#check input[name=beneficiary_name]').val('<%#= @disbursement.beneficiary_name %>');
+ //  $('#check input[name=beneficiary_account_number]').val('<%#= @disbursement.beneficiary_account_number %>');
+<%# end %>
+
+<%# @lines.size > 0 ? @hud = Hud.find(@lines.first.hud_id) : @hud = nil %>
+<%# @lines.each do |line| %>
+	<%# number = line.number %>
+	<%# case number %>
+	<%# when 100..699 %>
+		// $("tr#hud_row_<%#= number %>").replaceWith("<%#= j(render "huds/partials/half-line", builder: line ).html_safe %>");
+	<%# else %>
+		// $("tr#hud_row_<%#= number %>").html("<%#= j(render "huds/partials/full-line", builder: line ).html_safe %>");
+	<%# end %>
+<%# end %>

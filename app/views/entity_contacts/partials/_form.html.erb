@@ -1,0 +1,84 @@
+<% case @overlay%>
+<% when 'Contact Info' %>
+  <% if @contact %>
+    <% description = @contact.Description %>
+    <% contact_desc = @contact.ContactDesc %>
+    <% contact = @contact.Contact %>
+  <% else %>
+    <% description = "" %>
+    <% contact_desc = "" %>
+    <% contact = "" %>
+  <% end %>
+  <%= form_for (@contact == nil ? EntityContact.new : @contact ), remote: true do |f| %>
+    <table style="margin-top: 5px;">
+      <tr>
+        <td class="label">Type:</td>
+        <td><%= select :ContactDesc, :ContactDesc, EntityContact.contact_types.collect {|t, v| [ v, v ] }, {selected: contact_desc}, {onchange: "update_placeholder(this.value);", style:"width: 168px;", name: "ContactDesc"} %>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Description:</td>
+        <td><%= text_field_tag :Description, description, placeholder: "i.e. Cell, Home, Work, ect." %></td>
+      </tr>
+      <tr>
+        <td class="label">Info:</td>
+        <td><%= text_field_tag :Contact, contact, placeholder: "i.e. 555-555-5555" %></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: right;"><%= f.submit "Save" %><input type="button" value="Clear/New" onclick="$('input#ContactDesc').val('Mailing Address').change(); $(this).closest('form').find('input[type=text]').val(''); $('input#contact_id').val(''); if($('#current_contacts .active_row').html() != undefined){$('#current_contacts .active_row').removeClass('active_row')}" /></td>
+      </tr>
+    </table>
+    <%= hidden_field_tag :EntityID, "#{@rolodex_entity.EntityID}" %>
+    <%= hidden_field_tag :ContactType, "CONTACT" %>
+    <%= hidden_field_tag :contact_id, (@contact.ContactID if @contact != nil) %>
+  <% end %>
+<% when "Address" %>
+  <% if @contact %>
+    <% description = @contact.Description %>
+    <% contact_desc = @contact.ContactDesc %>
+    <% address_1 = @contact.Address %>
+    <% address_2 = @contact.Address2 %>
+    <% city = @contact.City %>
+    <% state = @contact.State %>
+    <% zip = @contact.Zip %>
+  <% else %>
+    <% description = "" %>
+    <% contact_desc = "" %>
+    <% address_1 = "" %>
+    <% address_2 = "" %>
+    <% city = "" %>
+    <% state = "" %>
+    <% zip = "" %>
+  <% end %>
+
+  <%= form_for (@contact == nil ? EntityContact.new : @contact ), remote: true do |f| %>
+    <table style="margin-top: 10px;">
+      <tr>
+        <td class="label">Type:</td> 
+        <td><%= select :ContactDesc, :ContactDesc, EntityContact.address_types.collect {|t, v| [ v, v ] }, {selected: contact_desc}, {onchange: "update_placeholder(this.value);", style:"width: 168px;", name: "ContactDesc", id: "ContactDesc"} %></td>
+      </tr>
+      <tr>
+        <td class="label">Description:</td> 
+        <td><%= text_field_tag :Description, description, placeholder: "i.e. Residential, Business, ect.", style:"width: 164px;" %></td>
+      </tr>
+      <tr>
+        <td class="label">Address 1:</td>
+        <td><%= text_field_tag :Address, address_1, style:"width: 164px;" %>
+      </tr>
+      <tr>
+        <td class="label">Address 2:</td>
+        <td><%= text_field_tag :Address2, address_2, style:"width: 164px;" %>
+      </tr>
+      <tr>
+        <td class="label">City, State Zip:</td>
+        <td><%= text_field_tag :City, city, id: "city", style: "width: 75px" %><%= text_field_tag :State, state, id: "state", style: "width: 25px;" %><%= text_field_tag :Zip, zip, id: "zip", style: "width: 50px;" %></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: right;"><%= f.submit "Save" %><input type="button" value="Clear/New" onclick="$('select#ContactDesc').val('Mailing Address').change(); $(this).closest('form').find('input[type=text]').val(''); $('input#contact_id').val(''); if($('#current_contacts .active_row').html() != undefined){$('#current_contacts .active_row').removeClass('active_row')}" /></td>
+      </tr>
+    </table>
+    <%= hidden_field_tag :EntityID, "#{@rolodex_entity.EntityID}" %>
+    <%= hidden_field_tag :ContactType, "ADDRESS" %>
+    <%= hidden_field_tag :contact_id, (@contact.ContactID if @contact != nil) %>
+  <% end %>
+<% end %>

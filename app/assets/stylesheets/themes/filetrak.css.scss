@@ -1,0 +1,86 @@
+@import "base";
+
+$white: #FFFFFF;
+$light_grey: #CCC;
+$grey: #BBB;
+$dark_grey: #222;
+$black: #111111;
+$red: #96190e;
+$blue: #01005E;
+
+/* Backgrounds */
+$background_color_active: $black;
+$background_color_body: #01005E;
+$background_color_doc_content: transparent;
+$background_color_menu: $white;
+$background_color_menu_hover: $black;
+$background_color_error: #f8a7aa;
+$background_color_search_bar: #efe8d8;
+
+/* Gradients */
+$header_gradient_background_legacy: rgb(0,0,0);
+$header_gradient_background_color_1: #000000;
+$header_gradient_background_color_2: #000000;
+$header_gradient_background_rgba: #FFFFFF 1px,#111111 1px,#111111 34px,#111111 34px,#000000 35px;
+
+$table_header_gradient_background_legacy: rgb(239,232,216);
+$table_header_gradient_background_color_1: #efe8d8;
+$table_header_gradient_background_color_2: #efe8d8;
+$table_header_gradient_background_rgba: #FFFFFF 1px,#efe8d8 1px,#efe8d8 34px,#efe8d8 34px,#000000 35px;
+
+$gradient_background_grey_legacy: rgb(239,232,216);
+$gradient_background_grey_color_1: #efe8d8;
+$gradient_background_grey_color_2: #efe8d8;
+$gradient_background_grey_rgba: rgba(239,232,216,1) 0%,rgba(239,232,216,1) 50%,rgba(239,232,216,1) 59%,rgba(239,232,216,1) 100%;
+
+/* Color Selector */
+$global_color: #008541;
+$error_color: #ed1c24;
+
+/* Fonts */
+$font_color_standard: $white;
+$font_color_doc_input_fields: #BBBBBB;
+$font_color_placeholder: $white;
+$font_color_doc_content: #000000;
+$font_color_flash: #FFF;
+$font_color_error: #464646;
+$font_color_active: $white;
+$font_color_table_header: #464646;
+$font_color_company_name: $white;
+$font_color_search_nav: $font_color_table_header;
+$font_color_search_bar: $font_color_table_header;
+
+/* Links */
+$link_color_standard: #00AAFF;
+$link_color_menu: $black;
+$link_color_menu_hover: $white;
+
+/* Borders */
+$border_color_standard: #c3bdaf;
+$border_color_accent: #efe8d8;
+$border_color_menu_hover: #282828;
+$border_color_menu: #282828;
+$border_color_row_divider: $black;
+$border_color_header_divider: $grey;
+$border_form_element: $black;
+
+/* Rules Etc. */
+$hr_color: #111111;
+
+/* Headlines */
+$h4_background_color: #FF0000;
+$h4_font_color: #FFF;
+
+/* tabs */
+$tab_background: url("/assets/filetrak_tab_bg.png") no-repeat;
+$tab_background_active: url("/assets/filetrak_tabactive_bg.png") no-repeat;
+$tab_font_color: #464646;
+$tab_font_color_hover: $font_color_standard;
+$tab_font_color_active: $font_color_standard;
+
+/* Navigation */
+$navigation_link_color: #00AAFF;
+$navigation_divider_color: #AAA;
+
+@import "main";
+@import "shame";

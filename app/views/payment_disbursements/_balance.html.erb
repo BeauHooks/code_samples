@@ -1,0 +1,18 @@
+<h3>Balance Summary</h3>
+<table class="balance_summary">
+  <tbody>
+    <tr>
+      <td class="label">Available:</td>
+      <td class="disbursement_amount available"><%= number_to_currency(@line.payment_amount, unit: "$") %></td>
+    </tr>
+    <tr class="border-bottom">
+      <td class="label">Payments:</td>
+      <td class="disbursement_amount payments"><%= number_to_currency(@line.payment_disbursements.sum("amount"), unit: "$") %></td>
+    </tr>
+    <% balance = @line.payment_amount - @line.payment_disbursements.sum("amount") %>
+    <tr class="<%= "red" if balance != 0 %>">
+      <td class="label">Balance:</td>
+      <td class="disbursement_amount balance"><%= number_to_currency(balance, unit: "$") %></td>
+    </tr>
+  </tbody>
+</table>

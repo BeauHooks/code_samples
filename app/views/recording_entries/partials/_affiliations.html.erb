@@ -1,0 +1,77 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_affiliation">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="number"><div>Affiliated #</div></th>
+          <th class="recorded"><div>Recorded</div></th>
+          <th class="taxid"><div>Tax ID</div></th>
+          <th class="type"><div>Type</div></th>
+          <th class="from"><div>From Party</div></th>
+          <th class="to"><div>To Party</div></th>
+          <th class="for"><div>Recorded For</div></th>
+          <th class="amount"><div>Amount</div></th>
+        </tr>
+      </thead>
+      <tbody class="results">
+        <% unless @detail.first_entries.nil? %>
+          <% @detail.first_entries.each do |first| %>
+            <% unless first.second_entry.nil? %>
+              <tr>
+                <td class="number"><%= link_to first.SecondNum.to_i, "recording_entries?search=#{first.SecondNum.to_i}&search_field=entrynumber&id=#{first.second_entry.ID}&match=true" %></td>
+                <td class="recorded"><%= first.second_entry.filingdate.to_date %></td>
+                <td class="taxid"><%= first.second_entry.taxid %></td>
+                <td class="type"><%= first.second_entry.type %></td>
+                <% if first.second_entry.fromparty.to_s.length > 20 %>
+                  <td class="from hint"><span><%= first.second_entry.fromparty %></span><%= first.second_entry.fromparty[0..19] %></td>
+                <% else %>
+                  <td class="from"><%= first.second_entry.fromparty %></td>
+                <% end %>
+                <% if first.second_entry.toparty.to_s.length > 20 %>
+                  <td class="to hint"><span><%= first.second_entry.toparty %></span><%= first.second_entry.toparty[0..19] %></td>
+                <% else %>
+                  <td class="to"><%= first.second_entry.toparty %></td>
+                <% end %>
+                <% if first.second_entry.recordedfor.to_s.length > 20 %>
+                  <td class="for hint"><span><%= first.second_entry.recordedfor %></span><%= first.second_entry.recordedfor[0..19] %></td>
+                <% else %>
+                  <td class="for"><%= first.second_entry.recordedfor %></td>
+                <% end %>
+                <td class="amount"><%= number_to_currency(first.second_entry.consideration) %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% unless @detail.second_entries.nil? %>
+          <% @detail.second_entries.each do |second| %>
+            <% unless second.first_entry.nil? %>
+              <tr>
+                <td class="number"><%= link_to second.FirstNum.to_i, "recording_entries?search=#{second.FirstNum.to_i}&search_field=entrynumber&id=#{second.first_entry.ID}&match=true" %></td>
+                <td class="recorded"><%= second.first_entry.filingdate.to_date %></td>
+                <td class="taxid"><%= second.first_entry.taxid %></td>
+                <td class="type"><%= second.first_entry.type %></td>
+                <% if second.first_entry.fromparty.to_s.length > 20 %>
+                  <td class="from hint"><span><%= second.first_entry.fromparty %></span><%= second.first_entry.fromparty[0..19] %></td>
+                <% else %>
+                  <td class="from"><%= second.first_entry.fromparty %></td>
+                <% end %>
+                <% if second.first_entry.toparty.to_s.length > 20 %>
+                  <td class="to hint"><span><%= second.first_entry.toparty %></span><%= second.first_entry.toparty[0..19] %></td>
+                <% else %>
+                  <td class="to"><%= second.first_entry.toparty %></td>
+                <% end %>
+                <% if second.first_entry.recordedfor.to_s.length > 20 %>
+                  <td class="for hint"><span><%= second.first_entry.recordedfor %></span><%= second.first_entry.recordedfor[0..19] %></td>
+                <% else %>
+                  <td class="for"><%= second.first_entry.recordedfor %></td>
+                <% end %>
+                <td class="amount"><%= number_to_currency(second.first_entry.consideration) %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function subst() {
+        var vars={};
+        var value = "";
+        var x=document.location.search.substring(1).split('&');
+        for(var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        var x=['doctitle', 'frompage','topage','page','webpage','section','subsection','subsubsection'];
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j){
+
+            if(y[j].className == 'page' || y[j].className == 'topage'){
+              if(Number(vars[x[i]])%2 == 0){
+                value = 2;
+              }
+              else{
+                value = 1;
+              }
+            }
+            else{
+              value = vars[x[i]]
+            }
+            y[j].textContent = value;
+          }
+        }
+
+        // if(parseInt(vars['page']) == 2 || parseInt(vars['page']) == 4){
+        //   document.getElementById("initials").innerHTML = "";
+        // }
+      }
+    </script>
+
+    <style>
+      table{ width: 100%; }
+      td{width: 30%; font-size: 7pt;}
+    </style>
+  </head>
+  <body style="margin: 0;" onload="subst();" class="ss_footer">
+    <table>
+      <tr>
+        <td>Settlement Statement - <span class="doctitle"></span></td>
+        <td style="text-align: center;"><!-- Page <span class="page"></span> of <span class="topage"></span> --></td>
+        <td style="text-align: right;" id="initials"><!-- Initials:
+      <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>/
+      <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> --></td>
+      </tr>
+    </table>
+  </body>
+</html>

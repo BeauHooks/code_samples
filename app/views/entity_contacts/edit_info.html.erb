@@ -1,0 +1,72 @@
+<% case @overlay%>
+<% when 'Contact Info' %>
+  <div id="add_edit_contact_info" class="add_edit_contact_info">
+    <div class="overlay_header">
+      <h2>Add Contact Info</h2>
+    </div>
+    <div class="overlay_content">
+      <% if @rolodex_entity != nil %>
+        <!-- <h3>Contacts On Record</h3>   -->
+        <div class="border">
+          <table class="grid_header">
+            <tr>
+              <td class="description">Description</td>
+              <td class="type">Type</td>
+              <td class="info">Contact</td>
+              <td class="modify_date">Modified</td>
+              <td class="modify_user">Modified By</td>
+              <td id="edit_contact_info_last" class="action"></td>
+            </tr>
+          </table>
+          <div id="current_contacts" class="results">
+            <%= render "entity_contacts/current_contacts" %>
+          </div>
+        </div>
+      <% end %>
+      <div id="contact_info_form">
+        <%= render 'entity_contacts/form' %>
+      </div>
+    </div>
+    </div>
+    <div class="overlay_footer">
+      <input type="button" value="Close" class="button close" onclick="closeOverlay('new_contact_info');" />
+    </div>
+  </div>
+
+<% when 'Address' %>
+  <div id="add_edit_address">
+    <div class="overlay_header">
+      <h2>Add Address</h2>
+    </div>
+    <div class="overlay_content">
+      <% if @rolodex_entity != nil %>
+        <!-- <h3>Contacts On Record</h3>   -->
+        <div class="border">
+          <table class="grid_header">
+            <tr>
+              <td class="description">Description</td>
+              <td class="type">Type</td>
+              <td class="info">Contact</td>
+              <td class="modify_date">Modified</td>
+              <td class="modify_user">Modified By</td>
+              <td id="edit_contact_info_last" class="action"></td>
+            </tr>
+          </table>
+          <div id="current_contacts" class="results">
+            <%= render 'entity_contacts/current_contacts' %>
+          </div>
+        </div>
+        <% end %>
+        <div id="contact_info_form">
+          <%= render 'entity_contacts/form' %>
+        </div>
+      </div>
+      <div class="overlay_footer">
+      <input type="submit" value="Close" class="button close" onclick="closeOverlay('new_contact_info');" />
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  openOverlay("new_contact_info");
+</script>

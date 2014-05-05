@@ -1,0 +1,13 @@
+<tbody>
+	<% policy_endorsements = policy.policy_endorsements %>
+	<% if policy_endorsements.size == 0 %>
+		<tr><td class="no_result" style="border-bottom: 0px;">No endorsements</td></tr>
+	<% else %>
+		<% policy_endorsements.each do |policy_endorsement| %>
+			<tr>
+				<td style="width: 60px;"><%= image_tag "/assets/redx.png", class: "trigger", style: "margin-right: 5px;", onclick: "destroy('#{policy_endorsement_path(id: policy_endorsement.id)}', $(this).closest('tr'));" %><%= policy_endorsement.endorsement.ShortName %></td>
+				<td><%= number_to_currency(policy_endorsement.amount) %></td>
+			</tr>
+		<% end %>
+	<% end %>
+</tbody>

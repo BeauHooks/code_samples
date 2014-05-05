@@ -1,0 +1,61 @@
+<% options, collection = relationship_list() %>
+<tr id="affiliation<%= @entity.EntityID %>" data-section="affiliation">
+	<td class="primary" data-field="Primary">
+		<img src="/assets/redx.png" onclick="$(this).closest('tr').remove();" class="trigger" />
+		<input type="checkbox" onclick="updateRolodexPrimary(this.id)" data-field="Primary" />
+	</td>
+	<% if @entity.name_last_first.to_s.length > 15 %>
+		<td class="entity hint" data-field="Name">
+			<span><%= @entity.name_last_first %></span>
+			<%= truncate(@entity.name_last_first, length: 15) %>
+	<% else %>
+		<td class="entity" data-field="Name">
+			<%= @entity.name_last_first %>
+	<% end %>
+		<%= hidden_field_tag "entity[EntityID]", @entity.EntityID, "data-field" => "EntityID" %>
+	</td>
+	<% phone = @entity.primary_phone %>
+  <% if !phone.nil? && "#{phone.ContactDesc}: #{phone.Contact}".length > 15 %>
+    <td class="hint" data-field="Phone">
+      <span><%= phone.Contact %></span>
+        <%= truncate("#{phone.ContactDesc}: #{phone.Contact}", length: 15) %>
+    </td>
+  <% else %>
+    <td class="w95" data-field="Phone">
+      <%= "#{phone.ContactDesc}: #{phone.Contact}" unless phone.nil? %>
+    </td>
+  <% end %>
+
+  <% email = @entity.primary_email %>
+  <% if !email.nil? && email.Contact.to_s.length > 15 %>
+    <td class="hint" data-field="Email">
+      <span><%= mail_to email.Contact, email.Contact.downcase %></span>
+      <%= link_to truncate(email.Contact, length: 15), email.Contact.downcase %>
+    </td>
+  <% else %>
+    <td class="w95" data-field="Email">
+      <%= mail_to "#{email.ContactDesc}: #{email.Contact}", email.Contact.to_s.downcase unless email.nil? %>
+    </td>
+  <% end %>
+
+  <% address = @entity.address %>
+  <% if !address[0].blank? && address[0].length > 15 %>
+    <td class="hint" data-field="Address">
+    	<span><%= address[0] %></span>
+      <%= truncate(address[0], length: 15) %>
+    </td>
+  <% else %>
+    <td class="w95" data-field="Address"><%= address[0] unless address.nil? %>
+    </td>
+  <% end %>
+
+  <td class="w95" data-field="City"><%= truncate(address[1], length: 17) unless address.nil? %></td>
+  <td class="w95" data-field="State"><%= address[2] unless address.nil? %></td>
+	<td class="relationship" data-field="Relationship">
+    <%= select :rolodex_affiliation, :Relationship, options_for_select(collection, @relationship), {include_blank: true}, {"data-field" => "Relationship", id: "affiliations_list#{@entity.EntityID}"} %><!-- <input id="affiliations_list<%= @entity.EntityID %>" value="<%= @relationship %>" data-field="Relationship" /> -->
+  </td>
+</tr>
+
+<script type="text/javascript">
+	initRolodexFormPosition($("tr#affiliation<%= @entity.EntityID %>"));
+</script>

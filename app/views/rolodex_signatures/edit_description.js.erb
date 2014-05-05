@@ -1,0 +1,7 @@
+if($("#signature_focus").val() != undefined){
+  var e = jQuery.Event("keydown");
+  e.keyCode = 27;
+  $("input#signature_focus").trigger(e);
+}
+
+$("tr#signature_<%= @signature.id %> td:nth-child(1)").html("<%= j(render :partial => "rolodex_signatures/edit_in_place").html_safe %>");

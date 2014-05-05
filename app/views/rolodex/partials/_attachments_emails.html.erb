@@ -1,0 +1,25 @@
+<table>
+  <% c = 0 %>
+  <%# FIXME: Need to make these accessible to ADMIN Users %>
+  <% rolodex.messages.where("employee_id = #{current_user.employee_id}").take(20).each do |i| %>
+    <% c += 1 %>
+    <tr>
+      <td class="attachment"><%= link_to image_tag("attach.png", class: "icon") %></td>
+      <td class="from"><div><%= mail_to i.from.downcase unless i.from.nil? %></div></td>
+      <td class="to"><div><%= mail_to i.recipients.first.address.downcase unless i.recipients.first.nil? %></div></td>
+      <td class="sent_date"><%= i.sent_at.to_formatted_s(:standard) unless i.sent_at.nil? %></td>
+      <td class="subject"><%= truncate(i.subject, length: 85) unless i.subject.nil? %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%# OPTIMIZE: Easier way to inject js? %>
+<% if c > 8 %>
+  <script type="text/javascript">
+    addWidth('rolodex_email', 670);
+  </script>
+<% else %>
+  <script type="text/javascript">
+    fixWidth('rolodex_email', 670);
+  </script>
+<% end %>

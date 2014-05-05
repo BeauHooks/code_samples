@@ -1,0 +1,63 @@
+<table>
+  <% if @overlay == "Contact Info" || @type == "Contact Info" %>
+    <% contact = "CONTACT" %>
+  <% else %>
+    <% contact = "ADDRESS" %>
+  <% end %>
+    <% c = 0 %>
+    <% @rolodex_entity.entity_contacts.where("ContactType = '#{contact}' AND IsActive = -1").each do |i| %>
+    <% c += 1%>
+    <tr onclick="rowSelect(this, 'entity_contacts/<%= i.ContactID %>/show_info?overlay=<%= @overlay %>');" class="trigger">
+      <% if !i.description.nil? && i.description.length > 15 %>
+        <td class="description hint">
+          <span>
+            <%=  i.description %>
+          </span>
+          <div>
+            <%=  truncate(i.description, :length => 15) %>
+          </div>
+        </td>
+      <% else %>
+        <td class="description">
+          <div>
+            <%=  i.description if i.description != nil %>
+          </div>
+        </td>
+      <% end %>
+
+        <td class="type"><%= i.type %></td>
+        <% if @overlay == "Contact Info" || @type == "Contact Info" %>
+          <td class="info <%= "hint"  if i.Contact != nil && i.Contact != "" && i.Contact.length > 28 %> ">
+          <% if i.type.titleize == "Email" %>
+            <span><%= mail_to i.Contact if i.Contact != nil && i.Contact.length > 28 %></span>
+            <%= mail_to i.Contact, truncate(i.Contact, :length => 28) if i.Contact != nil %>
+          <% else %>
+            <span><%= i.Contact if i.Contact != nil && i.Contact.length > 28 %></span>
+            <%= i.Contact if i.Contact != nil %>
+          <% end %>
+          </td>
+        <% else %>
+          <td class="info <%= "hint"  if i.address[0] != nil && i.address[0] != "" && i.address[0].length > 28 %> ">
+            <span><%= i.address[0]  if i.address[0]  != nil && i.address[0].length > 28 %></span>
+            <%= truncate(i.address[0] , :length => 28) if i.address[0]  != nil %></td>
+        <% end %>
+
+        <td class="modify_date"><%= i.modify_date %></td>
+        <td class="modify_user"><%= i.modify_user %></td>
+        <td class="action">
+          <input type ="button" value="Remove" onclick = "$.post('application/flash_notice?post=<%= entity_contact_path(i.ContactID) %>/destroy&confirm=Yes'); event.stopPropagation(); return false;" />
+          <%#= button_to "Remove", entity_contact_path(i.ContactID), method: :delete, remote: true, confirm: "Are you sure?" %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%# OPTIMIZE: Easier way to inject js? %>
+<% if c > 4 %>
+  <script type="text/javascript">
+    addWidth('edit_contact_info', 80);
+  </script>
+<% else %>
+  <script type="text/javascript">
+    fixWidth('edit_contact_info', 80);
+  </script>
+<% end %>

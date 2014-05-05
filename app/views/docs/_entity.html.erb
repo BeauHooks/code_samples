@@ -1,0 +1,110 @@
+<% name = @doc_entity.entity.name %>
+<% @doc_entity.doc_id == 0 ? click = "$('#all_docs .active_row a').click();" : click = "$('#preview_link').click();" %>
+  <!-- Expandable Title Of Entire Entity -->
+  <div id="doc_entity_<%= @doc_entity.id %>_container" class="entity_container">
+  <div onclick="if($('#doc_entity_<%= @doc_entity.id %>_contents').attr('style').indexOf('display: none') == -1){$('#doc_entity_<%= @doc_entity.id %>_contents').hide()}else{$('#doc_entity_<%= @doc_entity.id %>_contents').show()}">
+    <table class="grid_header trigger">
+      <tbody>
+        <tr>
+          <td colspan="2" class="sort">
+            <%= text_field_tag :sort, @doc_entity.sort_order, remote: true, onchange: "$.ajax({url: '#{update_entity_position_docs_path(id: @doc_entity.id)}&new_sort=' + $(this).val(), type: 'PUT' }); #{click}", onclick: "event.stopPropagation();", onkeydown: "numbersOnly(event);" %>
+          </td>
+          <td class="entity">
+            <%= truncate(name, length: 30) %>
+            <input type="hidden" id="<%= @doc_entity.tag %>_name_<%= @doc_entity.id %>" value="<%= name %>" />
+          </td>
+          <td>
+            <% @file.file_doc_fields.where("doc_id = #{@doc_entity.doc_id} AND is_active = 1 AND tag LIKE '#{@doc_entity.tag}_NOTARY_%#{@doc_entity.id}' ").count > 0 ? split = true : split = false %>
+            <%= check_box_tag "split_notary_#{@doc_entity.id}", "split", split, onclick: "$.ajax({url: '#{toggle_split_notary_docs_path(id: @doc_entity.id, type: 'entity')}', type: 'PUT'}); event.stopPropagation();", disabled: @file.file_doc_entities.where("is_active = 1 AND doc_id = #{@doc_entity.doc_id} AND tag = '#{@doc_entity.tag.upcase}' ").count > 1 && @doc_entity.entity.IndCorp != "Individual" %>
+            <%= image_tag "redx.png", :class => "remove_entity trigger", onclick: "destroy('#{remove_entity_docs_path(id: @doc_entity.id)}'); event.stopPropagation();", remote: true %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Inner Shell Of Entire Entity -->
+    <div  id="doc_entity_<%= @doc_entity.id %>_contents" class="entity_contents box" style="display: none;">
+      <% if @file.file_doc_fields.where("tag LIKE '%_NOTARY_%#{@doc_entity.id}' AND tag NOT LIKE '%_NOTARY_%#{@doc_entity.id}_' AND doc_id = #{@doc_entity.doc_id} AND is_active = 1 ").count > 0 && @file.file_doc_fields.where("tag LIKE '%_NOTARY_%#{@doc_entity.id}' AND tag NOT LIKE '%_NOTARY_%#{@doc_entity.id}_' AND doc_id = #{@doc_entity.doc_id} AND is_active = 1 ").first.value != "" %>
+        <table>
+            <tr>
+                <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_VESTING_#{@doc_entity.id}' AND doc_id = #{@doc_entity.doc_id} AND is_active = 1 ").first.value rescue "" %>
+                <% (value == nil || value == "") ? error = "error" : error = ""  %>
+                <td class="label top <%= error %>">Notary Vesting:</td>
+                <td colspan="3" class="hint">
+                  <div style="position: relative;">
+                    <form action="application/large_text" data-remote="true" method="post">
+                    <span>
+                            <%= image_tag "expand.jpg", :class => "icon trigger", onclick: "$(this.parentNode.parentNode).submit();" %>
+                    </span>
+                    <textarea name="text" id='<%= @doc_entity.tag.downcase %>_notary_vesting_<%= @doc_entity.id %>' class="<%= error %>" rows="3" cols="23" onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=global_<%= @doc_entity.tag %>_NOTARY_VESTING_<%= "#{@doc_entity.id}" %>&value=' + encodeURIComponent(this.value)); updateDocField(this);" placeholder="This section will automatically be updated as you add signatures."><%= value %></textarea>
+                    <input type="hidden" name="field" value="<%= @doc_entity.tag.downcase %>_notary_vesting_<%= @doc_entity.id %>" />
+                    <input type="hidden" name="confirm" value="Save" />
+                    <input type="hidden" name="editable" value="true" />
+                    <input type="hidden" name="title" value="<%= name %> Notary Vesting" />
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_DATE_#{@doc_entity.id}' AND doc_id = #{@doc_entity.doc_id} AND is_active = 1 ").first.value rescue "" %>
+                <% (value == nil || value == "") ? error = "error" : error = ""  %>
+                <td class="label top <%= error %>">Notary Date:</td>
+                <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>" id='<%= @doc_entity.tag.downcase %>_notary_date_<%= @doc_entity.id %>' onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=global_<%= @doc_entity.tag %>_NOTARY_DATE_<%= "#{@doc_entity.id}" %>&value=' + encodeURIComponent(this.value)); updateDocField(this);"/></td>
+              </tr>
+              <tr>
+                <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_STATE_#{@doc_entity.id}' AND doc_id = #{@doc_entity.doc_id} AND is_active = 1 ").first.value rescue "" %>
+                <% (value == nil || value == "") ? error = "error" : error = ""  %>
+                <td class="label top <%= error %>">Notary State:</td>
+                <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>" id='<%= @doc_entity.tag.downcase %>_notary_state_<%= @doc_entity.id %>' onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=global_<%= @doc_entity.tag %>_NOTARY_STATE_<%= "#{@doc_entity.id}" %>&value=' + encodeURIComponent(this.value)); updateDocField(this);"/></td>
+              </tr>
+              <tr>
+                <% value = @file.file_doc_fields.where("tag = '#{@doc_entity.tag}_NOTARY_COUNTY_#{@doc_entity.id}' AND doc_id = #{@doc_entity.doc_id} AND is_active = 1 ").first.value rescue "" %>
+                <% (value == nil || value == "") ? error = "error" : error = ""  %>
+                <td class="label <%= error %>">Notary County:</td>
+                <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>"  id='%= @doc_entity.tag.downcase %>_notary_county_<%= @doc_entity.id %>' onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=<%= @doc_entity.doc_id %>&field=global_<%= @doc_entity.tag %>_NOTARY_COUNTY_<%= "#{@doc_entity.id}" %>&value=' + encodeURIComponent(this.value)); updateDocField(this);" /></td>
+              </tr>
+            </table>
+            <hr />
+      <% end %>
+      <% if @doc_entity.rolodex_signature_id != nil || @force_create == true %>
+        <table>
+          <tr>
+            <td class="label"><%= @doc_entity.entity.IndCorp == "Individual" ? "Signature:" : "Signature Block:" %></td>
+            <td><%= select (@doc_entity.doc_id == 0 ? :block : :manage_block), @doc_entity.id, RolodexSignature.where("entity_id = #{@doc_entity.entity_id} AND is_active != 0").collect{|t| [t.description, t.id]} + [ [ 'Create', 'new' ] ], {selected: @doc_entity.rolodex_signature_id}, {onchange: "$.ajax({url: '#{update_entity_signature_docs_path(id: @doc_entity.id, doc_id: @doc_entity.doc_id)}&value=' + $(this).val(), type: 'PUT'}); #{click}", remote: true, :class => "signature_select"} %><%= link_to image_tag("edit.png", :class => "trigger icon", title: "Edit"), "overlays/manage_signature_block?id=#{@doc_entity.id}", remote: true %>
+            </td>
+          </tr>
+        </table>
+        
+        <% sig = @doc_entity.rolodex_signature %>
+        <% if @doc_entity.entity.IndCorp == "Individual" %>
+          <% signature = sig.rolodex_signature_entities.first %>
+            <div id="doc_signature_<%= @doc_entity.id %>_container">
+            <table class="grid_header trigger">
+              <tr>
+                <td style="padding-left: 5px;">
+                    <%= text_field_tag "#{@doc_entity.tag}_signature_#{@doc_entity.id}", signature.name, onclick: "event.stopPropagation();", onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: signature.id, field: "name", no_show: "true")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'}); $.ajax({url: '#{update_entity_signature_docs_path(id: @doc_entity.id, doc_id: @doc_entity.doc_id)}', type: 'PUT'}); updateDocField(this); $('#add_sub_entity_to_#{@doc_entity.id}').show(); #{click}", style: "width: 55%;", placeholder: "Name" %>
+                    <%= text_field_tag "#{@doc_entity.tag}_signature_#{@doc_entity.id}", signature.title, onclick: "event.stopPropagation();", onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: signature.id, field: "title", no_show: "true")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'}); $.ajax({url: '#{update_entity_signature_docs_path(id: @doc_entity.id, doc_id: @doc_entity.doc_id)}', type: 'PUT'}); updateDocField(this); $('#add_sub_entity_to_#{@doc_entity.id}').show(); #{click}", style: "width: 35%;", placeholder: "Title" %>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          <% else %>
+          <%= generate_doc_signature_tree(sig).html_safe %>
+          <script type="text/javascript">
+            checkSplitParent("<%= @doc_entity.id %>");
+          </script>
+          <% end %>
+      <% else %>
+        <script type="text/javascript">
+          <% if @doc_entity.entity.rolodex_signatures.first == nil %>
+            $.post("<%= rolodex_signatures_path(force_create: "true", doc_entity_id: @doc_entity.id, entity: @doc_entity.entity_id, description: "Primary") %>");
+          <% else %>
+            $.ajax({url: "<%= update_entity_signature_docs_path(force_create: "true", id: @doc_entity.id, doc_id: @doc_entity.doc_id, value: @doc_entity.entity.rolodex_signatures.first.id) %>", type: "PUT"});
+          <% end %>
+        </script>
+      <% end %>
+      </div>
+    </div>
+<script type="text/javascript">
+  initializer();
+</script>

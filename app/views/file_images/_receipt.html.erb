@@ -1,0 +1,70 @@
+<% if [101, 103, 106].include?(@company.CompanyID) %>
+	<% company_logo = "sutc_logo_color.jpg" %>
+<% elsif @company.CompanyID == 102 %>
+	<% company_logo = "terra_logo_color.jpg" %>
+<% else %>
+	<% company_logo = nil %>
+<% end %>
+
+<% 2.times do |i| %>
+	<% if i > 0 %>
+		<% scan_box = true %>
+		<% padding = "padding: 1em 0em;" %>
+	<% else %>
+		<% scan_box = false %>
+		<% padding = "padding-bottom: 1em;" %>
+	<% end %>
+	<div style="<%= padding %> border-bottom: 1px dotted #CCCCCC;">
+		<h2 style="float: right; font-weight: normal; text-align: right; font-size: 1.25em;">
+			Receipt No. <span style="font-weight: bold;"><%= @receipt.ReceiptID %></span><br />
+			Date: <%= @receipt.DateReceived.strftime("%m/%d/%Y") if @receipt.DateReceived != nil %>
+			<% if scan_box == true %>
+				<br />
+				<label class="label" style="border: 1px solid #464646; background-color: #CCCCCC; padding: 2px 5px; position: relative; top: 5px;">SCANNED:<%= check_box_tag :scanned, "true", false, style: "margin: 0px 2px; position: relative; top: -2px" %></label>
+			<% end %>
+		</h2>
+		<% if company_logo != nil %>
+			<img src="<%= Rails.root %>/public/images/<%= company_logo %>" style="float: left; height: 4.25em; margin-right: 5px;" />
+		<% end %>
+		<h1 style="font-size: 1.25em;"><%= @company.CompanyName %></h1>
+		<h2 style="font-weight: normal; font-size: 1.25em;"><%= @company.CompanyAddress %><br /><%= @company.CompanyCSZ %></h2>
+
+		<div style="margin: 20px 0px; height: 115px;">
+			<table style="width: 100%;">
+				<tr>
+					<td style="vertical-align: top; padding-bottom: 20px;">File #:</td>
+					<td style="vertical-align: top; padding-bottom: 20px;" colspan="2"><%= @file.DisplayFileID %></td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top; width: 4em;">From:</td>
+					<td style="vertical-align: top; width: 50em;" class="label"><%= @receipt.Payer %></td>
+					<td style="text-align: right; vertical-align: top; width: 10em;" class="label"><%= number_to_currency(@receipt.ReceiptAmount, unit: "$") %></span></td>
+				</tr>
+			</table>
+		</div>
+		<table style="width: 100%; clear: both;">
+			<tr>
+				<td style="vertical-align: bottom; width: 20em; padding-right: 5px;">Notes:<br /><%= text_area_tag :notes, @receipt.ReceiptNotes, style: "border: 1px solid #CCCCCC; width: 20em; padding: 2px; height: 4em;" %></td>
+				<td style="vertical-align: bottom">
+					<table style="border-collapse: collapse; width: 100%;">
+						<tr>
+							<td style=" padding: 2px;">Instrument</td>
+							<td style=" padding: 2px;">Type of Funds</td>
+							<td style=" padding: 2px;">Office</td>
+							<td style=" padding: 2px;">By</td>
+						</tr>
+						<tr>
+							<td style="border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; padding: 2px;"><%= @receipt.Instrument %></td>
+							<td style="border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; padding: 2px;"><%= @receipt.payment_type %></td>
+							<td style="border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; padding: 2px;"><%= @receipt.office_name %></td>
+							<td style="border-right: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; padding: 2px;"><%= truncate(@receipt.depositor, length: 25) %></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+<% end %>
+<div style="width: 100%; height: 30%; position: relative;">
+	<p style="position: absolute; border: 1px solid #CCCCCC; color: #CCCCCC; padding: 2px; left: 38%; top: 50%;">Place Check Here for Scan.</p>
+</div>

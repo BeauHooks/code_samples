@@ -1,0 +1,41 @@
+<div id="user_content" class="box">
+  <div id="user_left">
+    <h2 class="left"><%= @user.name %></h2> 
+    <span style="float: right;">
+      <%= submit_tag "Save", type: "button", onclick: "$(this).next('form').submit();" %>
+      <%= submit_tag "Remove", type: "button", onclick: "$.ajax({url: '#{admin_user_path(id: @user.id)}', type: 'delete'});" %>
+    </span>
+    <%= render 'admin/partials/user_form' %>
+  </div>
+  <div id="user_right">
+    <% @companies = Company.where(CompanyID: [101,103,102,104,106,115,117]) %>
+    <% collection = {} %>
+    <% collection["GLOBAL"] = "Global" %>
+    <% @companies.each do |company| %>
+      <% collection[company.DirName] = company.DirName %>
+    <% end %>
+    <% collection["PREFS"] = "Preferences" %>
+    <h2>Permissions - <%= select_tag :directory, options_from_collection_for_select(collection, :first, :last, "GLOBAL") , {onchange: "selectCompany($(this).val());"} %></h2>
+
+    <div id="GLOBAL" class="user_tab">
+      <%= render "admin/users/partials/permissions", user: @user, company: nil, global: true %>
+    </div>
+    <% @companies.each do |c| %>
+      <div id="<%= c.DirName %>" class="user_tab">
+        <%= check_box_tag c.DirName, c.CompanyID, @user.belongs_to_company?(c.CompanyID), onclick: "editCompany(#{@user.id}, this)" %> Can use this company
+        <%= render "admin/users/partials/permissions", user: @user, company: c.CompanyID, global: nil %>
+      </div>
+    <% end %>
+    <div id="PREFS" class="user_tab">
+      <%= render "admin/users/partials/preferences" %>
+    </div>
+
+    <script type="text/javascript">
+      $("#tabs").tabs();
+      $("#user_tabs").tabs();
+      $(".ui-tabs-panel").css("background", "none");
+      $("#directory").change();
+    </script>
+  </div>
+  <p class="clear"></p>
+</div>

@@ -1,0 +1,12 @@
+if($('#all_docs').html() != ''){
+  <% if ["Refinance", "Construction Loan"].include?(@file.TransactionDescription1) %>
+    $("#grantor_container").hide();
+  <% else %>
+    $("#grantor_container").show();
+  <% end %>
+  <% if @file.TransactionDescription1 == "Cash Purchase" %>
+    $("#lender_container").hide();
+  <% else %>
+    $("#lender_container").show();
+  <% end %>
+}

@@ -1,0 +1,10 @@
+<table>
+  <% @employees.each do |e| %>
+    <tr>
+      <td class="name"><%= e.FullName %></td>
+      <td class="position"><select><option>Buyer</option><option>Seller</option><option>Lender</option></select></td>
+      <td class="email"><%= link_to e.Email %></td>
+      <td class="add_link"><%= link_to 'Add', '/index/6915/file_employees', remote: true, :data => {:FileID => '101110379'}, method: :post %></td>
+    </tr>
+  <% end %>
+</table>

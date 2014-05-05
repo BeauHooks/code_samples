@@ -1,0 +1,108 @@
+@import "compass";
+/*
+ * Color List:
+ * Add Colors Here as Needed.
+ * Can be used to change the hue of the color.
+ * Can be used to set the variables below as well.
+*/
+$white: #FFF;
+$grey_tint: #EEE;
+$light_grey: #CCC;
+$grey: #BBB;
+$medium_grey: #555;
+$dark_grey: #222;
+$black: #000;
+$red: #96190e;
+$blue: #0054a0;
+$green: green;
+
+/*
+ * The values below set the values for the default values/theme.
+*/
+
+/* Backgrounds */
+$background_color_active: #0054a0;
+$background_color_body: #FFF;
+$background_color_doc_content: transparent;
+$background_color_menu: #FFF;
+$background_color_menu_hover: #0054a0;
+$background_color_error: #f8a7aa;
+$background_color_search_bar: #FFFFFF;
+$background_color_entity_contents: #EEE;
+
+/* Highlights */
+$highlight_color_tr: #DFDFDF;
+$hightlight_color_text: $black;
+$hightlight_color_link: $blue;
+
+/* Gradients */
+$header_gradient_background_legacy: rgb(211,237,250);
+$header_gradient_background_color_1: #d3edfa;
+$header_gradient_background_color_2: #deebf2;
+$header_gradient_background_rgba: #D2ECFB 0px, #D2ECFB 35px;
+
+$table_header_gradient_background_legacy: rgb(211,211,211);
+$table_header_gradient_background_color_1: #d3d3d3;
+$table_header_gradient_background_color_2: #999999;
+$table_header_gradient_background_rgba: #C0C0C0 0%, #CECECE 25%, #B5B5B5 75%, #AFAFAF 100%;
+
+$gradient_background_grey_legacy: rgb(211,211,211);
+$gradient_background_grey_color1: #d3d3d3;
+$gradient_background_grey_color2: #999999;
+$gradient_background_grey_rgba: #D7D7D7 0%,#D7D7D7 25%,#CCCCCC 75%, #CCCCCC 100%;
+
+/* Color Selector */
+$global_color: #008541;
+$error_color: #ed1c24;
+$notice_color: #00a651;
+$custom_color: #D2691E;
+
+/* Fonts */
+$font_family_standard: 'Cabin',Helvetica,Arial,"Lucida Grande",sans-serif;
+$font_color_standard: #1F1F1F;
+$font_color_doc_input_fields: #111;
+$font_color_placeholder: #9B9B9B;
+$font_color_doc_content: #000000;
+$font_color_flash: #FFF;
+$font_color_error: #464646;
+$font_color_menu_hover: #111111;
+$font_color_active: $white;
+$font_color_table_header: #464646;
+$font_color_company_name: $white;
+$font_color_search_nav: $blue;
+$font_color_search_bar: $font_color_standard;
+$font_color_entity_contents: #464646;
+$font_size: 9pt;
+
+/* Links */
+$link_color_standard: #0054a0;
+$link_color_menu: #0054a0;
+$link_color_menu_hover: $white;
+
+/* Borders */
+$border_color_standard: #CCC;
+$border_color_accent: #CCC;
+$border_color_menu_hover: #BBBBBB;
+$border_color_menu: #CCC;
+$border_color_row_divider: $border_color_standard;
+$border_color_header_divider: $border_color_standard;
+$border_form_element: #CCC;
+$border_color_overlay: #464646;
+
+/* Rules Etc. */
+$hr_color: #CCC;
+
+/* Headlines */
+$h4_background_color: #FF0000;
+$h4_font_color: #FFF;
+
+/* tabs */
+$tab_background: url("/assets/tab_bg.png") no-repeat;
+$tab_background_active: url("/assets/tabactive_bg.png") no-repeat;
+$tab_font_color: $font_color_standard;
+$tab_font_color_hover: $white;
+$tab_font_color_active: $white;
+
+/* Navigation */
+$navigation_link_color: #555;
+$navigation_divider_color: #AAA;

@@ -1,0 +1,119 @@
+<!-- 700 Section -->
+<div class="content">
+  <table>
+    <tbody id="hud_section_700">
+    <%  @hud.hud_lines.where("number >=700 AND number <= 799").each do |builder| %>
+      <% if builder.type != nil %>
+        <tr class="<%= builder.type.gsub("_custom", "") rescue "" %>" id="hud_row_<%= builder.number %>">
+      <% else %>
+        <tr class="l_none " id="hud_row_<%= builder.number %>">
+      <% end %>
+          <%= render 'huds/partials/full-line', builder: builder %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="content">
+  <!-- 800 Section -->
+  <table>
+    <tbody id="hud_section_800">
+    <%  @hud.hud_lines.where("number >=800 AND number <= 899").each do |builder| %>
+      <% if builder.type != nil %>
+        <tr class="<%= builder.type.gsub("_custom", "") rescue "" %>" id="hud_row_<%= builder.number %>">
+      <% else %>
+        <tr class="l_none " id="hud_row_<%= builder.number %>">
+      <% end %>
+        <%= render 'huds/partials/full-line', builder: builder %>
+      </tr>    
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="content">
+  <!-- 900 Section -->
+  <table>
+    <tbody id="hud_section_900">
+    <%  @hud.hud_lines.where("number >=900 AND number <= 999").each do |builder| %>
+      <% if builder.type != nil %>
+        <tr class="<%= builder.type.gsub("_custom", "") rescue "" %>" id="hud_row_<%= builder.number %>">
+      <% else %>
+        <tr class="l_none " id="hud_row_<%= builder.number %>">
+      <% end %>
+        <%= render 'huds/partials/full-line', builder: builder %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="content">
+<!-- 1000 Section -->
+<table>
+  <tbody id="hud_section_1000">
+  <%  @hud.hud_lines.where("number >=1000 AND number <= 1099").each do |builder| %>
+    <% if builder.type != nil %>
+      <tr class="<%= builder.type.gsub("_custom", "") rescue "" %>" id="hud_row_<%= builder.number %>">
+    <% else %>
+      <tr class="l_none " id="hud_row_<%= builder.number %>">
+    <% end %>
+      <%= render 'huds/partials/full-line', builder: builder %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+<div class="content">
+  <!-- 1100 Section -->
+  <table>
+    <tbody id="hud_section_1100">
+    <%  @hud.hud_lines.where("number >=1100 AND number <= 1199").each do |builder| %>
+      <% if builder.type != nil %>
+        <tr class="<%= builder.type.gsub("_custom", "") rescue "" %>" id="hud_row_<%= builder.number %>">
+      <% else %>
+        <tr class="l_none " id="hud_row_<%= builder.number %>">
+      <% end %>
+      <% if builder.number >= 1100 && builder.number <= 1199 %>
+        <%= render 'huds/partials/full-line', builder: builder %>
+      <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="content">
+  <!-- 1200 Section -->
+  <table>
+    <tbody id="hud_section_1200">
+    <%  @hud.hud_lines.where("number >=1200 AND number <= 1299").each do |builder| %>
+      <% if builder.type != nil %>
+        <tr class="<%= builder.type.gsub("_custom", "") rescue "" %>" id="hud_row_<%= builder.number %>">
+      <% else %>
+        <tr class="l_none " id="hud_row_<%= builder.number %>">
+      <% end %>
+      <% if builder.number >= 1200 && builder.number <= 1299 %>
+        <%= render 'huds/partials/full-line', builder: builder %>
+      <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="content">
+  <!-- 1300 Section -->
+  <table>
+    <tbody id="hud_section_1300">
+    <%  @hud.hud_lines.where("number >=1300 AND number <= 1399").each do |builder| %>
+      <% if builder.type != nil %>
+        <tr class="<%= builder.type.gsub("_custom", "") rescue "" %>" id="hud_row_<%= builder.number %>">
+      <% else %>
+        <tr class="l_none " id="hud_row_<%= builder.number %>">
+        <!-- <tr class="l_none " id="hud_row_<%#= builder.number %>" onclick="$.post('/hud_lines/<%#= @hud.id %>/new_description?line=<%#= builder.number %>&hud_id=<%#= @hud.id %>&type=l');"> -->
+      <% end %>
+      <% if builder.number >= 1300 && builder.number <= 1399 %>
+        <%= render 'huds/partials/full-line', builder: builder %>
+      <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

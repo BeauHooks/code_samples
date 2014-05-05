@@ -1,0 +1,6 @@
+<h2 style="margin-bottom: 10px; float: left;">Exceptions</h2>
+<p style="float: right;"><%= link_to "Add Exception", new_fp_exception_path(file_product_id: @file_product.id), remote: true %></p>
+<p style="clear: both;"></p>
+<% @file_product.fp_exceptions.each do |exception| %>
+	<%= render "fp_exceptions/show", exception: exception, view: "index" %>
+<% end %>

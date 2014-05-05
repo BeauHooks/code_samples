@@ -1,0 +1,24 @@
+<% if @permission_view_private_notes_index %>
+  <% notes = @file.file_notes %>
+<% else %>
+  <% notes = @file.file_notes.where("IsPrivate = 0 OR EnteredBy = #{current_user.employee_id} OR TickleEmployeeID = #{current_user.employee_id}") %>
+<% end %>
+<% notes.each do |n| %>
+  <tr>
+    <td class="from">
+      <%= n.entered_by.nil? ? "" : n.entered_by.FullName %>
+    </td>
+
+    <td class="to">
+      <%= n.tickled_by.nil? ? "" : n.tickled_by.FullName %>
+    </td>
+
+    <td class="date">
+      <%= n.NoteDT.nil? ? "" : n.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p') %>
+    </td>
+
+    <td class="note">
+      <%= hint_truncate(n.NoteText, 25) %>
+    </td>
+  </tr>
+<% end %>

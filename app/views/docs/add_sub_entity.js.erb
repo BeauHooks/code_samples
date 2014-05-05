@@ -1,0 +1,11 @@
+style = $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style");
+$("#doc_entity_<%= @doc_entity.id %>_container").replaceWith("<%= j(render :partial => "docs/entity").html_safe %>");
+$("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style", style);
+
+//$("#doc_entity_<%= @doc_entity.id %>_container").replaceWith("<%= j(render :partial => "docs/entity").html_safe %>");
+// $("#doc_entity_<%= @doc_entity.id %>").append("<%= j(render :partial => "docs/sub_entity").html_safe %>");
+$("#add_sub_entity_to_<%= @doc_entity.id %>").hide();
+
+<%# section = @doc_entity.tag.downcase %>
+<%# value = FileDocField.where("file_id = #{@doc_entity.file_id} AND tag = '#{section.upcase}_NOTARY_VESTING' AND doc_id=0").first.value %>
+// $("textarea#<%#= section %>_notary_vesting").val("<%#= value.html_safe %>").change();

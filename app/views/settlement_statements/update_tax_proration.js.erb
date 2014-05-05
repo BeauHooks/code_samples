@@ -1,0 +1,115 @@
+var viewModel = new window.ss_vm(<%= raw @ss.to_json(include: {ordered_sections: {include: {ordered_lines: {include: [:ordered_cells]}}}}).gsub("</", "<\\/") %>);
+ko.cleanNode($("#ss")[0]);
+ko.applyBindings(viewModel, $("#ss")[0]);
+
+var buyer_amount, date, date_beginning_year, date_end_year, day, month, next_year, prorate, proration_date, proration_days, seller_amount, total_days, year, seller_start_date, seller_end_date, seller_amount, seller_credits, seller_charges, buyer_start_date, buyer_end_date, buyer_amount, buyer_credits, buyer_charges, seller_total, buyer_total;
+proration_date      = viewModel.tax_proration_date().split("-");
+month               = proration_date[1];
+day                 = proration_date[2];
+year                = proration_date[0];
+next_year           = (Number(year) + 1) + "";
+date                = new Date(proration_date[0], Number(proration_date[1]) - 1, proration_date[2]);
+date_beginning_year = new Date(proration_date[0], 0, 1);
+date_end_year       = new Date(proration_date[0], 11, 31);
+
+if (viewModel.tax_total() !== null) {
+  total_days     = Math.round(12 * 30.4);
+  proration_days = Math.abs(Math.round((date - date_beginning_year) / 1000 / 60 / 60 / 24));
+  seller_total   = ((proration_days / total_days) * viewModel.tax_total()).toFixed(2);
+  proration_days = Math.abs(Math.round((date_end_year - date) / 1000 / 60 / 60 / 24));
+  buyer_total    = ((proration_days / total_days) * viewModel.tax_total()).toFixed(2);
+  prorate        = true
+} else {
+  prorate = false;
+}
+
+ko.utils.arrayForEach(viewModel.ordered_sections(), function(ss_section) {
+  if (ss_section.name().toLowerCase() == "seller") {
+    ko.utils.arrayForEach(ss_section.ordered_lines(), function(ss_line) {
+      ko.utils.arrayForEach(ss_line.ordered_cells(), function(ss_cell) {
+        switch (ss_line.line_type() + "_" + ss_cell.cell_name()){
+          case "proration_date_start_date":
+            seller_start_date = ss_cell.cell_value;
+            break;
+          case "proration_date_end_date":
+            seller_end_date = ss_cell.cell_value;
+            break;
+          case "proration_amount":
+            seller_amount = ss_cell.cell_value;
+            break;
+          case "proration_credits":
+            seller_credits = ss_cell.cell_value;
+            break;
+          case "proration_charges":
+            seller_charges = ss_cell.cell_value;
+            break;
+          default:
+        }
+      });
+    });
+  } else if (ss_section.name().toLowerCase() == "buyer") {
+    ko.utils.arrayForEach(ss_section.ordered_lines(), function(ss_line) {
+      ko.utils.arrayForEach(ss_line.ordered_cells(), function(ss_cell) {
+        switch (ss_line.line_type() + "_" + ss_cell.cell_name()){
+          case "proration_date_start_date":
+            buyer_start_date = ss_cell.cell_value;
+            break;
+          case "proration_date_end_date":
+            buyer_end_date = ss_cell.cell_value;
+            break;
+          case "proration_amount":
+            buyer_amount = ss_cell.cell_value;
+            break;
+          case "proration_credits":
+            buyer_credits = ss_cell.cell_value;
+            break;
+          case "proration_charges":
+            buyer_charges = ss_cell.cell_value;
+            break;
+          default:
+        }
+      });
+    });
+  }
+});
+
+switch (viewModel.tax_status()) {
+  case "credit":
+    seller_start_date([date.getMonth() + 1, date.getDate(), date.getFullYear()].join("/"));
+    seller_end_date([date_end_year.getMonth() + 1, date_end_year.getDate(), date_end_year.getFullYear()].join("/"));
+    seller_amount(viewModel.tax_total());
+    seller_charges(prorate ? "" : void 0);
+    seller_credits(prorate ? seller_total : void 0);
+    buyer_start_date([date.getMonth() + 1, date.getDate(), date.getFullYear()].join("/"));
+    buyer_end_date([date_end_year.getMonth() + 1, date_end_year.getDate(), date_end_year.getFullYear()].join("/"));
+    buyer_amount(viewModel.tax_total());
+    buyer_charges(prorate ? seller_total : void 0);
+    buyer_credits(prorate ? "" : void 0);
+    break;
+
+  case "debit":
+    seller_start_date([date_beginning_year.getMonth() + 1, date_beginning_year.getDate(), date_beginning_year.getFullYear()].join("/"));
+    seller_end_date([date.getMonth() + 1, date.getDate(), date.getFullYear()].join("/"));
+    seller_amount(viewModel.tax_total());
+    seller_charges(prorate ? seller_total : void 0);
+    seller_credits(prorate ? "" : void 0);
+    buyer_start_date([date.getMonth() + 1, date.getDate(), date.getFullYear()].join("/"));
+    buyer_end_date([date_end_year.getMonth() + 1, date_end_year.getDate(), date_end_year.getFullYear()].join("/"));
+    buyer_amount(viewModel.tax_total());
+    buyer_charges(prorate ? buyer_total : void 0);
+    buyer_credits(prorate ? "" : void 0);
+    break;
+
+  default:
+    seller_start_date([date_beginning_year.getMonth() + 1, date_beginning_year.getDate(), date_beginning_year.getFullYear()].join("/"));
+    seller_end_date([date.getMonth() + 1, date.getDate(), date.getFullYear()].join("/"));
+    seller_amount(viewModel.tax_total());
+    seller_charges(prorate ? seller_total : void 0);
+    seller_credits(prorate ? "" : void 0);
+    buyer_start_date([date_beginning_year.getMonth() + 1, date_beginning_year.getDate(), date_beginning_year.getFullYear()].join("/"));
+    buyer_end_date([date.getMonth() + 1, date.getDate(), date.getFullYear()].join("/"));
+    buyer_amount(viewModel.tax_total());
+    buyer_charges(prorate ? "" : void 0);
+    buyer_credits(prorate ? seller_total : void 0);
+    break;
+}

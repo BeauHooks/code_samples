@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function subst() {
+        var vars={};
+        var x=document.location.search.substring(1).split('&');
+        for(var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        var x=['frompage','topage','page','webpage','section','subsection','subsubsection'];
+
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+
+        var cookies = document.cookie;
+        var keyPairs = cookies.split("**");
+        var vars = {};
+        for(var i in keyPairs) {var z=keyPairs[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+
+        var x=['company_name', 'company_phone'];
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+
+        var year = new Date();
+        var y = document.getElementsByClassName("year");
+        for(var j=0; j<y.length; ++j) y[j].textContent = year.getFullYear();
+      }
+    </script>
+
+    <style>
+      table{ width: 100%; font-size: .65em !important; }
+      td{width: 30%;}
+    </style>
+  </head>
+  <body class="no_margin font_8px" onload="subst();">
+    <hr class="clear_fix">
+    <div>* <span class="company_name"></span> does not warrant or guarantee the accuracy of the information provided herein.</div>
+    <div>** Figures represent an estimate based on conveyences recorded. For a detailed list of conveyences, please call our office at <span class="company_phone"></span>.</div>
+    <div>&copy; <span class="year"></span> <span class="company_name"></span>.</div>
+  </body>
+</html>

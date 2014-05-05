@@ -1,0 +1,482 @@
+<% case @line.number %>
+<% when 100..399 %>
+
+  <% if @file.TransactionDescription1 != "Refinance" %>
+    <% label_1 = "Buyer Amount: " %>
+  <% else %>
+    <% label_1 = "Borrower Amount: " %>
+  <% end %>
+  <% field_1 = "borrower_amount" %>
+  <% suffix1 = "" %>
+
+<% when 400..699 %>
+
+  <% label_1 = "Seller Amount: " %>
+  <% field_1 = "seller_amount" %>
+  <% suffix1 = "" %>
+
+<% when 700..1400 %>
+
+  <% if @file.TransactionDescription1 != "Refinance" %>
+    <% label_1 = "Buyer Amount: " %>
+    <% field_1 = "borrower_amount" %>
+    <% label_2 = "Seller Amount: " %>
+    <% field_2 = "seller_amount" %>
+    <% suffix1 = "_buyer" %>
+    <% suffix2 = "_seller" %>
+  <% else %>
+    <% label_1 = "Borrower Amount: " %>
+    <% field_1 = "borrower_amount" %>
+    <% suffix1 = "_buyer" %>
+  <% end %>
+
+<% when 2000..2999 %>
+
+  <% label_1 = "Good Faith Estimate: " %>
+  <% field_1 = "gfe_amount" %>
+  <% label_2 = "HUD-1: " %>
+  <% field_2 = "hud_amount" %>
+  <% suffix1 = "_#{field_1}" %>
+  <% suffix2 = "_#{field_2}" %>
+
+<% when 3000..5999 %>
+
+  <% label_1 = "Charges: " %>
+  <% field_1 = "charges" %>
+  <% label_2 = "Credits: " %>
+  <% field_2 = "credits" %>
+  <% suffix1 = "_#{field_1}" %>
+  <% suffix2 = "_#{field_2}" %>
+
+<% end %>
+
+<% update = "updateHudLine(this); " %>
+
+<table style="float: left; margin-bottom: 5px; width: 70%;" id="line_info">
+  <% no_description = ["ss_commission_total", "ss_commission", "ss_proration_date", "l_main_payee", "l_dmr"] %>
+  <% if !no_description.include?(@line.type.gsub("_custom", "")) %>
+    <tr>
+      <td class="label" style="width: 65px;">Description:&nbsp;</td>
+      <td><%= text_field_tag :name, @line.name, onchange: update %></td>
+    </tr>      
+  <% end %>
+
+  <% payees = ["ss_payee", "l_payee", "l_mort_ins", "l_home_ins", "jk_disbursement", "l_disbursement", "ss_disbursement"] %>
+  <% if payees.include?(@line.type.gsub('_custom', '')) %>
+    <tr>
+      <td class="label" style="width: 65px;">Payee:&nbsp;</td>
+      <td><%= text_field_tag :payee_name, @line.payee_name, onchange: update %></td>
+    </tr>
+  <% end %>
+
+  <% case @line.type.gsub("_custom", "") %>
+  <% when "jk_disbursement" %>
+    <tr>
+      <td>
+        <span class="label">Amount:&nbsp;</span>
+      </td>
+      <td>
+        <%= text_field_tag :amount, number_to_currency(@line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", style: "text-align: right; width: 105px !important;" %>
+        <span class="label">&nbsp;&nbsp;POC:&nbsp;</span><%= text_field_tag :poc, @line.poc, onchange: "#{update}", style: "width: 105px !important;" %>
+      </td>
+    </tr>
+  <% when "l_disbursement" %>
+    <tr>
+      <td>
+        <span class="label">Amount:&nbsp;</span>
+      </td>
+      <td>
+        <%= text_field_tag :amount, number_to_currency(@line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", style: "text-align: right; width: 105px !important;" %>
+        <span class="label">&nbsp;&nbsp;POC:&nbsp;</span><%= text_field_tag :poc, @line.poc, onchange: "#{update}", style: "width: 105px !important;" %>
+        <% if @line.number > 800 && @line.number < 900 %>
+          <span class="label">&nbsp;&nbsp;GFE:&nbsp;</span><%= text_field_tag :description, @line.description, onchange: "#{update}", style: "width: 105px !important;" %>
+        <% end %>
+      </td>
+    </tr>
+  <% when "ss_disbursement" %>
+    <tr>
+      <td>
+        <span class="label">Amount:&nbsp;</span>
+      </td>
+      <td>
+        <%= text_field_tag :amount, number_to_currency(@line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", style: "text-align: right; width: 105px !important;" %>
+        <span class="label">&nbsp;&nbsp;POC:&nbsp;</span><%= text_field_tag :poc, @line.poc, onchange: "#{update}", style: "width: 105px !important;" %>
+      </td>
+    </tr>
+
+  <% when "jk_proration" %>
+    <tr>
+      <td class="label" style="width: 65px;">From:&nbsp;</td>
+      <td>
+        <% date = @line.start_date.to_s.split("-") if @line.start_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if @line.start_date != nil %>
+        <%= text_field_tag :start_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %> to
+
+        <% date = nil %>
+        <% date = @line.end_date.to_s.split("-") if @line.end_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if @line.end_date != nil %>
+        <%= text_field_tag :end_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %>
+
+        <script type="text/javascript">
+          $( ".manage_hud_line .date_short").datepicker({
+            changeMonth: true,
+            changeYear: true
+          });
+        </script>
+      </td>
+    </tr>
+
+  <% when "l_daily_int" %>
+    <tr>
+      <td class="label" style="width: 65px;">From:&nbsp;</td>
+      <td>
+        <% date = @line.start_date.to_s.split("-") if @line.start_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if @line.start_date != nil %>
+        <%= text_field_tag :start_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %> to
+
+        <% date = nil %>
+        <% date = @line.end_date.to_s.split("-") if @line.end_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if @line.end_date != nil %>
+        <%= text_field_tag :end_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %>
+
+        <script type="text/javascript">
+          $( ".manage_hud_line .date_short").datepicker({
+            changeMonth: true,
+            changeYear: true
+          });
+        </script>
+      <span class="label">&nbsp;&nbsp;Amount:&nbsp;</span><%= text_field_tag :amount, number_to_currency(@line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", style: "text-align: right; width: 105px !important;" %></td>
+    </tr>
+
+  <% when "l_mort_ins" %>
+    <tr>
+      <td class="label" style="width: 65px;">Periods:&nbsp;</td>
+      <td><%= text_field_tag :periods, @line.periods, onchange: "#{update}" %></td>
+    </tr>
+
+  <% when "l_home_ins" %>
+    <tr>
+      <td class="label" style="width: 65px;">Periods:&nbsp;</td>
+      <td><%= text_field_tag :periods, @line.periods, onchange: "#{update}" %></td>
+    </tr>
+
+  <% when "l_dmr" %>
+    <tr>
+      <td><span class="label">Deed:</span>&nbsp;
+        <%= text_field_tag :deed_amount, number_to_currency(@line.deed_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "width: 105px;" %>
+      &nbsp;&nbsp;
+      <span class="label">Mortgage:&nbsp;</span>
+        <%= text_field_tag :mortgage_amount, number_to_currency(@line.mortgage_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "width: 105px;" %>
+      &nbsp;&nbsp;
+      <span class="label">Release:&nbsp;</span>
+        <%= text_field_tag :releases_amount, number_to_currency(@line.releases_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "width: 105px;" %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label" style="padding-top: .5em;">* Deed and Mortgage amounts are calculated on line 1201.</td>
+    </tr>
+
+  <% when "ss_proration" %>
+    <% dateline = @hud.hud_lines.where("number = #{@line.number - 1}").first %>
+    <tr data-lineid="<%= dateline.id %>">
+      <td class="label" style="width: 65px;">From:&nbsp;</td>
+      <td>
+        <% date = dateline.start_date.to_s.split("-") if dateline.start_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if dateline.start_date != nil %>
+        <%= text_field_tag :start_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %> to
+
+        <% date = nil %>
+        <% date = dateline.end_date.to_s.split("-") if dateline.end_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if dateline.end_date != nil %>
+        <%= text_field_tag :end_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %>
+
+        <script type="text/javascript">
+          $( ".manage_hud_line .date_short").datepicker({
+            changeMonth: true,
+            changeYear: true
+          });
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Periods:&nbsp;</td>
+      <td><%= text_field_tag :periods, @line.periods, onchange: "#{update}", onkeydown: "numbersOnly(event);", class: "periods" %>&nbsp;&nbsp;Units:&nbsp;<%= select :description, :period, options_for_select([["Months", "Months"],["Days", "Days"]], @line.description), {:include_blank => true}, {id: "line_#{@line.number}_description", onchange: "#{update}", class: "units", name: "description"} %>&nbsp;&nbsp;<span class="label">Amount:&nbsp;<%= text_field_tag :periodic_amount, number_to_currency(@line.periodic_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 105px;" %></td>
+    </tr>
+
+  <% when "ss_proration_date" %>
+    <tr data-lineid="<%= @line.id %>">
+      <td class="label" style="width: 65px;">From:&nbsp;</td>
+      <td>
+        <% date = @line.start_date.to_s.split("-") if @line.start_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if @line.start_date != nil %>
+        <%= text_field_tag :start_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %> to
+
+        <% date = nil %>
+        <% date = @line.end_date.to_s.split("-") if @line.end_date != nil %>
+        <% date = "#{date[1]}/#{date[2]}/#{date[0]}" if @line.end_date != nil %>
+        <%= text_field_tag :end_date, date, class: "date_short", onchange: "validateDate(this); #{update}" %>
+
+        <script type="text/javascript">
+          $( ".manage_hud_line .date_short").datepicker({
+            changeMonth: true,
+            changeYear: true
+          });
+        </script>
+      </td>
+    </tr>
+    <% proration_line = @hud.hud_lines.where("number = #{@line.number + 1}").first %>
+    <tr data-lineid="<%= proration_line.id %>">
+      <td class="label" style="width: 65px;">Description:&nbsp;</td>
+      <td><%= text_field_tag :name, proration_line.name, onchange: update %></td>
+    </tr>  
+    <tr data-lineid="<%= proration_line.id %>">
+      <td class="label">Periods:&nbsp;</td>
+      <td><%= text_field_tag :periods, proration_line.periods, onchange: "#{update}", onkeydown: "numbersOnly(event);", class: "periods" %>&nbsp;&nbsp;Units:&nbsp;<%= select :description, :period, options_for_select([["Months", "Months"],["Days", "Days"]], proration_line.description), {:include_blank => true}, {id: "line_#{proration_line.number}_description", onchange: "#{update}", class: "units", name: "description"} %>&nbsp;&nbsp;<span class="label">Amount:&nbsp;<%= text_field_tag :periodic_amount, number_to_currency(proration_line.periodic_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 105px;" %></td>
+    </tr>
+
+  <% when "ss_commission" %>
+    <tr>
+      <td class="label">Commission To:&nbsp;</td>
+        <td>
+          <%= text_field_tag :payee_name, @line.payee_name, onchange: "#{update}", class: "commission_payee" %>
+          &nbsp;&nbsp;Amount:&nbsp;<%= text_field_tag :amount, number_to_currency(@line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);#{update}", class: "amount" %>
+          &nbsp;&nbsp;Split:&nbsp;<%= text_field_tag :percent, number_with_precision(@line.percent, precision: 2, delimiter: ',', separator: '.'), class: "percent", id: "#{@line.number}_percent", onchange: "#{update}", onkeydown: "numbersOnly(event);", style: "width: 35px;" %>%
+        </td>
+    </tr>
+
+  <% when "ss_commission_total" %>
+    <tr>
+      <td colspan="2" class="label" style="text-decoration: underline; padding-bottom: 5px;">Commission Totals</td>
+    </tr>
+    <% i = 0 %>
+    <% commission_group = [] %>
+    <% while true %>
+      <% i += 1 %>
+      <% commission_line = @hud.hud_lines.where("number = #{@line.number - i} AND (type = 'ss_commission' OR type = 'ss_commission_custom') ").first %>
+      <% if commission_line == nil %>
+        <% break %>
+      <% else %>
+        <% commission_group << commission_line %>
+      <% end %>
+    <% end %>
+    <% commission_group.reverse.each do |commission_line| %>
+      <tr data-lineid="<%= commission_line.id %>">
+        <td class="label">Commission To:&nbsp;</td>
+        <td>
+          <%= text_field_tag :payee_name, commission_line.payee_name, onchange: "#{update}", class: "commission_payee" %>
+          &nbsp;&nbsp;Amount:&nbsp;<%= text_field_tag :amount, number_to_currency(commission_line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);#{update}", class: "amount" %>
+          &nbsp;&nbsp;Split:&nbsp;<%= text_field_tag :percent, number_with_precision(commission_line.percent, precision: 2, delimiter: ',', separator: '.'), class: "percent", id: "#{commission_line.number}_percent", onchange: "#{update}", onkeydown: "numbersOnly(event);", style: "width: 35px;" %>%
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <%# Commission %>
+  <% if @line.number == 703 %>
+    <tr>
+      <td colspan="2" class="label" style="text-decoration: underline; padding-bottom: 5px;">Commission Totals</td>
+    </tr>
+    <% commission_lines = [701, 702] %>
+    <% commission_group = [] %>
+    <% commission_lines.each do |line| %>
+      <% commission_line = @hud.hud_lines.where("number = #{line}").first %>
+      <% if commission_line == nil %>
+        <%# do nothing %>
+      <% else %>
+        <% commission_group << commission_line %>
+      <% end %>
+    <% end %>
+    <% commission_group.each do |commission_line| %>
+      <tr data-lineid="<%= commission_line.id %>" >
+        <td class="label" colspan="2">Comm.:&nbsp;
+          <%= text_field_tag :payee_name, commission_line.payee_name, onchange: "#{update}", class: "commission_payee", style: "width: 287px !important;" %>
+          &nbsp;&nbsp;
+          Amount:&nbsp;<%= text_field_tag :amount, number_to_currency(commission_line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", class: "amount" %>
+          &nbsp;&nbsp;
+          Split:&nbsp;<%= text_field_tag :percent, number_with_precision(commission_line.percent, precision: 2, delimiter: ',', separator: '.'), class: "percent", id: "#{commission_line.number}_percent", onchange: "#{update}", onkeydown: "numbersOnly(event);", style: "width: 35px;" %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <%# Origination charges %>
+  <% if @line.number == 803 %>
+    <% lines = [801, 802] %>
+    <% group = [] %>
+    <% lines.each do |number| %>
+      <% line = @hud.hud_lines.where("number = #{number}").first %>
+      <% if line == nil %>
+        <%# do nothing %>
+      <% else %>
+        <% group << line %>
+      <% end %>
+    <% end %>
+    <% group.each do |line| %>
+      <tr id="line_info_row_<%= line.number %>"  data-lineid="<%= line.id %>">
+        <td class="label">Line <%= line.number %>:&nbsp;</td>
+        <td>
+          <%= text_field_tag :name, line.name, onchange: "#{update}", style: "width: 70%;" %>
+          &nbsp;&nbsp;
+          <span class="label">Total:&nbsp;</span><%= text_field_tag :amount, number_to_currency(line.amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", class: "amount" %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <%# Reserves %>
+  <% if @line.number == 1001 %>
+    <% lines = [1002, 1003, 1004, 1005, 1006] %>
+    <% group = [] %>
+    <% lines.each do |number| %>
+      <% line = @hud.hud_lines.where("number = #{number}").first %>
+      <% if line == nil %>
+        <%# do nothing %>
+      <% else %>
+        <% group << line %>
+      <% end %>
+    <% end %>
+    <% group.each do |line| %>
+      <tr id="line_info_row_<%= line.number %>" data-lineid="<%= line.id %>">
+        <td class="label">Line <%= line.number %>:&nbsp;</td>
+        <td>
+          <%= text_field_tag :name, line.name, onchange: "#{update}", class: "commission_payee" %>
+          &nbsp;&nbsp;
+          <span class="label">Periods:&nbsp;</span><%= text_field_tag :periods, line.periods, onchange: "#{update}", onkeydown: "numbersOnly(event);", style: "width: 25px;" %>
+          &nbsp;&nbsp;
+          <span class="label">Amount:&nbsp;</span><%= text_field_tag :periodic_amount, number_to_currency(line.periodic_amount || 0.0, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right;", class: "amount" %>
+          &nbsp;&nbsp;
+          <span class="label">Total:&nbsp;</span><%= text_field_tag :amount, number_to_currency(line.amount || 0.0, unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", class: "amount", disabled: true %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <%# Title Charges %>
+  <% if @line.number == 1101 %>
+    <% lines = [1102, 1104] %>
+    <% group = [] %>
+    <% lines.each do |number| %>
+      <% line = @hud.hud_lines.where("number = #{number}").first %>
+      <% if line == nil %>
+        <%# do nothing %>
+      <% else %>
+        <% group << line %>
+      <% end %>
+    <% end %>
+    <% group.each do |line| %>
+      <tr id="line_info_row_<%= line.number %>" data-lineid="<%= line.id %>">
+        <td class="label" style="width: 65px;">Line <%= line.number %>:&nbsp;</td>
+        <td>
+          <%= text_field_tag :name, line.name, onchange: "$('tr#hud_row_#{line.number} [name=name]').val($(this).val()).change();", style: "width: 65%" %>
+          &nbsp;&nbsp;
+          Amount:&nbsp;<%= text_field_tag :amount, number_to_currency(line.amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 105px;" %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <%# Government Recording Charges %>
+  <% if @line.number == 1201 %>
+    <% lines = [1202] %>
+    <% group = [] %>
+    <% lines.each do |number| %>
+      <% line = @hud.hud_lines.where("number = #{number}").first %>
+      <% if line == nil %>
+        <%# do nothing %>
+      <% else %>
+        <% group << line %>
+      <% end %>
+    <% end %>
+    <% group.each do |line| %>
+      <tr id="line_info_row_<%= line.number %>" data-lineid="<%= line.id %>">
+        <td class="label" style="width: 65px;">Deed:&nbsp;</td>
+        <td>
+          <%= text_field_tag :deed_amount, number_to_currency(line.deed_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 43%;" %>
+          &nbsp;&nbsp;
+          Mortgage:&nbsp;<%= text_field_tag :mortgage_amount, number_to_currency(line.mortgage_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 43%;" %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <%# Transfer Taxes %>
+  <% if @line.number == 1203 %>
+    <% lines = [1204, 1205] %>
+    <% group = [] %>
+    <% lines.each do |number| %>
+      <% line = @hud.hud_lines.where("number = #{number}").first %>
+      <% if line == nil %>
+        <%# do nothing %>
+      <% else %>
+        <% group << line %>
+      <% end %>
+    <% end %>
+    <% group.each do |line| %>
+      <tr id="line_info_row_<%= line.number %>" data-lineid="<%= line.id %>">
+        <td class="label"  style="width: 65px;">Line <%= line.number %>:&nbsp;</td>
+        <td>
+          <%= text_field_tag :name, line.name, onchange: "#{update}", style: "width: 33%" %>
+          &nbsp;&nbsp;
+          Deed:&nbsp;<%= text_field_tag :deed_amount, number_to_currency(line.deed_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 105px;" %>
+          &nbsp;&nbsp;
+          Mortgage:&nbsp;<%= text_field_tag :mortgage_amount, number_to_currency(line.mortgage_amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 105px;" %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+  <%# Required Services %>
+  <% if @line.number == 1301 %>
+    <% lines = [1302, 1303] %>
+    <% group = [] %>
+    <% lines.each do |number| %>
+      <% line = @hud.hud_lines.where("number = #{number}").first %>
+      <% if line == nil %>
+        <%# do nothing %>
+      <% else %>
+        <% group << line %>
+      <% end %>
+    <% end %>
+    <% group.each do |line| %>
+      <tr id="line_info_row_<%= line.number %>" data-lineid="<%= line.id %>">
+        <td class="label"  style="width: 65px;">Line <%= line.number %>:&nbsp;</td>
+        <td>
+          <%= text_field_tag :name, line.name, onchange: "#{update}", style: "width: 33%" %>
+          &nbsp;&nbsp;
+          Amount:&nbsp;<%= text_field_tag :amount, number_to_currency(line.amount, unit: ""), onchange: "#{update} toUSD(this);", onkeydown: "numbersOnly(event);", style: "text-align: right; width: 105px;" %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+
+</table>
+<div style="float: right; width: 215px;">
+  <table style="border: 1px solid #CCC; background: #EEE; padding: 2px 5px; margin-bottom: 5px; width: 100%;" id="line_totals">
+    <%= render "hud_lines/line_totals" %>
+  </table>
+  <table style="width: 100%; margin-bottom: 5px;">
+    <tr>
+      <% if label_1 != nil %>
+        <td class="label"><%= label_1 %>&nbsp;</td>
+        <td>
+          <%= text_field_tag "#{field_1}", number_to_currency(@line.send("#{field_1}".to_sym), unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update}; toUSD(this);", class: "amount #{field_1}" %>
+          <%#= text_field_tag "#{field_1}_#{@line.number}", number_to_currency(@line.send("#{field_1}".to_sym), unit: ""), onkeydown: "numbersOnly(event);", onchange: "$('#line_#{@line.number}#{suffix1}').val($(this).val()).change(); toUSD(this); updateWallet(#{@line.id}, #{@line.hud_id});", readonly: ["ss_commission_total"].include?(@line.type.gsub("_custom", "")), class: "amount" %>
+        </td>
+      <% end %>
+
+      <% if label_1 != nil && label_2 != nil && @file.TransactionDescription1 != "Refinance" && @line.number >= 700 %>
+        <td rowspan="2"><input type="button" value="%" onclick="$.post('hud_lines/<%= @line.id %>/split?hud_id=<%= @line.hud_id %>');" /></td>
+      <% end %>
+
+      <% if label_2 != nil %>
+        </tr>
+        <tr>
+          <td class="label"><%= label_2 %>&nbsp;</td>
+          <td>
+            <%= text_field_tag "#{field_2}", number_to_currency(@line.send("#{field_2}".to_sym), unit: ""), onkeydown: "numbersOnly(event);", onchange: "#{update} toUSD(this);", class: "amount #{field_2}" %>
+            <%#= text_field_tag "#{field_2}_#{@line.number}", number_to_currency(@line.send("#{field_2}".to_sym), unit: ""), onkeydown: "numbersOnly(event);", onchange: "$('#line_#{@line.number}#{suffix2}').val($(this).val()).change(); updateWallet(#{@line.id}, #{@line.hud_id});", readonly: ["ss_commission_total"].include?(@line.type.gsub("_custom", "")), class: "amount" %>
+          </td>
+      <% end %>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,21 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_properties sortable">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="w75">
+            <div>Property <%= link_to image_tag("plus.png", class: "icon"), file_properties_overlays_path(file_id: @file.ID), remote: true %></div>
+          </th>
+          <th class="w165"><div>Tax-ID</div></th>
+          <th class="w100"><div>Account #</div></th>
+          <th class="w200"><div>Address</div></th>
+          <th class="w315"><div>Legal</div></th>
+        </tr>
+      </thead>
+      <tbody id="overview_properties_list" class="highlight">
+        <%= render 'file_properties/partials/overview_properties', file: @file %>
+      </tbody>
+    </table>
+  </div>
+</div>

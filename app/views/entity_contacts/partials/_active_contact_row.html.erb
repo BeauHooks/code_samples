@@ -1,0 +1,37 @@
+<tr data-url=<%= rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: :contact) %>>
+  <td class="actions">
+    <%= link_to image_tag('/assets/redx.png'), rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "contact"), title: "Remove", class: "trigger x_image", method: :delete, remote: true, confirm: "Are you sure that you want to remove this contact information?" %>
+  </td>
+  <td class="is_primary">
+    <%= check_box_tag 'IsPrimary', -1, i.IsPrimary != 0, class: "primary", title: "Make Primary", data: {remote: true, method: :put, url: rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "contact")} %>
+  </td>
+
+  <td class="type">
+    <%= select_tag :ContactDesc, options_from_collection_for_select(i.contact_types, :first, :last, i.type.downcase), include_blank: false, data: {remote: true, method: :put, url: rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "contact")} %>
+  </td>
+
+  <td class="info">
+    <%= text_field_tag :Contact, i.Contact, class: "w115", data: {remote: true, method: :put, url: rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "contact")} %>
+
+    <% if i.type == "Email" %>
+      <a href="mailto:<%= i.Contact %>" onclick="var email = $(this).closest('td').find('input[type=text]').val(); $(this).attr('href', 'mailto:' + email);" style="position: relative; top: -3px;">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" role="button" aria-disabled="false" style="height: 12px; width: 14px;">
+          <span class="ui-button-icon-primary ui-icon ui-icon-mail-closed"></span>
+        </button>
+      </a>
+    <% elsif (i.type == "Cell" || i.type == "Home" || i.type == "Office") %>
+      <a href="tel:<%= sanitize_phone(i.Contact) %>" onclick=" var phone = $(this).closest('td').find('input[type=text]').val(); $(this).attr('href', 'tel:' + sanitize_phone_number(phone) );" style="position: relative; top: -3px;">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" role="button" aria-disabled="false" style="height: 12px; width: 14px;">
+          <span class="ui-button-icon-primary ui-icon ui-icon-person"></span>
+        </button>
+      </a>
+    <% end %>
+  </td>
+
+  <td class="description">
+    <%= text_field_tag :Description, i.Description, class: "w115", data: {remote: true, method: :put, url: rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "contact")} %>
+  </td>
+
+  <td class="modify_date"><%= i.modify_date %></td>
+  <td class="modify_user"><%= i.modify_user %></td>
+</tr>

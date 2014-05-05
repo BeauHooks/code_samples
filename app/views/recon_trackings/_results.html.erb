@@ -1,0 +1,30 @@
+<% recons = @file.recon_trackings %>
+<% recons.each do |recon| %>
+  <tr>
+    <td class="w50 padding_left_5">
+      <%= image_tag "redx.png", class: "trigger", onclick: "addToQueue('destroy_recon_tracking', 'recon_trackings/#{recon.id}/destroy');" %>
+      <%= image_tag "edit.png", class: "icon trigger", onclick: "addToQueue('edit_recon_tracking', 'recon_trackings/#{recon.id}/edit');" %>
+    </td>
+
+    <% tax_id = recon.TaxID.to_s %>
+    <% if tax_id.length > 25 %>
+      <td class="hint w190"><span><%= tax_id %></span><%= truncate(tax_id, length: 25) %></td>
+    <% else %>
+      <td class="w190"><%= tax_id %></td>
+    <% end %>
+
+    <% beneficiary = recon.Beneficiary.to_s %>
+    <% if beneficiary.length > 40 %>
+      <td class="hint w280"><span><%= beneficiary %></span><%= truncate(beneficiary, length: 40) %></td>
+    <% else %>
+      <td class="w280"><%= beneficiary %></td>
+    <% end %>
+
+    <% payoff = recon.PayoffGoodThruDate.to_s != "" ? recon.PayoffGoodThruDate.strftime("%m/%d/%Y") : "" %>
+    <% if payoff.length > 15 %>
+      <td class="hint w125"><span><%= payoff %></span><%= truncate(payoff, length: 15) %></td>
+    <% else %>
+      <td class="w125"><%= payoff %></td>
+    <% end %>
+  </tr>
+<% end %>

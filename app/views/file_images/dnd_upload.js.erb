@@ -1,0 +1,10 @@
+<% if @percent == "100" %>
+  $("#<%= @identifier %> #task-content").html("<%= @filename %>-<%= @percent %>%");
+  $.ajax({
+    url: "/file_images/load_process_images?file_id=<%= @file.ID %>",
+    type: "GET"
+  });
+  $("#<%= @identifier %>").remove();
+<% else %>
+  $("#<%= @identifier %> #task-content").html("<%= @filename %>-<%= @percent %>%");
+<% end %>

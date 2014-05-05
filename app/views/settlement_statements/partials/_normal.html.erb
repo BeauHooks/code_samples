@@ -1,0 +1,8 @@
+<% is_footer = line.object.line_type == "footer" && @print.blank? %>
+<div class="tru_new_line" id="line_<%= line.object.id %>" data-line-type="<%= line.object.line_type %>">
+  <%= is_footer ? "<div class='tru_line_number'>#{line.options[:child_index]+1}</div>".html_safe : render("settlement_statements/partials/flyout", line: line).html_safe %>
+  <%= line.fields_for :ss_line_cells, line.object.ordered_cells do |cell| %>
+    <%= get_cell(cell.object.identifier || "normal", f, section, line, cell, is_footer) %>
+  <% end %>
+  <div class="tru_clear"></div>
+</div>

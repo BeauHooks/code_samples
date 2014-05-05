@@ -1,0 +1,53 @@
+<% content_for :overlay_class do %>
+  new_file_note
+<% end %>
+
+<% content_for :overlay_title do %>
+  Add Notes
+<% end %>
+
+<% content_for :overlay do %>
+  <%= form_for @file.file_notes.new, url: index_file_notes_path(@file.ID), remote: true do |f| %>
+    <div class="overlay_content">
+      <table class="options">
+        <tr>
+          <td class="label">From:</td>
+          <td><select disabled ="disabled"><option><%= "#{current_user.first_name} #{current_user.last_name}" %></option></select></td>
+        </tr>
+        <tr>
+          <td class="label">To:</td>
+          <td><%= f.select :TickleEmployeeID, Employee.all.collect{|to| [to.FullName, to.ID]}, {include_blank: true} %></td>
+        </tr>
+          <td class="label">Reminder:</td>
+          <td><%= f.text_field :TickleDate, id: "note_datepicker", class: "datepicker", placeholder: "mm/dd/yyyy" %></td>
+        </tr>
+        <tr>
+          <td class="label" style="vertical-align: top;"><span>Message:</span></td>
+          <td><%= f.text_area :NoteText, rows: 5, cols: 70 %></td>
+        </tr>
+      </table>
+      <%= f.hidden_field :EnteredBy, value: current_user.employee_id %>
+      <%= hidden_field_tag :file, @file.ID %>
+    </div>
+  <% end %><br />
+
+  <h3 style="margin-top: 5px;">Notes On File</h3>
+  <div class="outer_table box">
+    <div class="grid_header"></div>
+    <div class="inner_table">
+      <table style="border-collapse: collapse;">
+        <thead class="grid_header_font">
+          <tr>
+            <th class="from"><div>From</div></th>
+            <th class="to"><div>To</div></th>
+            <th class="date"><div>Entered Date</div></th>
+            <th class="note"><div>Note</div></th>
+          </tr>
+        </thead>
+        <tbody id="current_notes" class="results highlight">
+          <%= render 'file_notes/partials/current_notes', file: @file %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,38 @@
+<div id="helper">
+  <div class="overlay_header">
+    <h2>Helper</h2>
+  </div>
+  <%= form_for :file_products, url: file_products_helper_path, method: "PUT", remote: true do %>
+    <%= hidden_field_tag :container, @container %>
+    <%= hidden_field_tag :start, @start %>
+    <%= hidden_field_tag :end, @end %>
+    <div class="overlay_content w250">
+      <table class="margin_top_5">
+        <tr>
+          <td class="label padding_right_5">Code:</td>
+          <td><%= text_field_tag :Shortcut, "", class: "w150"  %> <%= image_tag "notice.png", class: "trigger icon", onclick: "toggleInfo();" %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <span class="float_right">
+        <%= submit_tag "Save" %>
+        <%= submit_tag "Close", onclick: "closeOverlay('helper_info'); closeOverlay('helper');", type: "button" %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	openOverlay("helper");
+  $("#Shortcut").focus();
+
+  function toggleInfo(){
+    if($("#overlay_helper_info").is(":visible")){
+      $("#overlay_helper_info").hide();
+    }
+    else{
+      openOverlay("helper_info");
+    }
+  }
+</script>

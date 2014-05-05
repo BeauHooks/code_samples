@@ -1,0 +1,109 @@
+<% margin = @signature_entity.margin %>
+<% i = @signature_entity %>
+<% add_child = @signature_entity.rolodex_signature.add_children? %>
+<% case i.relationship %>
+<% when "parent" %>
+  <table id="<%= i.id %>" style="margin-left: <%= margin %>px;">
+    <tbody>
+      <tr>
+        <td class="label">Name:</td>
+        <td><%= text_area_tag "name", i.name, onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "name")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});", remote: true %></td>
+        <td>
+          <% if add_child %>
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only trigger icon" role="button" aria-disabled="false" tabindex="-1" onclick="$.get('<%= add_child_rolodex_signatures_path(id: i.id, type: "child") %>');">
+              <span class="ui-button-icon-primary ui-icon ui-icon-home"></span>
+            </button><br />
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only trigger icon" role="button" aria-disabled="false" tabindex="-1" onclick="$.get('<%= add_child_rolodex_signatures_path(id: i.id, type: "signature") %>');">
+              <span class="ui-button-icon-primary ui-icon ui-icon-person"></span>
+            </button>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Type:</td>
+        <td>
+          <% if i.rolodex_signature_entity_type_id != nil %>
+            <%= select :type, :name, RolodexSignatureEntityType.find(:all, conditions: ["name != 'Individual'"]).collect{|t| [t.name, t.id]}, {selected: i.rolodex_signature_entity_type_id}, {onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "type")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'}); addToQueue('change_rolodex_indcorp', 'application/flash_notice?title=Update Entity Type&notice=You have changed this signature type. Do you want to update the entity type as well?&confirm=Yes&post=' + encodeURIComponent('#{update_rolodex_info_rolodex_index_path(@signature_entity.entity_id)}?field=IndCorp&info=' + $(this).find(':selected').text() ) );", remote: true} %>
+            <% else %>
+            <select disabled="disabled"><option><%= @signature_entity.entity.IndCorp %></option></select>
+            <% end %></td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+<% when "child" %>
+  <table id="<%= i.id %>" style="margin-left: <%= margin %>px;">
+    <tbody>
+      <tr>
+        <td class="label"><%= image_tag("redx.png", class: "remove_entity trigger", onclick: "destroy('#{remove_child_rolodex_signatures_path(id: i.id)}');", title: "Remove") %>By:</td>
+        <td>
+          <div class="pos_relative">
+            <%= text_area_tag "name", i.name, onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "name")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});" %>
+          </div>
+        </td>
+        <td>
+          <%= image_tag "up.png", class: "icon trigger top_7", remote: true, onclick: "$.ajax({url: '#{update_child_sort_rolodex_signatures_path(id: i.id, direction: "up")}', type: 'PUT'});" %><br />
+          <%= image_tag "down.png", class: "icon trigger top_7", remote: true, onclick: "$.ajax({url: '#{update_child_sort_rolodex_signatures_path(id: i.id, direction: "down")}', type: 'PUT'});" %>
+        </td>
+        <td>
+          <% if add_child %>
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only trigger icon" role="button" aria-disabled="false" tabindex="-1" onclick="$.get('<%= add_child_rolodex_signatures_path(id: i.id, type: "child") %>');">
+              <span class="ui-button-icon-primary ui-icon ui-icon-home"></span>
+            </button><br />
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only trigger icon" role="button" aria-disabled="false" tabindex="-1" onclick="$.get('<%= add_child_rolodex_signatures_path(id: i.id, type: "signature") %>');">
+              <span class="ui-button-icon-primary ui-icon ui-icon-person"></span>
+            </button>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Its:</td>
+        <td>
+          <%= text_field_tag :title, i.title, onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "title")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});", class: "w175" %>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Type:</td>
+        <td><%= select :type, :name, RolodexSignatureEntityType.find(:all).collect{|t| [t.name, t.id]}, {include_blank: true, selected: i.rolodex_signature_entity_type_id}, {onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "type")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});"} %></td>
+      </tr>
+    </tbody>
+  </table>
+<% when  "signature" %>
+  <% if i.parent_id == 0 %>
+    <table id="<%= i.id %>" style="margin-left: <%= margin %>px;">
+      <tbody>
+        <tr>
+          <td class="label no_wrap">Name: </td>
+          <td>
+              <%= text_field_tag "name", i.name, onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "name")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});" %>
+          </td>
+        </tr>
+        <tr>
+          <td>Title:</td>
+          <td><%= text_field_tag :title, i.title, onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "title")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});" %></td>
+        </tr>
+      </tbody>
+    </table>
+  <% else %>
+    <table id="<%= i.id %>" style="margin-left: <%= margin %>px;">
+      <tbody>
+        <tr>
+          <td class="label no_wrap"><%= image_tag("redx.png", :class => "remove_entity trigger", onclick: "destroy('#{remove_child_rolodex_signatures_path(id: i.id)}');", title: "Remove") %> Signer:</td>
+          <td>
+            <div style="position: relative">
+              <%= text_field_tag "name", i.name, onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "name")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});", remote: true %>
+            </div>
+          </td>
+          <td rowspan="2">
+            <%= image_tag "up.png", :class => "icon trigger", remote: true, onclick: "$.ajax({url: '#{update_child_sort_rolodex_signatures_path(id: i.id, direction: "up")}', type: 'PUT'});" %><br />
+            <%= image_tag "down.png", :class => "icon trigger", remote: true, onclick: "$.ajax({url: '#{update_child_sort_rolodex_signatures_path(id: i.id, direction: "down")}', type: 'PUT'});" %>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">Title:</td>
+          <td><%= text_field_tag :title, i.title, onchange: "$.ajax({url: '#{update_signature_entity_rolodex_signatures_path(id: i.id, field: "title")}&value=' + encodeURIComponent($(this).val()), type: 'PUT'});" %></td>
+        </tr>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

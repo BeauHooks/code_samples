@@ -1,0 +1,45 @@
+style = $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style");
+$("#doc_entity_<%= @doc_entity.id %>_container").replaceWith("<%= j(render :partial => "docs/entity").html_safe %>");
+$("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style", style);
+
+<% if @doc_entity.doc_id != 0 %>
+  $('#preview_link').click();
+<% else %>
+  // Update Notary Vesting
+  <% section = @doc_entity.tag.downcase %>
+  <% value = FileDocField.where("file_id = #{@doc_entity.file_id} AND tag = '#{section.upcase}_NOTARY_VESTING' AND doc_id=0").first.value %>
+  <% unless value.blank? %>
+    $("#<%= section %>_notary_vesting").val("<%= j(value).html_safe %>");//.change();
+  <% end %>
+
+  <%# doc_entities = @file.file_doc_entities.where("tag = '#{@doc_entity.tag}' AND doc_id = 0 AND is_active = 1") %>
+  <%# vesting = "" %>
+  <%# count = doc_entities.count %>;
+  <%# n = 0 %>
+  //Load Entities
+  <%# doc_entities.order("sort_order ASC").each do |doc_entity| %>
+    <%# n += 1 %>
+    <%# signature = doc_entity.rolodex_signature %>
+    <%# if signature != nil %>
+      <%# name = signature.rolodex_signature_entities.where('parent_id = 0').first.name.to_s %>
+
+      <%# if vesting == "" %>
+        <%# vesting = "#{name}" %>
+      <%# elsif count == 2 && n == 2 %>
+        <%# vesting += " and #{name}" %>
+      <%# elsif n > count %>
+        <%# vesting += ", #{name}" %>
+      <%# else %>
+        <%# vesting += ", and #{name}" %>
+      <%# end %>
+    <%# end %>
+  <%# end %>
+  
+  // $("#<%#= @doc_entity.tag.downcase %>_names").val("<%#= vesting.html_safe %>").change();
+  // $("#<%#= @doc_entity.tag.downcase %>_vesting").val("<%#= vesting.html_safe %>").change();
+
+  // $('#all_docs .active_row a').click();
+  row = $("tbody#all_docs .active_row");
+  doc_request( $(row).attr("id").replace("doclist_", "") );
+  selectDocRow(row, $(row).attr("id").replace("doclist_", ""));
+<% end %>

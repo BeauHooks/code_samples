@@ -1,0 +1,15 @@
+<% @templates.each do |i| %>
+  <tr>
+    <td class="action" style="padding-left: 5px;"><input type="button" value="Add" onclick="$('#adding_new_docs').show(); addToQueue('add_docs', 'docs/quick_add?template_id=<%= i.id %>&file_id=<%= @file_id %>'); $(this).attr('disabled', 'disabled'); $(this).val('Added');" /></td>
+    <% if i.description.length > 17 %>
+      <td class="name hint"><span><%= i.description %></span><%= truncate(i.description, length: 17) %></td>
+    <% else %>
+      <td class="name"><%= i.description %></td>
+    <% end %>
+    <td class="version"><%= i.current_version %></td>
+    <td class="county"><%= i.state %></td>
+    <td class="modify_date"><%= i.updated_at.strftime('%m/%d/%Y') %></td>
+    <td class="modify_by"><%= i.doc_template_versions.where("version = #{i.current_version}").first.update_employee.FullName %></td>
+    
+  </tr>
+<% end %>

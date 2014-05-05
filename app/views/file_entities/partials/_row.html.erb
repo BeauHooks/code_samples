@@ -1,0 +1,14 @@
+<% e = @file_entity %>
+<tr class="row_<%= e.ID %>">
+  <td class="name hint"><span><%= e.entity.FullName %></span><%= truncate("#{e.entity.FullName}", length: 25) %></td>
+  <td class="position"><%= e.user_type.TypeDescription || "" %></td>
+  <td class="phone"><%= e.first_phone %></td>
+  <td class="fax"><%= e.first_fax %><td>
+  <td class="email <%= " hint" if !e.entity.email.blank? %> ">
+    <% if !e.entity.email.blank? %>
+  	  <span><%= e.entity.email %></span>
+  	  <div><%= truncate(e.entity.email.downcase, length: 17) %></div>
+  	<% end %>
+  </td>
+  <td class="add_link"><%= button_to 'Remove', file_entity_path(id: e.ID), method: :delete, remote: true, onclick: "$('tr.row_#{e.ID}').hide();" %></td>
+</tr>

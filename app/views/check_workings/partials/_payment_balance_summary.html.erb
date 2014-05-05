@@ -1,0 +1,25 @@
+<% payments = @file.payment_lines.sum{|l| l.payment_amount} %>
+<% working = @file.check_workings.sum("amount").to_f %>
+<% poc = @file.poc_payment_sum %>
+<% total = payments - working - poc %>
+
+<table id="payment_totals" style="width: 100%;">
+  <tr>
+    <td class="label">Payments</td>
+    <td class="amount"><%= number_to_currency(payments, precision: 2, unit: "$") %></td>
+  </tr>
+  <tr>
+    <td class="label">Disburse</td>
+    <td class="amount"><%= number_to_currency(working * -1, precision: 2, unit: "$") %></td>
+  </tr>
+  <tr>
+    <td class="label">POC</td>
+    <td class="amount"><%= number_to_currency(poc * -1, precision: 2, unit: "$") %></td>
+  </tr>
+  <tr class="<%= 'red' if total != 0 %>">
+    <td class="border-top total label">Balance</td>
+    <td class="border-top total amount">
+      <%= number_to_currency(total, precision: 2, unit: "$") %>
+    </td>
+  </tr>
+</table>

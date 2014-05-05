@@ -1,0 +1,81 @@
+<div class="box_header">
+  <p class="title">Stages</p>
+  <div class="tools">
+    <% if @file.Bombed == nil %>
+      <span class="trigger link margin_right">
+      <%= link_to "Cancel Order", close_note_overlay_path(@file), remote: true, method: :get %>
+    <% end %>
+    </span>
+  </div>
+</div>
+
+<div id="stages_content">
+  <% if @file.Bombed != nil %>
+    <div id="bombed" class="bombed">
+      <h3>Cancelled - <%= @file.Bombed.strftime('%m/%d/%Y') %></h3>
+    </div>
+  <% end %>
+  <div id="stages">
+    <table class="w100p">
+    <tbody>
+      <tr class="grid_header grid_header_font">
+        <td class="step">Search</td>
+        <td class="date" colspan=3>Date</td>
+      </tr>
+      <tr>
+        <td >Searched</td>
+        <% if @file.Searched != nil %>
+          <td colspan=3><%= @file.Searched.strftime('%m/%d/%Y') %></td>
+        <% else %>
+          <td colspan=3></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td>PR Out</td>
+        <% if @file.PROut != nil %>
+          <td colspan=3><%= @file.PROut.strftime('%m/%d/%Y') %></td>
+        <% else %>
+          <td colspan=3>-</td>
+        <% end %>
+      </tr>
+      <%= render "index/partials/recording_prep" %>
+        <tr class="grid_header grid_header_font">
+          <td class="step">Recording</td>
+          <td class="complete_user">User</td>
+          <td class="date" colspan=2>Date</td>
+        </tr>
+        <tr>
+          <td>Recorded:</td>
+          <% if @file.Recorded != nil && @file.RecordedBy != nil %>
+            <td><%= @file.recorded_by.FullName %></td>
+            <td colspan=2><%= @file.Recorded.strftime('%-1m/%-1d/%Y') %></td>
+          <% elsif @file.Recorded != nil %>
+            <td>-</td>
+            <td colspan=2><%= @file.Recorded.strftime('%-1m/%-1d/%Y') %></td>
+          <% else %>
+            <td>-</td>
+            <td colspan=2>-</td>
+          <% end %>
+        </tr>
+        <tr>
+          <td>Disbursed:</td>
+          <% if @file.Disbursed != nil %>
+            <td><%= @file.disbursed_by.FullName if @file.disbursed_by != nil %></td>
+            <td colspan=2><%= @file.Disbursed.strftime('%-1m/%-1d/%Y') %></td>
+          <% else %>
+            <td>-</td>
+            <td colspan=2>-</td>
+          <% end %>
+        </tr>
+        <tr>
+          <td>Policy Out:</td>
+          <% if @file.PolicyOut != nil %>
+            <td colspan=3><%= @file.PolicyOut.strftime('%-1m/%-1d/%Y') %></td>
+          <% else %>
+            <td colspan=3>-</td>
+          <% end %>
+        </tr>
+        </tbody>
+      </table>
+  </div>
+</div>

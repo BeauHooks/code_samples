@@ -1,0 +1,9 @@
+<table border="1" width="908" style="text-align:left;">
+  <%= f.fields_for :hud_lines do |builder| %>
+    <tr>
+    <% if builder.object.number == 1400 %>
+      <%= render 'huds/partials/full-line', :f => builder %>
+    <% end %>
+    </tr>
+  <% end %>
+</table><br />

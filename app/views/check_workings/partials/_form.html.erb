@@ -1,0 +1,103 @@
+<% @disbursement.payee_1_id.to_s == @disbursement.file_id.to_s[0..2] ? is_company = true : is_company = false %>
+<% @file.SentForFunding == nil && @disbursement.check_number == nil && @disbursement.check_id == nil ? disabled = false : disabled = true %>
+<% size = @disbursement.hud_line_payments.size %>
+<% update = "updateCheck(this);" %>
+
+<% if @disbursement.funds_type.downcase == "check" %>
+  <tr>
+    <td class="label">PAY TO THE ORDER OF:</td>
+    <td>
+      <%= text_field_tag "check_working[payee_1]", @disbursement.payee_1, onchange: update, placeholder: "Payee 1", disabled: is_company || disabled  %>
+    </td>
+    <td>&nbsp;</td>
+    <td>
+      $ <%= text_field_tag "check_working[amount]", number_to_currency(@disbursement.amount || 0.0, precision: 2, unit: ""), onchange: "#{update} toUSN(this);", onkeydown: "numbersOnly(event);", disabled: true, id: "check_total" %>
+    </td>
+  </tr>
+  <% if !is_company %>
+    <tr>
+      <td></td>
+      <td>
+        <%= text_field_tag "check_working[payee_2]", @disbursement.payee_2, onchange: update, placeholder: "Payee 2", disabled: disabled %>
+      </td>
+      <td colspan="2"></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>
+      <% if !is_company %>
+        <% @disbursement.entity != nil ? address_collection = @disbursement.entity.addresses.collect{|a| [ "#{a.description}", a.ContactID ]} : address_collection = [] %>
+        <%= select_tag "check_working[address_id]", options_for_select(address_collection, @disbursement.address_id), include_blank: "No Address", onchange: update, disabled: disabled, style: "width: 110px; #{'color: #464646; font-style: italic;' if address_collection.size == 0}" %>
+      <% end %>
+    </td>
+    <td>
+      <%= text_field_tag "check_working[address_1]", @disbursement.address_1, onchange: update, placeholder: "Address 1", disabled: is_company || disabled %>
+    </td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+        <%= text_field_tag "check_working[address_2]", @disbursement.address_2, onchange: update, placeholder: "Address 2", disabled: is_company || disabled %>
+    </td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      <%= text_field_tag "check_working[city]", @disbursement.city, onchange: update, placeholder: "City", disabled: is_company || disabled, class: "city" %>
+      <%= text_field_tag "check_working[state]", @disbursement.state, onchange: update, placeholder: "State", disabled: is_company || disabled, class: "state" %>
+      <%= text_field_tag "check_working[zip]", @disbursement.zip, onchange: update, placeholder: "Zip", disabled: is_company || disabled, class: "zip" %>
+    </td>
+    <td colspan="2"></td>
+  </tr>
+    <tr>
+      <td class="label">Instructions:</td>
+      <td><%= text_field_tag "check_working[check_deliver]", @disbursement.check_deliver, onchange: update, placeholder: "Delivery Instructions", disabled: disabled %></td>
+      <td colspan="2"></td>
+    </tr>
+  <tr>
+    <td class="label">Memo:<br />
+      <% grantees, grantors, property = get_memo_info(@file) %>
+      <%= submit_tag "Buy", title: "Buyer Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantees}.", disabled: grantees == "" %>
+      <%= submit_tag "Sell", title: "Seller Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantors}.", disabled: grantors == "" %>
+      <%= submit_tag "Prop", title: "Property Address", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{property}.", disabled: property == "" %>
+    </td>
+    <td><%= text_area_tag "check_working[memo_1]", @disbursement.memo_1, onchange: update, class: "memo_field", disabled: disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+
+<% else #If WIRE %>
+  <tr>
+    <td class="label">Name on Account:</td>
+    <td><%= text_field_tag "check_working[beneficiary_name]", @disbursement.beneficiary_name, onchange: update, disabled: is_company || disabled %></td>
+    <td style="width: 5px;">&nbsp;</td>
+    <td>$ <%= text_field_tag "check_working[amount]", number_to_currency(@disbursement.amount || 0.0, precision: 2, unit: ""), onchange: "#{update} toUSN(this);", onkeydown: "numbersOnly(event);", disabled: true, id: "check_total" %></td>
+  </tr>
+  <tr>
+    <td class="label">Account Number:</td>
+    <td><%= text_field_tag "check_working[beneficiary_account_number]", @disbursement.beneficiary_account_number, onchange: update, disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td class="label">Bank Name:</td>
+    <td><%= text_field_tag "check_working[beneficiary_bank_name]", @disbursement.beneficiary_bank_name, onchange: update, disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td class="label">Bank Routing:</td>
+    <td><%= text_field_tag "check_working[beneficiary_bank_routing]", @disbursement.beneficiary_bank_routing, onchange: update, disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+  <tr>
+    <td class="label">
+      Wire Memo:<br />
+      <% grantees, grantors, property = get_memo_info(@file) %>
+      <%= submit_tag "Buy", title: "Buyer Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantees}.", disabled: grantees == "" %>
+      <%= submit_tag "Sell", title: "Seller Names", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{grantors}.", disabled: grantors == "" %>
+      <%= submit_tag "Prop", title: "Property Address", type: "button", onclick: "updateMemo(this);", "data-memo" => "#{property}.", disabled: property == "" %>
+    </td>
+    <td><%= text_area_tag "check_working[b2b_information_message]", @disbursement.b2b_information_message, onchange: "val = $(this).val().replace(/[^A-Za-z0-9\s]/g, ''); $(this).val(val); #{update}", class: "memo_field", disabled: is_company || disabled %></td>
+    <td colspan="2"></td>
+  </tr>
+<% end %>

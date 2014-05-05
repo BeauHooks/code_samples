@@ -1,0 +1,165 @@
+<div id="file_disbursements" class="file_disbursements">
+    <div id="disbursements_left" class="disbursements_left">
+      <% if @view == "funding" %>
+        <div class="box">
+          <div class="box_header">
+            <p class="title">Reconveyances <%= image_tag "plus.png", onclick: "addToQueue('new_recon_tracking', 'recon_trackings/new?FileID=#{@file.FileID}');",  class: "trigger new_recon_tracking_button", class: "icon" %></p>
+          </div>
+          <div class="result_container">
+            <div class="grid_header"></div>
+            <div>
+              <table>
+                <thead class="grid_header_font">
+                  <tr>
+                    <th class="w50 padding_left_5"><div>Actions</div></th>
+                    <th class="w190"><div>Tax ID</div></th>
+                    <th class="w280"><div>Beneficiary</div></th>
+                    <th class="w125" id="reconveyances_last"><div>Good Thru</div></th>
+                  </tr>
+                </thead>
+                <tbody id="reconveyance_results" class="results">
+                  <%= render "recon_trackings/results" %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <div id="receipts" class="receipts box">
+        <div class="box_header">
+          <p class="title">Receipts <% @view != nil ? view = "&view=funding" : view = "" %>
+            <%= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('add_receipt', 'check_workings/create_receipt_overlay?file_id=#{@file.FileID}#{view}');" %></p>
+        </div>
+        <div class="result_container">
+          <div class="grid_header"></div>
+          <div>
+            <table>
+              <thead class="grid_header_font">
+                <tr>
+                  <th class="padding_left_5 w100"><div>Payer</div></th>
+                  <th class="w75"><div>Amount</div></th>
+                  <th class="w50"><div>Good</div></th>
+                  <th class="w70"><div>Receipt ID</div></th>
+                  <th class="w75"><div>Received</div></th>
+                  <th class="w75"><div>GF Date</div></th>
+                  <th class="w75"><div>Instrument</div></th>
+                  <th class="w50"><div>Void</div></th>
+                  <th class="w75"><div>Type</div></th>
+                  <th class="w100"><div>Note</div></th>
+                </tr>
+              </thead>
+              <tbody id="receipt_results" class="results">
+                <%= render "check_workings/receipt_results" %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="disbursements" class="box disbursements">
+        <div class="box_header">
+          <p class="title">Disbursements <span class="red" id="funding_notice"><%= " - Sent for funding on #{@file.SentForFunding.strftime("%-1m/%d/%Y at %l:%M %p")}".html_safe if @file.SentForFunding != nil %></span><% if @file.SentForFunding == nil %>
+              <%= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('add_disbursement', 'check_workings/create?file_id=#{@file.FileID}');", id: "add_disbursement_button" %>
+            <% else %>
+              <%= image_tag "plusgrey.png", class: "icon", title: "Adding disbursements is disabled after file has been sent for funding." %>
+            <% end %></p>
+          <div class="tools">
+            <%= link_to "Merge", "check_workings/show_merge?file_id=#{@file.FileID}", remote: true, id: "merge_disbursments_link", class: "hide" if @file.SentForFunding == nil %>
+            <%#= image_tag "plus.png", class: "icon trigger", onclick: "addToQueue('add_disbursement', 'check_workings/new?file_id=#{@file.FileID}');" %>
+          </div>
+        </div>
+        <div class="result_container">
+          <div class="grid_header"></div>
+          <div>
+            <table>
+              <thead class="grid_header_font">
+                <tr>
+                  <th class="padding_left_5 w120"><div>Payee</div></th>
+                  <th class="w100"><div>Memo</div></th>
+                  <th class="w75"><div>Amount</div></th>
+                  <th class="w75"><div>Type</div></th>
+                  <th class="w50"><div>Hold</div></th>
+                  <th class="w75"><div>Instructions</div></th>
+                  <th class="w110"><div>Print</div></th>
+                  <th class="w35"><div><%= "Ready" if @file.SentForFunding == nil %></div></th>
+                </tr>
+              </thead>
+              <tbody id="disbursement_results">
+                <%= render "hud_lines/disbursement_results" %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="check" class="check">
+        </div>
+      </div>
+    </div>
+
+    <div id="disbursements_right" class="disbursements_right">
+      <div class="box">
+        <div class="box_header">
+          <p class="title">Recording Prep</p>
+          <div class="tools">
+          </div>
+        </div>
+        <div class="box_content">
+          <table class="recording_prep_container w100p">
+            <%= render "index/partials/recording_prep" %>
+          </table>
+        </div>
+        <% count_checks = @file.check_workings.size %>
+        <% count_1099s = @file.docs.find(:all, conditions: ["doc_templates.short_name='1099' AND docs.is_active != 0"], include: [:doc_template]).size %>
+        <% count_images = @file.file_images.where("IsPrivate = 0 AND ImageType = 'Final Docs'").size %>
+        <p style="padding: 3px 5px;">
+          <label class="dis_block"><%= check_box_tag :HasWireBeforeRecording, true, @file.HasWireBeforeRecording != 0, onchange: "$.ajax({url: 'index/#{@file.ID}?HasWireBeforeRecording=' + $(this).val(), type: 'put'});", class: "margin_right_5 pos_relative top_2" %> Wire before recording</label>
+          <label class="<%= 'hide' if count_checks > 0 %>" ><span class="dis_block"><%= check_box_tag :no_disbursement, "true", false, class: "margin_right_5 pos_relative top_2" %> No Disbursement</span></label>
+          <label class="<%= 'hide' if count_1099s > 0 %>"><span class="dis_block"><%= check_box_tag :no_1099, "true", false, class: "margin_right_5 pos_relative top_2" %> No 1099s</span></label>
+          <label><span class="dis_block"><%= check_box_tag :no_images, "true", count_images > 0, class: "margin_right_5 pos_relative top_2", disabled: true %> <%= count_images > 0 ? "Final docs scanned" : "Final docs have not been scanned" %></span></label>
+        </p>
+      </div>
+
+      <% if current_user.has_permission?(:tester) %>
+        <div id="anticipated_disbursement_info" class="box padding_bottom_5">
+          <div class="box_header">
+            <p class="title">Anticipated Summary
+            <div class="tools">
+              <%#= link_to "Print", "index/#{@file.ID}/print_disbursement_sheet", remote: true %>
+            </div>
+            </p>
+          </div>
+          <div class="border_all_1 padding_ends_2 w240" id="anticipated_disbursement_summary">
+            <%= render "check_workings/anticipated_disbursement_summary" %>
+          </div>
+
+          <p class="clear_fix"></p>
+        </div>
+      <% end %>
+
+      <div id="disbursement_info" class="disbursement_info box padding_bottom_5">
+        <div class="box_header">
+          <p class="title">Actual Summary
+          <div class="tools">
+            <%= link_to "Print", "index/#{@file.ID}/print_disbursement_sheet", remote: true %>
+          </div>
+          </p>
+        </div>
+        <div class="border_all_1 padding_ends_2 w240" id="disbursement_summary">
+          <%= render "check_workings/disbursement_summary" %>
+        </div>
+
+        <p class="clear_fix"></p>
+      </div>
+
+      <div class="box">
+        <div class="box_header">
+          <p class="title">Invoice Balancing</p>
+        </div>
+        <div class="padding_all_5 w240" id="invoice_balancing">
+          <%= render "check_workings/invoice_balancing" %>
+        </div>
+
+        <p class="clear_fix"></p>
+      </div>
+
+    </div>
+    <!-- <div id="overlay_merge_disbursement" class="overlay"></div> -->
+  </div>

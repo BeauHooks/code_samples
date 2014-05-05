@@ -1,0 +1,21 @@
+<% if @doc.doc_entity_id != nil %>
+  <% type = @doc.doc_entity.entity.IndCorp %>
+  <% functions = [] %>
+  <% DocFunction.all.each do |i| %>
+    <% functions << i.name.gsub("_FUNCTION", "") %>
+  <% end %>
+  <table>
+    <% @file.file_doc_fields.where("tag LIKE '#{@doc.doc_template.short_name}_%_#{@doc.doc_entity_id}' AND is_active = 1 AND doc_id = 0").order("id ASC"). each do |i| %>
+
+        <% unless i.tag.include?("EXEMPT_PAYEE") || i.tag.include?("TAX_CLASS") %>
+          <tr>
+            <% value = i.value %>
+            <% (value == nil || value == "") ? error = "error" : error = ""  %>
+            <td class="label <%= error %>"><%= "#{i.tag.split("_")[1..-2].join(" ").to_s.titleize}" %>:</td>
+            <td colspan="3"><input type="text" class="<%= error %>" value="<%= value %>"  id='<%= i.tag.downcase %>' onchange="$.post('/docs/create_custom?file_id=<%= @file.ID %>&doc_id=0&field=global_<%= i.tag %>&value=' + encodeURIComponent(this.value));  $('tr#doc_<%= @doc.id %>').children('td:first').children('a:first').click();"/></td>
+          </tr>
+        <% end %>
+      
+    <% end %>
+    </table>
+<% end %>

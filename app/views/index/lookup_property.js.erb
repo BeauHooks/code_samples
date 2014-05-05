@@ -1,0 +1,24 @@
+$( '#<%= params[:row] %> td input.<%= @input_name %>' ).autocomplete({
+  source: [<%= @list.html_safe %>],
+  select: function(event, ui) {
+    var taxid = ''
+    var accountnum = ''
+    var county_id = $(this).closest('tr').find('select').eq(0).val();
+
+    $('#new_file_properties').find('input.taxid').each(function(){
+      if($(this).val() != ''){
+        taxid += '&taxid[]=' + $(this).val();
+      }
+    });
+    $('#new_file_properties').find('input.account').each(function(){
+      if($(this).val() != ''){
+        accountnum += '&accountnum[]=' + $(this).val();
+      }
+    });
+    addToQueue('fill_property_row', 'index/fill_property_row?county_id=' + county_id + '&row=<%= params[:row] %>&field=<%= params[:field] %>&company=<%= params[:company] %>&value=' + ui.item.value + taxid + accountnum);
+  },
+  change: function(event, ui) {
+    event.preventDefault();
+    return false;
+  }
+});

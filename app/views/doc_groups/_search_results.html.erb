@@ -1,0 +1,25 @@
+<% @results.each do |group| %>
+  <tr class="trigger" onclick="$.get('<%= add_to_doc_group_overlay_path(id: group.id) %>');">>
+    <% if !group.name.nil? && group.name.length > 25 %>
+      <td class="name hint">
+        <span>
+          <%=  group.name %>
+        </span>
+        <div>
+          <% click_action = CGI.escape("$.ajax({url: '#{doc_group_path(id: group.id)}', type: 'DELETE'});") %>
+          <%= image_tag "redx.png", onclick: "$.post('application/flash_notice?click_action=#{click_action}&notice=Are you sure you want to remove this group?&confirm=Yes'); event.stopPropagation();", title: "Remove Group", class: "trigger" %> <%=  truncate(group.name.titleize, :length => 25) %>
+        </div>
+      </td>
+    <% else %>
+      <td class="name">
+        <div>
+          <% click_action = CGI.escape("$.ajax({url: '#{doc_group_path(id: group.id)}', type: 'DELETE'});") %>
+          <%= image_tag "redx.png", onclick: "$.post('application/flash_notice?click_action=#{click_action}&notice=Are you sure you want to remove this group?&confirm=Yes'); event.stopPropagation();", title: "Remove Group", class: "trigger" %> <%=  group.name.titleize if group.name != nil %>
+        </div>
+      </td>
+    <% end %>
+    <td class="state"><%= group.state %></td>
+    <td class="modify_date"><%= group.updated_at.strftime("%m-%d-%Y") %></td>
+    <td class="modify_user"><%= group.update_employee.FullName %></td>
+  </tr>
+<% end %>

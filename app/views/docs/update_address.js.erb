@@ -1,0 +1,7 @@
+<% @update_fields.each do |field| %>
+  if($("#<%= field[0] %>").val() != "<%= field[1].html_safe %>"){
+  	$("#<%= field[0] %>").val("<%= field[1].html_safe %>").change();
+  }
+<% end %>
+
+countMissingFields();

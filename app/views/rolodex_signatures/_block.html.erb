@@ -1,0 +1,41 @@
+<% margin = @signature_entity.margin %>
+<% if @signature_entity.relationship == "parent" %>
+<table style="margin-left: <%= margin %>px;">
+  <tr>
+    <td><%= @signature_entity.name.gsub(/\r?\n/, "<br />").html_safe if @signature_entity.name != nil %></td>
+  </tr >
+</table>
+<% elsif @signature_entity.relationship == "child" %>
+<table style="margin-left: <%= margin %>px;">
+  <tr>
+    <td class="label">By:</td>
+    <td><%= @signature_entity.name.gsub(/\r?\n/, "<br />").html_safe if @signature_entity.name != nil %></td>
+  </tr>
+  <tr>
+    <td class="label">Its:</td>
+    <td><%= @signature_entity.title %></td>
+  </tr>
+</table>
+<% elsif @signature_entity.relationship == "signature" %>
+  <% if @signature_entity.parent_id == 0 %>
+    <table>
+      <tr>
+        <td class="signature_line"><hr  /></td>
+      </tr>
+      <tr>
+        <td><%= @signature_entity.name.gsub(/\r?\n/, "<br />").html_safe if @signature_entity.name != nil %><%= ", #{@signature_entity.title}" if @signature_entity.title != nil %></td>
+      </tr>
+    </table>
+  <% else %>
+    <table style="margin-left: <%= margin %>px;">
+      <tr>
+        <td class="label">By:</td>
+        <td class="signature_line"><hr  /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><%= @signature_entity.name.gsub(/\r?\n/, "<br />").html_safe if @signature_entity.name != nil %><%= ", #{@signature_entity.title}" if @signature_entity.title != nil %></td>
+      </tr>
+    </table>
+  <% end %>
+<% end %>

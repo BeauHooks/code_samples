@@ -1,0 +1,85 @@
+<div id="import">
+  <div class="overlay_header">
+    <h2>Import - <%= @type.titleize %></h2>
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+      <span id="import_spinner" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Saving...</span>
+    </div>
+  </div>
+  <%= form_for @file_product, url: file_products_import_path(id: @file_product.id, type: @type), remote: true do %>
+    <div class="overlay_content">
+      <% case @type %>
+      <% when "prior" %>
+        <table style="margin-top: 10px;">
+          <tr>
+            <td class="label" style="padding-right: 5px;">Company:</td>
+            <td>
+              <%= select_tag :company_id, options_for_select(Company.collection, session[:company]), {style: "width: 254px;", id: "prior_company_id", onchange: "$.get('#{file_products_get_prior_product_options_path}?company_id=' + $(this).val() + '&prior_file_number=' + $('#prior_file_number').val());"} %>
+            </td>
+          </tr>
+          <tr>
+            <td class="label" style="padding-right: 5px;">Prior:</td>
+            <td>
+              <%= text_field_tag :prior_file_number, "", style: "width: 250px;", onkeydown: "numbersOnly(event); if(event.which == 13){event.preventDefault(); $.get('#{file_products_get_prior_product_options_path}?company_id=' + $('#prior_company_id').val() + '&prior_file_number=' + $(this).val()); return false;}", onchange: "$.get('#{file_products_get_prior_product_options_path}?company_id=' + $('#prior_company_id').val() + '&prior_file_number=' + $(this).val());" %>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Product:</td>
+            <td id="prior_product_options"><%= render "prior_product_options" %></td>
+          </tr>
+        </table>
+      <% when "base" %>
+        <table style="margin-top: 10px;">
+          <tr>
+            <td class="label" style="padding-right: 5px;">Subsurvey:</td>
+            <td>
+              <%#= select :base, :id, options_for_select(FileBase.find(:all).collect{|b| ["#{b.Subsurvey}#{" - Phase #{b.Phase}" if !b.Phase.blank?}", b.BaseID]}), {include_blank: false}, {style: "width: 254px;", name: "base_id"} %>
+              <%#= select :base, :id, options_for_select(BaseFile.find(:all).collect{|b| ["#{b.subsurvey}#{" - Phase #{b.phase}" if !b.phase.blank?}", b.id]}), {include_blank: false}, {style: "width: 254px;", name: "base_id"} %>
+              <%= text_field_tag :subsurvey, "" %>
+            </td>
+            <td class="label" style="padding-left: 10px; padding-right: 5px;">Phase:</td>
+            <td>
+              <%= text_field_tag :phase, "" %>
+            </td>
+          </tr>
+        </table>
+      <% end %>
+    </div>
+    <div class="overlay_footer">
+      <span style="float: right;">
+        <%= submit_tag "Import", type: "button", onclick: "validateImport(this);", id: "import_button" %>
+        <%= submit_tag "Cancel", onclick: "closeOverlay('import');", type: "button" %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	openOverlay("import");
+  <% case @type %>
+  <% when "prior" %>
+    $("#prior_file_number").focus();
+  <% when "base" %>
+    $("#subsurvey").focus();
+  <% end %>
+
+  function validateImport(sender){
+    errors = ""
+
+    <% case @type %>
+    <% when "prior" %>
+      errors += $("#prior_company_id").val() == "" ? "&list[]=Company must be selected." : "";
+      errors += $("#prior_file_number").val() == "" ? "&list[]=You must enter a valid file number." : "";
+      errors += $("#prior_file_product_id").val() == "" ? "&list[]=You must select a product to import from." : "";
+    <% when "base" %>
+      errors += $("#subsurvey").val() == "" ? "&list[]=You must enter a subsurvey code." : "";
+    <% end %>
+
+    if(errors != ""){
+      addToQueue("import_error", "application/flash_notice?title=Import Error&notice=Please corrrect the following errors:" + errors);
+      return;
+    }
+    $("#import_spinner").show();
+    // $("#import_button").attr('disabled', true);
+    $(sender).closest('form').submit();
+  }
+</script>

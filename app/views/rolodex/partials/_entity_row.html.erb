@@ -1,0 +1,139 @@
+<%# TODO: Clean up this view file %>
+<tr class="record trigger border_bottom" id="row<%= i.EntityID %>" onclick="changeRolodex(this.id);" data-entity="<%= i.EntityID %>" >
+  <td class="expand"><a href="<%= "rolodex/#{i.EntityID}/result_detail" %>" data-remote="true"></a></td>
+
+  <% name = i.name_last_first %>
+  <% if name.length > 17 %>
+    <td class="name hint">
+      <span>
+        <%= name %>
+      </span>
+      <div>
+        <%= truncate(name, length: 17) %>
+      </div>
+    </td>
+  <% else %>
+    <td class="name">
+      <div>
+        <%= name %>
+      </div>
+    </td>
+  <% end %>
+
+  <% description = i.Description.to_s %>
+  <% if description.length > 17 %>
+    <td class="affiliation hint">
+      <span><%= description %></span>
+      <%= truncate(description, length: 17) %>
+    </td>
+  <% else %>
+    <td class="affiliation">
+      <%= description %>
+    </td>
+  <% end %>
+
+  <% affiliation = i.primary_affiliation_name.to_s %>
+  <% affiliation_id = i.primary_affiliation_id.to_s %>
+  <% if affiliation.length > 17 %>
+    <td class="affiliation hint">
+      <span>
+        <%= link_to affiliation, "/rolodex?entity_id=#{affiliation_id}", onclick: "event.stopPropagation();", target: "_blank" %>
+      </span>
+      <div>
+        <%= link_to truncate(affiliation, :length => 17), "/rolodex?entity_id=#{affiliation_id}", target: "_blank", onclick: "event.stopPropagation();", 'data-affiliation' => true %>
+      </div>
+    </td>
+  <% else %>
+    <td class="affiliation">
+      <div>
+        <%= link_to affiliation, "/rolodex?entity_id=#{affiliation_id}", onclick: "event.stopPropagation();", target: "_blank", 'data-affiliation' => true unless affiliation.blank? %>
+      </div>
+    </td>
+  <% end %>
+
+  <% phone = i.primary_phone_number.to_s %>
+  <% tel_phone = phone.gsub("Cell:", "").gsub("Home:", "").gsub("Office:", "") %>
+  <% if phone.length > 25 %>
+    <td class="phone hint">
+      <span><%= link_to phone, "tel:#{tel_phone}" %></span>
+      <div>
+        <%= link_to truncate(phone, length: 25), "tel:#{tel_phone}" %>
+      </div>
+    </td>
+  <% else %>
+    <td class="phone">
+      <div>
+        <%= link_to phone, "tel:#{tel_phone}" unless tel_phone.blank? %>
+      </div>
+    </td>
+  <% end %>
+
+  <% email = i.Email.to_s %>
+  <% if email.length > 22 %>
+    <td class="email hint">
+      <span><%= mail_to email, email %></span>
+      <div>
+        <%= link_to truncate(email, length: 22), email %>
+      </div>
+    </td>
+  <% else %>
+    <td class="email">
+      <div>
+        <%= mail_to email, email unless email.blank? %>
+      </div>
+    </td>
+  <% end %>
+
+  <% address = i.entity_contacts.primary_address %>
+  <% if address.length > 25 %>
+    <td class="rolodex_address hint"><span><%= address %></span>
+      <div><%= truncate(address, length: 25) %></div>
+    </td>
+  <% else %>
+    <td class="rolodex_address"><div><%= address %></div></td>
+  <% end %>
+
+  <% city = i.primary_city.to_s %>
+  <% state = i.primary_state.to_s %>
+  <td class="city"><div><%= truncate(city, length: 17) %></div></td>
+  <td class="state center"><%= state %></td>
+</tr>
+<!-- oops -->
+<tr class='record trigger row_divider' data-id="<%= i.ID %>" id="index_row_<%= i.FileID %>">
+  <td class="file">
+      <%= link_to i.DisplayFileID, "index?file_id=#{i.FileID}", onclick: "event.stopPropagation();", class: ("red" if i.confidential?), target: "_blank" %>
+      <%= image_tag "/assets/#{current_user.users_preferences[:theme]}_lock.png", style: "width: 10px;" if i.confidential? %>
+  </td>
+
+  <td class="buyer">
+    <%= hint_truncate(link_to(i.buyer_1.blank? ? "" : i.buyer_1.name_last_first, rolodex_index_path(entity_id: i.Buyer1), onclick: "event.stopPropagation();", target: "_blank"), 18, true) %>
+  </td>
+
+  <td class="seller">
+    <%= hint_truncate(link_to(i.seller_1.blank? ? "" : i.seller_1.name_last_first, rolodex_index_path(entity_id: i.Seller1), onclick: "event.stopPropagation();", target: "_blank"), 18, true) %>
+  </td>
+
+  <td class="lender">
+    <%= hint_truncate(link_to(i.lender.blank? ? "" : i.lender.name_last_first, rolodex_index_path(entity_id: i.Lender1), onclick: "event.stopPropagation();", target: "_blank"), 18, true) %>
+  </td>
+
+  <td class="closer">
+    <%= hint_truncate(i.CloserName, 18) %>
+  </td>
+
+  <td class="type">
+    <%= i.TransactionDescription1 %>
+  </td>
+
+  <td class="address">
+    <%= hint_truncate(i.Address1, 18) %>
+  </td>
+
+  <td class="stage">
+    <%= i.stage %>
+  </td>
+
+  <td class="taxid">
+    <%= hint_truncate(i.TaxID1, 18) %>
+  </td>
+</tr>

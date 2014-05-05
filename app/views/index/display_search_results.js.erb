@@ -1,0 +1,38 @@
+document.title = "Filetrak - File Index";
+
+$('#search_bar').find('input').each(function(){$(this).attr('readonly', false)});
+$("#spinner").hide();
+$("#searching_text").hide();
+$("#search_button").show();
+
+// Display search results
+$("#overview_left .tools").each(function(){
+	$(this).html("");
+});
+
+$("#index_results").html("<%= j(render 'shared/result_row').html_safe -%>");
+clearSort($("#index_results").closest("table"));
+$("#search_nav").html("<%= j(render 'index/partials/search_results_count').html_safe -%>");
+
+<% if @search_type == "file_number" && @record != nil %>
+  $("#search_results").find("#<%= @record.ID %>").first().click();
+  $("#search_results").scrollTop($("#search_results").scrollTop() - 17 + $("#<%= @record.ID %>").position().top);
+<% else %>
+  $("#search_results").find(".result_row").first().click();
+  $("#search_results").scrollTop(0);
+<% end %>
+
+
+<% unless @show_file_number.blank? %>
+	$("input#search_box").val("<%= @show_file_number %>");
+<% end %>
+
+<% if @search_results.size > 0 %>
+  $("#tabs").show();
+  $("#tab_content").hide();
+<% else %>
+  $("#tabs").hide();
+  $("#tab_content").show();
+<% end %>
+
+check_type();

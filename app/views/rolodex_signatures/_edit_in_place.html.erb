@@ -1,0 +1,5 @@
+<%= text_field :signature, :description, name: "description", onchange: "title = $(this.parentNode.parentNode).attr('title'); $(this.parentNode.parentNode).attr('title', title.replace('#{@signature.description.gsub(/[']/,"\\\\\'")}', $(this).val())); $.post('rolodex_signatures/#{@signature.id}/update_description?description=' + $(this).val() );", onkeydown: "if(event.keyCode == 27){this.parentNode.innerHTML='#{@signature.description.gsub(/[']/,"\\\\\'")}';}", id: "signature_focus", remote: true, style: "width: 115px;" %>
+
+<script type="text/javascript">
+	$("#signature_focus").focus();
+</script>

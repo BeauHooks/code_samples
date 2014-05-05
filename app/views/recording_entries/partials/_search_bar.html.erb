@@ -1,0 +1,23 @@
+<form id="search_form" name="search_form" action="/recording_entries/display_search_results/" data-remote="true" method="get" onsubmit="clearSorting('#search_results');">
+  <div>
+    <div class="expand_toggle">
+      <span><%= link_to "&#x25BC;".html_safe, "#", id: "search_expanded", onclick: "$('#search_results').toggle(); $('#search_expanded').toggle(); $('#search_collapsed').toggle();" %></span>
+      <span><%= link_to "&#x25B6;".html_safe, "#", id: "search_collapsed", onclick: "$('#search_results').toggle(); $('#search_collapsed').toggle(); $('#search_expanded').toggle();", class: "hide" %></span>
+    </div>
+    <div class="search_control">
+      <%= render "shared/search_select" %>
+    </div>
+    <div class="search_control">
+      <%= render "shared/search_box" %>
+    </div>
+    <div class="search_control">
+      <%= render "shared/county_select" %>
+    </div>
+    <div class="search_control">
+      <%= render "shared/date_from" %>
+    </div>
+    <div class="search_control">
+      <%= render "shared/date_to" %>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,7 @@
+<tr>
+  <% @search_display.each do |display| %>
+    <th class="<%= display[:style] %>">
+      <div><%= display[:label] %></div>
+    </th>
+  <% end %>
+</tr>

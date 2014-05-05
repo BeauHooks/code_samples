@@ -1,0 +1,57 @@
+<div id="search_bar" class="search_bar">
+  <div id="search" class="search">
+    <%= render "index/partials/search_bar" %>
+  </div>
+  <div id="search_nav" class="search_nav">
+    <%= render 'index/partials/search_results_count' %>
+  </div>
+</div>
+
+<div class="result_container margin_bottom">
+  <div class="grid_header"></div>
+  <div id="search_results" class="h<%= current_user.users_preferences[:index_result_count].to_i * 23 %> search_results" style="position: static;">
+    <table class="w100p sortable">
+      <thead class="grid_header_font">
+        <%= render "shared/thead_row" %>
+      </thead>
+      <tbody id="index_results" class="grid_results">
+        <%= render 'shared/result_row' %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="tabs" class="tabs_container no_border margin_top_10">
+	<ul class="tabs">
+    <li><%= link_to @file, "#file_overview", id: "tab_file_id", class: "overview tab" %></li>
+    <% if @permission_create_docs %>
+      <li id="docs_tab"><%= link_to "Docs", "#file_docs", onclick: "", class: "docs tab" %></li>
+    <% end %>
+    <li id="attachments_tab"><a href="#file_attachments" class="attachments tab">Attachments</a></li>
+    <li id="emails_tab"><a href="#file_emails" class="emails tab">Emails</a></li>
+    <% if current_user.is_developer? %>
+      <!-- <li id="clearing_tab"><a href="#file_clearing" class="clearing tab">Clearing</a></li> -->
+    <% end %>
+		<% if @permission_create_docs %>
+      <li id="recording_tab"><a href="#file_recording" class="recording tab">Recording Prep</a></li>
+    <% end %>
+	</ul>
+  <div id="file_overview"></div>
+  <% if @permission_create_docs %>
+    <div id="file_docs"></div>
+  <% end %>
+  <div id="file_attachments"></div>
+  <div id="file_emails"></div>
+  <% if current_user.is_developer? %>
+    <div id="file_clearing"></div>
+  <% end %>
+  <% if @permission_create_docs %>
+    <div id="file_recording"></div>
+  <% end %>
+</div>
+
+<div id="tab_content" class="tab_content no_border hide">
+  <center>
+    <b>No File Selected</b>
+  </center>
+</div>

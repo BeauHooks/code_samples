@@ -1,0 +1,84 @@
+<%= content_for :overlay_title do %>
+  HOA Proration Calculator
+<% end %>
+
+<%= content_for :overlay do %>
+  <div  id="hoa_proration_calculator">
+    <%= form_for 'search_form', url: "settlement_statements/#{@ss.id}/update_hoa_proration", remote: true do %>
+      <table style="float: left; margin-right: 10px;">
+        <tr style="height: 17px;">
+          <td class="label">HOA Due:</td>
+          <td>
+            <%= radio_button_tag :hoa_due, "monthly", @ss.hoa_due == "monthly" || true, onclick: "proration_date('monthly');" %> Monthly
+            <%= radio_button_tag :hoa_due, "annual", @ss.hoa_due == "annual", onclick: "proration_date('annual');" %> Annually
+          </td>
+        </tr>
+        <tr style="height: 20px;">
+          <td id="date_label" class="label">Proration Date:</td>
+          <td style="padding-right: 10px;">
+            <%= text_field_tag :proration_start, @ss.hoa_start_at.nil? || @ss.hoa_start_at == "" ? "01/01/#{Time.now.year}" : @ss.hoa_start_at.to_s(:std), class: "date annual_date", style: "width: 70px;", placeholder: "Start Date" %>
+            <span class="annual_date">-</span>
+            <%= text_field_tag :proration_end, @ss.hoa_end_at.to_s(:std), class: "date", style: "width: 70px;", placeholder: "End Date" %>
+          </td>
+        </tr>
+        <tr style="height: 20px;">
+          <td class="label" style="padding-right: 5px;">HOA Amount:</td>
+          <td style="padding-right: 10px;"><%= text_field_tag :total, number_to_currency(@ss.hoa_amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "toUSN(this);" %></td>
+        </tr>
+        <tr style="height: 25px;">
+          <td class="label" style="vertical-align: top;">HOA Applies:</td>
+          <td style="padding-right: 10px;">
+            <label><%= radio_button_tag :hoa_applies, "charge_buyer-charge_seller", @ss.hoa_applies == "charge_buyer-charge_seller" %> Charge Buyer and Charge Seller</label><br />
+            <label><%= radio_button_tag :hoa_applies, "charge_buyer-credit_seller", @ss.hoa_applies == "charge_buyer-credit_seller" %> Charge Buyer and Credit Seller</label>
+          </td>
+        </tr>
+      </table>
+      <div style="float: left; padding-top: 5px; padding-right: 10px;">
+      </div>
+      <p style="clear: both;"></p><br />
+      <p style="color: #ED1C24">Warning - Lines in red will be overwritten when using this calculator</p>
+    <% end %>
+  </div>
+
+  <script type="text/javascript">
+    openOverlay("hoa_proration_calculator");
+    proration_date("<%= @ss.hoa_due %>");
+
+    function proration_date(length){
+      if(length == "annual"){
+        $("#date_label").html("Date Range:");
+        $(".annual_date").show();
+        $("#proration_end").attr("placeholder", "End Date");
+        $("#proration_end").attr("style","width: 70px;");
+      } else {
+        $("#date_label").html("Proration Date:");
+        $("#proration_end").attr("placeholder", "Proration Date");
+        $("#proration_end").attr("style","width: 80px;");
+        $(".annual_date").hide();
+      }
+    }
+
+    $( "#hoa_proration_calculator .date").datepicker({
+      changeMonth: true,
+      changeYear: true
+    });
+
+    function validateHOAProration(){
+      var errors = "";
+
+      if($("#hoa_proration_calculator #proration_start, #hoa_proration_calculator #proration_end").val() == ""){
+        errors += "&list[]=Proration date cannot be left empty.";
+      }
+
+      if($("#hoa_proration_calculator #total").val() == ""){
+        errors += "&list[]=Total amount cannot be left empty.";
+      }
+
+      if(errors != ""){
+        addToQueue("validate_hoa_proration_calculator", "application/flash_notice?title=Errors on Form&notice=Please correct the following errors before proceeding:" + errors);
+        return false;
+      }
+      return true;
+    }
+  </script>
+<% end %>

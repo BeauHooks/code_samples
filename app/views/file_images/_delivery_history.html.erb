@@ -1,0 +1,21 @@
+<table>
+<% @b = 0 %>
+<% @delivery_log.each do |d| %>
+  <% @b += 1 %>
+  <tr style="padding-left: ">
+    <td class="to"><%= d.public_user.email %></td>
+    <td class="sent_date"><%= d.created_at.strftime("%-1m/%-1d/%Y %l:%M %p") %></td>
+    <td class="expire_date"><%= d.expires_at.strftime("%-1m/%-1d/%Y %l:%M %p") %></td>
+    <td class="viewed_at"><%= d.viewed_at.strftime("%-1m/%-1d/%Y %l:%M %p") unless d.viewed_at.nil? %></td>
+    <td class="created_by"><%= User.find(d.created_by).employee.FullName %></td>
+  </tr>
+<% end %>
+</table>
+
+<script type="text/javascript">
+  <% if @b > 4 %>
+      addWidth('log', 95);
+  <% else %>
+      fixWidth('log', 95);
+  <% end %>
+</script>

@@ -1,0 +1,83 @@
+<div id="add_affiliation">
+  <div class="overlay_header">
+    <h2>Add Affiliation</h2>
+   </div>
+  <div class="overlay_content">
+    <% (@rolodex_entity != "" && @rolodex_entity != nil) ? action = "rolodex_affiliations/display_search_results?overlay=Affiliation&entity=#{@rolodex_entity.EntityID}" : action = "rolodex_affiliations/display_search_results" %>
+    <%= form_tag("#{action}", {onsubmit: "$('#new_affiliation').html(\"<p class='margin_top_5 padding_left_5'><img src='assets/loading.gif' class='margin_right_5 w15 pos_relative top_4' />Searching...</p>\");", remote: true}) do |f| %>
+    <h4>Search: <%= text_field_tag "search_value", params[:search_value],  class: "search" %><%= image_submit_tag("search.png", class: 'icon') %></h4>
+    <% end %>
+    <div class="box" id="affiliation_results">
+      <table class="grid_header">
+        <tr>
+          <td class="action w60 padding_left_5">Action</td>
+          <td class="w95 padding_left_5">Name</td>
+          <td class="w95">Type</td>
+          <td class="w95">Phone</td>
+          <td class="w95">Email</td>
+          <td class="w95">Address</td>
+          <td class="w95">City</td>
+          <td class="w95">State</td>
+          <% if @overlay == "Affiliation" %>
+            <td class="w95" id="new_rolodex_affiliation_last">Relationship<a href="temp_link" id="temp_link" data-remote="true"></a></td>
+          <% end %>
+
+        </tr>
+      </table>
+      <div class="results h207 no_max_height" id="<%= @overlay != "" ? 'new_affiliation' : 'new_rolodex_affiliation' %>">
+        <%= render "rolodex_affiliations/partials/search_results" %>
+      </div>
+    </div>
+
+
+  <script type="text/javascript">
+    openOverlay('new_affiliation');
+    $("#search_value").focus();
+  </script>
+
+    <% if @rolodex_entity != nil %>
+      <h3 class="margin_top_5">Affiliations On File</h3>
+      <div class="box" id="current_affiliations_box">
+        <table class="grid_header">
+          <tr>
+            <td class="action w60 padding_left_5">Actions</td>
+            <td class="w95 padding_left_5">Entity</td>
+            <td class="w95">Phone</td>
+            <td class="w95">Email</td>
+            <td class="w95">Address</td>
+            <td class="w95">City</td>
+            <td class="w95">State</td>
+            <td class="w95" id="current_affiliations_last">Relationship</td>
+          </tr>
+      </table>
+        <div id="current_affiliations" class="results">
+          <%= render 'rolodex_affiliations/partials/current_affiliations' %>
+        </div>
+      </div>
+    <% else %>
+      <h3 class="margin_top_5">Affiliations On New Contact</h3>
+      <div class="box" id="current_affiliations_box">
+        <table class="grid_header">
+          <tr>
+            <td class="action w60 padding_left_5">Actions</td>
+            <td class="w95 padding_left_5">Entity</td>
+            <td class="w95 padding_left_5">Phone</td>
+            <td class="w95 padding_left_5">Email</td>
+            <td class="w95 padding_left_5">Address</td>
+            <td class="w95 padding_left_5">City</td>
+            <td class="w95 padding_left_5">State</td>
+            <td class="w95 padding_left_5" id="affiliations_on_new_contact_last">Relationship</td>
+          </tr>
+      </table>
+        <div class="results">
+          <table id="affiliations_on_new_contact">
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="overlay_footer">
+    <input type="button" value="Close" class="button close" onclick="closeOverlay('new_affiliation');" />
+  </div>
+</div>
+

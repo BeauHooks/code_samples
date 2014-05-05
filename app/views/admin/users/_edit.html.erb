@@ -1,0 +1,22 @@
+<div style="text-align: left;">
+  <%= link_to "Back", refresh_users_admin_index_path, method: :post, remote: true, class: "button" %>
+  <h2><%= @user.first_name %> <%= @user.last_name %></h2>
+</div>
+
+<%= form_tag @user, remote: true do |f| %>
+  <table id="edit_user" class="edit_user">
+    <tr>
+      <td class="label">First Name:</td>
+      <td><%= f.text_field :first_name, @user.first_name %></td>
+    </tr>
+    <tr>
+      <td class="label">Last Name:</td>
+      <td><%= f.text_field :last_name, @user.last_name %></td>
+    </tr>
+    <tr>
+      <td class="label">Email:</td>
+      <td><%= text_field_tag :email, @user.email %></td>
+    </tr>
+  </table>
+<% end %><br /><br />
+

@@ -1,0 +1,192 @@
+<% if @show == "Buyer" || @show == "Seller" %>
+  <% sides = [@show] %>
+<% else %>
+  <% sides = ["Seller", "Buyer"] %>
+<% end %>
+
+<div id="ss">
+<% sides.each do |side| %>
+  <div style="margin-bottom: 1em; text-align: center;" id="hud_title">
+    <h1 style="text-align: center; text-transform: uppercase; font-size: .5em;">{{COMPANY_NAME}}</h1>
+    <h2 style="font-size: .4em;">{{COMPANY_ADDRESS}}</h2>
+    <h2 style="font-size: .4em;">{{COMPANY_CITY}}, {{COMPANY_STATE}} {{COMPANY_ZIP}}</h2>
+    <h2 style="margin: 1em; font-size: .75em;"><%= side.upcase %>'S SETTLEMENT STATEMENT</h2>
+  </div>
+
+  <table>
+    <tr>
+      <td class="hud_border">
+        <table>
+          <tr>
+            <td class="hud_box_title">Seller</td>
+          </tr>
+          <tr>
+            <td style="height: 3.5em;">{{GRANTOR_NAMES}}</td>
+          </tr>
+        </table>
+      </td>
+      <td style="width: 10%;">&nbsp;</td>
+      <td style="width: 10%;">&nbsp;</td>
+      <td class="hud_border" colspan="2">
+        <table>
+          <tr>
+            <td class="hud_box_title">Buyer</td>
+          </tr>
+          <tr>
+            <td style="height: 3.5em;">{{GRANTEE_NAMES}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="5">&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td class="hud_border">
+        <table>
+          <tr>
+            <td class="hud_box_title">Seller's Address</td>
+          </tr>
+          <tr>
+            <td style="height: 2.5em;">
+              {{GRANTOR_ADDRESS_1}} {{GRANTOR_ADDRESS_2}}<br />
+              {{GRANTOR_CITY}}, {{GRANTOR_STATE}} {{GRANTOR_ZIP}}
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td class="hud_border" colspan="2">
+        <table>
+          <tr>
+            <td class="hud_box_title">Buyer's Address</td>
+          </tr>
+          <tr>
+            <td style="height: 2.5em;">
+              {{GRANTEE_ADDRESS_1}} {{GRANTEE_ADDRESS_2}}<br />
+              {{GRANTEE_CITY}}, {{GRANTEE_STATE}} {{GRANTEE_ZIP}}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="5">&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td class="hud_border" colspan="2" rowspan="2">
+        <table>
+          <tr>
+            <td class="hud_box_title">Property Address/Description</td>
+          </tr>
+          <tr>
+            <td style="height: 2.5em;">{{PROPERTY_ADDRESS}}<br />{{PROPERTY_CITY}}, {{PROPERTY_STATE}} {{PROPERTY_ZIP}}
+              <br />
+              <% legal = @doc.file_doc_fields.where("tag = 'PROPERTY_LEGAL_DESCRIPTION' AND value != '' AND is_active = 1").first %>
+              <% legal == nil ? legal = @file.file_doc_fields.where("doc_id = 0 AND tag = 'PROPERTY_LEGAL_DESCRIPTION' AND is_active = 1").first.value : legal = legal.value %>
+              <%= (legal.length < 50 ? "{{PROPERTY_LEGAL_DESCRIPTION}}" : "{{PROPERTY_TAX_ID}}") unless legal.nil? %>
+            </td>
+          </tr>
+        </table>
+      </td>
+
+      <td>&nbsp;</td>
+
+      <td class="hud_border" style="width: 20%; padding-right: .25em;">
+        <table>
+          <tr>
+            <td class="hud_box_title">Closing Date</td>
+          </tr>
+          <tr>
+            <td style="height: 1.5em; text-align: center;">{{CLOSING_DATE}}<%#= side == "Buyer" ? "{{GRANTEE_SIGNING_DATE}}" : "{{GRANTOR_SIGNING_DATE}}" %></td>
+          </tr>
+        </table>
+      </td>
+      <td class="hud_border" style="width: 20%; padding-left: .25em;">
+        <table>
+          <tr>
+            <td class="hud_box_title">Order Number</td>
+          </tr>
+          <tr>
+            <td style="height: 1.5em; text-align: center;">{{FILE_ID_NUMBER}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+  </table>
+
+  <table class="ss_body full_content">
+      <tr>
+        <td style="border-top: none; border-left: none;">&nbsp;</td>
+        <td style="text-align: center;">Charges</td>
+        <td style="text-align: center;">Credits</td>
+      </tr>
+    <% side == "Buyer" ? condition = "number >=  3000 AND number < 4000" : condition = "number >=  4000 AND number < 5000" %>
+    <% @hud.hud_lines.where("#{condition}").each do |line| %>
+      <!-- <tr id="hud_row_<%= line.number %>" class="<%= line.type != nil && line.type != "ss_none" ? line.type : "ss_none trigger" %>" onclick="$.post('/hud_lines/create?hud_id=<%= line.hud_id %>&id=<%= line.id %>&line_num=<%= line.number %>&type=ss_normal');" ondblclick="<%= line.type != nil ? "" : "$.post('/hud_lines/#{line.hud_id}/new_description?line=#{line.number}&hud_id=#{line.hud_id}&type=ss&group=ss');" %>" > -->
+      <tr id="hud_row_<%= line.number %>" class="<%= line.type != nil ? line.type : "" %>">
+          <%= render 'huds/partials/full-line', builder: line %>
+      </tr>
+    <% end %>
+    <!-- <tr>
+      <td style="border: none; text-align: center">Approved By:</td>
+      <td style="border: none;" colspan="2"></td>
+    </tr> -->
+  </table>
+<div style="margin-top: 5px;">{{CB_FINAL_2}} Preliminary <span style="margin-left: 10px;">{{CB_FINAL_1}} Final</span></div>
+
+  <!-- <div class="ss_left">
+    <table class="signature_container">
+      <tr>
+        <td colspan="2" style="font-weight: bold">{{COMPANY_NAME}}</td>
+      </tr>
+      <tr>
+        <td style="width: 5%">By:</td>
+        <td style="width: 70%;"><hr /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>{{CLOSER_NAME}}</td>
+      </tr>
+      <tr>
+        <td colspan="2"><%#= radio_button_tag "final", "preliminary", false %> Preliminary &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%#= radio_button_tag "final", "final", true %>Final</td>
+      </tr>
+    </table>
+  </div> -->
+  
+  <%# @show = side %>
+  <%#= @show %>
+  <!-- {{SS_SIGNATURE_FUNCTION}} -->
+  {{PAGE_BREAK}}
+  <center><h2 style='font-size: 2em !important' >ADDENDUM TO SETTLEMENT STATEMENT</h2></center>
+  <p>Approved By:</p>
+  <br />
+    {{<%= side.upcase %>_SIGNATURES}}
+      <%#= render partial: 'docs/doc_signature' %>
+  <br />
+  <table class='signature_container' style='width: 45%'>
+    <tr>
+       <td colspan='2'><h4>{{COMPANY_NAME}}</h4></td>
+    </tr>
+    <tr>
+      <td style='width: 5%'>By: </td>
+      <td style='width: 70%; height: 25px; border-bottom: 1px solid #464646 !important;' colspan='2'></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>{{CLOSER_NAME}}</td>
+    </tr>
+  </table>
+  <div style="margin-top: 5px;">{{CB_FINAL_2}} Preliminary <span style="margin-left: 10px;">{{CB_FINAL_1}} Final</span></div>
+  <%= "{{PAGE_BREAK}}" if side == "Seller" %>
+<% end %>
+</div>

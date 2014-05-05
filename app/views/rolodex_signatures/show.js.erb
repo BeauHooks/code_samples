@@ -1,0 +1,18 @@
+<% if @update == nil  %>
+  $("div#tree_view").html("<%= j(render :partial => "rolodex_signatures/show").html_safe %>");
+<% end %>
+
+<% if @signature_entity && @update != nil %>
+	$("table#<%= @signature_entity.id %> [name=name]").val("<%= @signature_entity.name %>");
+<% end %>
+
+$("div#signature_content").html("<%= j(render :partial => "rolodex_signatures/signature_block_preview").html_safe %>");
+
+$("a#edit_signature").attr("href", "rolodex_signatures/<%= @signature.id %>/show_editor");
+
+if($('#selected_signature').val() != undefined){
+<% if @signature != nil %>
+  $('#selected_signature').val("<%= @signature.id %>");
+  $('.signature_management h2:first').html("Manage Signature Blocks - <%= @signature.description %>");
+<% end %>
+}

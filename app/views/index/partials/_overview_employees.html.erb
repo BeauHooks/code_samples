@@ -1,0 +1,28 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_employees sortable">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="name">
+            <div>
+              Employees
+              <% if @permission_add_employee_to_index || @file.has_employee?(current_user.employee_id) %>
+                <%= link_to image_tag("plus.png", class: "icon"), index_file_employees_path(index_id: @file.ID, position: 6), class: "trigger", style: "margin-right: 10px;", remote: true, method: :post %>
+              <% else %>
+                <%= link_to image_tag("plusgrey.png", class: "icon"), index_file_employees_path(index_id: @file.ID, position: 6), class: "trigger", style: "margin-right: 10px;", remote: true, method: :post %>
+              <% end %>
+            </div>
+          </th>
+          <th class="position"><div>Position</div></th>
+          <th class="phone"><div>Phone</div></th>
+          <th class="fax"><div>Fax</div></th>
+          <th class="email"><div>Email</div></th>
+        </tr>
+      </thead>
+      <tbody id="file_employees_list" class="highlight">
+        <%= render 'file_employees/partials/overview_employees', file: @file, employees: @employees, file_employee_types: @file_employee_types %>
+      </tbody>
+    </table>
+  </div>
+</div>

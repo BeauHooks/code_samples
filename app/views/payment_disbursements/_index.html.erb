@@ -1,0 +1,17 @@
+<div class="tru_payment_window" data-id="<%= @line.id %>">
+  <div class="tru_payment_summary" data-id="<%= @line.id %>">
+    <%= render "payment_disbursements/balance" %>
+  </div>
+  <div class="tru_payment_results">
+    <h3>Payments</h3>
+    <%  if @line.line_type == "commission" %>
+      <%= select_tag :disbursement_id, options_for_select(@file.existing_disbursement_options()), class: "disbursement_options" %>
+      <%= submit_tag(:Add, type: "button", onclick: "$.post('#{@line.class.table_name == "ss_lines" ? payment_disbursements_path(ss_line_id: @line.id, funds_type: "check", view: @view) : payment_disbursements_path(hud_line_id: @line.id, funds_type: "check", view: @view)}&id=' + $(this).prev('select').val() );") %>
+    <% end %>
+    <%= submit_tag "Collapse View", type: "button", onclick: "$(this).closest('.tru_payment_window').remove();" %>
+    <% @line.payment_disbursements.each do |payment_disbursement| %>
+      <%= render "payment_disbursements/show", payment_disbursement: payment_disbursement  %>
+    <% end %>
+  </div>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,112 @@
+<% cannot_edit = [
+    100, 120,
+    200, 220,
+    300,301,302,303,
+    400, 420,
+    500, 520,
+    600,601,602,603,
+    700,
+    800,
+    900,
+    1000,
+    1100
+ ]
+
+%>
+
+<% if (builder.number >= 121 && builder.number <= 199) || (builder.number >= 421 && builder.number <= 499) || (builder.number >= 706 && builder.number <= 799) || (builder.number >= 809 && builder.number <= 899) || (builder.number >= 905 && builder.number <= 999) || (builder.number >= 1008 && builder.number <= 1099) || (builder.number >= 1109 && builder.number <= 1199) || (builder.number >= 1207 && builder.number <= 1299) || (builder.number >= 1306 && builder.number <= 1399) || (builder.number >= 3035 && builder.number <= 3095) || (builder.number >= 4035 && builder.number <= 4095) || (builder.number >= 5035 && builder.number <= 5095) %>
+  <% can_remove = true %>
+<% else %>
+  <% can_remove = false %>
+<% end %>
+
+<% if builder.number >= 2000 %>
+  <% if (builder.type == "ss_header_custom" || builder.type == "ss_header") && !cannot_edit.include?(builder.number) %>
+    <% display = "<div style='width: 3px; height: 113%; background: #0054A0; float: left; position: absolute; top: -1px; left: -2px;' class='non-printable'>&nbsp;</div>".html_safe %>
+  <% elsif builder.number < 3000 && !cannot_edit.include?(builder.number) %>
+    <% display = "<div style='width: 5px; height: 1.35em; background: #0054A0; float: left; position: relative; left: -3px;' class='non-printable'>&nbsp;</div>".html_safe %>
+  <% elsif !cannot_edit.include?(builder.number) || builder.name == nil && builder.type != nil && builder.type.include?("_normal")  %>
+    <% display = "<div style='width: 5px; height: 113%; background: #0054A0; float: left; position: absolute; top: -1px; left: -5px;' class='non-printable'>&nbsp;</div>".html_safe %>
+  <% else %>
+    <% display = "" %>
+  <% end %>
+<% else %>
+    <% display = "#{builder.number}." %>
+<% end %>
+
+<% if cannot_edit.include?(builder.number) %>
+    <% post = "return false" %>
+    <% trigger = "" %>
+<% else %>
+    <% post = "displayFlyout(#{builder.number});" %>
+    <% trigger = "trigger" %>
+<% end %>
+
+<div class="flyout" onclick="<%= post %>" style="<%= "color: #0054A0;" if trigger != "" && @print == nil %>"> <!-- onclick="displayFlyout(<%= builder.number %>);" -->
+  <span class="<%= trigger %>"><%= display %></span>
+  <ul class="submenu_hide non-printable">
+    <li><%= link_to "Change", "/hud_lines/#{@hud.id}/new_description?line=#{builder.number}&hud_id=#{@hud.id}", remote: true %></li>
+    <li><%= link_to "Clear", "/hud_lines/#{builder.id}/clear?hud_id=#{@hud.id}", remote: true %></li>
+    <li><%= link_to "Default", "/hud_lines/#{builder.id}/default?hud_id=#{@hud.id}", remote: true %></li>
+    <% if @hud.hud_type != "standard" %>
+      <li><%= link_to "Insert Above", "/hud_lines/#{@hud.id}/new_description?line=#{builder.number}&line_action=insert_above&hud_id=#{@hud.id}", remote: true %></li>
+      <li><%= link_to "Insert Below", "/hud_lines/#{@hud.id}/new_description?line=#{builder.number + 1}&line_action=insert_below&hud_id=#{@hud.id}", remote: true %></li>
+      <% can_remove = true %>
+    <% end %>
+    <% if can_remove  %>
+      <li><%= link_to "Remove", "/hud_lines/#{builder.id}/destroy?hud_id=#{@hud.id}", remote: true %></li>
+    <% end %>
+    <!--<%# if !cannot_manage.include?( builder.type.gsub("_custom", "") ) %>
+      <li><%#= link_to "Manage", "hud_lines/#{builder.id}/manage?hud_id=#{@hud.id}", remote: true %></li> -->
+    <%# end %>
+  </ul>
+</div>
+
+<%#
+ [
+     100,101,102,103, 104, 105, 106, 107, 108, 120,
+     200,201,202,203, 206, 210, 211, 212, 220,
+     300,301,302,303,
+     400,401,402,406, 407, 408, 420,
+     500,501,502,503, 504, 505, 506, 510, 511, 512,520,
+     600,601,602,603,
+     700,701,702,703,704,
+     800,801,802,803,804,805,806,807,808,
+     900,901,902,903,904,
+     1000,1001,1002,1003,1004, 1005, 1006,1007,
+     1100,1101,1102,1103,1104,1105,1106,1107,1108,
+     1200,1201,1202,1203,1204,1205, 1206,
+     1300,1301,1302, 1303, 1304, 1305,
+     1400,
+     2000,2001,2002,2003,
+     2100,2101,2102,2103,2104,2105,2106,2107,
+     2200,2201,2202,
+     3000,3001,3003,3004,3005,3006,3007,3008,3009,3011,3012,3013,3014,3015,3017,3018,3096,3097,3099,
+     4000,4001,4003,4004,4005,4006,4007,4008,4009,4011,4012,4013,4014,4015,4017,4018,4096,4097,4099,
+     5000,5001,5003,5004,5005,5006,5007,5008,5009,5011,5012,5013,5014,5016,5017,5018,5019,5020,5096,5097,5099]
+%>
+
+<%# cannot_manage = []
+[
+    "jk_header",
+    "jk_footer",
+    "jk_checkbox",
+    "jk_inverse",
+    "l_main_header",
+    "l_main_payee",
+    "l_payee_amount",
+    "l_header",
+    "l_footer",
+    "l_amount_desc",
+    "l_inverse",
+    "l_amount",
+    "l_periodic",
+    "l_dm",
+    "m_normal",
+    "m_periodic",
+    "ss_header",
+    "ss_proration_date",
+    "ss_commission",
+    "ss_footer"
+  ]
+%>

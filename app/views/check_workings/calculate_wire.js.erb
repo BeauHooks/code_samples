@@ -1,0 +1,27 @@
+
+
+if($("#anticipated_wire").val() == "From Lender"){
+  if("<%= @lender_wire %>" == "No Loan Amount"){
+    $("#flash_text").html("No Loan Amount");
+    $("#flash_message").fadeIn(1000).delay(3000).fadeOut(500);
+  } else if("<%= @lender_wire %>" == "No ss"){
+    $("#flash_text").html("Cannot calculate from Settlement Statement");
+    $("#flash_message").fadeIn(1000).delay(3000).fadeOut(500);
+  } else {
+    <% buyer_id = @file.file_entities.where("Position in (7, 1)").first.EntityID rescue nil %>
+    <% lender = @file.file_entities.where("Position = 3").first.entity.name rescue nil %>
+    $('#create_receipt select#received_for').val('<%= buyer_id %>');
+    $('#create_receipt input#received_from').val('<%= lender %>');
+    $('#create_receipt input#amount').val('<%= number_to_currency(@lender_wire, precision: 2, unit: "") %>');
+  }
+} else if($("#anticipated_wire").val() == "From Borrower"){
+  if("<%= @borrower_wire %>" == "No Borrower Amount"){
+    $("#flash_text").html("No Borrower Amount");
+    $("#flash_message").fadeIn(1000).delay(3000).fadeOut(500);
+  } else {
+    <% buyer_id = @file.file_entities.where("Position in (7, 1)").first.EntityID rescue nil %>
+    $('#create_receipt select#received_for').val('<%= buyer_id %>');
+    $('#create_receipt input#amount').val('<%= number_to_currency(@borrower_wire, precision: 2, unit: "") %>');
+    $('#create_receipt input#received_from').val('');
+  }
+}

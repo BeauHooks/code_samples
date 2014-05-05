@@ -1,0 +1,2 @@
+$("tbody#file_entities_list").html("<%= j(render 'file_entities/partials/overview_contacts', file: @file, file_user_types: @file_user_types).html_safe %>");
+$("tbody#current_contacts").html("<%= j(render 'file_entities/partials/current_contacts', file: @file, file_user_types: @file_user_types).html_safe %>");

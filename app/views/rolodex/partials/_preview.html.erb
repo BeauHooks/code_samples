@@ -1,0 +1,135 @@
+<tr class="preview">
+  <td colspan="100" style="padding: .5em;">
+    <div class="float_left" style="width: 50em;">
+      <table>
+        <tr>
+          <td class="label" style="width: 7em; min-width: 0px;">Name:</td>
+          <td><%= @entity.name %></td>
+        </tr>
+        <tr>
+          <td class="label">Affiliations:</td>
+
+          <% name =  @entity.primary_affiliation_name %>
+          <% hash = Hash.new %>
+          <% list_1 = @entity.affiliations_as_entity_1 + @entity.affiliations_as_contact_1 %>
+          <% list_2 = @entity.affiliations_as_entity_2 + @entity.affiliations_as_contact_2 %>
+          <% list_1.each do |item| %>
+            <% hash[item] = "1" %>
+          <% end %>
+          <% list_2.each do |item| %>
+            <% hash[item] = "2" %>
+          <% end %>
+
+          <% if name.blank? && list_1.size + list_2.size == 0 %>
+            <td class="no_result">No Affiliations</td>
+          <% else %>
+            <td>
+              <% i = 0 %>
+              <% unless name.blank? %>
+                <% affiliation = @entity.affiliations_as_entity_1.where("EntityID2 = #{@entity.primary_affiliation_id} OR ContactID2 = #{@entity.primary_affiliation_id} OR ContactID1 = #{@entity.primary_affiliation_id}").first %>
+                <% affiliation = @entity.affiliations_as_entity_2.where("EntityID1 = #{@entity.primary_affiliation_id} OR ContactID2 = #{@entity.primary_affiliation_id} OR ContactID1 = #{@entity.primary_affiliation_id}").first if affiliation == nil %>
+                <% affiliation = @entity.affiliations_as_contact_1.where("EntityID1 = #{@entity.primary_affiliation_id} OR EntityID2 = #{@entity.primary_affiliation_id} OR ContactID2 = #{@entity.primary_affiliation_id}").first if affiliation == nil  %>
+                <% affiliation = @entity.affiliations_as_contact_2.where("EntityID1 = #{@entity.primary_affiliation_id} OR EntityID2 = #{@entity.primary_affiliation_id} OR ContactID1 = #{@entity.primary_affiliation_id}").first if affiliation == nil %>
+                <% unless affiliation == nil %>
+                  <span style="display: block;">
+                    <% if @form != "new_file" && @file != nil %>
+                      <% click = "addToQueue('add_file_entity', '/file_entities?entity_id=#{@entity.primary_affiliation_id}&id=#{@file.ID}&position=' + $(this).closest('.preview').prev().find('select option:selected').val()); $(this).val('Added').change();" %>
+                      <% click += " addToQueue('add_payee', 'check_workings/add_payee?id=#{@check.id}&entity_id=#{@entity.primary_affiliation_id}'); $('#new_contact_spinner').show();" if @check != nil %>
+                      <% click += " addToQueue('create_doc_entity', 'docs/create_entity?file_id=#{@file.ID}&section=#{@section}&doc_id=#{@doc_id}&entity_id=#{@entity.primary_affiliation_id}');" if @form == "doc" %>
+                      <input type="button" onclick="<%= click %> event.stopPropagation();" value="Add" id="contact_result_<%= @entity.primary_affiliation_id %>" />
+                    <% else %>
+                      <input type="button" onclick="$.post('index/add_contact_to_new_file/?entity_id=<%= @entity.primary_affiliation_id %>&position=' + $(this).closest('.preview').prev().find('select option:selected').val() ); $(this).val('Added').change(); event.stopPropagation();" data-remote="true" value="Add" id="contact_button_<%= @entity.primary_affiliation_id %>">
+                    <% end %>
+                    <%= name %> - <%= affiliation.Relationship %>
+                  </span>
+                  <% i += 1 %>
+                <% end %>
+              <% end %>
+
+              <% hash.each do |affiliation, key| %>
+                <% if key == "1" %>
+                  <% affiliate = affiliation.entity_2 != nil ? affiliation.entity_2 : affiliation.contact_2 != nil ? affiliation.contact_2 : nil %>
+                <% else %>
+                  <% affiliate = affiliation.entity_1 != nil ? affiliation.entity_1 : affiliation.contact_1 != nil ? affiliation.contact_1 : nil %>
+                <% end %>
+
+                <% if affiliate != nil && affiliation.EntityID1 != @entity.primary_affiliation_id && affiliation.EntityID2 != @entity.primary_affiliation_id && affiliation.ContactID1 != @entity.primary_affiliation_id && affiliation.ContactID2 != @entity.primary_affiliation_id %>
+                  <span class="dis_block">
+                    <% if @form != "new_file" && @file != nil %>
+                      <% click = "addToQueue('add_file_entity', '/file_entities?entity_id=#{affiliate.EntityID}&id=#{@file.ID}&position=' + $(this).closest('.preview').prev().find('select option:selected').val()); $(this).val('Added').change();" %>
+                      <% click += " addToQueue('add_payee', 'check_workings/add_payee?id=#{@check.id}&entity_id=#{affiliate.EntityID}'); $('#new_contact_spinner').show();" if @check != nil %>
+                      <% click += " addToQueue('create_doc_entity', 'docs/create_entity?file_id=#{@file.ID}&section=#{@section}&doc_id=#{@doc_id}&entity_id=#{affiliate.EntityID}');" if @form == "doc" %>
+                      <input type="button" onclick="<%= click %> event.stopPropagation();" value="Add" id="contact_result_<%= affiliate.EntityID %>" />
+                    <% else %>
+                      <input type="button" onclick="$.post('index/add_contact_to_new_file/?entity_id=<%= affiliate.EntityID %>&position=' + $(this).closest('.preview').prev().find('select option:selected').val() ); $(this).val('Added').change(); event.stopPropagation();" data-remote="true" value="Add" id="contact_button_<%= affiliate.EntityID %>">
+                    <% end %>
+                    <%= affiliate.name_last_first %> - <%= affiliation.Relationship %>
+                  </span>
+                  <% i += 1 %>
+                <% else %>
+                  <% next %>
+                <% end %>
+
+                <% break if i >= 3 %>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+
+        <% addresses = @entity.addresses[0...3] %>
+        <tr>
+          <td class="label top">Addresses:</td>
+          <% if addresses.size == 0 %>
+            <td class="no_result">No Address</td>
+          <% else %>
+            <td>
+              <% addresses.each do |address| %>
+                <span class="dis_block"><%= address.line %></span>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="label">Contact Info:</td>
+          <% contacts = @entity.contact_infos %>
+          <% if contacts.size == 0 %>
+            <td class="no_result">No Phone</td>
+          <% else %>
+            <td>
+              <% contacts[0...3].each do |contact| %>
+                <span class="dis_block"><%= contact.line %></span>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+    <div class="float_left" style="width: 30em;">
+      <table>
+        <tr>
+          <td class="label top" style="width: 6em; min-width: 0px;">Description:</td>
+          <td><%= @entity.Description %></td>
+        </tr>
+        <tr>
+          <td class="label">Category:</td>
+          <td><%= @entity.IndCorp %></td>
+        </tr>
+        <tr>
+          <td class="label"><%= @entity.IndCorp != "Individual" ? "Tax ID:" : "SSN:" %></td>
+          <td>
+            <% can_view = @permission_view_tax_id || current_user.has_file_with_entity?(@entity.EntityID) %>
+            <% if can_view && !@entity.TaxID.blank? %>
+              <%= @entity.TaxID %>
+            <% elsif !@entity.TaxID.blank? %>
+              <%= @entity.IndCorp == "Individual" ? "xxx-xx-#{@entity.TaxID[-4..-1]}" : "xx-xxx#{@entity.TaxID[-4..-1]}" %>
+            <% else %>
+              <%= "null" %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <p class="clear_fix"></p>
+  </td>
+</tr>

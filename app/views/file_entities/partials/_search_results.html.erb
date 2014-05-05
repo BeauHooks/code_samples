@@ -1,0 +1,35 @@
+<% @entities.each_with_index do |entity, index| %>
+  <tr id="entity_<%= index %>" data-id="<%= entity.EntityID %>">
+    <td class="add_link">
+      <% if @file %>
+        <%= button_to "Add", index_file_entities_path(@file.ID, entity_id: entity.EntityID), method: :post, remote: true, id: "add_#{index}" %>
+      <% else %>
+        <%= button_tag "Add", class: "add_file_entity", id: "add_#{index}" %>
+      <% end %>
+    </td>
+    <td class="name">
+      <%= hint_truncate(link_to(entity.name_last_first, rolodex_index_path(id: entity.EntityID), target: :blank, id: "name_#{index}"), 18, true) %>
+    </td>
+    <td class="description">
+      <%= hint_truncate(entity.Description, 15) %>
+    </td>
+    <td class="affiliation">
+      <%= entity.primary_affiliation_name %>
+    </td>
+    <td class="phone">
+      <%= entity.primary_phone_number %>
+    </td>
+    <td class="email">
+      <%= entity.Email %>
+    </td>
+    <td class="files">
+      <%= entity.FileCount %>
+    </td>
+    <td class="used">
+      <%= entity.LastUsedDT.nil? ? "Never" : entity.LastUsedDT.strftime("%m/%d/%y") %>
+    </td>
+    <td class="modified">
+      <%= entity.LastModifiedDT.nil? ? "Never" : entity.LastModifiedDT.strftime("%m/%d/%y") %>
+    </td>
+  </tr>
+<% end %>

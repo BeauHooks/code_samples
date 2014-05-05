@@ -1,0 +1,10 @@
+<% update = "update('#{fp_exception_path(id: exception.id, view: view)}', this);" %>
+<div id="exception_container_<%= exception.id %>_<%= view %>" style="margin-bottom: 10px;" class="sb_container" data-record="<%= exception.id %>">
+	<div style="margin-bottom: 5px; min-width: 680px;">
+		<%= text_field_tag :sort_order, exception.sort_order, onchange: update, style: "width: 15px; margin-right: 10px; float: left;" %>
+		<div id="fp_exceptions_text_<%= exception.id %>_<%= view %>" style="float: left; width: 680px;">
+			<%= render "fp_exceptions/text", exception: exception, view: view %>
+		</div>
+	</div>
+	<p style="clear: both;"></p>
+</div>

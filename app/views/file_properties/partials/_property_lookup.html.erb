@@ -1,0 +1,96 @@
+<% content_for :overlay_class do %>
+  property_lookup
+<% end %>
+
+<% content_for :overlay_title do %>
+  Add Property
+<% end %>
+
+<% content_for :overlay do %>
+  <% if @file != nil %>
+    <% url = "/index/#{@file.ID}/file_properties/search" %>
+  <% else %>
+    <% url = "file_properties/search" %>
+  <% end %>
+  <%= form_for 'search_form', url: url, html: {name: 'search_form', onsubmit: "$('#add_property #result').html(\"<p class='margin_top_5 padding_left_5'><img src='assets/loading.gif' class='margin_right_5 w15 pos_relative top_4' />Searching...</p>\");", remote: true} do %>
+    <h4>
+      <% if @file != nil %>
+        <% default_county = @file.company.DefaultCounty rescue 4 %>
+      <% elsif @company != nil %>
+        <% default_county = Company.find(@company).DefaultCounty rescue 4 %>
+      <% else %>
+        <% default_county = 4 %>
+      <% end %>
+      County: <%= select :file_properties, :county, County.find(:all, order: "CountyName ASC").collect{|county| [county.CountyName, county.CountyID]}, {include_blank: true, selected: default_county}, {name: "search_county", class: "margin_right_10 w135"} %>
+      Search: <%= select :file_properties, :search_type, options_for_select([["Account Number", "accountnum"], ["Address", "SitusAddress"], ["Legal", "FullLegal"], ["Owner Address", "Address1"], ["Owner Name", "OwnerName"], ["Tax ID", "serialnum"], ["Subdivision", "SubdivisionDescr"]], "serialnum"), {include_blank: false}, {name: "search_type", class: "margin_right_3 w135"} %><input type="text" name="search_value" id="search_value" placeholder="Begin Typing Here...">
+      <%= image_submit_tag "search.png", class: "icon" %><%= image_tag "plus.png", class: "icon trigger" , onclick: "$.post('/file_properties/add_custom?id=#{@file.ID}');" if @file != nil  %>
+    </h4>
+  <% end %>
+  <div class="outer_table box">
+    <div class="grid_header"></div>
+    <div class="inner_table h100">
+      <table>
+        <thead class="grid_header_font">
+          <tr>
+            <th class="add_link">
+              <div>Actions</div>
+            </th>
+            <th class="owner_name">
+              <div>Owner Name</div>
+            </th>
+            <th class="owner_address">
+              <div>Owner Address</div>
+            </th>
+            <th class="tax_id">
+              <div>Tax-ID</div>
+            </th>
+            <th class="account">
+              <div>Account #</div>
+            </th>
+            <th class="address">
+              <div>Address</div>
+            </th>
+            <th class="legal">
+              <div>Legal</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="property_lookup_results" class="highlight">
+          <%= render 'file_properties/partials/search_properties' %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% if @file != nil %>
+    <h3 class="margin_top_10">Properties on File</h3>
+    <div class="outer_table box">
+      <div class="grid_header"></div>
+      <div class="inner_table h100">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="add_link">
+                <div>Actions</div>
+              </th>
+              <th class="tax_id">
+                <div>Tax ID</div>
+              </th>
+              <th class="account">
+                <div>Account #</div>
+              </th>
+              <th class="address">
+                <div>Address</div>
+              </th>
+              <th class="legal">
+                <div>Legal</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="current_properties" class="highlight">
+            <%= render 'file_properties/partials/current_properties', file: @file %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+<% end %>

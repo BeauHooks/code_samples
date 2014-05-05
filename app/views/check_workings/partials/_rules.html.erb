@@ -1,0 +1,24 @@
+<div id="disbursement_errors">
+  <% errors = disbursement.get_disbursement_errors %>
+  <% unless errors.size == 0 %>
+    <h4 class="error underline">Error(s):</h4>
+    <% n = 0 %>
+    <% errors.each do |w| %>
+      <% n += 1 %>
+      <p class="error"><%= "#{n}) #{w}" %></p>
+    <% end %>
+  <% end %>
+</div>
+<div class="error" id="disbursement_entity_rules">
+  <% entity = Entity.find(disbursement.payee_1_id) rescue nil %>
+  <%# entity != nil ? rules = entity.show_rules : rules = [] %>
+  <% rules = entity != nil ? entity.get_rules("Add to Disbursement") : disbursement.payee_1.to_s != "" ? Rule.check_name(disbursement.payee_1, "Add to Disbursement") : [] %>
+  <% if rules.size > 0 %>
+    <h4 class="error underline">Entity Rules - <label>Reviewed: <%= check_box_tag "check_working[rules_checked]", !(disbursement.rules_checked.to_i != 0), disbursement.rules_checked.to_i != 0, onchange: "#{update} if($(this).val() == 'true'){$(this).val('false')}else{$(this).val('true')}", disabled: disabled %></label></h4>
+    <% n = 0 %>
+    <% rules.each do |rule| %>
+      <% n += 1 %>
+      <p class="error"><%= "#{n}) #{rule.rule_text}" %></p>
+    <% end %>
+  <% end %>
+</div>

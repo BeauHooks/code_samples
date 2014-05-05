@@ -1,0 +1,26 @@
+<div id="pref_left">
+  <h2 class="left"><%= @preference.name %></h2> <%= submit_tag :Remove, type: :button, onclick: "$.ajax({url: 'admin/site_preferences/#{@preference.id}', type: 'delete'}); $('#preference_#{@preference.id}').remove();", class: "float_right" %><%= submit_tag "Save", type: :button, onclick: "$(this).next('form').submit();", class: "float_right" %>
+  <%= render "admin/site_preferences/partials/form" %>
+</div>
+<div id="pref_right">
+  <h2 class="left">Options</h2><%= link_to image_tag("plus.png", class: "icon"), admin_site_preference_options_path(site_preference_id: @preference.id, description: "", setting: ""), remote: true, method: :post %>
+  <div class="outer_table clear">
+    <div class="grid_header"></div>
+    <div class="inner_table box">
+      <table>
+        <thead class="grid_header_font">
+          <tr>
+            <th><div>Description</div></th>
+            <th><div>Setting</div></th>
+          </tr>
+        </thead>
+        <tbody id="pref_options">
+          <% @preference.site_preference_options.each do |option| %>
+            <%= render "admin/site_preferences/partials/option_row", option: option %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="clear"></div>

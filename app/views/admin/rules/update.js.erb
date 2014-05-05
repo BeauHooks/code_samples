@@ -1,0 +1,7 @@
+$("#rule_<%= @rule.id %>").replaceWith("<%= j(render "admin/rules/partials/rule_row").html_safe %>");
+
+<% if @refresh_view %>
+	$("#rule_<%= @rule.id %>").click();
+<% else %>
+	$("#rule_<%= @rule.id %>").addClass("active_row");
+<% end %>

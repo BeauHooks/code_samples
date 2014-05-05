@@ -1,0 +1,7 @@
+<% @signature.block_text == nil ? html = generate_signature_tree(@signature).html_safe : html = @signature.block_text.to_s.html_safe %>
+
+<%= form_tag "rolodex_signatures/#{@signature.id}/save_block", remote: true do |f| %>
+  <%= submit_tag "Save Signature Block", class: "w100p" %>
+  <%= text_area_tag :editor, "#{html}", id: "tinymce", class: "tinymce", style: "width: 697px; height: 450px;", name: "text"  %>
+  <%= tinymce %>
+<% end %>

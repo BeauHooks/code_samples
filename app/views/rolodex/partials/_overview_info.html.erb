@@ -1,0 +1,112 @@
+<div id="info">
+  <div class="box_header">
+  <form name="info_form" action="" method="get">
+    <p class="title">Info</p>
+    <div class="tools">
+      <ul class="margin_right">
+        <li class="menu_item"><span class="trigger link">Entity Tools</span>
+          <ul class="submenu w85">
+            <li><%= link_to "FedEx History", "#", onclick: "window.open('/shipments?entity_id=#{@entity.EntityID}');" %></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <table class="entity_info">
+    <tr>
+      <td class="label col1">Name:</td>
+      <% if !@entity.name.blank? &&  @entity.name.length > 20 %>
+        <td id="rolodex_name" class="hint">
+          <span>
+            <%= link_to @entity.name, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=Name", remote: true %>
+          </span>
+          <div>
+            <%= truncate(@entity.name, length: 20) %>
+          </div>
+        </td>
+      <% else %>
+        <td id="rolodex_name">
+          <div>
+            <% value = @entity.blank? ? "Add" : @entity.name %>
+            <%= link_to truncate(value, length: 20), "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=Name", remote: true %>
+          </div>
+        </td>
+      <% end %>
+
+      <td class="label">Active:</td>
+      <% value = @entity.IsActive == -1 ? "Yes" : "No" %>
+      <td id="rolodex_active" class="rolodex_active"><span class="<%= @entity.IsActive == -1 ? "active" : "inactive" %>">
+      <%= link_to value, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=IsActive", remote: true %>
+      </span></td>
+    </tr>
+
+    <tr>
+      <td class="label padding_right_5">Description:</td>
+      <% description = @entity.Description.to_s %>
+      <% if description.length > 20 %>
+        <td id="rolodex_description" class="hint">
+          <span>
+            <%= link_to description, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=Description", remote: true %>
+          </span>
+          <div>
+            <%= truncate(description, length: 20) %>
+          </div>
+        </td>
+      <% else %>
+        <td id="rolodex_description">
+          <div>
+            <% value = !description.blank? ? description : "Add" %>
+            <%= link_to value, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=Description", remote: true  %>
+          </div>
+        </td>
+      <% end %>
+
+      <td class="label">Entity ID:</td>
+      <td id="entity_id"><%= @entity.EntityID %></td>
+    </tr>
+
+    <tr>
+      <td class="label">Category:</td>
+      <td id="rolodex_indcorp">
+        <% value = @entity.IndCorp.blank? ? "Add" : "#{@entity.IndCorp}" %>
+        <%= link_to value, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=IndCorp", remote: true %>
+      </td>
+
+      <td class="label" id="effective_date_label"><%= @entity.IndCorp == "Individual" ? "DOB:" : "Effective Date:" %></td>
+      <td  id="rolodex_effective_date"><% value = !@entity.EffectiveDate.blank? ? "#{@entity.EffectiveDate.strftime('%m/%d/%Y')}" : "Add" %>
+        <%= link_to value, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=EffectiveDate", remote: true %></td>
+    </tr>
+    <tr>
+      <td class="label">Type:</td>
+      <td id="rolodex_customer_type">
+      <% value = @entity.CustomerType.blank? ? "Add" : "#{@entity.CustomerType}" %>
+      <%= link_to value, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=CustomerType", remote: true %>
+      </td>
+
+      <td class="label" id="tax_id_label"><%= @entity.IndCorp == "Individual" ? "SSN:" : "Tax ID:" %></td>
+      <td id="rolodex_tax_id">
+        <% can_view = @permission_view_tax_id || current_user.has_file_with_entity?(@entity.EntityID) %>
+        <% if can_view && !@entity.TaxID.blank? %>
+          <%= link_to @entity.TaxID, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=TaxID", remote: true %>
+        <% elsif !@entity.TaxID.blank? && @entity.IndCorp == "Individual" %>
+          <%= "xxx-xx-#{@entity.TaxID[-4..-1]}" %>
+        <% elsif !@entity.TaxID.blank? %>
+          <%= "xx-xxx#{@entity.TaxID[-4..-1]}" %>
+        <% else %>
+          <%= link_to "Add", "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=TaxID", remote: true %>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Send:</td>
+      <td colspan="2" id="rolodex_send"><div>
+        <% value = @entity.SendDocsVia.blank? ? "Add" : "#{@entity.SendDocsVia}" %>
+        <%= link_to value, "/rolodex/#{@entity.EntityID}/edit_rolodex_info?type=SendDocsVia", remote: true %>
+      </div></td>
+    </tr>
+  </table>
+  <div id='overview_rules'>
+    <%= render "rolodex/partials/overview_rules" %>
+  </div>
+  </form>
+</div>

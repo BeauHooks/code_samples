@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <style>
+    	*{
+    		margin: 0px;
+    		color: #222;
+    		font-family: sans-serif;
+    	}
+
+    	table{
+    		width: 100%;
+    		border-collapse: collapse;
+    		margin-bottom: 5px;
+    	}
+
+    	p, td, .header, ol{
+    		font-size: 10pt !important;
+    	}
+
+    	p{
+    		margin-bottom: .5em;
+    	}
+
+    	td{
+    		vertical-align: top;
+    	}
+
+    	h6{
+    		font-size: 8pt;
+    		font-weight: lighter;
+    		text-align: center;
+    	}
+
+    	#wrapper{
+    		padding: 10px 5px;
+    	}
+
+    	.label{
+    		font-weight: bold;
+    	}
+
+    	.section_label{
+    		text-decoration: underline;
+    		font-weight: bold;
+    		font-style: italic;
+    	}
+
+    	.header{
+    		font-weight: bold;
+    		background-color: #CCC;
+    	}
+
+    	.blank{
+    		color: #AAA;
+    		font-style: italic;
+    		padding-left: 5px;
+    	}
+
+    	.border{
+    		border: 1px solid #CCC;
+    	}
+
+    	.border td{
+    		padding: 2px 0px;
+    		border-bottom: 1px solid #CCC;
+    	}
+
+    	.property td{
+    		border-bottom: none;
+    	}
+
+    	.image_container{
+    		float: right;
+    		width: 250px;
+    	}
+
+    	.image_container img{
+    		width: 250px;
+    		border: 1px solid #222;
+    	}
+
+    	table.property{
+    		float: left;
+    		width: 35%;
+    	}
+    </style>
+  </head>
+  <body>
+  	<div id="wrapper">
+  		<p>Submitted by: <%= @user.first_name %> <%= @user.last_name %></p>
+  		<p>Date: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S") %></p>
+  		<p style="margin-bottom: none; text-decoration: underline;">Error Sending Confirmation to the Following Entities:</p>
+  		<% count = 0 %>
+      <% @exceptions.each do |to, e| %>
+        <p><span class="label">TO:</span> <%= to %><br /><span class="label">ERROR:</span> <%= e[0].split("\n").join("<br />").html_safe %><br /><span class="label">BACKTRACE:</span> <%= e[1].split("\n").join("<br />").html_safe %></p>
+      <% end %>
+	  </div>
+  </body>
+</html>
+

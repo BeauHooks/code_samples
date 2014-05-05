@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <title>Filetrak - <%= page_name %></title>
+    <%= user_styles.html_safe %>
+    <%= stylesheet_link_tag "/assets/themes/default" %>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "module" %>
+    <%= yield :head %>
+    <%= csrf_meta_tags %>
+    <link href='http://fonts.googleapis.com/css?family=Cabin:400,600' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div id="wrapper" class="wrapper">
+      <!-- Company Select, Navigation, ect. -->
+      <%= render "layouts/partials/header" %>
+
+      <div id="content" class="content">
+        <%= yield %>
+      </div>
+    </div>
+
+    <!-- Overlays -->
+    <!-- New Contact -->
+    <div class="overlay" id="overlay_new_rolodex">
+    </div>
+
+    <!-- New Order -->
+    <div class="overlay" id="overlay_new_file">
+    </div>
+
+    <!-- Admin View -->
+    <div class="overlay" id="overlay_admin">
+    </div>
+
+    <!-- Remove Alert -->
+    <div class="overlay" id="overlay_remove_alert">
+    </div>
+
+    <div class="overlay overlay_flash_notice" id="overlay_flash_notice">
+    </div>
+
+    <div class="overlay" id="overlay_large_text">
+    </div>
+
+    <!-- Feedback -->
+    <div class="overlay overlay_request" id="overlay_bug_report">
+    </div>
+
+    <div class="overlay overlay_request" id="overlay_feature_request">
+    </div>
+
+    <!-- Entity Lookup -->
+    <div class="overlay" id="overlay_entity_lookup">
+    </div>
+
+    <!-- Index Overlays -->
+    <div class="overlay" id="overlay_new_contact"></div>
+    <div class="overlay" id="overlay_new_employee"></div>
+    <div class="overlay" id="overlay_new_property"></div>
+    <div class="overlay" id="overlay_new_index_note"></div>
+
+    <!-- Rolodex Overlays -->
+    <div class="overlay" id="overlay_rolodex_affiliation"></div>
+    <div class="overlay" id="overlay_new_contact_info"></div>
+    <div class="overlay" id="overlay_new_note"></div>
+    <div class="overlay" id="overlay_new_rule"></div>
+    <div class="overlay" id="overlay_new_affiliation"></div>
+
+    <!-- Print -->
+    <div id="print_box" class="hide"></div>
+
+    <!-- File Product -->
+    <div class="overlay" id="overlay_file_product"></div>
+
+    <!-- Task Bar -->
+    <%= render "layouts/partials/task_bar" %>
+  </body>
+</html>

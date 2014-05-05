@@ -1,0 +1,9 @@
+$("#select_all_docs").attr("checked", false);
+
+<% if @file.docs.where("is_active = -1").count > 0 %>
+	$("#doc_content").html("");
+	$("#all_docs tr:first").click();
+<% else %>
+	$("#doc_content").html("");
+	$("#doc_input_fields").html("");
+<% end %>

@@ -1,0 +1,105 @@
+<div id="file_recording">
+	<div id="recording" class="box" style="float: left; width: 785px; margin-right: 20px;">
+		<div class="box_header">
+			<p class="title">Reconveyances</p>
+			<div class="tools">
+				<%= image_tag "plus.png", onclick: "addToQueue('new_recon_tracking', 'recon_tracking/new?FileID=#{@file.FileID}');",  class: "trigger new_recon_tracking_button" %>
+			</div>
+		</div>
+		<div id="reconveyances">
+			<% tracking = @file.recon_trackings.where("InActive = 0") %>
+			<% total = tracking.size %>
+			<% if total == 0 %>
+				<%= render "index/recording_tab_content/reconveyance_tracking_form", reconveyance: nil, action: 'new' %>
+				<script type="text/javascript">
+					$(".new_recon_tracking_button").hide();
+				</script>
+			<% else %>
+				<% count = 0 %>
+				<% tracking.each do |reconveyance| %>
+					<% count += 1 %>
+					<%= render "index/recording_tab_content/reconveyance_tracking_form", reconveyance: reconveyance, action: 'edit' %>
+					<%= "<hr style='margin-top: 5px;' />".html_safe if count < total %>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+	<div class="right" style="float: left; width: 250px;">
+		<div class="box">
+			<div class="box_header">
+				<p class="title">Recording Prep</p>
+				<div class="tools">
+				</div>
+			</div>
+			<div class="box_content">
+				<table style="border-collapse: collapse; width: 100%" class="recording_prep_container">
+					<%= render "index/recording_prep" %>
+				</table>
+			</div>
+		</div>
+
+		<div class="box">
+			<div class="box_header">
+				<p class="title">File Properties</p>
+				<div class="tools">
+				</div>
+			</div>
+			<div class="grid_header">
+				<table>
+					<tr>
+						<td style="padding-left: 5px;">Tax ID</td>
+					</tr>
+				</table>
+			</div>
+			<div class="results" id="recording_properties">
+				<table>
+					<% properties = @file.file_properties.where("Inactive = 0 AND TaxID IS NOT NULL AND TaxID != ''") %>
+					<% if properties.size == 0 %>
+						<tr>
+							<td style="padding-left: 5px; font-style: italic; color: #464646;">Properties with Tax ID not found.</td>
+						</tr>
+					<% else %>
+						<% properties.each do |property| %>
+							<tr class="trigger" style="padding-left: 5px;" onclick="addToQueue('new_recon_tracking', 'recon_trackings/new?FileID=<%= @file.FileID %>&TaxID=' + encodeURIComponent( $(this).find('td').html() ) );">
+								<td style="padding-left: 5px;"><%= property.TaxID %></td>
+							</tr>
+						<% end %>
+					<% end %>
+				</table>
+			</div>
+		</div>
+
+		<div class="box" style="margin-top: 10px;">
+			<div class="box_header">
+				<p class="title">Scanned Final Docs</p>
+				<div class="tools">
+				</div>
+			</div>
+			<div class="grid_header">
+				<table>
+					<tr>
+						<td style="padding-left: 5px;">Scan Date</td>
+					</tr>
+				</table>
+			</div>
+			<div class="results" id="recording_images">
+				<table>
+					<% images = @file.file_images.where("IsPrivate = 0 AND ImageType = 'Final Docs'") %>
+					<% if images.size == 0 %>
+						<tr>
+							<td style="padding-left: 5px; font-style: italic; color: #464646;">Final Docs not found.</td>
+						</tr>
+					<% else %>
+						<% images.each do |image| %>
+							<tr style="padding-left: 5px;">
+								<td style="padding-left: 5px;"><%= image.ImageDate.strftime('%-1m/%-1d/%Y') %></td>
+							</tr>
+						<% end %>
+					<% end %>
+				</table>
+			</div>
+		</div>
+
+	</div>
+	<p style="clear: both;"></p>
+</div>

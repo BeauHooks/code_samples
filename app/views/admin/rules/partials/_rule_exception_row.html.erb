@@ -1,0 +1,20 @@
+<% if @exception.new_record? %>
+	<% update = "" %>
+	<% destroy = "remove_rule_name_exception(this, 'Exceptions');" %>
+<% else %>
+	<% update = "updateRuleException(this);" %>
+	<% destroy = "destroyRuleException(this);" %>
+<% end %>
+
+<tr id="<%= @exception.id unless @exception.new_record? %>">
+	<td style="width: 10em;">
+		<%= image_tag "redx.png", class: "trigger", onclick: destroy %>
+		<%= select_tag :match_field, options_for_select(RuleException.get_exceptions, @exception.match_field ), style: "width: 8em;", onchange: update, field: "match_field" %>
+	</td>
+	<td style="width: 8em;">
+		<%= select_tag :match_operator, options_for_select(RuleException.get_operators, @exception.match_operator || "Equal To"), style: "width: 8em;", onchange: update, field: "match_operator" %>
+	</td>
+	<td>
+		<%= text_field_tag :match_value, @exception.match_value, style: "width: 15em;", placeholder: "Value", onchange: update, field: "match_value" %>
+	</td>
+</tr>

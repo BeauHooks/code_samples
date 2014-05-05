@@ -1,0 +1,17 @@
+<div id="fp_requirement">
+  <div class="overlay_header">
+    <h2>Requirement #<%= @requirement.sort_order %></h2>
+  </div>
+  <div class="overlay_content">
+    <%= render "show", requirement: @requirement, view: "overlay" %>
+  </div>
+  <div class="overlay_footer">
+    <span style="float: right;">
+      <%= submit_tag "Close", onclick: "closeOverlay('fp_requirement');", type: "button" %>
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+	openOverlay("fp_requirement");
+</script>

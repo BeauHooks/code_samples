@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function subst() {
+        var vars={};
+        var x=document.location.search.substring(1).split('&');
+        for(var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        var x=['doctitle', 'frompage','topage','page','webpage','section','subsection','subsubsection'];
+
+        if(vars['page'] == "1"){
+          document.getElementById("container").show();
+        }
+        
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }
+      
+    </script>
+
+    <style>
+    </style>
+  </head>
+  <body style="margin: 0; font-size: 9px;" onload="subst();">
+    <div style="position: relative; height: 25px; display: none;" id="container">
+      <div style="float: right; width: 100px;">&nbsp;</div>
+      <h1 style="text-align: center; font-size: 3.25em;">Southern Utah Title Company</h1>
+      <p style="text-align: center; margin-top: 0em;"><em><strong>"Achieving Excellence"<br /></strong></em></p>
+      <hr style="clear: both;" />
+      <p style="margin-top: 0em; text-align: center;">&nbsp;20 North Main Street, #300, St. George, UT 84770 Phone: (435) 628-0404 Fax: (435) 628-6681</p>
+    </div>
+  </body>
+</html>

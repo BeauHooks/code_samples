@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    Reported By: <%= @user.first_name %> <%= @user.last_name %><br />
+    Date: <%= Time.now.strftime("%-1m/%d/%Y %l:%M %p") %><br /><br />
+    <u>Description</u><br />
+    <%= @description %>
+  </body>
+</html>

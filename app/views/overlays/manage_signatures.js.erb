@@ -1,0 +1,11 @@
+<% render "docs/manage_signatures" %>
+$("#overlay_list").append("<%= j(render 'overlays/partials/overlay').html_safe %>");
+
+//Load Entities
+<% @doc.file_doc_entities.where("is_active = 1").order("sort_order ASC").each do |doc_entity| %>
+	<% @doc_entity = doc_entity %>
+	<% @type = @doc_entity.entity.IndCorp %>
+	<% @doc_id = @doc.id %>
+	<% @section = @doc_entity.tag.downcase %>
+	$("div#manage_<%= @section %>_entities").append("<%= j(render :partial => "docs/entity").html_safe %>");
+<% end %>

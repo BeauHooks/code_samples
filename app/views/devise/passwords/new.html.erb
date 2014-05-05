@@ -1,0 +1,24 @@
+<div id="sign_in">
+  <div id="logo">
+    <img src="/assets/logo.png" />
+  </div>
+  <div id="sign_in_content">
+    <script type="text/javascript">
+      $("#errors").html("<%= devise_error_messages!.gsub(/\n/, "").gsub('"', '\"').html_safe %>");
+      $("#errors").show();
+    </script>
+    
+    <div id="form">
+      <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+        
+      <div class="label">Confirm your email address.<br />
+      <%= f.email_field :email %></div><br />
+
+      <div id="submit"><%= f.submit "Send" %></div>
+      <% end %>
+      <div id="links"><%= render "links" %></div>
+      <p style="clear: both"></p>
+    </div>
+
+  </div>
+</div>

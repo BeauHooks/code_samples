@@ -1,0 +1,6 @@
+<h2 class="<%= 'red' if @file.confidential? %> box_first_column">
+	File #<span id='display_file_id'><%= @file.DisplayFileID %></span>
+	<% if @permission_lock_files %>
+		- <label><%= check_box_tag :confidential, true, @file.confidential?, onclick: "update('#{index_path(id: @file.ID)}', this, 'index');", title: "Make File Confidential" %> <%= "Confidential" if @file.confidential? %></label>
+	<% end %>
+</h2>

@@ -1,0 +1,18 @@
+<% content_for :overlay_title do %>
+  Confirm Update
+<% end %>
+
+<% content_for :overlay do %>
+  <div>
+    <%= form_for @payment_disbursement, remote: true, html: {method: "put", id: "my_form"} do |f| %>
+      <p>That action would change multiple disbursements. How would you like to proceed?</p>
+      <p><%= select_tag :override, options_for_select([["Update all related disbursements", "update_all"], ["Split this disbursement from the others", "create_new"]]) %></p>
+      <% unless @payment_params.blank? %>
+        <% @payment_params.each do |key, value| %>
+          <%= hidden_field_tag "payment_disbursement[#{key}]", value %>
+        <% end %>
+        <%= hidden_field_tag "view", @view %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

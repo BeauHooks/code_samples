@@ -1,0 +1,45 @@
+<% content_for :overlay_class do %>
+  disbursement
+<% end %>
+
+<% content_for :overlay_title do %>
+  Balance Sheet
+<% end %>
+
+<% content_for :overlay do %>
+  <div id="sheet_view">
+    <%= render "check_workings/partials/index" %>
+    <%#= render "payment_disbursements/index" %>
+  </div>
+  <div id="receipt_results">
+    <div class="box selector">
+      <label><%= radio_button_tag :balance_view, "disbursements", true, onclick: "$.get('#{toggle_balance_view_index_path(@file, view: "disbursements")}');" %> Disbursements</label>
+      <label><%= radio_button_tag :balance_view, "payments", false, onclick: "$.get('#{toggle_balance_view_index_path(@file, view: "payments")}');"  %> Balancing</label>
+    </div>
+    <div class="box">
+      <div class="box_header">
+        <p class="title">Payment Balancing</p>
+      </div>
+      <div id="payment_balance_summary">
+        <%= render "check_workings/partials/payment_balance_summary" %>
+      </div>
+    </div>
+    <!-- <div class="box">
+      <div class="box_header">
+        <p class="title">Anticipated Balancing</p>
+      </div>
+      <div id="anticipated_disbursement_summary">
+        <%#= render "check_workings/anticipated_disbursement_summary" %>
+      </div>
+    </div>
+    <div class="box">
+      <div class="box_header">
+        <p class="title">Actual Balancing</p>
+      </div>
+      <div id="disbursement_summary">
+        <%#= render "check_workings/disbursement_summary" %>
+      </div>
+    </div> -->
+  </div>
+  <div class="clear"></div>
+<% end %>

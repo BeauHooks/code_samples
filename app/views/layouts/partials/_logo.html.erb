@@ -1,0 +1,18 @@
+<div id="logo" class="logo" onclick="if($('#company_options').is(':visible')){$('#company_options').hide();}else{$('#company_options').show();}" class="<%= 'trigger' if current_user.companies.size > 1 %>">
+  <div id="logo_image" class="logo_image">
+    <img src="/assets/southern_utah_title.png" /><span class="no_select"><%= company_name session[:company] %></span>
+    <input type="hidden" id="page_company_id" value="<%= session[:company] %>" />
+    <input type="hidden" id="page_company_dir_name" value="<%= Company.find(session[:company]).DirName %>" />
+  </div>
+  <div id="company_options" style="position: absolute; left: 50px; top: 31px; width: 266px;" class="hide">
+    <ul class="company_select">
+      <% if current_user.companies.size > 1 %>
+        <% companies = [] %>
+        <% current_user.companies.each { |c| companies << c } %>
+        <% companies.each do |c| %>
+          <li><%= link_to c.CompanyName, "index/#{c.CompanyID}/change_company", remote: true, class: 'trigger', id: "company_#{c.CompanyID}" %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>

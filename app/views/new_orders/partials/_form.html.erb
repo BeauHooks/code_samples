@@ -1,0 +1,219 @@
+<%= form_for @file, url: new_orders_path, html: { remote: true } do %>
+  <div class="overlay_content margin_all_10">
+    <table>
+      <tr>
+        <td class="padding_right_10 top">
+          <table>
+            <tbody>
+              <tr>
+                <td class="label type">
+                  Type:
+                </td>
+                <td colspan="3">
+                  <%= select :TransactionType, :TransactionType, @transaction_types.collect{|t| [t.TransactionDescription, t.ID]}, {include_blank: false, selected: @file.TransactionType || "2"}, {onchange: "showTransactionFields(this.value)", class: "w205"} %>
+                </td>
+              </tr>
+              <tr>
+                <td class="label side">
+                  Side:
+                </td>
+                <td colspan ="3">
+                  <%= select :side_select, :side_select, options_for_select([["Both", "Both"],["Owner", "Owner"],["Lender", "Lender"]]), {include_blank: true}, {class: "w205", name: "side_select", onchange: "$(this).closest('td').find('input').eq(0).val( $(this).val() ); showSplitField($(this).val());"} %>
+                </td>
+              </tr>
+              <tr id="sales_price">
+                <td class="label sale">
+                  Sale:
+                </td>
+                <td colspan ="3">
+                  <%= text_field_tag :SalesPrice, @file.SalesPrice, onkeydown: "numbersOnly(event);", onchange: "toUSD(this);", class: "w200" %>
+                </td>
+              </tr>
+              <tr id="loan_amount">
+                <td class="label loan">
+                  Loan:
+                </td>
+                <td>
+                  <%= text_field_tag :LoanAmount, @file.LoanAmount, onkeydown: "numbersOnly(event);", onchange: "toUSD(this);", class: "w90" %>
+                </td>
+                <td class="label">
+                  2nd:
+                </td>
+                <td>
+                  <%= text_field_tag :SecondLoan, @file.SecondLoan, onkeydown: "numbersOnly(event);", onchange: "toUSD(this);", class: "w75" %>
+                </td>
+              </tr>
+              <tr id="loan_number">
+                <td class="label">
+                  Loan #:
+                </td>
+                <td colspan ="3">
+                  <%= text_field_tag :LoanNum, @file.LoanNum, class: "loan_number w200" %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+        <td class="padding_right_10 top">
+          <table>
+            <tr>
+              <td class="label underwriter">
+                Underwriter:
+              </td>
+              <td>
+                <%= select :Underwriter, :Underwriter, @underwriters.collect {|u| [u.Underwriter, u.ID]}, include_blank: true, selected: @file.Underwriter, class: "w130" %>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">
+                Closing Date:
+              </td>
+              <td>
+                <%= text_field_tag :COEDate, @file.COEDate.to_s(:std),  onchange: "validateDate(this);", class: "datepicker", class: "w135", placeholder: "mm/dd/yyyy" %>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">
+                Prior File:
+              </td>
+              <td>
+                <%= text_field_tag :PriorFileNum, @file.PriorFileNum, onkeydown: "numbersOnly(event);", class: "w135" %>
+              </td>
+            </tr>
+            <% if @permission_lock_files %>
+              <tr>
+                <td class="label">
+                  Confidential:
+                </td>
+                <td>
+                  <%= check_box_tag :confidential, {id: "new_order_confidential"}, -1 %>
+                </td>
+              </tr>
+            <% end %>
+            <tr id="split_with" class="hide">
+              <td class="label">
+                Split With:
+              </td>
+              <td>
+                <%= select :SplitTitle, :SplitTitle, options_for_select(Index.split_companies), include_blank: true, selected: @file.SplitTitle, class: "w135" %>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td class="top">
+          <% current_user.employee.position == "Closer" ? @position = 3 : @position = 9 %>
+          <table class="new_file_employees">
+            <tr>
+              <td class="label employees">
+                <%= link_to image_tag("plus.png", class: "icon trigger"), new_order_file_employees_path(@file.ID), data: {remote: true, method: :post} %>
+                Employees
+                <%= check_box_tag :show_all_employees, true, false, title: "Show all employees", data: {remote: true, method: :get, url: show_all_employees_new_order_file_employees_path(@file.ID)}, class: "pos_relative top_2 margin_left_5" %>
+              </td>
+              <td class="label">Position</td>
+            </tr>
+          </table>
+          <table class="new_file_employees">
+            <tbody id="new_order_file_employees">
+              <%= render "new_orders/file_employees/partials/new_order_file_employees" %>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <hr />
+    <div id="property" class="properties">
+      <div id="property_flash" class="property_flash hide">
+        <h3 id="property_flash_text" class="bold">
+        </h3>
+        <table class="duplicate_property_table">
+        </table>
+      </div>
+      <div>
+        <table>
+          <tr>
+            <td class="label w125">
+              <%= image_tag "search.png", class: "icon trigger", id: "", onclick: "addToQueue('show_property_overlay', '/overlays/file_properties?parent=#{@identifier}&company=' + $('#page_company_id').val() );", remote: true %>
+              <%= link_to image_tag("plus.png", class: "icon trigger"), new_order_file_properties_path(@file.ID), data: {remote: true, method: :post} %>
+              County
+            </td>
+            <td class="label w75">Tax ID</td>
+            <td class="label w75">Account ID</td>
+            <td class="label w125">Address</td>
+            <td class="label w85">City</td>
+            <td class="label w55">State</td>
+            <td class="label w75">Zip</td>
+            <td class="label w150">Abbreviated Legal</td>
+            <td class="label w100">Owner</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table class="new_file_properties w100p">
+          <tbody id="new_order_file_properties">
+            <%= render "new_orders/file_properties/partials/new_order_file_properties" %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <hr />
+    <table class="contacts">
+      <tr>
+        <td class="label">Contacts
+          <%= link_to image_tag("plus.png", class: "icon"),  add_file_entities_new_order_overlays_path, id: "add_file_contact", remote: true %>
+        </td>
+        <td class="label w120">Position</td>
+        <td class="label w95">Home Phone</td>
+        <td class="label w95">Work Phone</td>
+        <td class="label w95">Cell Phone</td>
+        <td class="label w95">Email</td>
+        <td class="label center w45" title="Send PR">PR</td>
+        <td class="label center w45" title="Send Closing Protection Letter with PR">CPL</td>
+        <td class="label center w45" title="Send Preliminary HUD">HUD</td>
+        <td class="label center w105" title="Send New Order Confirmation" id="new_file_contacts_last">Confirmation</td>
+      </tr>
+    </table>
+    <div class="contact_row">
+      <table id="new_file_entities">
+        <tbody>
+          <% @file.file_entities.each do |file_entity| %>
+            <%= render "index/partials/contact_row", file_entity: file_entity %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <hr />
+    <table class="notes_table">
+      <thead>
+        <tr>
+          <th class="text_left label w380"><%= link_to image_tag("plus.png", class: "icon trigger" ), index_add_note_to_new_file_path, remote: true %> Note</th>
+          <th class="text_left label w135">From</th>
+          <th class="text_left label w135">To</th>
+          <th class="text_left label w135">Remind</th>
+          <th class="text_left label center w70">Private</th>
+        </tr>
+      </thead>
+      <tbody class="new_file_notes">
+        <tr>
+          <%= render "index/partials/note_row" %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $("#datepickerCOEDate").datepicker({
+    minDate: 0,
+    yearRange: "+0:+10",
+    changeMonth: true,
+    changeYear: true,
+    showOn: "button",
+    buttonImage: "/assets/calendar.png",
+    buttonImageOnly: true
+  });
+
+  addToQueue('update_employee_options', '/index/update_employee_options?company=' + $('#page_company_id').val() + '&checked=' + $("#all_employees").attr('checked') );
+  var company = $("#page_company_id").val();
+  $("#new_order_company").val(company);
+</script>

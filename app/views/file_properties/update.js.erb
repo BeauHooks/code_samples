@@ -1,0 +1,4 @@
+<% case @form %>
+<% when "file_product" %>
+	$("#file_product_property_results").html("<%= j(render "file_products/property_results").html_safe %>");
+<% end %>

@@ -1,0 +1,115 @@
+<% content_for :overlay_title do %>
+  New Rule
+<% end %>
+
+<% content_for :overlay do %>
+  <%= form_tag admin_rules_path, remote: true do %>
+    <div style="float: left; width: 36.5em;">
+      <div class="box">
+        <div class="box_header"><p class="title">Rule Text</p></div>
+        <div style="padding: .5em .5em;">
+          <%= text_area_tag :rule_text, @rule.rule_text, style: "width: 35em; height: 7em; resize: vertical;", placeholder: "Type a description that will be shown to the user." %>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box_header">
+          <p class="title">Names to Check</p>
+          <div class="tools">
+            <% if @rule.new_record? %>
+              <%= link_to image_tag("plus.png", class: "icon trigger"), new_admin_rule_name_path, remote: true %>
+            <% else %>
+              <%= image_tag "plus.png", class: "icon trigger", onclick: "$.post('admin/rule_names?rule_id=#{@rule.id}');" %>
+            <% end %>
+          </div>
+        </div>
+        <div class="outer_table">
+          <div class="grid_header"></div>
+          <div class="inner_table">
+            <table>
+              <thead class="grid_header_font">
+                <tr>
+                  <th><div>Type</div></th>
+                  <th><div>Name</div></th>
+                </tr>
+              </thead>
+              <tbody id="overlay_rule_names">
+                <% names = @rule.rule_names %>
+                <% names.each do |rule_name| %>
+                  <% @rule_name = rule_name %>
+                  <%= render "/admin/rules/partials/rule_name_row" %>
+                <% end %>
+                <% if names.size == 0 %>
+                  <tr class="no_result"><td colspan="2">No Names</td></tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="float: left; width: 48.8%; margin-left: 1em;">
+      <div class="box">
+        <div class="box_header">
+          <p class="title">Triggers</p>
+          <div class="tools">
+            <%#= image_tag("plus.png", class: "icon trigger") %>
+          </div>
+        </div>
+        <div style="padding: .5em .5em;" class="actions_container">
+          <% list = RuleTrigger.get_trigger_list %>
+          <% i = 0 %>
+          <% 3.times do %>
+            <div style="float: left; width: 15em;">
+              <% triggers = list[i..i + 4] != nil ? list[i..i + 4] : [] %>
+              <% triggers.each do |trigger| %>
+                <label class="dis_block"><%= check_box_tag "rule_triggers[]", trigger, @rule.has_trigger?(trigger), class: "margin_right_5" %><%= trigger %></label>
+              <% end %>
+              <% i += 5 %>
+            </div>
+          <% end %>
+          <p class="clear_fix"></p>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box_header">
+          <p class="title">Exclude Conditions</p>
+          <div class="tools">
+            <% if @rule.new_record? %>
+              <%= link_to image_tag("plus.png", class: "icon trigger"), new_admin_rule_exception_path, remote: true %>
+            <% else %>
+              <%= image_tag "plus.png", class: "icon trigger" , onclick: "$.post('/admin/rule_exceptions?rule_id=#{@rule.id}');" %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="outer_table">
+          <div class="grid_header"></div>
+          <div class="inner_table">
+            <table>
+              <thead class="grid_header_font">
+                <tr>
+                  <th><div>Field</div></th>
+                  <th><div>Op</div></th>
+                  <th><div>Value</div></th>
+                </tr>
+              </thead>
+              <tbody id="overlay_rule_exceptions">
+                <% exceptions = @rule.rule_exceptions %>
+                <% exceptions.each do |exception| %>
+                  <% @exception = exception %>
+                  <%= render "/admin/rules/partials/rule_exception_row" %>
+                <% end %>
+                <% if exceptions.size == 0 %>
+                  <tr class="no_result"><td colspan="3">No Exceptions</td></tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <p class="clear_fix"></p>
+<% end %>

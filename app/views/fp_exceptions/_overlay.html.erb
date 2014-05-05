@@ -1,0 +1,17 @@
+<div id="fp_exception">
+  <div class="overlay_header">
+    <h2>Exception #<%= @exception.sort_order %></h2>
+  </div>
+  <div class="overlay_content">
+    <%= render "show", exception: @exception, view: "overlay" %>
+  </div>
+  <div class="overlay_footer">
+    <span style="float: right;">
+      <%= submit_tag "Close", onclick: "closeOverlay('fp_exception');", type: "button" %>
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+	openOverlay("fp_exception");
+</script>

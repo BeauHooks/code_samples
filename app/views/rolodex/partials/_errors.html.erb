@@ -1,0 +1,1 @@
+<% c = 0 %><h4 class="flash_error underline">The following errors occurred with your entry.</h4><% @response.each do |i| %>  <% i[1].errors.full_messages.each do |e| %>	<% c += 1 %>    <h4 class="flash_error"><%= "#{c}) #{e}" %></h4>  <% end %><% end %>

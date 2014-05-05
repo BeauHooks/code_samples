@@ -1,0 +1,40 @@
+<% @file.file_entities.each do |i| %>
+  <tr>
+    <td class="name">
+      <%= link_to image_tag("redx.png", class: "trigger"), file_entity_path(id: i.ID), remote: true, method: :delete %>
+      <%= hint_truncate(link_to(i.entity.name_last_first, rolodex_index_path(entity_id: i.EntityID), target: "_blank"), 17, true) %>
+    </td>
+
+    <td class="position">
+      <%= select_tag :Position, options_from_collection_for_select(@file_user_types, :ID, :TypeDescription, i.Position), include_blank: true, data: {remote: true, url: file_entity_path(id: i.ID), method: :put} %>
+    </td>
+
+    <td class="pr">
+      <%= check_box_tag :SendPR, i.SendPR, i.SendPR?, data: {remote: true, url: file_entity_path(id: i.ID), method: :put} %>
+    </td>
+
+    <td class="pr">
+      <%= check_box_tag :SendCPL, i.SendCPL, i.SendCPL?, data: {remote: true, url: file_entity_path(id: i.ID), method: :put} %>
+    </td>
+
+    <td class="pr">
+      <%= check_box_tag :SendPreHud, i.SendPreHud, i.SendPreHud?, data: {remote: true, url: file_entity_path(id: i.ID), method: :put} %>
+    </td>
+
+    <td class="phone">
+      <%= hint_truncate(link_to(i.entity.primary_phone.Contact.to_s, "tel:#{sanitize_phone(i.entity.primary_phone.Contact.to_s)}"), 25, true) %>
+    </td>
+
+    <td class="email">
+      <%= hint_truncate(mail_to(i.entity.primary_email.Contact.to_s, i.entity.primary_email.Contact.downcase, body: "#{@file.company.DirName} ##{@file.DisplayFileID}"), 20, true) %>
+    </td>
+
+    <td class="send">
+      <%= i.entity.SendDocsVia %>
+    </td>
+
+    <td class="fedex">
+      <%= link_to "FedEx", shipments_module.new_shipments_path(file_number: @file.DisplayFileID, entity_id: i.entity) %>
+    </td>
+  </tr>
+<% end %>

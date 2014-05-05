@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Filetrak Login</title>
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= stylesheet_link_tag "/assets/themes/default" %>
+  <%= javascript_include_tag "login" %>
+  <%= csrf_meta_tags %>
+  <link href='http://fonts.googleapis.com/css?family=Cabin:400,600' rel='stylesheet' type='text/css'>
+</head>
+<body id="sign_in_body" class="sign_in_body">
+  <div id="container">
+    <%= flash_message %>
+    <div id="box">
+      <%= yield %>
+    </div>
+  </div>
+</body>
+</html>

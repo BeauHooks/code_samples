@@ -1,0 +1,96 @@
+ <!-- Manage User Content -->
+<div class="float_left">
+  <h2>Manage Users</h2>
+</div>
+<div class="padding_top_10">
+  <span class="float_left">Search Employee: <%= text_field_tag :filter, nil, class: 'employee_search' %></span>
+  <ul class="float_right">
+    <li class="menu_item trigger">
+      <span class="link">Options</span>
+      <ul class="submenu">
+        <li><%= link_to "Add User", nil, onclick: "openOverlay('new_user'); return false;" %></li>
+        <li><%= link_to "Populate Permissions", nil, onclick: "openOverlay('populate_permissions'); return false;" %></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div id="user_search_results" class="user_search_results">
+  <table id="user_list" class="user_list">
+    <thead>
+      <th id="manage" class="manage">Manage</th>
+      <th id="first_name" class="first_name">First Name</th>
+      <th id="last_name" class="last_name">Last Name</th>
+      <th id="email" class="email">Email</th>
+    </thead>
+    <tbody>
+      <% User.find(:all, order: "first_name ASC").each do |u| %>
+        <tr <% User.last.id == u.id ? "class='last'" : ""%>>
+          <td id="manage" class="manage">
+            <%= link_to (image_tag "/assets/delete.png", width: "20", height: "20"), "/users/#{u.id}", confirm: "Are you sure?", method: :delete, remote: true %>
+            <%= link_to (image_tag "/assets/pencil_medium.png", width: "20", height: "20"), "/users/#{u.id}/edit", remote: true %>
+          </td>
+          <td id="first_name" class="first_name">
+            <%= u.first_name %>
+          </td>
+          <td id="last_name" class="last_name">
+            <%= u.last_name %>
+          </td>
+          <td id="email" class="email">
+            <%= u.email %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- <div id="overlay_populate_permissions" class="overlay">
+  <div class="overlay_header">
+    <h2>
+      Mass Populate Permissions
+    </h2>
+    <div class="tools float_right">
+      <span>
+        <%= image_tag "loading.gif", class: "spinner" %>Saving...
+      </span>
+    </div>
+  </div>
+  <form action="users/populate_permissions" method="post" data-remote="true">
+    <div class="overlay_content w50">
+      <table>
+        <tr>
+          <td class="label">Company:</td>
+          <td>
+            <% collection = Company.find(:all, conditions: ["CompanyID IN (101,103,102,104,106,117)"], order: "CompanyName ASC").collect{|c| [c.CompanyName, c.CompanyID]} %>
+            <%= select :company, :id, options_for_select(collection), {include_blank: "All"}, {class: "w205", name: "company_id"} %>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">Permission:</td>
+          <td>
+            <% collection = Permission.find(:all, order: "description ASC").collect{|p| [p.description, p.name]} %>
+            <%= select_tag :permission, options_for_select(collection), class: "w205" %>
+          </td>
+        </tr>
+        <tr>
+          <td class="label padding_right_10">Employee Field:</td>
+          <td>
+            <% collection = [] %>
+            <% Employee.column_names.each do |column| %>
+              <% collection << [column, column] if column[0..1] == "AC" %>
+            <% end %>
+            <% collection.sort_by!{|a, b| a} %>
+            <%= select_tag :field, options_for_select(collection), class: "w205" %>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <span>
+        <%= submit_tag "Save", onclick: "$(this).closest('.overlay').find('.spinner').show();" %>
+        <%= submit_tag "Cancel", type: "button", onclick: "$(this).closest('.overlay').hide(); $(this).closest('.overlay').find('input').val('');" %>
+      </span>
+    </div>
+  </form>
+</div>
+ -->

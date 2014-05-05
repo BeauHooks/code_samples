@@ -1,0 +1,14 @@
+<% case @overlay %>
+<% when "Contact Info" %>
+  $("#overlay_new_contact_info").html("<%= j(render "entity_contacts/edit_info").html_safe %>");
+<% when "Address" %>
+  $("#overlay_new_contact_info").html("<%= j(render "entity_contacts/edit_info").html_safe %>");
+<% when "Note" %>
+  $("#overlay_new_note").html("<%= j(render "entity_notes/new").html_safe %>");
+<% when "Rule" %>
+  $("#overlay_new_rule").html("<%= j(render "entity_rules/new").html_safe %>");
+<% when "Affiliation" %>
+  $("#overlay_new_affiliation").html("<%= j(render "rolodex_affiliations/new").html_safe %>");
+<% when "User Image" %>
+  $("#overlay_new_user_image").html("<%= j(render "rolodex_attachments/new").html_safe %>");
+<% end %>

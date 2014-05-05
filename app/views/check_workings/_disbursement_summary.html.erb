@@ -1,0 +1,26 @@
+<% receipts = @file.receipts.sum("ReceiptAmount").to_f %>
+<% working = @file.check_workings.sum("amount").to_f %>
+<% adjustments = @file.adjustments.sum("incrdeccash").to_f %>
+
+<% total = receipts - working + adjustments %>
+
+<table id="disbursement_totals" style="width: 100%;">
+  <tr>
+    <td class="label">Receipt</td>
+    <td class="amount" style="text-align: right;"><%= number_to_currency(receipts, precision: 2, unit: "$") %></td>
+  </tr>
+  <tr>
+    <td class="label">Disburse</td>
+    <td class="amount" style="text-align: right;"><%= number_to_currency(working * -1, precision: 2, unit: "$") %></td>
+  </tr>
+  <tr>
+    <td class="border-bottom label">Adjust</td>
+    <td class="border-bottom amount" style="text-align: right;"><%= number_to_currency(adjustments, precision: 2, unit: "$") %></td>
+  </tr>
+  <tr class="<%= 'red' if total < 0 %>">
+    <td class="total label">Balance</td>
+    <td class="total amount" style="text-align: right;">
+      <%= number_to_currency(total, precision: 2, unit: "$") %>
+    </td>
+  </tr>
+</table>

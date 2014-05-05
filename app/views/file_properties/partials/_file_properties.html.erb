@@ -1,0 +1,24 @@
+<% content_for :overlay_title do %>
+  Add Property
+<% end %>
+<% content_for :overlay do %>
+  <%= form_tag('file_properties/display_search_results/', :remote => true) do |f| %>
+  <h4>Search: <%= text_field_tag "search_value", params[:search_value],  class: "search" %><%= image_submit_tag("search.png", :class => 'icon') %></h4>
+  <% end %>
+  <div class="border">
+    <table class="grid_header">
+      <tr>
+        <td class="tax_id">Tax ID</td>
+        <td class="owner">Owner</td>
+        <td class="acres">Acres</td>
+        <td class="address">Site Address</td>
+        <td class="legal">Legal Description</td>
+        <td class="county">County</td>
+        <td class="actions" id="add_property_last">Actions</td>
+      </tr>
+    </table>
+    <div class="results" id="property_search_results">
+      <%= render "file_properties/partials/search_results" %>
+    </div>
+  </div>
+<% end %>

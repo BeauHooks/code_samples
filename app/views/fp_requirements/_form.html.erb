@@ -1,0 +1,30 @@
+<div id="fp_requirement">
+  <div class="overlay_header">
+    <h2>New Requirement</h2>
+  </div>
+  <%= form_for @requirement, remote: true do %>
+    <div class="overlay_content" style="width: 300px;">
+      <%= hidden_field_tag :requirement_template_id, "" %>
+      <%= hidden_field_tag :file_product_id, @file_product.id %>
+      <%= hidden_field_tag :fp_exception_id, @fp_exception_id %>
+      <%= hidden_field_tag :entry_number, @entry_number %>
+      <table>
+        <tr>
+          <td class="label" style="padding-right: 5px; white-space: nowrap;">Template Code:</td>
+          <td><%= text_field_tag :template_code, @requirement_template_code, style: "width: 150px;"  %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <span style="float: right;">
+        <%= submit_tag "Save" %>
+        <%= submit_tag "Close", onclick: "closeOverlay('fp_requirement');", type: "button" %>
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	openOverlay("fp_requirement");
+  $("#template_code").focus();
+</script>

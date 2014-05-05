@@ -1,0 +1,3 @@
+<% @file.file_employees.each_with_index do |file_employee, index| %>
+  <%= render "new_orders/partials/file_employee_row", file_employee: file_employee, index: index %>
+<% end %>

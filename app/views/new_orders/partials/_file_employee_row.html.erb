@@ -1,0 +1,7 @@
+<tr>
+	<td class="no_wrap">
+		<%= link_to image_tag("redx.png", class: "trigger"), new_order_file_employee_path(@file.ID, file_employee.ID), data: {remote: true, method: :delete}, class: "remove_row" %>
+		<%= select_tag "file_employee_#{index}", options_from_collection_for_select(@employees, :ID, :FullName), include_blank: true, selected: current_user.employee_id, class: "auto_select w135" %>
+	</td>
+	<td><%= select_tag "file_employee_position_#{index}", options_from_collection_for_select(@file_employee_types, :ID, :TypeDescription), selected: @position, class: "w115" %></td>
+</tr>

@@ -1,0 +1,38 @@
+<div id="add_edit_signature">
+  <div class="overlay_header">
+    <h2>Add Signature</h2>
+  </div>
+  <div id="signature_error" class="flash_error hide">
+  </div>
+  <form action="<%= rolodex_signatures_path() %>" data-remote="true" method="post" onsubmit="return verifySignature(); closeOverlay('signature');" id="signature_description_form">
+    <div class="overlay_content">
+      <table>
+        <tr>
+          <td><span class="label">Enter a Description:</span></td>
+          <td><input type="text" name="description" id="signature_description" />
+            <input type="hidden" name="entity" value="<%= @entity_id %>">
+            <% if @doc_entity != nil && @doc_entity != "" %>
+              <input type="hidden" name="doc_entity_id" value="<%= @doc_entity.id %>">
+              <input type="hidden" name="force_create" value="<%= @force_create %>">
+            <% end %>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="overlay_footer">
+      <input type="button" value="Cancel" class="button close" onclick="closeOverlay('signature'); return false;" />
+      <input type="submit" value="Save" class="button close" onclick="$('#overlay_signature').hide();" id="signature_save" /></p>
+    </div>
+  </form>
+</div>
+
+<% if @force_create == true %>
+  <script type="text/javascript">
+    $("#signature_description").val("Primary");
+    $("input[type=submit]#signature_save").click();
+  </script>
+<% else %>
+  <script type="text/javascript">
+    openOverlay("signature");
+  </script>
+<% end %>

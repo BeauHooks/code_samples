@@ -1,0 +1,9 @@
+<% num = @search_results.nil? ? 0 : @search_results.size %>
+<% if num == 100 %>
+  <%= num %> Results Returned **Narrow Search**
+ <% elsif num == 1 %>
+  <%= num %> Result Returned
+<% else %>
+  <%= num %> Results Returned
+<% end %>
+<a href="rolodex/show_new?page=rolodex" data-remote="true"><img class="trigger icon" src="/assets/plus.png" id="new" /></a>

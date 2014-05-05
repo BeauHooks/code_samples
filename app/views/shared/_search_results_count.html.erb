@@ -1,0 +1,19 @@
+<% num = @search_results.nil? ? 0 : @search_results.size %>
+<% if num == 100 %>
+  <%= num %> Results Returned **Narrow Search**
+ <% elsif num == 1 %>
+  <%= num %> Result Returned
+<% else %>
+  <%= num %> Results Returned
+<% end %>
+<% if controller_name == 'rolodex' %>
+  <%= link_to new_entity_overlays_path, remote: true do %>
+    <%= image_tag('plus.png', class: 'icon') %>
+  <% end %>
+<% end %>
+<% if controller_name == 'index' %>
+  <%= link_to image_tag("/assets/plus.png", class: "icon trigger"), new_order_overlays_path, remote: true %>
+<% end %>
+<% if controller_name == 'users' %>
+  <%= link_to image_tag("/assets/plus.png", class: "icon trigger"), new_user_overlays_path, remote: true %>
+<% end %>

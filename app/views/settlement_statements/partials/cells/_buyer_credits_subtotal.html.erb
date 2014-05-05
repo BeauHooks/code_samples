@@ -1,0 +1,10 @@
+<div class="<%= cell.object.get_css_attributes %>">
+  <%= cell.text_field :cell_value,
+    value: format_value_for_display(cell.object.data_type, cell.object.cell_value, is_footer ? "$" : ""),
+    placeholder: placeholder(cell.object),
+    data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, bind: "valueAsCurrency: buyer_credits_subtotal(#{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+    disabled: is_footer %>
+</div>
+<% if cell.object.is_resizable? %>
+  <div class="tru_resize_slider"></div>
+<% end %>

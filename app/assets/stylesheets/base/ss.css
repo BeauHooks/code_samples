@@ -1,0 +1,489 @@
+#ss{
+  width: 615px;
+  font-size: .8em;
+  font-family: Arial, sans-serif;
+}
+
+#ss  p{
+  margin: 0;
+}
+
+#ss h4{
+  margin-top: 5px;
+}
+
+#ss p, #ss table, #ss li, #ss input, #ss select{
+  font-size: 1em;
+}
+
+#ss td{
+  padding: 1px 2px;
+}
+
+#ss textarea, #ss input[type=text], #ss select{
+  font-family: Arial, sans-serif;
+}
+
+#ss form{
+  position: relative;
+}
+
+#ss_company_title{
+  float: left;
+  font-size: 2em;
+}
+
+#ss_company_title h1{
+  font-size: 0.5em;
+}
+
+#ss_company_title  h2{
+  font-size: 0.4em;
+}
+
+.ss table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ss_doc_title{
+  float: right;
+  text-align: right;
+}
+
+.ss_doc_title p{
+  padding: 0;
+}
+
+.ss_row{
+  clear: both;
+  margin-bottom: 0.5em;
+}
+
+.ss_vert_spacer{
+  width: 0.5em;
+}
+
+.ss_w5{
+  width: 5%;
+}
+
+.ss_w45{
+  width: 45%;
+}
+
+.ss_w50{
+  width: 50%;
+}
+
+.ss_w70{
+  width: 70%;
+}
+
+.ss_w75{
+  width: 75%;
+}
+
+.ss_box{
+  vertical-align: top;
+}
+
+.ss_info{
+  height: 3.5em;
+}
+
+.ss_half_info{
+  height: 1.5em;
+}
+
+.ss_push_left_10{
+  margin-left: 10px;
+}
+
+.ss_closer_sig{
+  width: 45%;
+}
+
+.ss_sig_line{
+  height: 25px;
+}
+
+#doc_large #ss h1{
+  font-size: 20pt !important;
+}
+
+/*****************************************************************************/
+/*******************************Start hud type*******************************/
+/*****************************************************************************/
+
+.hud p{
+  padding: 0;
+}
+
+.hud{
+  font-size: 7pt;
+  width: 100%;
+  font-family: Arial;
+}
+
+.hud hr{
+  margin: 5px 0;
+}
+
+.hud #loan_terms, .hud #projected_payments, .hud #cash_to_close{
+  font-size: 8.5pt;
+}
+
+.hud .info_column td{
+  vertical-align: top;
+}
+
+.hud td:first-child{
+  padding-right: 5px;
+}
+
+.hud td p{
+  padding: 5px;
+}
+
+.hud #closing_disclosure_page h1{
+  font-size: 14pt;
+  padding-top: 5px;
+}
+
+.hud #additional_information_about_this_loan hr{
+  margin-top: 0;
+}
+
+.hud #additional_information_about_this_loan .column{
+  width: 48%;
+  float: left;
+}
+
+.hud #loan_calculations .column{
+  width: 48%;
+  float: left;
+}
+
+.hud .page .column.column-left{
+  margin-right: 4%;
+}
+
+.hud #additional_information_about_this_loan td{
+  vertical-align: top;
+  padding: 2px 5px;
+}
+
+.hud #loan_calculations td{
+  padding: 5px;
+}
+
+.hud #loan_calculations table.loan_calculations .col-1{
+  width: 75%;
+}
+
+.hud #loan_calculations table.loan_calculations .col-2{
+  width: 25%;
+}
+
+.hud #loan_calculations .info-box{
+  border: 3px solid #CCC;
+  border-radius: 10px;
+  width: 99%;
+  margin-top: 15px;
+}
+
+.hud #loan_calculations .info-box .info-box-icon{
+  color: #CCC;
+  font-size: 50pt;
+  font-weight: bold;
+  float: left;
+  width: 10%;
+  padding: 0 3%;
+}
+
+.hud #loan_calculations .info-box .info-box-content{
+  float: left;
+  width: 75%;
+  padding: 10px 0 10px 15px;
+}
+
+.hud #loan_calculations ul{
+  padding-left: 20px;
+}
+
+.hud #loan_calculations .contact-information td{
+  width: 15%;
+  border-bottom: 1px dotted #CCC;
+}
+
+.hud #loan_calculations .contact-information td:first-child{
+  width: 10%;
+}
+
+.hud #loan_calculations .signature_table{
+  height: 30px;
+}
+
+.hud #loan_calculations .signature_line{
+  height: 30px;
+}
+
+.hud .hud_header div{
+  float: left;
+}
+
+.hud .hud_header > div:first-child{
+  width: 40%;
+}
+
+.hud .hud_header > div:last-child{
+  width: 60%;
+}
+
+.hud .page{
+  clear: both;
+}
+
+.hud .page h1{
+  font-size: 11pt;
+  padding-top: 5px;
+}
+
+.hud .info_row > .info_column:first-child{
+  width: 34%;
+}
+
+.hud .info_row > .info_column:last-child{
+  padding-right: 0;
+}
+
+.hud .info_column{
+  width: 30%;
+  float: left;
+  padding: 0 5px;
+  font-size: 7pt;
+}
+
+.hud .info_column:first-child tr > td:first-child{
+  width: 55%;
+}
+
+.hud > .info_row > div:first-child{
+  padding-left: 0;
+}
+
+.hud > .info_row > div:last-child{
+  padding-right: 0;
+}
+
+.hud .info_column .column_header{
+  font-size: 9pt;
+  margin-bottom: 4px;
+}
+
+.hud .info_column td:first-child{
+  padding-left: 0;
+}
+
+.hud .section{
+  margin-top: 20px;
+}
+
+.hud .header_tab{
+  background-color: #333;
+  border: 1px solid #222;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 6px 0 2px;
+  color: #FFFFFF;
+  width: 100%;
+  font-weight: bold;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; /* Firefox */
+}
+
+.hud .header_tab span{
+  padding-left: 5px;
+}
+
+.hud table.section > tbody > tr:first-child > td:first-child{
+  padding: 0;
+}
+
+.hud tr.section_header td{
+  padding-bottom: 2px;
+  vertical-align: bottom;
+}
+
+.hud .section td{
+  border-bottom: 1px solid #222;
+  padding: 5px;
+}
+
+.hud tr > td:first-child{
+  border-left: none;
+}
+
+.hud tr > td:last-child{
+  border-right: none;
+}
+
+.hud .big{
+  font-size: 10pt;
+}
+
+.hud .sum{
+  width: 40%;
+  margin-left: 25%;
+}
+
+.hud .sum p{
+  text-align: right;
+}
+
+.hud .sum span{
+  float: left;
+}
+
+.hud .tru_container{
+  padding-top: 1px;
+}
+
+.hud .tru_new_line.header_row{
+  height: 30px;
+}
+
+.hud .tru_new_line{
+  position: relative;
+  width: 615px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  margin: -2px 0 2px;
+}
+
+.hud .tru_new_line.border-bottom{
+  border-bottom: 1px solid #CCC !important;
+}
+
+.hud .tru_new_line.border-top{
+  border-top: 1px solid #CCC !important;
+}
+
+.hud .tru_new_line.header_row .header_tab{
+  position: absolute;
+  bottom: 0;
+}
+
+.hud .tru_line_number{
+  position: relative;
+}
+
+.hud .tru_amount{
+  border-left: none;
+  margin-left: -2px;
+}
+
+.hud .heading{
+  margin-top: 5px;
+}
+
+.hud .tru_1, .hud .tru_2, .hud .tru_3, .hud .tru_4, .hud .tru_5, .hud .tru_6, .hud .tru_7, .hud .tru_8, .hud .tru_9, .hud .tru_10, .hud .tru_11, .hud .tru_12, .hud .tru_13, .hud .tru_14, .hud .tru_15{
+  /*padding: 2px 4px;*/
+   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+.hud .tru_1 input[type=text], .hud .tru_2 input[type=text], .hud .tru_3 input[type=text], .hud .tru_4 input[type=text], .hud .tru_5 input[type=text], .hud .tru_6 input[type=text], .hud .tru_7 input[type=text], .hud .tru_8 input[type=text], .hud .tru_9 input[type=text], .hud .tru_10 input[type=text], .hud .tru_11 input[type=text], .hud .tru_12 input[type=text], .hud .tru_13 input[type=text], .hud .tru_14 input[type=text], .hud .tru_15{
+  font-size: 7pt;
+}
+
+.tru_new_line:not(.header_row) div div:not(.tru_half)
+{
+  padding: 3px 4px;
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+.hud .tru_half div{
+  padding: 6px 1px;
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+.hud .tru_half{
+  float: left; width: 50%; font-size: 6.5pt;
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+.hud .header_tab_container{
+  padding: 0;
+}
+
+.hud .top{vertical-align: top;}
+
+.hud .background{background-color: #EEE;}
+.hud .center{text-align: center;}
+.hud .right{text-align: right;}
+.hud .border{border: 1px solid #222 !important;}
+.hud .border-left{border-left:  1px solid #222 !important;}
+.hud .border-right{border-right:  1px solid #222 !important;}
+.hud .border-top{border-top:  1px solid #222 !important;}
+.hud .border-bottom{border-bottom:  1px solid #222 !important;}
+.ss .border-bottom td, .hud .border-bottom td{border-bottom:  1px solid #222 !important;}
+.hud .no-border{border: none !important;}
+.hud .no-border-left{border-left: none !important;}
+.hud .no-border-right{border-right: none !important;}
+.hud .no-border-top{border-top: none !important;}
+.hud .no-border-bottom{border-bottom: none !important;}
+.hud .no-border td{border: none !important;}
+.hud .border-bottom-double{border-bottom: 2px solid #222 !important;}
+.hud .border-top-double{border-top: 2px solid #222 !important;}
+.hud .border-right-double{border-right: 2px solid #222 !important;}
+.hud .border-left-double{border-left: 2px solid #222 !important;}
+.hud .bottom{vertical-align: bottom;}
+.hud .no_pad_left{padding-left: 0 !important;}
+
+.hud #estimated_amounts div{float: left; padding: 10px;}
+.hud #estimated_amounts table{float: left;}
+.hud #estimated_amounts table td{padding: 0;}
+
+.hud .margin-top{margin-top: 15px;}
+.hud .align-top td{vertical-align: top;}
+.hud th{text-align:left; padding: 5px; background-color: #CCC;}
+
+.hud .header_row .tru_1, .hud .header_row .tru_2, .hud .header_row .tru_3, .hud .header_row .tru_4, .hud .header_row .tru_5, .hud .header_row .tru_6, .hud .header_row .tru_7, .hud .header_row .tru_8, .hud .header_row .tru_9, .hud .header_row .tru_10, .hud .header_row .tru_11, .hud .header_row .tru_12, .hud .header_row .tru_13, .hud .header_row .tru_14, .hud .header_row .tru_15{
+  height: 30px;
+}
+
+.checkbox-list li,
+.checkbox-list ul li {
+  margin-bottom: 5px;
+  padding-top: 2px;
+  position: relative;
+  list-style-type: none;
+}
+
+.checkbox-list label,
+.checkbox-list ul label {
+  display: block;
+  font-weight: normal;
+  padding-left: 21px;
+}
+
+.checkbox-list li > label > input:first-child {
+  display: inline;
+  margin: 0 5px 0 -21px;
+  position: absolute;
+}
+
+.checkbox-list ul {
+  margin: 5px 0 0 20px;
+}
+
+.checkbox-list p,
+.checkbox-list ul p {
+  padding-left: 21px;
+  margin: 0;
+}
+/*****************************************************************************/
+/*******************************End hud type*******************************/
+/*****************************************************************************/

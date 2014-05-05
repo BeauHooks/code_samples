@@ -1,0 +1,3 @@
+$("#task_bar_target").mouseover();
+$("#task_bar").mouseout();
+$("#task_bar").html($("#task_bar").html() + "<%= j(render 'layouts/partials/task', title: @title, identifier: @identifier).html_safe %>");

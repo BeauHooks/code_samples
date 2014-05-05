@@ -1,0 +1,109 @@
+<br />
+<div style="text-align:left; padding-left:10px;" class="label">Loan Terms</div>
+<table id="loan_terms">
+  <tr>
+    <td class="description">Your Initial loan amount is</td>
+    <td>&nbsp;$<%= text_field_tag :initial_loan_amount, number_to_currency(@hud.initial_loan_amount, unit: ""), onchange: "updateLoanTerms(this);", placeholder: ("Amount" if @print == nil) %></td>
+  </tr>
+  <tr>
+    <td class="description">Your loan term is</td>
+    <td><%= text_field_tag :loan_term, @hud.loan_term, :style => 'text-align:right;', onchange: "updateLoanTerms(this);", placeholder: ("Term" if @print == nil) %> years</td>
+  </tr>
+  <tr>
+    <td class="description">Your initial interest rate is</td>
+    <td><%= text_field_tag :initial_interest_rate, @hud.initial_interest_rate, :style => 'text-align:right;', onchange: "updateLoanTerms(this);", placeholder: ("Rate Percent" if @print == nil) %> %</td>
+  </tr>
+  <tr>
+    <td class="description">Your initial monthly amount owed for principal, interest, and any mortgage insurance is</td>
+    <td>
+      &nbsp;$<%= text_field_tag :initial_payment_amount, number_to_currency(@hud.initial_payment_amount, unit: ""), onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Amount" if @print == nil) %> includes<br /><br />
+      {{CB_PRINCIPAL}} Principal<br />
+      {{CB_INTEREST}} Interest<br />
+      {{CB_MORTGAGE_INSURANCE}} Mortgage Insurance<br />&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td class="description interest_rate">Can your interest rate rise?</td>
+    <td>
+      &nbsp; {{CB_RATE_RISE_2}} No {{CB_RATE_RISE_1}} Yes, it can rise to a maximum of       
+      <%= text_field_tag :interest_rate_may_rise_by, @hud.interest_rate_may_rise_by, :style => 'text-align:right;' , onchange: "updateLoanTerms(this);", placeholder: ("Percent" if @print == nil) %>%. 
+      The first change will be on 
+      <%# @hud.interest_rate_first_changes_on != nil ? date =  @hud.interest_rate_first_changes_on.strftime('%m/%d/%Y') : date = "" %>
+      
+      <%= text_field_tag :interest_rate_first_changes_on, @hud.interest_rate_first_changes_on, :id => 'interest_rate_first_changes_on', :style => ' text-align:center;' , onchange: "updateLoanTerms(this);", class: "", placeholder: ("Date" if @print == nil) %>
+
+      and can change again every 
+
+      <%= text_field_tag :interest_rate_change_frequency, @hud.interest_rate_change_frequency, :style => 'text-align:center;' , onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Frequency" if @print == nil) %> after 
+      <%# @hud.interest_rate_may_change_frequently_after != nil ? date =  @hud.interest_rate_may_change_frequently_after.strftime('%m/%d/%Y') : date = "" %>
+      <%= text_field_tag :interest_rate_may_change_frequently_after, @hud.interest_rate_may_change_frequently_after, :style => ' text-align:center;' , onchange: "updateLoanTerms(this);", class: "", placeholder: ("Date" if @print == nil) %>. Every change date, 
+      your interest rate can increase or decrease by 
+      <%= text_field_tag :interest_rate_may_change_by, @hud.interest_rate_may_change_by, :style => 'text-align:right;' , onchange: "updateLoanTerms(this);", placeholder: ("Percent" if @print == nil) %>%. 
+      Over the life of the loan, your interest rate is guaranteed to never be <b>lower</b> than 
+      <%= text_field_tag :minimum_interest_rate, @hud.minimum_interest_rate, :style => 'text-align:right;' , onchange: "updateLoanTerms(this);", placeholder: ("Percent" if @print == nil) %>% or <b>higher</b> than 
+      <%= text_field_tag :maximum_interest_rate, @hud.maximum_interest_rate, :style => 'text-align:right;' , onchange: "updateLoanTerms(this);", placeholder: ("Percent" if @print == nil) %>%. 
+    </td>
+  </tr>
+  <tr>
+    <td class="description">Even if you make payments on time, can your loan balance rise?</td>
+    <td>
+      &nbsp;{{CB_BALANCE_RISE_2}} No  {{CB_BALANCE_RISE_1}} Yes, it can rise to a maximum of
+      $<%= text_field_tag :maximum_balance, number_with_precision(@hud.maximum_balance, precision: 2, separator: ".", delimiter: ",") , onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Amount" if @print == nil) %>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">Even if you make payments on time, can your monthly amount owed for principal, interest, and mortgage insurance rise?</td>
+    <td>
+      &nbsp;{{CB_MONTHLY_RISE_2}} No  {{CB_MONTHLY_RISE_1}} Yes, the first increase
+      can be on 
+      <%# @hud.payment_amount_first_changes_on != nil ? date =  @hud.payment_amount_first_changes_on.strftime('%m/%d/%Y') : date = "" %>
+      <%= text_field_tag :payment_amount_first_changes_on, @hud.payment_amount_first_changes_on, :style => ' text-align:center;' , onchange: "updateLoanTerms(this);", class: "", placeholder: ("Date" if @print == nil) %> and the
+      monthly amount owed can rise to $<%= text_field_tag :monthly_payment_amount, number_with_precision(@hud.monthly_payment_amount, precision: 2, separator: ".", delimiter: ",") , onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Amount" if @print == nil) %>. The maximum it can ever rise to is 
+      $<%= text_field_tag :maximum_payment_amount, number_with_precision(@hud.maximum_payment_amount, precision: 2, separator: ".", delimiter: ",") , onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Amount" if @print == nil) %>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">Does your loan have a prepayment penalty?</td>
+    <td>
+      &nbsp;{{CB_PREPAYMENT_PENALTY_2}} No 
+      {{CB_PREPAYMENT_PENALTY_1}} Yes, your maximum prepayment penalty is $<%= text_field_tag :maximum_prepayment_penalty, number_with_precision(@hud.maximum_prepayment_penalty, precision: 2, separator: ".", delimiter: ",") , onchange: "updateLoanTerms(this);", placeholder: ("Amount" if @print == nil) %>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">Does your loan have a balloon payment?</td>
+    <td>
+      &nbsp;{{CB_BALLOON_PAYMENT_2}} No {{CB_BALLOON_PAYMENT_1}} Yes, you have a balloon payment of
+      $<%= text_field_tag :balloon_payment_amount, number_with_precision(@hud.balloon_payment_amount, precision: 2, separator: ".", delimiter: ",") , onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Amount" if @print == nil) %> due in 
+      <%= text_field_tag :balloon_payment_years, @hud.balloon_payment_years, :style => 'text-align:center;' , onchange: "updateLoanTerms(this);", placeholder: ("Years" if @print == nil) %> years on 
+      <%# @hud.balloon_payment_date != nil ? date =  @hud.balloon_payment_date.strftime('%m/%d/%Y') : date = "" %>
+      <%= text_field_tag :balloon_payment_date, @hud.balloon_payment_date, :style => ' text-align:center;' , onchange: "updateLoanTerms(this);", class: "", placeholder: ("Date" if @print == nil) %>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">Total monthly amount owed including escrow account payments</td>
+    <td>
+      &nbsp;
+       {{CB_MONTHLY_ESCROW_2}} You do not have a monthly escrow payment for items, such as property taxes and homeowner's 
+      insurance. You must pay these items directly yourself.<br />
+      &nbsp;
+      {{CB_MONTHLY_ESCROW_1}} You have an additional monthly escrow payment of 
+      $<%= text_field_tag :escrow_payment_amount, number_with_precision(@hud.escrow_payment_amount, precision: 2, separator: ".", delimiter: ",") , onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Amount" if @print == nil) %><br />
+      that results in a total initial monthly amount owed of $<%= text_field_tag :total_payment_amount, number_with_precision(@hud.total_payment_amount, precision: 2, separator: ".", delimiter: ",") , onchange: "updateLoanTerms(this);", class: "long", placeholder: ("Amount" if @print == nil) %>. This includes
+      pricipal, interest, any mortgage insurance and any items checked below:<br /><br />
+      <table border="0" id="escrow_accounts">
+        <tr>
+          <td>&nbsp;{{CB_PROPERTY_TAXES}} Property taxes</td>
+          <td>&nbsp;{{CB_HOMEOWNERS_INSURANCE}} Homeowner's insurance</td>
+        </tr>
+        <tr>
+          <td>&nbsp;{{CB_FLOOD_INSURANCE}} Flood insurance</td>
+          <td>&nbsp;{{CB_ITEM4}}  <%= text_field_tag :escrow_payment_item4_name, @hud.escrow_payment_item4_name , onchange: "updateLoanTerms(this);", placeholder: ("Description" if @print == nil) %></td>
+        </tr>
+        <tr>
+          <td>&nbsp;{{CB_ITEM5}}  <%= text_field_tag :escrow_payment_item5_name, @hud.escrow_payment_item5_name , onchange: "updateLoanTerms(this);", placeholder: ("Description" if @print == nil) %></td>
+          <td>&nbsp;{{CB_ITEM6}}  <%= text_field_tag :escrow_payment_item6_name, @hud.escrow_payment_item6_name , onchange: "updateLoanTerms(this);", placeholder: ("Descriptoin" if @print == nil) %></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

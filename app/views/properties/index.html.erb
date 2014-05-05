@@ -1,0 +1,35 @@
+<div id="search_bar" class="search_bar">
+  <div id="search" class="search">
+    <%= render "properties/partials/search_bar" %>
+  </div>
+  <div id="search_nav" class="search_nav">
+    <%= render "shared/search_results_count" %>
+  </div>
+</div>
+<div class="result_container margin_bottom_10">
+  <div class="grid_header"></div>
+  <div id="search_results" class="search_results h<%= current_user.users_preferences[:index_result_count].to_i * 23 %>" style="position: static;">
+    <table class="w100p sortable">
+      <thead class="grid_header_font">
+        <%= render "shared/thead_row" %>
+      </thead>
+      <tbody id="properties_results" class="grid_results">
+        <%= render 'shared/result_row' %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="tabs" class="tabs_container no_border hide">
+  <ul>
+    <li><%= link_to "Overview", "#file_overview", id: "tab_file_id", class: "overview" %></li>
+  </ul>
+  <div id="file_overview"></div>
+</div>
+
+
+<div id="tab_content" class="tab_content">
+  <center>
+    <b>No File Selected</b>
+  </center>
+</div>

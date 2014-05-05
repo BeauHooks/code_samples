@@ -1,0 +1,3 @@
+$("#policy_<%= @policy.id %>_endorsements").html("<%= j(render "policies/endorsements", policy: @policy ).html_safe %>");
+closeOverlay("endorsement");
+fileProductInitializer();

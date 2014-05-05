@@ -1,0 +1,154 @@
+<div id="process_file_images" class="w470">
+  <div class="overlay_header">
+    <h2>
+      Process User Images - <%= @entity.FullName %>
+      <font class="float_right font_12px padding_top_6 padding_right_10 green hide" id="success">
+        Sent for processing successfully...
+      </font>
+      <font class="float_right font_12px padding_top_6 padding_right_10 red hide" id="failed">
+        Failed to process attachment...
+      </font>
+    </h2>
+  </div>
+
+  <div class="overlay_content">
+    <div class="border">
+      <table class="grid_header">
+        <td class="w300 padding_left_5">FileName</td>
+        <td class="w125" id="process_images_last">Upload Date</td>
+      </table>
+      <div class="results">
+        <table id="process_image_list">
+          <% @files = Dir["tmp/rolodex_dnd/#{current_user.employee_id}/#{@entity.EntityID}/*"].sort_by{ |f| File.mtime(f) }.reverse %>
+          <% c = 0 %>
+          <% for file in @files %>
+            <% c += 1 %>
+            <tr class="noSelect trigger">
+              <td class="w300 padding_left_5"><%= file.split("/").last %></td>
+              <td class="w125"><%= File.mtime(file).strftime("%m/%d/%Y %l:%M") %></td>
+            </tr>
+          <% end %>
+        </table>
+        <%# OPTIMIZE: Easier way to inject js? %>
+        <% if c > 4 %>
+          <script type="text/javascript">
+            addWidth('process_images', 125);
+          </script>
+        <% else %>
+          <script type="text/javascript">
+            fixWidth('process_images', 125);
+          </script>
+        <% end %>
+      </div>
+    </div>
+    <br />
+
+    <%= form_tag :user_file_upload, :remote => true do %>
+      <table class="w100p">
+        <tr>
+          <td class="col1"><%= label_tag "File:" %></td>
+          <td><%= text_field_tag :file, nil, id: "filename", readonly: true %></td>
+        </tr>
+        <tr>
+          <td><%= label_tag "Type:" %></td>
+          <td><%= select_tag :image_type, options_from_collection_for_select(@filebin, "Description", "Description"), include_blank: true %>
+          <span id="no_type" class="red hide">No Type Selected!</span></td>
+        </tr>
+        <tr>
+          <td class="top"><%= label_tag "Notes:" %></td>
+          <td><%= text_area_tag :image_notes, nil, rows: 3 %></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="vertical-align: middle; padding-top: 10px">
+            <span class="float_right"><%= submit_tag "Process File", id: "save_form", onclick: "setTimeout($('#reload_images').click(), 1000);" %>
+            <%= button_tag "Delete!", type: "button", id: "delete_button", onclick: "$.post('rolodex_attachments/remove_temp?entity_id=#{@entity.EntityID}&file=' + $('tr.active_row').find('td:first').text());", style: "margin-right:87px;" %></span>
+            <%= text_field_tag :entity_id, nil, id: "entity_id", class: "hide" %></td>
+        </tr>
+      </table>
+    <% end %>
+
+  </div>
+  <div class="overlay_footer">
+    <input type="button" value="Close" class="button close" onclick="$('#reload_images').click(); closeOverlay('process_user_images');" />
+    <%= link_to "Reload File Images", "rolodex_attachments/reload_entity_images?entity_id=#{@entity.EntityID}", remote: true, id: "reload_images", class: "hide" %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  <% if @files.size == 0 %>
+    $("#save_form").attr("disabled", "disabled");
+  <% end %>
+  <% if @files.size > 5 %>
+    $("#right_header").attr("style", "width:100px; padding-right:25px;");
+  <% else %>
+    $("#right_header").attr("style", "width:100px; padding-right:13px;");
+  <% end %>
+
+
+  $("table#process_image_list tr:first").addClass("active_row");
+  $("#filename").val($("table#process_image_list tr:first").find("td:first").text());
+  $("input#entity_id").val($("#filename").val().split("_")[0])
+
+  $("table#process_image_list tr").click(function(){
+    $("#process_file_images tr").removeClass("active_row");
+    $(this).addClass("active_row");
+    $("#filename").val($(this).find("td:first").text());
+    $("input#entity_id").val($("#filename").val().split("_")[0])
+  });
+
+  $("table#process_image_list tr").dblclick(function(){
+    var iframe;
+    var hiddenIFrameID = 'hiddenDownloader';
+    iframe = document.getElementById(hiddenIFrameID);
+    if (iframe === null) {
+      iframe = document.createElement('iframe');
+      iframe.id = hiddenIFrameID;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    iframe.src = "/rolodex_attachments/request_file?file=" + $(this).find("td:first").text();
+  });
+
+  $(function(){
+    $.extend($.fn.disableTextSelect = function() {
+        return this.each(function(){
+            if($.browser.mozilla){//Firefox
+                $(this).css('MozUserSelect','none');
+            }else if($.browser.msie){//IE
+                $(this).bind('selectstart',function(){return false;});
+            }else{//Opera, etc.
+                $(this).mousedown(function(){return false;});
+            }
+        });
+    });
+    $('.noSelect').disableTextSelect();//No text selection on elements with a class of 'noSelect'
+  });
+
+  $(function() {
+    $('form').each(function() {
+      var $that = $(this);
+      $(this).submit(function(){
+        var submitButton = $that.find("input[type='submit']");
+        btnText = $(submitButton).attr("value");
+        $(submitButton).attr("value", "Please Wait...");
+        $(submitButton).attr("disabled", "true");
+
+        jQuery.ajax({
+          data: $(this).serialize(),
+          url: $(this).attr("action"),
+          type: "post",
+          timeout: 3000,
+          error: function() {
+            $that.find("input[type='submit']").attr("value", "Failed to Submit");
+            $that.find("input[type='submit']").removeAttr('disabled');
+          },
+          success: function(r) {
+            $that.find("input[type='submit']").attr("value", btnText);
+            $that.find("input[type='submit']").removeAttr('disabled');
+          },
+        })
+        return false;
+      })
+    });
+  })
+</script>

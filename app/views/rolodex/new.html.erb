@@ -1,0 +1,10 @@
+<div id="add_edit_rolodex">
+  <div class="overlay_header">
+    <h2>New Contact</h2>
+    <div class="tools new_contact_rolodex">
+      <span id="saving_new_contact" class="hide bold margin_right_10"><%= image_tag "loading.gif", id: "spinner", class: "saving_new_contact" %>Saving...</span>
+      <span id="checking_for_duplicates" class="hide bold margin_right_10"><%= image_tag "loading.gif", id: "spinner", class: "checking_for_duplicates" %>Checking for duplicates...</span>
+    </div>
+  </div>
+  <%= render "rolodex/partials/form" %>
+</div>

@@ -1,0 +1,107 @@
+<div  id="hoa_proration_calculator">
+  <%= form_for 'search_form', :url => "huds/#{@hud.id}/update_hoa_proration", :remote => true do %>
+    <div class="overlay_header">
+      <h2>HOA Proration Calculator</h2>
+    </div>
+    <div class="overlay_content">
+      <table style="float: left; margin-right: 10px;">
+        <tr style="height: 17px;">
+          <td class="label">HOA Due:</td>
+          <td>
+            <%= radio_button_tag :hoa_due, "monthly", @hud.hoa_due == "monthly" || true, onclick: "proration_date('monthly');" %> Monthly
+            <%= radio_button_tag :hoa_due, "annual", @hud.hoa_due == "annual", onclick: "proration_date('annual');" %> Annually
+          </td>
+        </tr>
+        <tr style="height: 20px;">
+          <td id="date_label" class="label">Proration Date:</td>
+          <td style="padding-right: 10px;">
+            <%= text_field_tag :proration_start, @hud.hoa_start_at.nil? || @hud.hoa_start_at == "" ? "01/01/#{Time.now.year}" : @hud.hoa_start_at.to_s(:std), class: "date annual_date", style: "width: 70px;", placeholder: "Start Date" %>
+            <span class="annual_date">-</span>
+            <%= text_field_tag :proration_end, @hud.hoa_end_at.to_s(:std), class: "date", style: "width: 70px;", placeholder: "End Date" %>
+          </td>
+        </tr>
+        <tr style="height: 20px;">
+          <td class="label" style="padding-right: 5px;">HOA Amount:</td>
+          <td style="padding-right: 10px;"><%= text_field_tag :total, number_to_currency(@hud.hoa_amount, unit: ""), onkeydown: "numbersOnly(event);", onchange: "toUSD(this);" %></td>
+        </tr>
+        <tr style="height: 25px;">
+          <td class="label" style="vertical-align: top;">HOA Applies:</td>
+          <td style="padding-right: 10px;">
+            <label><%= radio_button_tag :hoa_applies, "charge_buyer-charge_seller", @hud.hoa_applies == "charge_buyer-charge_seller" %> Charge Buyer and Charge Seller</label><br />
+            <label><%= radio_button_tag :hoa_applies, "charge_buyer-credit_seller", @hud.hoa_applies == "charge_buyer-credit_seller" %> Charge Buyer and Credit Seller</label>
+          </td>
+        </tr>
+      </table>
+      <div style="float: left; padding-top: 5px; padding-right: 10px;">
+      </div>
+      <p style="clear: both;"></p><br />
+      <% if @hud.hud_type == "standard" %>
+        <p style="color: #ED1C24">Warning - Lines 109, 110, 409, and 513 will be overwritten when using this calculator</p>
+      <% else %>
+        <p style="color: #ED1C24">Warning - Lines in red will be overwritten when using this calculator</p>
+      <% end %>
+    </div>
+    <div class="overlay_footer">
+      <span style="float: right;">
+        <input type="button" value="Save" class="close" onclick="if(validateHOAProration()){$(this).closest('form').submit(); closeOverlay('hoa_proration_calculator');} on_close();">
+        <input type="button" value="Cancel" class="close" onclick="closeOverlay('hoa_proration_calculator'); on_close();" />
+      </span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  openOverlay("hoa_proration_calculator");
+  proration_date("<%= @hud.hoa_due %>");
+
+  <% if @hud.hud_type == "in-house" %>
+    $("#hud_row_4026").attr("style", "background:#ED1C24");
+    $("#hud_row_3022").attr("style", "background:#ED1C24");
+    $("#hud_row_3023").attr("style", "background:#ED1C24");
+  <% end %>
+
+  function on_close(){
+    <% if @hud.hud_type == "in-house" %>
+      $("#hud_row_4026").attr("style", "");
+      $("#hud_row_3022").attr("style", "");
+      $("#hud_row_3023").attr("style", "");
+    <% end %>
+  }
+
+  function proration_date(length){
+    if(length == "annual"){
+      $("#date_label").html("Date Range:");
+      $(".annual_date").show();
+      $("#proration_end").attr("placeholder", "End Date");
+      $("#proration_end").attr("style","width: 70px;");
+    } else {
+      $("#date_label").html("Proration Date:");
+      $("#proration_end").attr("placeholder", "Proration Date");
+      $("#proration_end").attr("style","width: 80px;");
+      $(".annual_date").hide();
+    }
+  }
+
+  $( "#hoa_proration_calculator .date").datepicker({
+    changeMonth: true,
+    changeYear: true
+  });
+
+  function validateHOAProration(){
+    var errors = "";
+
+    if($("#hoa_proration_calculator #proration_start, #hoa_proration_calculator #proration_end").val() == ""){
+      errors += "&list[]=Proration date cannot be left empty.";
+    }
+
+    if($("#hoa_proration_calculator #total").val() == ""){
+      errors += "&list[]=Total amount cannot be left empty.";
+    }
+
+    if(errors != ""){
+      addToQueue("validate_hoa_proration_calculator", "application/flash_notice?title=Errors on Form&notice=Please correct the following errors before proceeding:" + errors);
+      return false;
+    }
+    return true;
+  }
+</script>

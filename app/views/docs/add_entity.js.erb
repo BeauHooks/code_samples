@@ -1,0 +1,10 @@
+// Add Entity
+<%# if @doc_id == 0 %>
+	
+<%# else %>
+	// $("#manage_<%#= @section %>_entities").append("<%#= j(render :partial => "docs/add_entity").html_safe %>");
+	// $("#add_manage_<%#= @section %>_entities").hide();
+<%# end %>
+
+$("div#<%= @section %>_entities").append("<%= j(render :partial => "docs/add_entity").html_safe %>");
+$("#add_<%= @section %>_entities").hide();

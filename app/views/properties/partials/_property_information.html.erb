@@ -1,0 +1,23 @@
+<div class="result_container">
+  <div class="box_header">
+    <span class="title">Property Information</span>
+  </div>
+  <div>
+    <div class="label w95 float_left">Property Address:</div>
+    <div class="float_left"><%= @detail.assessment.SitusAddress %></div>
+    <div class="clear_fix" />
+    <div class="label w95 float_left">County:</div>
+    <div class="float_left"><%= @detail.county.CountyName %></div>
+    <div class="clear_fix" />
+    <div class="label w95 float_left">Acres:</div>
+    <div class="float_left"><%= @detail.assessment.Acres %></div>
+    <div class="clear_fix" />
+    <% if coords = @detail.get_coords %>
+      <div><%= link_to "Click to View Map", "https://local.google.com/maps?q=#{coords.lat},#{coords.lon}", target: "_blank" %></div>
+    <% elsif !@detail.assessment.SitusAddress.blank? %>
+      <div><%= link_to "Click to View Map", "https://local.google.com/maps?q=#{@detail.assessment.SitusAddress}, Washington, Utah", target: "_blank" %></div>
+    <% else %>
+      <div>Note: Unable to generate map.</div>
+    <% end %>
+  </div>
+</div>

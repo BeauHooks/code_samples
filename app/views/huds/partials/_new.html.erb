@@ -1,0 +1,79 @@
+<div id="center-page">
+<%= form_for @hud do |f| %>
+<table border="0">
+  <tr>
+    <td colspan="2">
+      <div class="full-header"><h1>B. Type of Loan</h1></div>
+        <table id="b-section" border="1" style="text-align:left;">
+          <tr style="height: 80px;" valign="top">
+            <td>
+              <%= radio_button_tag "type", "fha"        %> 1. FHA | 
+              <%= radio_button_tag "type", "rhs"        %> 2. RHS |
+              <%= radio_button_tag "type", "conv-unins" %> 3. Conv. Unins.<br /> 
+              <%= radio_button_tag "type", "va"         %> 4. VA |
+              <%= radio_button_tag "type", "conv-ins"   %> 5. Conv. Ins.
+            </td>
+            <td>6. File Number:</td>
+            <td>7. Loan Number:</td>
+            <td>8. Mortgage Insurance Case Number:</td>
+          </tr>
+          <tr style="text-align:left;" valign="top">
+            <td colspan="4">
+              <b>C. Note:</b> This form is furnished to give you a statement of actual settlement costs.  Amounts paid to and by the settlement agent are shown.  Items marked "(p.o.c.)" were paid outside the closing; they are shown here for informational purposes and are not included in the totals.
+            </td>
+          </tr>
+          <tr style="height:110px;" valign="top">
+            <td>D. Name & Address of Borrower:</td>
+            <td colspan="2">E. Name & Address of Seller:</td>
+            <td>F. Name & Address of Lender:</td>
+          </tr>
+          <tr  style="height:45px;" valign="top">
+            <td rowspan="2">G. Property Location:</td>
+            <td colspan="2">H. Settlement Agent</td>
+            <td>I. Settlement Date</td>
+          </tr>
+          <tr style="height:45px;" valign="top">
+            <td colspan="2">Place of Settlement:</td>
+            <td></td>
+          </tr>
+        </table>
+      <div class="full-content">
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="half-header"><h1>J. Summary of Borrower's Transaction</h1></div>
+      <div class="half-content">
+        <table border="1" width="443">
+          <th colspan="2" style="text-align:left"><b>100. Gross Amount Due from Borrower</th>
+          <%= f.fields_for :hud_lines do |builder| %>
+          <tr>
+            <td>
+              <%= builder.text_field :number %>
+            </td>
+          </tr>
+          <% end %>
+        </table>
+      </div>
+    </td>
+    <td style="padding-left:8px;">
+      <div class="half-header"><h1>K. Summary of Seller's Transaction</h1></div>
+      <div class="half-content">
+        <table border="1" width="443">
+          <th colspan="2" style="text-align:left"><b>400. Gross Amount Due to Seller</b></th>
+        </table>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div class="full-header"><h1>L. Settlement Charges</h1></div>
+      <div class="full-content">
+      </div>
+    </td>
+  </tr>
+</table>
+<% end %>
+</div>
+

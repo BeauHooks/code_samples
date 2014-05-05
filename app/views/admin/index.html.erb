@@ -1,0 +1,12 @@
+<div id="tabs" class="tabs_container no_border">
+  <ul>
+    <li><%= link_to "Manage Users", "#manage_users", onclick: "$.get('#{admin_users_path}');" %></li>
+    <li><%= link_to "Rules", "#manage_rules", onclick: "$.get('#{admin_rules_path}');" %></li>
+    <li><%= link_to "Preferences", "#preferences", onclick: "$.get('#{admin_site_preferences_path}');" %></li>
+  </ul>
+  <div id="manage_users">
+    <%= render "admin/partials/users" %>
+  </div>
+  <div id="manage_rules"></div>
+  <div id="preferences"></div>
+</div>

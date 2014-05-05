@@ -1,0 +1,784 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"dis",
+				"display_1"
+			],
+			[
+				"fot",
+				"font-size"
+			],
+			[
+				"padding",
+				"padding-bottom"
+			],
+			[
+				"bag",
+				"background-color"
+			],
+			[
+				"buyer",
+				"buyer_credit_due"
+			],
+			[
+				"seller_char",
+				"seller_charge_subtotal"
+			],
+			[
+				"seller_credi",
+				"seller_credit_subtotal"
+			],
+			[
+				"buyer_cred",
+				"buyer_credit_subtotal"
+			],
+			[
+				"bor",
+				"borrower_amount"
+			],
+			[
+				"number",
+				"number_with_precision"
+			],
+			[
+				"per",
+				"periodic_amount"
+			],
+			[
+				"ss_pro",
+				"ss_proration"
+			],
+			[
+				"prora",
+				"proration_dates"
+			],
+			[
+				"rb",
+				"rb=	erb_equal"
+			],
+			[
+				"ss_",
+				"ss_commission"
+			],
+			[
+				"ss_com",
+				"ss_commission"
+			],
+			[
+				"calc",
+				"calculate_hud_by_line"
+			],
+			[
+				"Calcu",
+				"calculate_line_by_type"
+			],
+			[
+				"deli",
+				"delimeter"
+			],
+			[
+				"numb",
+				"number_with_precision"
+			],
+			[
+				"mort",
+				"mortgage_amount"
+			],
+			[
+				"borro",
+				"borrower_amount"
+			],
+			[
+				"update",
+				"update_line"
+			],
+			[
+				"initial",
+				"initial_loan_amount"
+			],
+			[
+				"initi",
+				"initial_loan_amount"
+			],
+			[
+				"seller",
+				"seller_amount"
+			],
+			[
+				"line_14",
+				"line_1400_borrower"
+			],
+			[
+				"rolodex",
+				"rolodex_attachments"
+			],
+			[
+				"remove",
+				"remove_temp"
+			],
+			[
+				"req",
+				"request_file"
+			],
+			[
+				"rolo",
+				"rolodex_attachments"
+			],
+			[
+				"rolod",
+				"rolodex_attachments"
+			],
+			[
+				"display",
+				"display_file_id"
+			],
+			[
+				"process",
+				"process_image_list"
+			],
+			[
+				"Atta",
+				"Attachment"
+			],
+			[
+				"send_do",
+				"send_doc"
+			],
+			[
+				"rolode",
+				"rolodex_signatures"
+			],
+			[
+				"sign",
+				"signature_block"
+			],
+			[
+				"quick",
+				"quickadd_field"
+			],
+			[
+				"up",
+				"updated_at"
+			],
+			[
+				"doc_tem",
+				"doc_template_versions"
+			],
+			[
+				"ali",
+				"text-align"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"entity",
+				"entity_id"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically\n// This is a manifest file that'll be compiled into including all the files listed below.\n// be included in the compiled file accessible from http://example.com/assets/application.js\n// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the\n// the compiled file.\n//\n//= require jquery\n//= require jquery_ujs\n//= require jquery.iframe-transport\n//= require jquery.remotipart\n//= require jquery.ui.all\n//= require ./plugins/jquery.format\n//= require ./plugins/jquery.ajaxq\n//= require underscore\n//= require jack_up\n//= require ./lib/timepicker\n//= require ./lib/fancybox\n//= require ./lib/fancypack\n//= require ./lib/date\n//= require tinymce-jquery\n//= require ./plugins/jquery.ui.widget\n//= require ./plugins/jquery.filedrop\n//= require_directory ./jquery-uploader/\n//= require ./plugins/jquery.fileupload\n//= require ./plugins/jquery.fileupload-fp\n//= require ./plugins/jquery.fileupload-ui\n//= require_directory ./\n\n\n// Push notifications\n// $(function() {\n//   var faye = new Faye.Client('http://192.168.106.60:9292/faye');\n//   faye.subscribe(\"/messages/new\", function(data) {\n//     alert(data);\n//   });\n// });\n\n// $(function() {\n//   $('div#flash').delay(500).fadeIn('normal', function() {\n//     $(this).delay(2500).fadeOut();\n//   });\n\n//   $(\"html\").keydown(function(event) {\n//     if(event.keyCode == 27){\n//       $(\".submenu_show\").attr(\"class\", \"submenu_hide\");\n//     }\n//   });\n// });\n\n//\n// \n//\n\n// Main initializer for application-wide functionality\n// Call this whenever adding elements to the view\nfunction initializer() {\n  formatFax();\n  formatPhone();\n\n    // Sets up inputs and textareas so they can be escaped and retain their value\n   $(\" input:text \").focus(function() {\n      this.setAttribute(\"data-escape\", $(this).val().replace(/'/g, \"\\'\").replace(/\"/g, '\\\"') );\n   });\n\n   $(\" input:text \").blur(function() {\n      $(this).val( $(this).val() + \"\" );\n   });\n\n   $(\" input:text \").keydown(function(event) {\n      if(event.keyCode == 27){\n        this.value = this.getAttribute(\"data-escape\").replace(/'/g, \"\\'\").replace(/\"/g, '\\\"') ;\n        $(this).blur();\n      }\n   });\n\n   $(\" textarea \").focus(function() {\n      this.setAttribute(\"data-escape\", $(this).val().replace(/'/g, \"\\'\").replace(/\"/g, '\\\"') );\n   });\n\n   $(\" textarea \").blur(function() {\n      $(this).val( $(this).val() );\n   });\n\n   $(\" textarea \").keydown(function(event) {\n      if(event.keyCode == 27){\n        this.value = this.getAttribute(\"data-escape\").replace(/'/g, \"\\'\").replace(/\"/g, '\\\"') ;\n        $(this).blur();\n      }\n   });\n\n   // Sets up images to blur so they don't have the border when clicked\n   $(\" img \").focus(function() {\n      $(this).blur();\n   });\n\n   $(\" img \").click(function() {\n      $(this).blur();\n   });\n\n   // Sets onclick function of index rows\n  //  $('div.index_grid tr').click(function() {\n  //   clearRows();\n  //   $(this).toggleClass('active_row');\n  //   $(this).find('a#index_row')[0].click();\n  // });\n}\n\n//Add any post action to ajax queue\nfunction addToQueue(title, post){\n  $.ajaxq(title,{\n    url: post,\n    type: \"post\"\n  });\n  return true;\n}\n\n// Checkbox functionality that allows for select/deselect all\nfunction selectAll(object, list){\n  var list = list || \"nothing\";\n  if(list == \"nothing\"){\n    list = $(object).closest('div').next();\n    $(list).find(\"td.select input[type=checkbox]\").each(function(){\n      if(object.checked && this.disabled != true){\n        $(this).attr(\"checked\", \"checked\");\n      }\n      else{\n        $(this).removeAttr(\"checked\");\n      }\n    });\n  }\n  else{\n    $(\"#\" + list + \" input[type=checkbox]\").each(function(){\n      if(object.checked && this.disabled != true){\n        $(this).attr(\"checked\", \"checked\");\n      }\n      else{\n        $(this).removeAttr(\"checked\");\n      }\n    });\n  }\n}\n\nfunction selectIndividual(object){\n  var all = $(object).closest('div').prev().find('input[type=checkbox]');\n  if( $(all).attr('checked') == 'checked' ){\n    $(all).removeAttr('checked');\n  }\n}\n\n// Gets selected items from container\nfunction getSelected(object){\n  var boxes = $(object).closest('div.box').find('div.results').find('td.select input[type=checkbox]');\n  var list = \"\";\n\n  $(boxes).each(function(){\n    if($(this).attr('checked') == 'checked'){\n      list += \"&list[]=\" + $(this).data('id');\n    }\n  });\n  return list;\n}\n\n\nfunction stuff(hud_line_id) {\n  $.ajaxq(\"stuff\",{\n    url: \"/hud_lines/\" + hud_line_id + \"/view_check\",\n    type: \"post\"\n  });\n}\n\nfunction displayCompanyList(){\n  var options = document.getElementById(\"company_options\");\n  options.className = options.className.replace(\"hidden\", \"\");\n  options.className = \"visible\";\n}\n\nfunction hideCompanyList(){\n  var options = document.getElementById(\"company_options\");\n  options.className = options.className.replace(\"visible\", \"\");\n  options.className = \"hidden\";\n}\n\nfunction changeMe(id, type, value){\n  var inside = \"\";\n  \n  if (type == 'text'){\n    inside =  \"<input type='text' value='\" + value + \"' onblur='changeBack(\" + '\"' + id +  '\"' + \", \" + '\"' +  type  + '\"' + \" )' />\"; \n  }\n  \n  document.getElementById(id).innerHTML = inside;\n}\n\nfunction changeBack(id, type){  \n  var value = document.getElementById(id).value;\n  \n  documen.getElementById(id).innerHTML = \"<p onclick='changeMe('\" + id + \"', '\" + type + \"', '\" + value + \"')'>\" + value + \"</p>\";\n}\n\n// These functions fix the width of the header of a scrollable table when scroll is visible or not\n// Use an id that ends with \"_last\" on the last column of the header to resize it.\nfunction addWidth(box, width){\n  var id = box + '_last';\n  var current = document.getElementById(id).style.width.replace(\"px\", \"\") ;\n  \n  if(current <= width){\n    width += 16;\n    newWidth = width + 'px';\n    document.getElementById(id).style.width = newWidth;\n  }\n}\n\nfunction fixWidth(box, width){\n  var id = box + '_last';\n  var current = document.getElementById(id).offsetWidth;\n  \n  if(current > width){\n    newWidth = width + 'px';\n    document.getElementById(id).style.width = newWidth;\n  }\n}\n\nfunction fixLoadingHeight(left, right){\n  var overviewLeft = document.getElementById(left).offsetHeight;\n  var overviewRight = document.getElementById(right).offsetHeight;\n  \n  if(overviewLeft >= overviewRight){\n    document.getElementById(\"loading_cover\").style.height = overviewLeft + \"px\";\n  }\n  else{\n    document.getElementById(\"loading_cover\").style.height = overviewRight + \"px\";\n  }\n}\n\nfunction showHint(id){\n  document.getElementById(id).getElementsByTagName(\"span\")[0].style.display = \"\";\n}\n\nfunction hideHint(id){\n  document.getElementById(id).getElementsByTagName(\"span\")[0].style.display = \"none\";\n}\n\n//Overlay Script\n\nfunction openOverlay(view){\n  var id = \"#overlay_\" + view;\n  var win = $(window).width();\n  var overlay = $(id).innerWidth();\n  var position = (win - overlay)/2;\n  //document.getElementById(id).style.display = \"block\";    \n  $(id).attr(\"style\", \"display: block; left:\" + position + \"px !important;\");\n\n  initializer();\n}\n\nfunction closeOverlay(view){\n  view = view.replace(\"overlay_\", \"\");\n  var id = \"#overlay_\" + view;\n  //document.getElementById(id).removeAttribute(\"style\");\n  $(id).hide();\n  $(id).html(\"\");\n  //document.getElementById(id).innerHTML = \"\";\n}\n\n//$(\"img[rel]\").overlay();\n\n// function close_fancybox_index(id) {\n//   parent.$.fancybox.close();\n//   parent.reload_partials_index(id);\n// }\n\nfunction close_fancybox_rolodex(id) {\n  parent.$.fancybox.close();\n  parent.reload_partials_rolodex(id);\n}\n\n$(document).ready(function() {\n  $(\".fancybox_file_employees\").fancybox({\n    'type':'iframe',\n    'padding':0,\n    'width':503,\n    'height':540,\n    beforeShow: function() {\n      $(\"body\").css({'overflow':'hidden'});\n    },\n    afterClose: function() {\n      $(\"body\").css({\"overflow\":\"visible\"});\n    },\n    closeBtn: false,\n    closeClick: false,\n    helpers : {\n      overlay : {\n        closeClick: false,\n        opacity: 0.3\n      }\n    }\n  });\n});\n\n// Optimize I'm sure there's a way to dry this up...\nfunction fixNumber(input){\n  var str = input.value;\n  str = str.replace(/[A-Za-z$-]/g, '');\n  input.value = str;\n}\n\nfunction fixNumberOnly(input){\n  var str = input.value;\n  str = str.replace(/[^0-9]/g, '');\n  input.value = str;\n}\n\nfunction updatePrimary(input){\n  $(input).closest('table').find('input.primary').each(function(){\n    $(this).removeAttr('checked');\n  });\n  $(input).attr('checked', 'checked');\n}\n\nfunction updateAffiliations(type){\n  var from = type;\n  var to = document.getElementById('entity_IndCorp').value;\n  var affiliations = \"\";\n  \n  if(from == \"Individual\" && to == \"Individual\"){\n    affiliations = [\n    \"Brother\",\n    \"Daughter\",\n    \"Father\",\n    \"Granddaughter\",\n    \"Grandfather\",\n    \"Grandmother\",\n    \"Grandson\",\n    \"Significant Other (Partner)\",\n    \"Mother\",\n    \"Son\",\n    \"Spouse\",\n    \"Employer\",\n    \"Employee\",\n    \"Partner\",\n    \"Attorney\",\n    \"Assistant\",\n    \"Accountant\",\n    \"Friend\"\n    ];\n  }\n  else if(from != \"Individual\" && to == \"Individual\"){\n    affiliations = [\n    \"Employer\",\n    \"Lender\",\n    \"HOA\",\n    \"Trust\"\n    ];\n  }\n  else if(from == \"Individual\" && to != \"Individual\"){\n    affiliations = [\n    \"Manager\",\n    \"Trustee\",\n    \"President\",\n    \"Employee\",\n    \"HOA Handler\",\n    \"Realtor\",\n    \"Owner\",\n    \"Director\",\n    \"Broker\",\n    \"Loan Officer\",\n    \"Attorney\",\n    \"Member\",\n    \"Treasurer\",\n    \"Vice President\",\n    \"Branch Manager\",\n    \"Developer\",\n    \"Accountant\"\n    ];\n  }\n  else{\n    affiliations = [\n    \"AKA\",\n    \"DBA\",\n    \"Lender\",\n    \"Underwriter\"\n    ];\n  }\n  \n  return affiliations;\n}\n\n$(function(){\n  $.extend($.fn.disableTextSelect = function() {\n      return this.each(function(){\n          if($.browser.mozilla){ //Firefox\n              $(this).css('MozUserSelect','none');\n          } else if ($.browser.msie){ //IE\n              $(this).bind('selectstart',function(){return false;});\n          } else { //Opera, etc.\n              $(this).mousedown(function(){return false;});\n          }\n      });\n  });\n  $('.noSelect').disableTextSelect(); // No text selection on elements with a class of 'noSelect'\n});\n",
+			"file": "/home/donavan/code/rails/atom_current/app/assets/javascripts/application.js",
+			"file_size": 10190,
+			"file_write_time": 130111164527545852,
+			"settings":
+			{
+				"buffer_size": 10200,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/donavan/code/rails/atom_current/spec/spec_helper.rb",
+			"settings":
+			{
+				"buffer_size": 1485,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/donavan/code/rails/atom_current/spec/requests/user_login_spec.rb",
+			"settings":
+			{
+				"buffer_size": 761,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application_controller.rb",
+			"settings":
+			{
+				"buffer_size": 4112,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Ruby/Ruby.sublime-build",
+	"command_palette":
+	{
+		"height": 79.0,
+		"selected_items":
+		[
+			[
+				"insall",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"gitbr",
+				"Git: Change Branch"
+			],
+			[
+				"git bra",
+				"Git: Change Branch"
+			],
+			[
+				"gitadd",
+				"Git: Add..."
+			],
+			[
+				"gitlo",
+				"Git: Log Current File"
+			],
+			[
+				"gitlog",
+				"Git: Log All"
+			],
+			[
+				"gitstat",
+				"Git: Status"
+			],
+			[
+				"gitnew",
+				"Git: New Tag"
+			],
+			[
+				"gitbra",
+				"Git: Change Branch"
+			],
+			[
+				"gitdel",
+				"Git: Delete Branch"
+			],
+			[
+				"gitdele",
+				"Git: Delete Branch"
+			],
+			[
+				"gitnewbranch",
+				"Git: New Branch"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"Snippet: ",
+				"Snippet: Lorem ipsum"
+			],
+			[
+				":w",
+				":w - Save"
+			],
+			[
+				"requ",
+				"Snippet: require \"..\""
+			],
+			[
+				":q",
+				"Snippet: require \"..\""
+			],
+			[
+				":n",
+				"Snippet: task :task_name => [:dependent, :tasks] do .. end"
+			],
+			[
+				":",
+				":w - Save"
+			]
+		],
+		"width": 579.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib2,os; pf='Package Control.sublime-package'; ipp=sublime.installed_packages_path(); os.makedirs(ipp) if not os.path.exists(ipp) else None; urllib2.install_opener(urllib2.build_opener(urllib2.ProxyHandler())); open(os.path.join(ipp,pf),'wb').write(urllib2.urlopen('http://sublime.wbond.net/'+pf.replace(' ','%20')).read()); print('Please restart Sublime Text to finish installation')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+	],
+	"find":
+	{
+		"height": 37.0
+	},
+	"find_in_files":
+	{
+		"height": 95.0,
+		"where_history":
+		[
+			"/home/donavan/code/rails/filetrak/app",
+			"/home/donavan/code/rails/filetrak",
+			"/home/donavan/code/rails/filetrak/app/views",
+			"/home/donavan/code/rails/filetrak/app/views/calc",
+			"/home/donavan/code/rails/filetrak",
+			"/home/donavan/code/rails/filetrak/app/models",
+			"/home/donavan/code/gems/mina",
+			"/home/donavan/code/gems/mina/lib/mina",
+			"/home/donavan/code/rails/atom/app/models",
+			"/home/donavan/code/gems/inploy",
+			"/home/donavan/code/gems/rails",
+			"/home/donavan/projects/rails-apps/atom/db/migrate",
+			"/home/donavan/projects/rails-apps/rate-calculator/app/views",
+			"/home/donavan/projects/rails-apps/atom/app",
+			"/home/donavan/projects/rails-apps/atom/app/assets/stylesheets",
+			"/home/donavan/projects/rails-apps/atom/app",
+			"/home/donavan/projects/rails-apps/atom/app/views",
+			"/home/donavan/projects/rails-apps/atom/app",
+			"/home/donavan/projects/rails-apps/atom/app/views",
+			"/home/donavan/projects/rails-apps/atom/app/views/docs",
+			"/home/donavan/projects/rails-apps/atom/app/views/*",
+			"/home/donavan/projects/rails-apps/gems/tinymce-rails/vendor/assets/javascripts/tinymce/themes",
+			"/home/donavan/projects/rails-apps/atom/app/views/index/templates"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"policy_endorsement_amount",
+			"policy_endorsements_total",
+			"@table",
+			"table",
+			".table",
+			"@table",
+			"discount",
+			"policy_endorsement_amount",
+			"endorsement_premium",
+			"def endorsement_premium",
+			"endorsement_premium",
+			"endorsements_list",
+			"endorsements",
+			"Create",
+			"def setup",
+			"def deploy",
+			"def init",
+			"include",
+			"\n  ",
+			"ModelLock",
+			"model_lock",
+			"update_code",
+			"log",
+			"Record",
+			"Recorded",
+			";\n",
+			"categoriddes",
+			"categories",
+			"titleize",
+			"resolve",
+			"resolver",
+			"def establish_connection",
+			"database_configuration",
+			"database.yml",
+			"random_string",
+			"random_string + \".pdf\"",
+			"@style",
+			"nothing",
+			"{{",
+			"tag",
+			"4001",
+			"ss_commission",
+			"HEAD",
+			"3099",
+			"3096",
+			"3099",
+			"3096",
+			"line_3096_charges",
+			"line",
+			"builder",
+			"render",
+			"@commission_total_line",
+			"alert",
+			"l_descript",
+			"dmr",
+			"HEAD",
+			"alert",
+			"line_302",
+			"replace",
+			"description",
+			"<<<<<<< HEAD",
+			"1103",
+			".abs",
+			"1201",
+			"l_descript",
+			"amount description",
+			"l_amount",
+			"901\n",
+			"number",
+			"key code",
+			"ondbl",
+			"ss_commission",
+			"ss_proration_date",
+			"l_descriptive",
+			"'ENGINE=MyISAM DEFAULT'",
+			"ENGINE=MyISAM",
+			"create_table",
+			"(create_table.*)(?<!'ENGINE=MyISAM DEFAULT')(?<!'ENGINE=MyISAM DEFAULT CHARSET=latin1') do \\|t\\|",
+			"(create_table.*)(?<!'ENGINE=MyISAM DEFAULT'|'ENGINE=MyISAM DEFAULT CHARSET=latin1') do \\|t\\|",
+			"(create_table.*)(?<!'ENGINE=MyISAM DEFAULT') do \\|t\\|",
+			"create_table (.+) do \\|t\\|",
+			"create_table do ",
+			"  def change\n    create_table",
+			"def change\n  create_table",
+			", :options => 'ENGINE=MyISAM DEFAULT CHARSET=latin1' do |t|",
+			"HEAD",
+			":style =>",
+			", builder.borrower_amount,",
+			",  :id =>",
+			", builder.seller_amount,",
+			"  :",
+			"seller_amount, builder.seller_amount,  ",
+			", builder.seller_amount,",
+			"builder.seller_amount",
+			".seller_amount",
+			"builder",
+			"HEAD",
+			"check_borrower",
+			"borrower",
+			"location_select",
+			"location",
+			"checkbox",
+			"total_payment_amount",
+			"2100",
+			":amount, builder.amount",
+			"builder.amount",
+			"builder. ",
+			"l_payee_amount",
+			":amount, number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), ",
+			"l_amount",
+			"number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'),",
+			"builder.amount",
+			"builder.periodic_amount",
+			"function",
+			"updateLine('#{builder.number}',",
+			"updateLine('#{builder.number",
+			"@{builder.number}",
+			"    $(\"#",
+			"$(\"#hud_total\").val(\"<%= number_with_precision(@hud.hud_lines.where(:number => 2002).first.hud_amount, precision: 2, separator: \".\", delimiter: \",\") %>\");",
+			"number_with_precision(builder.borrower_amount, precision: 2, separator: ',', delimiter: '.')",
+			"builder.borrower_amount",
+			", builder.borrower_amount",
+			", borrower_amount",
+			"number_with_precision(builder.amount, precision: 2, delimiter: '.', separator: ',')",
+			"number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: ',')",
+			", builder.amount",
+			", builder.mortgage_amount",
+			", builder.deed_amount"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			", :options => 'ENGINE=MyISAM DEFAULT CHARSET=latin1' do |t|",
+			"style:",
+			", number_with_precision(builder.borrower_amount, precision: 2, delimeter: ',', separator: '.'),",
+			", id:",
+			", number_with_precision(builder.seller_amount, precision: 2, delimeter: ',', separator: '.'),",
+			"builder.",
+			"number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.'), id: \"#{builder.number}_amount\",",
+			"updateLine(",
+			"$(\"#hud_total\").val(\"<%= number_with_precision(@hud.hud_total, precision: 2, separator: \".\", delimiter: \",\") %>\");",
+			"number_with_precision(builder.borrower_amount, precision: 2, delimiter: ',', separator: '.')",
+			"number_with_precision(builder.amount, precision: 2, delimiter: ',', separator: '.')",
+			", precision: 2, delimeter: ',', separator: '.')",
+			"<%= @hud_line.number %>",
+			"line_num",
+			"updateLine('#{builder.id}','#{@hud.id}','name',this.value);",
+			"updateLine('#{builder.id}','#{@hud.id}','amount',this.value);",
+			"builder.deed_amount, id: \"#{builder.number}_deed_amount\",",
+			"builder.mortgage_amount, id: \"#{builder.number}_mortgage_amount\",",
+			":amount, builder.amount, id: \"#{builder.number}_amount\",",
+			":amount, builder.amount, id: \"#{builder.number}_amount\"",
+			"style:",
+			", id:",
+			"id:",
+			"<% type = builder.type.gsub(\"_custom\", \"\") rescue \"\" %>\n<% case type %>\n<% when \"l_header\"%>\n<%# Header %>\n<td class=\"local_header label\" colspan=\"5\">\n    <%=  label :number,  builder.number %>. \n    <%=  label :name, builder.name %>\n  </td>\n\n<% when \"l_main_header\" %>\n<%# Main Header %>\n<td class=\"local_header label\">\n    <%=  label :number,  builder.number %>. \n    <%=  builder.name %>\n  </td>\n  <% if  builder.number == 700 %>\n    <td  rowspan=\"4\" style=\"text-align:center;\" class=\"line_total local_header\">Paid From Borrower\"s Funds at Settlement</td>\n    <td  rowspan=\"4\" style=\"text-align:center;\" class=\"line_total local_header\">Paid From Seller\"s Funds at Settlement</td>\n  </tr>\n  <tr>\n    <td style=\"padding-left:33px;\" class=\"description\">\n      Division of commission (line 700) as follows:\n      <!--<br /> on price -->\n      <!--<%#= text_field_tag \"700_price\", nil, :style => \"text-align:center;\" %> @ <%#= text_field_tag \"700_percent\", nil, :style => \"text-align:right;\" %>% \n      = $<%#= text_field_tag \"700_total\", nil, :readonly => true %>-->\n    </td>\n  </tr>\n  <% end %>\n<% when \"l_main_payee\" %>\n<%# Main Payee %>\n  <td class=\"description\"><%=  label :number,  builder.number %>. \n    $<%=  text_field_tag :amount, builder.amount, class: \"amount\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %> to <%=  text_field_tag :payee_name, builder.payee_name, class: \"name\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','payee_name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.payee_name}'); $(this).blur(); }\" %>\n</td>\n\n<%# Payee %>\n<% when \"l_payee\" %>\n  <td colspan=\"2\" class=\"payee_name description\"><%=  label :number,  builder.number %>. \n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    <%=  text_field_tag :payee_name, builder.payee_name %>\n  </td>\n  <td class=\"gfe description\">\n    <%=  label :description,  builder.description %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount, :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount, :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Payee Amount %>\n<% when \"l_payee_amount\" %>\n  \n    <% if  builder.number == 801 %>\n    <td class=\"description name\"><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name,this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    </td>\n    <td class=\"amount description\">\n      <%= label_tag \"$\", nil %><%=  text_field_tag :amount, builder.amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %>\n    </td>\n    <td class=\"gfe description\">\n      <%=  label :description,  builder.description, :style => \"float:right;\" %>\n    <% elsif  builder.number == 1102 %>\n    <td class=\"description\"><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    </td>\n    <td colspan=\"2\" class=\"description\">\n      <%=  text_field_tag :amount, builder. amount, :style => \" float:right;\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %><%= label_tag \"$\", nil, :style => \"float:right;\" %>\n    <% else %>\n    <td><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    <% end %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Amount %>\n<% when \"l_amount\" %>\n  \n    <% if  builder.number == 1104 ||  builder.number == 1302 ||  builder.number == 1303 %>\n    <td class=\"description\"><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n  </td>\n  <td colspan=\"2\" class=\"description\">\n    <% else %>\n    <td class=\"description\"><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    </td>\n    <td colspan=\"2\" class=\"description\">\n      <%=  text_field_tag :amount, builder. amount, :style => \" float:right;\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %><%= label_tag \"$\", nil, :style => \"float:right;\" %>\n    <% end %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Amount Desc %>\n<% when \"l_amount_desc\" %>\n    <% if  builder.number == 802 %> \n    <td class=\"description name\"><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    </td>\n    <td class=\"amount description\">\n      <%= label_tag \"$\", nil %><%=  text_field_tag :amount, builder.amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %>\n    </td>\n    <td class=\"description\">\n      <%=  label :description,  builder.description, :style => \"float:right;\" %> \n    <% elsif  builder.number == 1107 ||  builder.number == 1108 %>\n    <td colspan=\"3\" class=\"description\"><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n      <%=  text_field_tag :amount, builder. amount, :style => \" float:right;\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %><%= label_tag \"$\", nil, :style => \"float:right;\" %>\n    <% else %>\n    <td class=\"description\"><%=  label :number,  builder.number %>. \n      <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    <% end %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Descriptive %>\n<% when \"l_descriptive\" %>\n  <td colspan=\"3\" class=\"description\">\n    <%=  label :number,  builder.number %>. \n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %><%=  label :description,  builder.description, :style => \"float:right;\" %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Daily Int %>\n<% when \"l_daily_int\" %>\n  <td colspan=\"2\" class=\"daily_int description\"><%=  label :number,  builder.number %>. \n    <%#= builder.type.include?(\"custom\") ? text_field_tag(:name, builder.name) : builder.name %>\n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n\n    <% date = builder.start_date.to_s.split(\"-\") if builder.start_date != nil %>\n    <% date = \"#{date[1]}/#{date[2]}/#{date[0]}\" if builder.start_date != nil %>\n    <%=  text_field_tag :start_date, date, :style => \"text-align:center;\", :id => \"start_date_#{builder.number}\", class: \"date_short\", onchange: \"validateDate(this); updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','start_date',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{date}'); $(this).blur(); }\" %> to \n\n    <% date = builder.end_date.to_s.split(\"-\") if builder.end_date != nil %>\n    <% date = \"#{date[1]}/#{date[2]}/#{date[0]}\" if builder.end_date != nil %>\n    <%=  text_field_tag :end_date, date, :style => \"text-align:center;\", :id => \"end_date_#{builder.number}\", class: \"date_short\", onchange: \"validateDate(this); updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','end_date',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{date}'); $(this).blur(); }\" %> @ $\n    <%=  text_field_tag :amount, builder.amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %> /day\n\n    <script type=\"text/javascript\">\n      $( \"input#start_date_<%= builder.number %>\").datepicker({\n        minDate: 0,\n        changeMonth: true,\n        changeYear: true\n      });\n\n      $( \"input#end_date_<%= builder.number %>\").datepicker({\n        minDate: 0,\n        changeMonth: true,\n        changeYear: true\n      });\n    </script>\n  </td>\n  <td class=\"gfe description\">\n    <%=  label :description,  builder.description %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Mort Ins %>\n<% when \"l_mort_ins\" %>\n  <td colspan=\"2\" class=\"description\"><%=  label :number,  builder.number %>. \n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    <%=  text_field_tag :periods, builder.periods, :style => \"text-align:right;\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','periods',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.periods}'); $(this).blur(); }\" %> months to <%=  text_field_tag :payee_name, builder.payee_name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','payee_name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.payee_name}'); $(this).blur(); }\" %>\n  </td>\n  <td class=\"gfe description\">\n    <%=  label :description,  builder.description %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Home Ins %>\n<% when \"l_home_ins\" %>\n  <td colspan=\"2\" class=\"description\"><%=  label :number,  builder.number %>.\n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    <%=  text_field_tag :periods, builder.periods, :style => \"text-align:right;\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','periods',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.periods}'); $(this).blur(); }\" %> years to \n    <%=  text_field_tag :payee_name, builder.payee_name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','payee_name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.payee_name}'); $(this).blur(); }\" %>\n  </td>\n  <td class=\"gfe description\">\n    <%=  label :description,  builder.description %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Periodic %>\n<% when \"l_periodic\" %>\n  <td class=\"periodic_label description\"><%=  label :number,  builder.number %>.\n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n  </td>\n  <td colspan=\"2\" class=\"periodic_amount description\"><%=  text_field_tag :periods, builder.periods, id: ,style: \"text-align:right;\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','periods',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.periods}'); $(this).blur(); }\" %> months @ $\n    <%=  text_field_tag :periodic_amount, builder.periodic_amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','periodic_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.periodic_amount}'); $(this).blur(); }\" %>per month $<%=  text_field_tag :amount, builder.amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# DMR %>\n<% when \"l_dmr\" %>\n  <td colspan=\"3\" class=\"description\">\n    <%=  label :number,  builder.number %>.\n    Deed $<%=  text_field_tag :deed_amount, builder.deed_amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','deed_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.deed_amount}'); $(this).blur(); }\" %> Mortgage $\n    <%=  text_field_tag :mortgage_amount, builder.mortgage_amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','mortgage_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.mortgage_amount}'); $(this).blur(); }\" %> Release $<%=  text_field_tag :releases_amount, builder.releases_amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','releases_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.releases_amount}'); $(this).blur(); }\" %>\n  </td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# DM %>\n<% when \"l_dm\" %>\n  <td colspan=\"2\" class=\"description\"><%=  label :number,  builder.number %>.\n    <%#= builder.type.include?(\"custom\") ? text_field_tag(:name, builder.name) : builder.name %>\n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n  </td>\n  <td class=\"description\">Deed $<%=  text_field_tag :deed_amount, builder.deed_amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','deed_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.deed_amount}'); $(this).blur(); }\" %>\n    Mortgage $<%=  text_field_tag :mortgage_amount, builder.mortgage_amount, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','mortgage_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.mortgage_amount}'); $(this).blur(); }\" %>\n  </td>\n<td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n<td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# Inverse %>\n<% when \"l_inverse\" %>\n  <td colspan=\"3\" class=\"description\"><%=  label :number,  builder.number %>.\n    <%#= builder.type.include?(\"custom\") ? text_field_tag(:name, builder.name) : builder.name %>\n    <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %>\n    <%=  text_field_tag :amount, builder.amount, :style => \"float:right;\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.amount}'); $(this).blur(); }\" %><%= label_tag \"-$\", nil, :style => \"float:right\" %>\n  </td>\n  <td  class=\"line_total\"> <%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<%# L Footer %>\n<% when \"l_footer\" %>\n  <td class=\"header\">\n    <h1><%=  label :number,  builder.number %>.\n    <%=  label :name, builder.name,  builder.name %></h1>\n  </td>\n  <td class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n\n<% when \"l_normal\" %>\n  <td class=\"description\"><%=  label :number,  builder.number %>. <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n<% else %>\n<% if builder.number < 800 %>\n  <td class=\"description\"><%=  label :number,  builder.number %>. <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n  <% else %>\n  <td colspan=\"3\" class=\"description\"><%=  label :number,  builder.number %>. <%= text_field_tag :name, builder.name, onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','name',this.value);\", onkeydown: \"if(event.keyCode == 27){$(this).val('#{builder.name}'); $(this).blur(); }\", remote: true %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :borrower_amount, builder.borrower_amount,  :id => \"line_#{ builder.number}_buyer\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','borrower_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.borrower_amount}'); $(this).blur(); }\" %></td>\n  <td  class=\"line_total\"><%=  text_field_tag :seller_amount, builder.seller_amount,  :id => \"line_#{ builder.number}_seller\", onchange: \"updateLine('#{builder.number}','#{builder.id}','#{@hud.id}','seller_amount',this.value);\", onkeydown: \"numbersOnly(event); if(event.keyCode == 27){$(this).val('#{builder.seller_amount}'); $(this).blur(); }\" %></td>\n  <% end %>\n<% end %>",
+			"/assets",
+			"assets",
+			"",
+			"}}",
+			"{{",
+			"atom",
+			"AtomTheme"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/donavan/code/rails/atom_current/app/assets/javascripts/application.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10200,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1545,
+								1545
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 234.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/donavan/code/rails/atom_current/spec/spec_helper.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1485,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/donavan/code/rails/atom_current/spec/requests/user_login_spec.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 761,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "application_controller.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4112,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1313.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 114.0
+	},
+	"output.git":
+	{
+		"height": 159.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 150.0
+	},
+	"project": "atom_current.sublime-project",
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"create_doc_group",
+				"atom/db/migrate/20110315000907_create_doc_groups.rb"
+			],
+			[
+				"routes",
+				"atom/config/routes.rb"
+			],
+			[
+				"databas",
+				"atom/config/database.yml"
+			],
+			[
+				"database.y",
+				"atom/config/database.yml"
+			],
+			[
+				"users_co",
+				"atom/app/controllers/users_controller.rb"
+			],
+			[
+				"config/data",
+				"atom/config/database.yml"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"~/sublime_projects/code.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 335.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

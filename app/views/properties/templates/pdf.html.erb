@@ -1,0 +1,255 @@
+<div id="header">
+
+  <% if company.sutc? || company.terra? || company.mesquite? %>
+    <div id="logo">
+      <% if company.sutc? %>
+        <%= image_tag "file://#{PropertyLookupModule::Engine.root.join('app','assets','images','property_lookup_module','sutc.png')}", alt: "Logo" %>
+      <% elsif company.terra? %>
+        <%= image_tag "file://#{PropertyLookupModule::Engine.root.join('app','assets','images','property_lookup_module','terra.png')}", alt: "Logo" %>
+      <% elsif company.mesquite? %>
+        <%= image_tag "file://#{PropertyLookupModule::Engine.root.join('app','assets','images','property_lookup_module','mesquite.png')}", alt: "Logo" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div id="title">
+    <h2><u>Property Profile Report</u></h2>
+    <h3>TaxID: <%= property.assessment.serialnum %><br />
+    Property Address: <%= property.assessment.SitusAddress %></h3>
+    <h6>Please call <%= company.CompanyPhone %> with any questions concerning this information.</h6>
+  </div>
+</div>
+
+<hr />
+
+<div id="content">
+  <div id="left_col">
+    <table>
+      <tr>
+        <td class="header">
+          Property Address:
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= property.assessment.SitusAddress %>
+        </td>
+      </tr>
+      <tr>
+        <td class="header">
+          County Area:
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= property.area.AreaName unless property.area.nil? %>
+        </td>
+      </tr>
+      <tr>
+        <td class="header">
+          Improvement Information:
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td>
+          Year Build:
+        </td>
+        <td>
+          <%= property.information.yearbuilt %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Improvements:
+        </td>
+        <td>
+          <%= number_to_currency(property.assessment.MarketValueImprovements) %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Living Area:
+        </td>
+        <td>
+          <%= property.information.LivingArea %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Garage Area:
+        </td>
+        <td>
+          <%= property.information.GarageArea %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Carport Area:
+        </td>
+        <td>
+          <%= property.information.CarportArea %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Basement Area:
+        </td>
+        <td>
+          <%= property.information.BasementArea %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Rooms:
+        </td>
+        <td>
+          <%= property.information.Rooms %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Bedrooms:
+        </td>
+        <td>
+          <%= property.information.BedRooms %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Bathrooms:
+        </td>
+        <td>
+          <%= property.information.NumFullBaths %>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="middle_col">
+    <table>
+      <tr>
+        <td class="header">
+          Mailing Information:
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= property.assessment.OwnerName %><br />
+          <%= property.assessment.Address1 %><br />
+          <%= property.assessment.City %> <%= property.assessment.State %>, <%= property.assessment.ZipCode %>
+        </td>
+      </tr>
+      <tr>
+        <td class="header">
+          Land Information:
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td>
+          Acres:
+        </td>
+        <td>
+          <%= property.assessment.Acres %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Land Assessed:
+        </td>
+        <td>
+          <%= number_to_currency(property.assessment.MarketValueLand) %>
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td class="header">
+          Tax Information:
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td>
+          Tax Serial Number:
+        </td>
+        <td>
+          <%= property.assessment.serialnum %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Account Number:
+        </td>
+        <td>
+          <%= property.accountnum %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          2012 Est. Taxes:
+        </td>
+        <td>
+          <%= number_to_currency(property.assessment.EstimatedTaxes) %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Collection Balance:
+        </td>
+        <td>
+          <%= number_to_currency(property.assessment.CollectionBalanceDue) %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total Assessed:
+        </td>
+        <td>
+          <%= number_to_currency(property.assessment.TotalValuation) %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Vesting Entry:
+        </td>
+        <td>
+          <%= property.assessment.VestingEntryNum %>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="right_col">
+    <%= image_tag "file:///mnt/f-drive/images/taxid/" + property.assessment.serialnum.split("-").first.downcase + "/" + property.assessment.serialnum + ".TIF", width: "75%", alt: "No Plat Available", class: "plat" %>
+  </div>
+</div>
+<table style="clear: both;">
+  <tr>
+    <td class="header">
+      Legal Description:
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <%= property.FullLegal %>
+    </td>
+  </tr>
+</table>
+<hr />
+
+<div id="images">
+  <% photo = property.images.where("ImageType = 'Photo' AND IsDefault = -1").first %>
+  <% if photo != nil %>
+    <%= image_tag "file://" + DriveMap.posix(photo.BaseDir) + "/" + photo.FileName, width: "46%", class: "photo", alt: "No Photo Available" %>
+  <% end %>
+
+  <% sketch = property.images.where("ImageType = 'Sketch'").first %>
+  <% if sketch != nil %>
+    <%= image_tag "file://" + DriveMap.posix(sketch.BaseDir) + "/" + sketch.FileName, width: "46%", class: "sketch", alt: "No Sketch Available" %>
+  <% end %>
+</div>

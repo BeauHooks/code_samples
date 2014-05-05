@@ -1,0 +1,78 @@
+<div class="box_header">
+  <p class="title">My Favorites</p>
+</div>
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div class="dash_results">
+    <table class="sortable">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="name"><div>Name</div></th>
+          <th class="affiliation"><div>Affiliation</div></th>
+          <th class="phone"><div>Phone</div></th>
+          <th class="email"><div>Email</div></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% if @favorites.size == 0 %>
+        <tr><td colspan="4" class="no_result">No results</td></tr>
+      <% else %>
+        <% if @favorites.size == 0 %>
+        <% else %>
+          <% @favorites.each do |entity| %>
+            <tr>
+              <% name = entity.name_last_first %>
+              <% if name.length > 14 %>
+                <td class="name hint"><span><%= link_to name, "rolodex?entity_id=#{entity.EntityID}" %></span><%= link_to truncate(name, length: 14), "rolodex?entity_id=#{entity.EntityID}"  %></td>
+              <% else %>
+                <td class="name"><%= link_to name, "rolodex?entity_id=#{entity.EntityID}" %></td>
+              <% end %>
+
+              <% name = entity.primary_affiliation_name.to_s %>
+              <% id = entity.primary_affiliation_id.to_s %>
+              <% if name.length > 14 %>
+                <td class="affiliation hint"><span><%= link_to name, "rolodex?entity_id=#{id}" %></span><%= link_to truncate(name, length: 14), "rolodex?entity_id=#{id}"  %></td>
+              <% else %>
+                <td class="affiliation"><%= link_to name, "rolodex?entity_id=#{id}" %></td>
+              <% end %>
+
+              <% phone = entity.primary_phone_number.to_s %>
+              <% tel_phone = phone.gsub("Cell:", "").gsub("Home:", "").gsub("Office:", "") %>
+              <% if phone.length > 20 %>
+                <td class="phone hint">
+                  <span><%= link_to phone, "tel:#{tel_phone}" %></span>
+                  <div>
+                    <%= link_to truncate(phone, length: 20), "tel:#{tel_phone}" %>
+                  </div>
+                </td>
+              <% else %>
+                <td class="phone">
+                  <div>
+                    <%= link_to phone, "tel:#{tel_phone}" if tel_phone != "" %>
+                  </div>
+                </td>
+              <% end %>
+
+              <% email = entity.Email.to_s %>
+              <% if email.length > 20 %>
+                <td class="email hint">
+                  <span><%= mail_to email, email %></span>
+                  <div>
+                    <%= link_to truncate(email, length: 20), email %>
+                  </div>
+                </td>
+              <% else %>
+                <td class="email">
+                  <div>
+                    <%= mail_to email, email if email != "" %>
+                  </div>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

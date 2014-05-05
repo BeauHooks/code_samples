@@ -1,0 +1,6 @@
+<h2 style="margin-bottom: 10px; float: left;">Requirements</h2>
+<p style="float: right;"><%= link_to "Add Requirement", new_fp_requirement_path(file_product_id: @file_product.id), remote: true %></p>
+<p style="clear: both;"></p>
+<% @file_product.fp_requirements.each do |requirement| %>
+	<%= render "fp_requirements/show", requirement: requirement, view: "index" %>
+<% end %>

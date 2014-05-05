@@ -1,0 +1,390 @@
+<% transaction_type = @file.TransactionDescription1 %>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <style>
+    	*{
+    		margin: 0px;
+    		color: #222;
+    		font-family: sans-serif;
+    	}
+
+    	table{
+    		width: 100%;
+    		border-collapse: collapse;
+    		margin-bottom: 5px;
+    	}
+
+    	p, td, .header{
+    		font-size: 10pt !important;
+    	}
+
+    	td{
+    		vertical-align: top;
+    	}
+
+    	h6{
+    		font-size: 8pt;
+    		font-weight: lighter;
+    		text-align: center;
+    	}
+
+    	#wrapper{
+    		width: 900px;
+    		margin: auto;
+    		padding: 10px 5px;
+    	}
+
+    	.label{
+    		font-weight: bold;
+    	}
+
+    	.section_label{
+    		text-decoration: underline;
+    		font-weight: bold;
+    		font-style: italic;
+    	}
+
+    	.header{
+    		font-weight: bold;
+    		bgcolor: #CCCCCC;
+    		background-color: #CCCCCC;
+    	}
+
+    	.blank{
+    		color: #AAA;
+    		font-style: italic;
+    		padding-left: 5px;
+    	}
+
+    	.border{
+    		border: 1px solid #CCCCCC;
+    	}
+
+    	.border td{
+    		padding: 2px 0px;
+    		border-bottom: 1px solid #CCCCCC;
+    	}
+
+    	.property td{
+    		border-bottom: none;
+    	}
+
+    	.image_container{
+    		float: right;
+    		width: 250px;
+    	}
+
+    	.image_container img{
+    		width: 250px;
+    		border: 1px solid #222;
+    	}
+
+    	table.property{
+    		float: left;
+    		width: 35%;
+    	}
+    </style>
+  </head>
+  <body>
+  	<div id="wrapper">
+	  	<%= "<h6 style='padding: 5px 0px;'>********************  TESTING ONLY  **********************</h6>".html_safe if @testing == true %>
+	  	<table>
+	  		<tr>
+	  			<% if attachments['logo.jpg'] != nil %>
+	  				<td style="vertical-align: bottom; width: 75px;"><%= image_tag attachments['logo.jpg'].url, style: "height: 60px; margin-right: 10px;" -%></td>
+	  			<% end %>
+	    		<td style="vertical-align: bottom;">
+	    			<h1><%= @company.CompanyName %></h1>
+	    			<h2>Title Order Confirmation for File #<%= @file.DisplayFileID %></h2>
+	    		</td>
+	    	</tr>
+	    </table>
+	    <% employee = @file.order_taken_by %>
+	    <p style="clear: both; margin: 10px 0px 10px;"><%= "<span style='font-weight: bold;'>CONFIDENTIAL: You have been given access to view this file.</span> ".html_safe if @file.confidential? %>This information was entered by <%= employee.FullName %> whose email address is <%= employee.Email %> and whose direct phone number is <%= number_to_phone(employee.DirectPhone, area_code: true) %>.</p>
+	    <table>
+	    	<tr>
+	    		<td style="vertical-align: top;">
+	    			<table>
+	    				<tr>
+	    					<td class="label" style="width: 125px;">Transaction Type:</td>
+	    					<td><%= @file.TransactionDescription1 %></td>
+	    				</tr>
+	    				<% if !["Refinance", "Construction Loan"].include?(transaction_type) %>
+		    				<tr>
+		    					<td class="label">Sales Price:</td>
+		    					<td><%= number_to_currency(@file.SalesPrice || 0.0, unit: "$") %></td>
+		    				</tr>
+		    			<% end %>
+		    			<% if transaction_type != "Cash Purchase" %>
+			    			<tr>
+			    				<td class="label"><%= "Loan Amount:" %></td>
+		    					<td><%= number_to_currency(@file.LoanAmount || 0.0, unit: "$") %></td>
+			    			</tr>
+			    			<% if @file.SecondLoan.to_f > 0 %>
+				    			<tr>
+				    				<td class="label"><%= "Second Loan:" %></td>
+			    					<td><%= number_to_currency(@file.SecondLoan || 0.0, unit: "$") %></td>
+				    			</tr>
+				    		<% end %>
+			    		<% end %>
+	    			</table>
+	    		</td>
+	    		<td style="vertical-align: top;">
+	    			<table>
+	    				<% if @file.underwriter != nil %>
+		    				<tr>
+					    		<td class="label" style="width: 200px">Underwriter:</td>
+					    		<td><%= @file.underwriter.Underwriter %></td>
+					    	</tr>
+					    <% end %>
+					    <% if @file.Opened != nil %>
+					    	<tr>
+					    		<td class="label" style="width: 200px">Opened:</td>
+					    		<td><%= @file.Opened.strftime("%m/%d/%Y") %></td>
+					    	</tr>
+					    <% end %>
+					    <% if @file.COEDate != nil %>
+					    	<tr>
+					    		<td class="label" style="width: 200px">Estimated Closing Date:</td>
+	    						<td><%= @file.COEDate.strftime("%m/%d/%Y") %></td>
+					    	</tr>
+					    <% end %>
+	    			</table>
+	    		</td>
+	    	</tr>
+	    </table>
+	    <table class="border">
+	    	<tr>
+	    		<td class="header" style="padding-left: 5px; width: 135px;">Contacts</td>
+	    		<td class="header" style="padding-left: 5px; width: 75px;">Position</td>
+	    		<td class="header" style="padding-left: 5px; width: 95px;">Office</td>
+	    		<td class="header" style="padding-left: 5px; width: 95px">Cell</td>
+	    		<td class="header" style="width: 95px; padding-left: 5px;">Fax Number</td>
+	    		<td class="header" style="padding-left: 5px; width: 135px;">Email</td>
+	    		<td class="header" style="width: 25px; padding-left: 5px;">PR</td>
+	    		<td class="header" style="padding-left: 5px;">Send</td>
+	    	</tr>
+	    	<% file_entities = @file.file_entities %>
+	    	<% if file_entities.size == 0 %>
+	    		<tr>
+	    			<td colspan="8" class="blank" style="padding-left: 5px;">No contacts have been assigned to this file.</td>
+	    		</tr>
+	    	<% else %>
+		    	<% file_entities.each do |e| %>
+		    		<% unless e.entity == nil %>
+				    	<tr>
+				    		<td style="padding-left: 5px;"><%= truncate(e.entity.name, length: 20) %></td>
+				    		<td style="padding-left: 5px;"><%= e.user_type.TypeDescription if e.user_type != nil %></td>
+				    		<td style="padding-left: 5px; white-space: nowrap">
+				    			<% office = e.entity.primary_office %>
+				    			<%= office.Contact if office != nil %>
+				    		</td>
+				    		<td style="padding-left: 5px; white-space: nowrap">
+				    			<% cell = e.entity.primary_cell %>
+				    			<%= cell.Contact if cell != nil %>
+				    		</td>
+				    		<td style="padding-left: 5px;">
+				    			<% fax = e.entity.primary_fax %>
+				    			<%= fax.Contact if fax != nil %>
+				    		</td>
+				    		<td style="padding-left: 5px;">
+				    			<% email = e.entity.Email.to_s %>
+				    			<%= truncate(email, length: 20) if email != nil %>
+				    		</td>
+				    		<td style="padding-left: 5px;"><%= check_box_tag :SendPR, e.SendPR, e.SendPR?, disabled: true %></td>
+				    		<td style="padding-left: 5px;"><%= e.entity.SendDocsVia %></td>
+				    	</tr>
+				    <% end %>
+			    <% end %>
+			  <% end %>
+	    </table>
+	   	<table class="border">
+	    	<tr>
+	    		<td class="header" style="padding-left: 5px;">Employee</td>
+	    		<td class="header">Position</td>
+	    		<td class="header">Phone</td>
+	    		<td class="header">Fax Number</td>
+	    		<td class="header">Email</td>
+	    	</tr>
+	    	<% file_employees = @file.file_employees %>
+	    	<% if file_employees.size == 0 %>
+	    		<tr>
+	    			<td colspan="5" class="blank" style="padding-left: 5px;">No employees have been assigned to this file.</td>
+	    		</tr>
+	    	<% else %>
+		    	<% file_employees.each do |e| %>
+		    		<% unless e.employee == nil %>
+				    	<tr>
+				    		<td style="padding-left: 5px;"><%= e.employee.FullName %></td>
+				    		<td><%= e.Position %></td>
+				    		<td><%= number_to_phone(e.employee.DirectPhone, area_code: true) %></td>
+				    		<td><%= number_to_phone(e.employee.DirectFax, area_code: true) %></td>
+				    		<td><%= e.employee.Email %></td>
+				    	</tr>
+				    <% end %>
+			    <% end %>
+			  <% end %>
+	    </table>
+	    <table class="border">
+	    	<tr>
+	    		<td class="header" style="padding-left: 5px;">From</td>
+	    		<td class="header" style="padding-left: 5px;">To</td>
+	    		<td class="header" style="padding-left: 5px;">Remind</td>
+	    		<td class="header" style="padding-left: 5px;">Note</td>
+	    	</tr>
+	    	<% if @notes.size == 0 %>
+	    		<tr>
+	    			<td colspan="4" class="blank" style="padding-left: 5px;">There are no notes for this file.</td>
+	    		</tr>
+	    	<% else %>
+		    	<% @notes.each do |n| %>
+		    		<tr>
+		    			<td style="padding-left: 5px; width: 135px;"><%= n.entered_by.FullName if n.entered_by != nil %></td>
+		    			<td style="width: 135px; padding-left: 5px;"><%= n.tickled_by.FullName if n.tickled_by != nil %></td>
+		    			<td style="width: 150px; padding-left: 5px;"><%= n.TickleDate.strftime("%m/%d/%Y %I:%M %p") if n.TickleDate != nil %></td>
+		    			<td style="padding-left: 5px;"><%= truncate(n.NoteText, length: 70) %></td>
+		    		</tr>
+		    	<% end %>
+		    <% end %>
+	    </table>
+	    <table class="border">
+	    	<tr>
+	    		<td class="header" style="padding-left: 5px;">Property Tax ID</td>
+	    		<td class="header" style="padding-left: 5px; width: 250px;">Address</td>
+	    		<td class="header" style="padding-left: 5px; width: 125px;">City</td>
+	    		<td class="header" style="padding-left: 5px; width: 350px;">Abbreviated Legal</td>
+	    	</tr>
+	    	<% properties = @file.file_properties %>
+	    	<% if properties.size == 0 %>
+	    		<tr>
+	    			<td colspan="4" class="blank" style="padding-left: 5px;">No properties have been assigned to this file.</td>
+	    		</tr>
+	    	<% else %>
+		    	<% properties.each do |p| %>
+		    		<tr>
+		    			<td style="padding-left: 5px;"><%= p.TaxID %></td>
+		    			<td style="padding-left: 5px;"><%= truncate(p.PropertyAddress, length: 40) %></td>
+		    			<td style="padding-left: 5px;"><%= p.City %></td>
+		    			<td style="padding-left: 5px;"><%= truncate(p.LegalDescription, length: 45) %></td>
+		    		</tr>
+		    	<% end %>
+		    <% end %>
+	    </table>
+	    <table class="border">
+	    	<tr>
+	    		<td class="header" style="padding-left: 5px;">The following information is as the properties appear on record at the county recorder's office.</td>
+	    	</tr>
+	    	<% if @county_properties.size == 0 %>
+	    		<tr>
+	    			<td class="blank" style="padding-left: 5px;">No county information found.</td>
+	    		</tr>
+	    	<% else %>
+	    		<% i = 0 %>
+		    	<% @county_properties.each do |p| %>
+		    		<tr>
+		    			<td style="padding: 5px;">
+		    				<table class="property">
+		    					<tr>
+		    						<td class="section_label" colspan="2">Owner Information</td>
+		    					</tr>
+		    					<tr>
+		    						<td style="width: 9em;">Name:</td>
+		    						<td><%= p.OwnerName %></td>
+		    					</tr>
+		    					<tr>
+		    						<td>Address:</td>
+		    						<td>
+		    							<%= "#{p.Address1}#{"<br />#{p.Address2}" if p.Address2.to_s != ""}".html_safe %><br />
+		    							<% csz = p.City %>
+		    							<% csz = ", #{p.State}" if p.State.to_s != "" %>
+		    							<% csz = " #{p.ZipCode}" if p.ZipCode.to_s != "" %>
+		    							<%= csz %>
+		    						</td>
+		    					</tr>
+		    					<tr>
+		    						<td class="section_label" colspan="2" style="padding-top: 5px;">Property Information</td>
+		    					</tr>
+		    					<tr>
+		    						<td>Address:</td>
+		    						<td><%= p.SitusAddress != nil ? p.SitusAddress : "-" %></td>
+		    					</tr>
+		    					<tr>
+		    						<td>County:</td>
+		    						<td>
+		    							<% county = County.find(p.taxroll2.CountyID) if p.taxroll2 != nil %>
+		    							<%= county != nil ? county.CountyName : "-"  %>
+		    						</td>
+		    					</tr>
+		    					<tr>
+		    						<td class="section_label" colspan="2" style="padding-top: 5px;">Tax Information</td>
+		    					</tr>
+		    					<tr>
+		    						<td>Tax Serial Number:</td>
+		    						<td><%= p.serialnum %></td>
+		    					</tr>
+		    					<tr>
+		    						<td>Estimated Taxes:</td>
+		    						<td>
+		    							<%= p.EstimatedTaxes != nil ? number_to_currency(p.EstimatedTaxes, unit: "$") : "-" %>
+		    						</td>
+		    					</tr>
+		    				</table>
+		    				<table class="property" style="margin-left: 2%; width: 33%;">
+		    					<tr>
+		    						<td class="section_label" colspan="2">Land Information</td>
+		    					</tr>
+		    					<tr>
+		    						<td style="width: 11em;">Acres:</td>
+		    						<td><%= p.Acres != nil ? p.Acres : "-" %></td>
+		    					</tr>
+		    					<tr>
+		    						<td class="section_label" colspan="2" style="padding-top: 5px;">Improvements</td>
+		    					</tr>
+		    					<tr>
+		    						<td>Year Built:</td>
+		    						<td><%= p.taxroll3 != nil && p.taxroll3.yearbuilt != nil ? p.taxroll3.yearbuilt : "-" %></td>
+		    					</tr>
+		    					<tr>
+		    						<td>Living Area:</td>
+		    						<td><%= p.taxroll3 != nil && p.taxroll3.LivingArea != nil ? "#{number_with_precision(p.taxroll3.LivingArea || 0, :strip_insignificant_zeros => true, delimiter: ",")} Sq. Ft." : "-" %></td>
+		    					</tr>
+		    					<tr>
+		    						<td>Bedrooms:</td>
+		    						<td><%= p.taxroll3 != nil && p.taxroll3.BedRooms != nil ? p.taxroll3.BedRooms.to_i : "-" %></td>
+		    					</tr><tr>
+		    						<td>Bathrooms (Full/Half):</td>
+		    						<td><%= p.taxroll3 != nil ? "#{p.taxroll3.NumFullBaths != nil ? p.taxroll3.NumFullBaths.to_i : "-"} / #{p.taxroll3.NumHalfBaths != nil ? p.taxroll3.NumHalfBaths.to_i : "-"}" : "- / -" %></td>
+		    					</tr><tr>
+		    						<td>Garage Area:</td>
+		    						<td><%= p.taxroll3 != nil && p.taxroll3.GarageArea != nil ? "#{number_with_precision(p.taxroll3.GarageArea || 0, :strip_insignificant_zeros => true, delimiter: ",")} Sq. Ft." : "-" %></td>
+		    					</tr><tr>
+		    						<td>Carport Area:</td>
+		    						<td><%= p.taxroll3 != nil && p.taxroll3.CarportArea != nil ? "#{number_with_precision(p.taxroll3.CarportArea || 0, :strip_insignificant_zeros => true, delimiter: ",")} Sq. Ft." : "-" %></td>
+		    					</tr><tr>
+		    						<td>Basement Area:</td>
+		    						<td><%= p.taxroll3 != nil && p.taxroll3.BasementArea != nil ? "#{number_with_precision(p.taxroll3.BasementArea || 0, :strip_insignificant_zeros => true, delimiter: ",")} Sq. Ft." : "-" %></td>
+		    					</tr>
+		    				</table>
+		    				<div class="image_container">
+		    					<% if Rails.env == "production" %>
+			    					<%= image_tag attachments[@county_images[i]].url if @county_images[i] != nil && @file.Company.to_i == 101 -%>
+			    					<% i += 1 %>
+			    				<% end %>
+		    				</div>
+		    				<p style="clear: both;">
+		    					<span class="section_label">Abbreviated Legal Description</span><br />
+		    					<%= p.taxroll2 != nil && p.taxroll2.FullLegal.to_s != "" ?  truncate(p.taxroll2.FullLegal, length: 380) : "Legal description not found or left blank." %>
+		    				</p>
+		    			</td>
+		    		</tr>
+		    	<% end %>
+		    <% end %>
+	    </table>
+	    <%= "<h6 style='padding: 5px 0px;'>********************  TESTING ONLY  **********************</h6>".html_safe if @testing == true %>
+	  </div>
+  </body>
+</html>
+

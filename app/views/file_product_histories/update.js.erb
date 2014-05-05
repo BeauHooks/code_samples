@@ -1,0 +1,12 @@
+<% case @field_name %>
+<% when "content" %>
+	$("#<%= @container %>").val("<%= j( @value ).html_safe %>").change();
+	$("#<%= @container %>").focus();
+<% else %>
+	$("#<%= @field_name %>").val("<%= j( @value ).html_safe %>").change();
+	$("#<%= @field_name %>").focus();
+<% end %>
+
+if($("#overlay_history").is(":visible")){
+	closeOverlay("history");
+}

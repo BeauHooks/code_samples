@@ -1,0 +1,19 @@
+<%# FIXME: Need to make these accessible to ADMIN Users %>
+<% @images.each do |i| %>
+  <tr>
+    <td class="private"><%= check_box_tag('private', i.IsPrivate, i.IsPrivate?) %></td>
+    <td class="type">
+      <div>
+        <% if Rails.env == "staging" && i.ScanDate < Time.now.strftime("%Y-%m-%d 00:00:00") %>
+          <font color="gray"><%= i.image_type %></font>
+        <% elsif i.tempfile == "PROCESSED" || tempfile.nil? %>
+          <%= link_to "#{i.image_type}".titleize, controller: 'rolodex_attachments', action: 'user_image', :image_id: i.ID %>
+        <% else %>
+          <font color="gray"><%= i.image_type %> (Processing...)</font>
+        <% end %>
+      </div>
+    </td>
+    <td class="modify_date"><%= i.ScanDate.to_formatted_s(:standard) unless i.ScanDate.nil? %></td>
+    <td class="notes"><div><%= i.ImageNotes unless i.ImageNotes.nil? %></div></td>
+  </tr>
+<% end %>

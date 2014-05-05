@@ -1,0 +1,24 @@
+<div class="box" style="margin: 0px 20px;">
+	<div class="box_header">
+  <p class="title">Title Clearing <%#= link_to image_tag("plus.png", class: "icon"), "index/show_overlay?id=#{@file.ID}&overlay=File Entities&form=overview_contacts", remote: true %></p>
+	  <div class="tools">
+	    Show: <%= select_tag "show_options", options_for_select([["All", "all"]] + @file.employees.collect{|e| [e.FullName, e.ID]}), style: "width: 150px;" %>
+	  </div>
+	</div>
+	<% 5.times do |i| %>
+		<div style="padding: 5px;">
+			<table>
+				<tbody>
+					<tr>
+						<td class="label" style="padding-right: 5px; vertical-align: top;">Description:</td>
+						<td><%= text_area_tag :description, "" %></td>
+					</tr>
+					<tr>
+						<td class="label" style="padding-right: 5px;">Assigned To:</td>
+						<td><%= select_tag "assigned_to", options_for_select(@file.employees.collect{|e| [e.FullName, e.ID]}), style: "width: 150px;" %></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	<% end %>
+</div>

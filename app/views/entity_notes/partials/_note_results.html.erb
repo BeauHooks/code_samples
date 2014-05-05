@@ -1,0 +1,19 @@
+<% @entity_notes.each do |i| %>
+  <tr>
+    <td class="from"><%= i.note_from %></td>
+    <td class="to"><%= i.note_to %></td>
+    <td class="entered"><%= i.note_date%></td>
+    <% if i.NoteText != nil && i.NoteText != "" && i.NoteText.length > 65 %>
+      <td class="note hint" id="<%= i.ID %>" >
+        <span>
+          <%= i.NoteText %>
+        </span>
+        <%= truncate(i.NoteText, :length => 65) %>
+      </td>
+    <% else %>
+      <td class="note" id="<%= i.ID %>" >
+        <%= i.NoteText %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>

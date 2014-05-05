@@ -1,0 +1,17 @@
+$("#rolodex_results").html("<%= j(render 'shared/result_row').html_safe -%>");
+$("#search_nav").html("<%= j(render 'shared/search_results_count').html_safe -%>");
+$("tr.result_row").first().trigger("click");
+
+<% if @search_results.size > 0 %>
+  $("#tabs").show();
+  $("#tab_content").hide();
+<% else %>
+  $("#tabs").hide();
+  $("#tab_content").show();
+<% end %>
+
+$("#search_box").attr("readonly", false);
+$('#spinner').hide();
+$("#include_closed_control").show()
+$('#searching_text').hide();
+$("#search_button").show();

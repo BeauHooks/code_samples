@@ -1,0 +1,54 @@
+<table id="new_current_employees">
+  <% n = 0 %>
+  <% @file.file_employees.each do |e| %>
+    <% unless e.employee == nil %>
+      <% n += 1 %>
+      <tr class="row_<%= n %>">
+        <td class="add_link"><%= button_to 'Remove', file_employee_path(:id => e.ID), :method => :delete, :remote => true, onclick: "if($('#employee_result_#{e.EmployeeID}').val() != undefined){$('#employee_result_#{e.EmployeeID}').val('Add'); $('#employee_result_#{e.EmployeeID}').attr('disabled', false);}" %></td>
+        <% if e.employee.FullName.to_s.length > 17 %>
+          <td class="name hint">
+            <span><%= e.employee.FullName %></span>
+            <%= truncate(e.employee.FullName, :length => 17) %>
+          </td>
+        <% else %>
+          <td class="name">
+            <%= e.employee.FullName %>
+          </td>
+        <% end %>
+
+        <td class="position"><%= e.Position %></td>
+
+        <% if e.employee.DirectPhone.to_s.length > 17 %>
+          <td class="phone hint">
+            <span><%= e.employee.DirectPhone %></span>
+            <%=  truncate(e.employee.DirectPhone, :length => 17) %>            
+          </td>
+        <% else %>
+          <td class="phone">
+            <%= e.employee.DirectPhone if e.employee.DirectPhone != nil %>
+          </td>
+        <% end %>
+
+        <% if e.employee.Email.to_s.length > 17 %>
+          <td class="email hint">
+            <span><%=  e.employee.Email.to_s %></span>
+            <%= truncate(e.employee.Email.to_s, :length => 17) %>
+          </td>
+        <% else %>
+          <td class="email">
+            <%= e.employee.Email.to_s %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
+<%# OPTIMIZE: Easier way to inject js? %>
+<script type="text/javascript">
+  <% if n > 8 %>
+	  addWidth('current_employee', 80);
+  <% else %>
+	  fixWidth('current_employee', 80);
+  <% end %>
+</script>

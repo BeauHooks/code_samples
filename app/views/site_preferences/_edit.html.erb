@@ -1,0 +1,19 @@
+<div id="add_site_preference">
+  <div class="overlay_header" class="overlay_header">
+    <h2 style="margin: 0;">New Site Preference</h2>
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+      <span id="new_site_preference_spinner" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Saving...</span>
+    </div>
+  </div>
+  <%= form_for @site_preference, html: {:remote => true, onsubmit: "$('#new_site_preference_spinner').show();"} do |f| %>
+    <div class="overlay_content">
+      <%= render "site_preferences/form", f: f %>
+    </div>
+    <div class="overlay_footer">
+      <span class="buttons" style="float: right;">
+        <%= submit_tag "Save" %>
+        <%= submit_tag "Cancel", type: "button", onclick: "closeOverlay('new_site_preference');" %>
+      </span>
+    </div>
+  <% end %>
+</div>

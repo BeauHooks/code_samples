@@ -1,0 +1,26 @@
+<tr class="trigger" onclick="rowSelect(this); $.get('<%= admin_rule_path(@rule) %>');" id="rule_<%= @rule.id %>">
+  <% rule_text = @rule.rule_text.to_s %>
+  <% if rule_text.length > 40 %>
+  	<td class="rule_text hint"><span><%= image_tag "redx.png", onclick: "destroyRule(this); event.stopPropagation();", class: "trigger" %> <%= rule_text %></span><%= image_tag "redx.png", onclick: "destroyRule(this); event.stopPropagation();", class: "trigger" %> <%= truncate(rule_text, length: 40) %></td>
+ 	<% else %>
+ 		<td class="rule_text"><%= image_tag "redx.png", onclick: "destroyRule(this); event.stopPropagation();", class: "trigger" %> <%= rule_text %></td>
+ 	<% end %>
+
+  <% names = @rule.get_names %>
+  <% if names.length > 40 %>
+  	<td class="names hint"><span><%= names %></span><%= truncate(names, length: 40) %></td>
+ 	<% else %>
+ 		<td class="names"><%= names %></td>
+ 	<% end %>
+
+  <td class="modified_date"><%= @rule.updated_at.strftime("%m/%d/%Y") if @rule.updated_at != nil %></td>
+
+  <% modified_by = @rule.modified_by %>
+  <% if modified_by.length > 15 %>
+  	<td class="modified_by hint"><span><%= modified_by %></span><%= truncate(modified_by, length: 15) %></td>
+ 	<% else %>
+ 		<td class="modified_by"><%= modified_by %></td>
+ 	<% end %>
+
+  <td class="reviewed_date"><%= @rule.reviewed_at != nil ? @rule.reviewed_at.strftime("%m/%d/%Y") : "Never" %></td>
+</tr>

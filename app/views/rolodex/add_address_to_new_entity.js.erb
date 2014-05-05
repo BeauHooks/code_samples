@@ -1,0 +1,6 @@
+$("#new_rolodex_address_info").append("<%= j(render "rolodex/partials/address_row").html_safe %>");
+$("#overlay_new_rolodex input").keydown(function(event){
+  if(event.which == 13){
+    event.preventDefault();
+  }
+});

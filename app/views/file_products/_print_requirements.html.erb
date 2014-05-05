@@ -1,0 +1,9 @@
+<%# This is for the print view %>
+<div class="file_product_wrapper">
+	<p style="margin-bottom: 1em; font-weight: bold; text-align: center;">Schedule B - Section 1 "Requirements"</p>
+	<ol style="margin: 0em 2em;">
+		<% @file_product.all_requirements.each do |requirement| %>
+			<li style="padding-left: 1.5em;"><%= requirement.print_text %></li>
+		<% end %>
+	</ol>
+</div>

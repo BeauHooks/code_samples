@@ -1,0 +1,7 @@
+<tr>
+	<td style="white-space: nowrap;">
+		<%= link_to image_tag("redx.png", class: "trigger"), file_employee_path(file_employee.ID), data: {remote: true, method: :delete} %>
+		<%= select :EmployeeID, :EmployeeID, @employees, include_blank: true, selected: current_user.employee_id, style: "width: 135px;" %>
+	</td>
+	<td><%= select :Position, :Position, @file_employee_types, selected: @position, style: "width: 95px;" %></td>
+</tr>

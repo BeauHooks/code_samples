@@ -1,0 +1,15 @@
+<% @file.docs.find(:all, conditions: ["docs.is_active = -1"], include: [:doc_template], order: ["doc_templates.short_name ASC"]).each do |i| %>
+	<tr>
+		<td class="action" style="padding-left: 5px;">
+			<%= submit_tag "Remove", onclick: "addToQueue('remove_doc', 'application/flash_notice?request_type=delete&title=Confirm Remove Doc&notice=Are you sure you want to remove this doc?&list[]=#{i.doc_template.short_name} - #{i.description}&post=' + encodeURIComponent('docs/destroy?file_id=#{@file.FileID}&docs[]=#{i.id}') );" %>
+		</td>
+		<% if i.doc_template.description.length > 17 %>
+			<td class="name hint"><span><%= i.doc_template.description %></span><%= truncate(i.doc_template.description, length: 17) %></td>
+		<% else %>
+			<td class="name"><%= i.doc_template.description %></td>
+		<% end %>
+		<td class="description"><%= i.doc_template.short_name %></td>
+		<td class="modify_date"><%= i.updated_at.strftime('%m/%d/%Y') %></td>
+		<td class="modify_by"><%= i.update_employee.FullName %></td>
+	</tr>
+<% end %>

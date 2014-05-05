@@ -1,0 +1,5 @@
+<% if @view == "disbursements" %>
+  $("#sheet_view").html("<%= j(render "check_workings/partials/index").html_safe %>");
+<% else %>
+  $("#sheet_view").html("<%= j(render "payment_disbursements/overlay_index").html_safe %>");
+<% end %>

@@ -1,0 +1,106 @@
+<div class="w770">
+  <div class="overlay_header">
+    <h2>Duplicates Found</h2>
+  </div>
+  <div class="overlay_content">
+    <p><span class="red">Please review the following list for potential duplicates:</span><label class="float_right"><%= check_box_tag :no_show, "true", false, onchange: "if($(this).attr('checked') == 'checked'){$('#overlay_new_rolodex input[name=no_show]').val('true')}else{$('#overlay_new_rolodex input[name=no_show]').val('false')}", class: "pos_relative top_2" %> Don't show me this again for this contact</label></p>
+    <% i = 0 %>
+    <% @duplicates_hash.each do |title, list| %>
+      <% i += 1 %>
+      <% size = list.size %>
+      <hr />
+      <h4 class="clear_fix"><%= title %><span class="float_right"><%= size %> Matches</span></h4>
+      <div class="box">
+        <div class="grid_header">
+          <table>
+            <tr>
+              <td class="padding_left_5 w105">Name</td>
+              <td class="padding_left_5 w105">Description</td>
+              <td class="padding_left_5 w105">Affiliation</td>
+              <td class="padding_left_5 w105">Phone</td>
+              <td class="padding_left_5 w105">Email</td>
+              <td class="padding_left_5 w105" id="duplicate_table_<%= i %>_last">Action</td>
+            </tr>
+          </table>
+        </div>
+        <div class="results">
+          <% if size == 0 %>
+            <p style="color: #CCCCCC; font-style: italic; padding: 2px 5px;">No matches.</p>
+          <% else %>
+            <table>
+              <% list.each do |e| %>
+                <tr>
+                  <% name = e.name_last_first %>
+                  <% if name.length > 15 %>
+                    <td class="padding_left_5 w105 hint"><span><%= link_to name, "/rolodex?entity_id=#{e.EntityID}", onclick: "event.stopPropagation();", target: "_blank" %></span><%= link_to truncate(name, length: 15), "/rolodex?entity_id=#{e.EntityID}", onclick: "event.stopPropagation();", target: "_blank" %></td>
+                  <% else %>
+                    <td class="padding_left_5 w105"><%= link_to name, "/rolodex?entity_id=#{e.EntityID}", onclick: "event.stopPropagation();", target: "_blank" %></td>
+                  <% end %>
+
+                  <% description = e.Description.to_s %>
+                  <% if description.length > 15 %>
+                    <td class="padding_left_5 w105 hint"><span><%= description %></span><%= truncate(description, length: 15) %></td>
+                  <% else %>
+                    <td class="padding_left_5 w105"><%= description %></td>
+                  <% end %>
+
+                  <% affiliation = e.primary_affiliation_name.to_s %>
+                  <% if affiliation.length > 15 %>
+                    <td class="padding_left_5 w105 hint"><span><%= affiliation %></span><%= truncate(affiliation, length: 15) %></td>
+                  <% else %>
+                    <td class="padding_left_5 w105"><%= affiliation %></td>
+                  <% end %>
+
+                  <td class="padding_left_5 w105"><%= e.primary_phone_number %></td>
+
+                  <% email = e.Email.to_s %>
+                  <% if email.length > 15 %>
+                    <td class="padding_left_5 w105 hint"><span><%= email %></span><%= truncate(email, length: 15) %></td>
+                  <% else %>
+                    <td class="padding_left_5 w105"><%= email %></td>
+                  <% end %>
+
+                  <td class="padding_left_5 w105">
+                    <% label = "Use Entity" %>
+                    <% case @form %>
+                    <% when "doc" %>
+                      <% @section == "grantor" ? position = "2" : position = "1" %>
+                      <% click_action = "addToQueue('create_file_entity', '/file_entities?entity_id=#{e.EntityID}&id=#{@file.ID}&position=#{position}'); addToQueue('create_doc_entity', 'docs/create_entity?file_id=#{@file.ID}&section=#{@section}&doc_id=#{@doc_id}&entity_id=#{e.EntityID}');" %>
+                    <% when "disbursement" %>
+                      <% click_action = "addToQueue('add_payee', 'check_workings/add_payee?id=#{@check_id}&entity_id=#{e.EntityID}');" %>
+                    <% when "new_file" %>
+                      <% click_action = "addToQueue('add_contact_to_new_file', 'index/add_contact_to_new_file/?entity_id=#{e.EntityID}&position=1'); $(this).val('Added').change(); $(this).attr('disabled', 'disabled');" %>
+                    <% when "overview_contacts" %>
+                      <% click_action = "addToQueue('create_file_entity', '/file_entities?entity_id=#{e.EntityID}&id=#{@file.ID}&position=1');" %>
+                    <% else %>
+                      <% click_action = "document.location.href = '/rolodex?entity_id=#{e.EntityID}';" %>
+                      <% label = "Go to Entity" %>
+                    <% end %>
+
+                    <%= submit_tag label, type: "button", onclick: "#{click_action} closeOverlay('new_rolodex'); closeOverlay('rolodex_duplicates');" %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+            <script type="text/javascript">
+              <% if size > 4 %>
+                addWidth("duplicate_table_<%= i %>", 105);
+              <% else %>
+                fixWidth("duplicate_table_<%= i %>", 105);
+              <% end %>
+            </script>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="overlay_footer">
+    <span class="button">
+      <input type="button" value="Close" class="close" onclick="closeOverlay('rolodex_duplicates');" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  openOverlay("rolodex_duplicates");
+</script>

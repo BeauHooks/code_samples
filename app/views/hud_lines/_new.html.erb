@@ -1,0 +1,38 @@
+<div id="add_hud_line">
+  <div class="overlay_header">
+    <h2><%= @line != nil ? "Change Line #{@line.number}" : "Add Line" %></h2>
+  </div>
+  <div class="overlay_content">
+    <% unless @line == nil %>
+      Select Type:
+      <% if @line.number >= 3000 && @line.number < 5000 %>
+        <%= select_tag :hud_lines_type, "
+                                    <option value='ss_commission_group'>Commission Group</option>
+                                    <option value='ss_commission'>Commission Line</option>
+                                    <option value='ss_commission_total'>Commission Total</option>
+                                    <option value='ss_header'>Header</option>
+                                    <option value='ss_payee'>Payee</option>
+                                    <option value='ss_proration'>Proration</option>
+                                    <option value='ss_normal'>Normal</option>".html_safe, style: "width:150px;" %>
+      <% elsif @line.number > 700 %>
+        <%= select_tag :hud_lines_type, options_for_select([["Disbursement", "l_disbursement"], ["Normal", "l_normal"]]), {style: "width: 150px;"} %>
+      <% else %>
+        <%= select_tag :hud_lines_type, options_for_select([["Disbursement", "jk_disbursement"], ["Normal", "jk_normal"]]), {style: "width: 150px;"} %>
+      <% end %>
+    <% else %>
+      Use add row button
+    <% end %>
+  </div>
+  <div class="overlay_footer">
+    <span class="button">
+      <% if @line != nil %>
+        <input type="button" value="Save" onclick="$.post('/hud_lines/create?line_action=<%= @line_action %>&hud_id=<%= @hud.id %>&id=<%= @line.id %>&line_num=<%= @line.number %>&type=' + $('#hud_lines_type option:selected').val() ); closeOverlay('new_hud_line');" />
+      <% end %>
+      <input type="button" value="Cancel" class="close" onclick="closeOverlay('new_hud_line')" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  openOverlay('new_hud_line');
+</script>

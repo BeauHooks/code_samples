@@ -1,0 +1,8 @@
+<% n = @file_note %>
+<tr class="row_<%= n.NoteID %>">
+  <td class="from"><%= n.entered_by.FullName rescue ""%></td>
+  <td class="to"><%= n.tickled_by.FullName rescue "" %></td>
+  <td class="date"><%= n.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p') rescue "" %></td>
+  <td class="note"><%= truncate(n.NoteText, length: 15px) %></td>
+  <td class="remove_button"><%= button_to 'Remove', file_note_path("#{n.NoteID}"), method: :delete, remote: true, onclick: "$('tr.row_#{n.NoteID}').hide();" %></td>
+</tr>

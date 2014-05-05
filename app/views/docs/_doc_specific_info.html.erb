@@ -1,0 +1,61 @@
+<table>
+<% standard_fields = ["PAGE_BREAK", "SIGNATURES"] %>
+<% doc_names = [] %>
+<% DocStandardField.all.each do |i| %>
+  <% standard_fields << i.tag %>
+<% end %>
+<% DocBlock.all.each do |i| %>
+  <% standard_fields << i.tag %>
+<% end %>
+<% DocFunction.all.each do |i| %>
+  <% standard_fields << i.name %>
+<% end %>
+<% @file.docs.each do |i| %>
+  <% doc_names << i.doc_template.short_name %>
+<% end %>
+
+<% fields = [] %>
+
+<%##### @x is being set in the "generate_fields" method in the docs helper ####%>
+<% @x[0].each do |tag| %>
+  <% unless ( standard_fields.include?(tag[0]) || standard_fields.include?( tag[0].split("_")[0..-2].join("_") )  || standard_fields.include?( tag[0].split("_")[0..2].join("_") )) || tag[0].include?("RF_") %>
+    <% fields << tag[0] %>
+  <% end %>
+<% end %>
+
+<% short_name = @doc.doc_template.short_name %>
+<% if short_name == "W9" %>
+  <% fields << "W9_SSN_#{@doc.doc_entity_id}" %>
+  <% fields << "W9_TAX_ID_#{@doc.doc_entity_id}" %>
+<% end %>
+
+<% if fields.count > 0 %>
+  <% fields.sort! {|a, b| a <=> b} %>
+  <% fields.uniq! %>
+  <% fields.each do |field| %>
+    <tr>
+      <% value = @file.file_doc_fields.get_value(@file.FileID, current_user.employee_id,"#{field}") %>
+      <% (value == nil || value == "") ? error = "error" : error = ""  %>
+      <% @doc.doc_entity_id != nil ? label = field.gsub("#{@doc.doc_template.short_name}_", "").gsub("_#{@doc.doc_entity_id}", "").titleize : label = field.gsub("#{@doc.doc_template.short_name}_", "").titleize %>
+      <% if label.length > 12 %>
+        <td class="label <%= error %> hint no_wrap"><span><%= label %></span><%= truncate(label, length: 12) %> :</td>
+      <% else %>
+        <td class="label <%= error %> no_wrap"><%= label %>:</td>
+      <% end %>
+      <td>
+        <% change = "updateGlobalField(this);"  %>
+        <% change += " $('#all_docs .active_row a').click();" if field.include?("W9_SSN") || field.include?("W9_TAX_ID") %>
+        <%= text_field_tag field.downcase, value, class: error, onchange: change, placeholder: label, disabled: ("1099, HUD, SS, LSS, INV".include?(short_name) && @file.SentForFunding != nil) %> 
+        <!-- <input type="text" class="<%#= error %>" value="<%#= value %>" id='<%#= field.downcase %>' onchange="$.post('/docs/create_custom?file_id=<%#= @file.ID %>&doc_id=0&field=global_<%#= field %>&value=' + encodeURIComponent(this.value)); updateDocField(this); <%#= field.include?("W9_SSN") || field.include?("W9_TAX_ID") ? "$('#all_docs .active_row a').click();" : '' %>" placeholder="<%#= label %>" /> -->
+      </td>
+    </tr>
+  <% end %>
+    <tr>
+      <td colspan="2" class="label">* Fields are still considered global. (Entity fields on docs similar to 1099 and W9 are not global.)</td>
+    </tr>
+<% else %>
+  <tr>
+    <td>All fields in this doc are included in the standard fields list.</td>
+  </tr>
+<% end %>
+</table>

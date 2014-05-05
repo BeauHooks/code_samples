@@ -1,0 +1,3 @@
+$('#disbursement_results').html('<%= j(render 'check_workings/partials/results').html_safe %>');
+$('#poc_results').html('<%= j(render 'payment_disbursements/poc_results').html_safe %>');
+$("div#payment_balance_summary").html("<%= j(render "check_workings/partials/payment_balance_summary").html_safe %>");

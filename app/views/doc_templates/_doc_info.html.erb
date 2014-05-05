@@ -1,0 +1,154 @@
+<div class="box_header">
+  <p class="title">Doc Info</p>
+</div>
+<div id="info_contents">
+  <table>
+      <tr>
+        <td class="col1 label">Required:</td>
+      </tr>
+  	<tr>
+  		<td class="label">Name:</td>
+  		<td><input type="text" id="form_description" name="description" value="<%= !@template.new_record? ? @template.description : '' %>" onchange="updateTemplate(this);" <%= !@template.new_record? ? "disabled='disabled'" : "" %>  /></td>
+  	</tr>
+  	<tr>
+  		<td class="label">Code:</td>
+  		<td><input type="text"  id="form_short_name" name="short_name" value="<%= !@template.new_record? ? @template.short_name : '' %>" onchange="updateTemplate(this);" <%= !@template.new_record? ? "disabled='disabled'" : "" %> /></td>
+  	</tr>
+  	<tr>
+  		<td class="label">Version:</td>
+  		<td><input  type="text" name="version" value="<%= !@template.new_record? ? @template.current_version : '1' %>" disabled="disabled" /></td>
+  	</tr>
+  	<tr>
+  		<td class="label">Min Version:</td>
+  		<td>
+  			<% if !@template.new_record? %>
+  			<%= select :doc_template, :version, DocTemplateVersion.find(:all, :conditions => ["doc_template_id = ?", @template.id], :order => "version DESC").collect{|v| [v.version, v.version]} + [["This Version", @template.current_version + 1]], {:include_blank => false, :selected => @template.minimum_version}, {:name => "min_version", :onchange => "updateTemplate(this);", id: "form_min_version"} %>
+  			<% else %>
+  			<%= select :doc_template, :version, options_for_select([[1, 1]]), {:include_blank => false}, {disabled: "disabled"} %>
+  			<% end %>
+  		</td>
+  	</tr>
+      <tr>
+      <td class="label">Category:</td>
+      <td>
+        <%= select :doc_template, :Category, options_for_select([["Title", "Title"], ["Escrow", "Escrow"], ["Other", "Other"]], @template.category), {:include_blank => false}, {onChange: "updateTemplate(this);", id: "form_category", name: "category"} %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label no_wrap">Sub Category:</td>
+      <td>
+          <% case @template.category %>
+          <% when "Other" %>
+            <%= select :doc_template, :SubCategory, options_for_select([["Other", "Other"]], @template.sub_category), {:include_blank => false}, {onChange: "updateTemplate(this);", id: "form_sub_category", name: "sub_category"} %>
+          <% when "Escrow" %>
+            <%= select :doc_template, :SubCategory, options_for_select([["Clearing", "Clearing"], ["Recording", "Recording"]], @template.sub_category), {:include_blank => false}, {onChange: "updateTemplate(this);", id: "form_sub_category", name: "sub_category"} %>
+          <% else %>
+            <%= select :doc_template, :SubCategory, options_for_select([["Commitment", "Commitment"], ["Policy", "Policy"], ["Report", "Report"]], @template.sub_category), {:include_blank => false}, {onChange: "updateTemplate(this);", id: "form_sub_category", name: "sub_category"} %>
+          <% end %>
+        </td>
+    </tr>
+    <tr>
+    	<td class="label">Notes:</td>
+    	<td><textarea id="form_note" name="note" placeholder="Type a brief description of what changes have been made in this version."   onchange="updateTemplate(this);"><%= "New Document" if @template.new_record? %></textarea></td>
+    </tr>
+    <tr>
+      <td class="label no_wrap" title='Select "Yes" if document template can be edited by the end user. Select "No" for templates that should never be changed.'>Editable:</td>
+      <td>
+        <%= select :doc_template, :Category, options_for_select([["Yes", 1], ["No", 0]], @template.is_editable), {:include_blank => false}, {onChange: "updateTemplate(this);", id: "form_editable", name: "editable"} %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label" title='Select "Yes" document needs to be generated for INDIVIDUAL entities only. Documents in this category include the 1099, W9, etc.'>Ind. Entity:</td>
+      <td>
+        <%= select :doc_template, :Category, options_for_select([["Yes", 1], ["No", 0]], @template.is_entity_doc || 0), {:include_blank => false}, {onChange: "updateTemplate(this);", id: "form_entity_doc", name: "entity_doc"} %>
+      </td>
+    </tr>
+  </table>
+  <hr />
+  <table>
+    <tr>
+      <td class="label col1">Optional:</td>
+    </tr>
+    <% (!@template.new_record?) ? (signers, format = get_signature_options(@template)) : (signers, format = "", "") %>
+    <tr>
+      <td class="label"  title='Select who can sign for this document. If you do not select anything, "Grantor" will be selected by default.'>Signers:</td>
+      <td>
+        <% if !@template.new_record? %>
+          <%= select :doc_template, :Signers, options_for_select([["Grantor", "grantor"], ["Grantee", "grantee"], ["Both", "both"]], signers), {:include_blank => true}, {onChange: "changeFormatOptions(this); updateTemplate(this);", id: "form_signers", name: "signers"} %>
+        <% else %>
+          <%= select :doc_template, :Signers, options_for_select([["Grantor", "grantor"], ["Grantee", "grantee"], ["Both", "both"]]), {:include_blank => true}, {onChange: "changeFormatOptions(this); updateTemplate(this);", id: "form_signers", name: "signers"} %>
+        <% end %>
+        </td>
+    </tr>
+    <tr>
+      <td class="label" title='Select how the Signature Block will be positioned. '>Sig. Block:</td>
+      <td>
+        <% if !@template.new_record? %>
+          <% if signers != "both" %>
+          <%= select :doc_template, :Signers, options_for_select([["Left", "left"], ["Right", "right"], ["Both", "both"]], format), {:include_blank => true}, {onChange: "updateTemplate(this);", id: "signature_format", name: "signature_block"} %>
+          <% else %>
+          <%= select :doc_template, :Signers, options_for_select([["Grantor First", "grantorfirst"], ["Grantee First", "granteefirst"]], format), {:include_blank => true}, {onChange: "updateTemplate(this);", id: "signature_format", name: "signature_block"} %>
+          <% end %>
+        <% else %>
+          <%= select :doc_template, :Signers, options_for_select([["Left", "reft"], ["Right", "right"], ["Both", "both"]]), {:include_blank => true}, {onChange: "updateTemplate(this);", id: "signature_format", name: "signature_block"} %>
+        <% end %>
+        </td>
+    </tr>
+    <tr>
+      <td class="label">Underwriter:</td>
+      <td>
+        <% if !@template.new_record? %>
+        <%= select :doc_template, :Underwriter, Underwriter.where("IsActive = -1", :order => "Underwriter ASC").collect {|u| [u.Underwriter, u.ID]}, {:include_blank => true, selected: @template.underwriter_id}, {onChange: "updateTemplate(this);", id: "form_underwriter", name: "underwriter"} %>
+        <% else %>
+        <%= select :doc_template, :Underwriter, Underwriter.where("IsActive = -1", :order => "Underwriter ASC").collect {|u| [u.Underwriter, u.ID]}, {:include_blank => true}, {onChange: "updateTemplate(this);", id: "form_underwriter", name: "underwriter"} %>
+        <% end %>
+        </td>
+    </tr>
+    <tr>
+      <td class="label">State:</td>
+      <td>
+        <% if !@template.new_record? %>
+        <% @template.state != nil  %>
+          <%= select :doc_template, :State, options_for_select([["Arizona", "Arizona"], ["Nevada", "Nevada"], ["Utah", "Utah"]], @template.state), {:include_blank => true}, {onChange: "updateTemplate(this);", id: "form_state", name: "state"} %>
+        <% else %>
+          <%= select :doc_template, :State, options_for_select([["Arizona", "Arizona"], ["Nevada", "Nevada"], ["Utah", "Utah"]]), {:include_blank => true}, {onChange: "updateTemplate(this);", id: "form_state", name: "state"} %>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td class="label">Company:</td>
+      <td>
+        <% if !@template.new_record? %>
+        <%= select :doc_template, :Company, Company.find(:all, :order => "CompanyID ASC").collect {|u| [u.CompanyName, u.CompanyID]}, {:include_blank => true, selected: @template.company_id}, {onChange: "updateTemplate(this);", id: "form_company", name: "company"}  %>
+        <% else %>
+        <%= select :doc_template, :Company, Company.find(:all, :order => "CompanyID ASC").collect {|u| [u.CompanyName, u.CompanyID]}, {:include_blank => true}, {onChange: "updateTemplate(this);", id: "form_company", name: "company"}  %>
+        <% end %>
+        </td>
+    </tr>
+  </table>
+  <hr />
+  <div id="doc_groups">
+    <%= render "doc_groups/doc_groups" %>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  <% if @template == nil %>
+    updateSubCategory();
+  <% end %>
+
+  taken = []
+  <% get_short_names().each do |short_name| %>
+    taken.push("<%= j(short_name).html_safe %>");
+  <% end %>
+
+  $("input#form_short_name").change(function(){
+    if(taken.indexOf($(this).val().toUpperCase()) != -1 && $(this).val() != ''){
+      addToQueue("short_name_taken", "application/flash_notice?notice=The template code must be a unique value. " + $(this).val() + " is in use. Please try again.&title=Code In Use&confirm=Okay");
+      $(this).val("");
+      $(this).addClass('error');
+      $(this).focus();
+    }
+  });
+</script>

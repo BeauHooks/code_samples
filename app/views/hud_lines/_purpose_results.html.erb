@@ -1,0 +1,11 @@
+<% if @purpose == "File" %>
+	<tr>
+	  <td class="label">File:</td>
+	  <td style="padding-left: 5px;"><%= text_field_tag :purpose_value, "", style: "width: 200px;", onkeydown: "numbersOnly(event);" %></td>
+	</tr>
+<% else %>
+	<tr>
+	  <td class="label" style="">Item:</td>
+	  <td style="padding-left: 5px;"><%= select :invoice, :purpose_value, options_for_select([["Cancellation Fee", "Cancellation Fee"], ["Closing Fee", "Closing Fee"], ["Doc Prep", "Doc Prep"],["Escrow Collection", "Escrow Collection"],["Endorsements", "Endorsements"], ["Exchange Fee", "Exchange Fee"],["Federal Express", "Federal Express"],["Forclosure", "Forclosure"],["Junior Policy", "Junior Policy"], ["Lender Policy", "Lender Policy"], ["Lim Report", "Lim Report"], ["Miscellaneous", "Miscellaneous"],["Owner Policy", "Owner Policy"], ["Recon", "Recon"], ["Recording Fee", "Recording Fee"], ["Transfer Tax", "Transfer Tax"],["TSG/Litigation", "TSG/Litigation"]]), {:include_blank => false}, {style: "width: 204px;", name: "purpose_value"} %></td>
+	</tr>
+<% end %>

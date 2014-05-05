@@ -1,0 +1,1 @@
+<%= select_tag :address_id, grouped_options_for_select( get_address_group_options() ), {id: "address_select", name: "address_id", style: "width: 204px", onchange: "addToQueue('display_address_entry', 'docs/display_address_entry?entity_id=#{@entity.EntityID if @entity != nil}&file_id=#{@file.ID}&tag=#{@tag}&address_id=' + $(this).val() );"} %>

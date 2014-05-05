@@ -1,0 +1,17 @@
+<table id="grid_results">
+  <% c = 0 %>
+  <% @file_products.each do |i| %>
+    <% c += 1 %>
+    <%= render "file_products/partials/file_product_row", i: i %>
+  <% end %>
+</table>
+
+<%# OPTIMIZE: Easier way to inject js? %>
+<script type="text/javascript">
+  indexInit(<%= @record == nil ? "''".html_safe : @record %>);
+  <% if c > 5 %>
+    addWidth('search_results', 120);
+  <% else %>
+    fixWidth('search_results', 120);
+  <% end %>
+</script>

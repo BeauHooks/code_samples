@@ -1,0 +1,12 @@
+<% if @form == "new_file" %>
+	<% @contact = @entity %>
+	<% @position = 1 %>
+	$("#new_file_contacts").append("<%= j(render "index/partials/contact_row").html_safe %>");
+	updateIndexFormCurrent("contacts");
+	clearRolodexFormForNew();
+	$("#overlay_new_rolodex input").keydown(function(event){
+    if(event.which == 13){
+      event.preventDefault();
+    }
+  });
+<% end %>

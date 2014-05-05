@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function subst() {
+        var vars={};
+        var x=document.location.search.substring(1).split('&');
+        document.getElementById("container").innerHTML = x;
+
+        for(var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        var x=['post', 'doctitle', 'frompage','topage','page','webpage','section','subsection','subsubsection'];
+
+        // if(vars['page'] == "1"){
+        //   document.getElementById("container").innerHTML = "";
+        // }
+        
+        for(var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }      
+    </script>
+
+    <style>
+    </style>
+  </head>
+  <body style="margin: 0; font-size: 9px;" onload="subst();">
+    <div style="position: relative; height: 25px;" id="container">
+    </div>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+<% @entity_addresses.each do |i| %>
+  <tr class="update_row" data-url="<%= rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: 'address') %>">
+    <td class="actions">
+      <%= i.inactive? ?
+        link_to(image_tag('/assets/plus.png'), activate_rolodex_entity_contact(@entity.EntityID, i.ContactID), class: "trigger", remote: true)
+        :
+        link_to(image_tag('/assets/redx.png'), rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "address"), title: "Remove", class: "trigger x_image", method: :delete, remote: true, confirm: "Are you sure that you want to remove this contact information?") %>
+      <%= radio_button_tag 'IsPrimary', -1, i.IsPrimary != 0, class: "primary", disabled: i.inactive?, title: "Make Primary", data: {remote: true, method: :put, url: rolodex_entity_contact_path(@entity.EntityID, i.ContactID, type: "address")} %>
+    </td>
+    <td class="description">
+      <%= text_field_tag :Description, i.description %>
+    </td>
+    <td class="address1">
+      <%= text_field_tag :Address, i.Address %>
+      <%= image_tag "/assets/notice.png", class: "icon trigger", onclick: "searchRolodexAddress(this);" %>
+    </td>
+    <td class="address2">
+      <%= text_field_tag :Address2, i.Address2 %>
+    </td>
+    <td class="city">
+      <%= text_field_tag :City, i.City %>
+    </td>
+    <td class="state">
+      <%= text_field_tag :State, i.State %>
+    </td>
+    <td class="zip">
+      <%= text_field_tag :Zip, i.Zip %>
+    </td>
+    <td class="county">
+      <%= text_field_tag :County, i.County %>
+    </td>
+    <td class="ship"><%= link_to "FedEx", shipments_module.new_shipments_path(contact_info_id: i.ContactID), title: "Ship to this address" %></td>
+  </tr>
+<% end %>

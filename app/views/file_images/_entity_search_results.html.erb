@@ -1,0 +1,31 @@
+<table>
+  <% n = 0 %>
+  <% @entities.each do |e| %>
+    <% n += 1 %>
+    <tr>
+      <td class="action w50"><input type="button" value="Add" onclick="alert('hello');" /></td>
+      <% name = e.entity.name.to_s %>
+      <% if name.length > 16 %>
+        <td class="name hint padding_left_5 w110"><span><%= name %></span><%= truncate(name, length: 16) %></td>
+      <% else %>
+        <td class="name padding_left_5 w110"><%= name %></td>
+      <% end %>
+
+      <% email = e.entity.email.to_s %>
+      <% if email.length > 30 %>
+        <td class="email hint padding_left_5 w200"><span><%= email %></span><%= truncate(email, length: 16) %></td>
+      <% else %>
+        <td class="email padding_left_5 w200"><%= email %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<script type="text/javascript">
+  <%# OPTIMIZE: Easier way to inject js? %>
+  <% if n > 4 %>
+      addWidth('image_entity_search_results', 100);
+  <% else %>
+      fixWidth('image_entity_search_results', 100);
+  <% end %>
+</script>

@@ -1,0 +1,12 @@
+// Display new file form
+<% case @overlay %>
+<% when "File Employees" %>
+  $("#overlay_new_employee").html("<%= j(render 'file_employees/employee_lookup').html_safe %>");
+<% when "File Properties" %>
+  <% render 'file_properties/property_lookup' %>
+<% when "File Attachments" %>
+  $("#overlay_new_file_attachment").html("<%= j(render :template => "file_images/new").html_safe %>");
+<% else %>
+<% end %>
+
+$("#overlay_list").append("<%= j(render 'overlays/partials/overlay', buttons: @buttons, identifier: @identifer).html_safe %>");

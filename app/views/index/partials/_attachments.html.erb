@@ -1,0 +1,50 @@
+<div id="file_attachments" class="file_attachments">
+  <div id="attachments" class="box attachments">
+    <div class="box_header">
+      <p class="title">Attachments</p>
+      <div class="tools">
+        <li class="menu_item">
+          <span class="trigger link tool">Image Actions</span>
+          <ul class="submenu">
+            <% if @permission_send_images %>
+              <li><%= link_to "Send", "#send_images", onclick: "send_file(this); return false;" %></li>
+            <% end %>
+            <% if @permission_view_send_image_log %>
+              <li><%= link_to "Delivery Log", "#delivery_log", onclick: "view_log(this); return false;" %></li>
+            <% end %>
+          </ul>
+        </li>
+        <%= link_to "View all PDFs", "file_images/view_all?file_id=#{@file.id}", remote: true if current_user.employee.ACViewPrivateFile != 0 %>
+        <span class="tool"><%= link_to "Show Inactive", "/index/#{@file.ID}/file_images/show_inactive?toggle=true", remote: true, id: "show_inactive" %></span>
+        <span class="tool"><%= link_to image_tag("upload.png"), file_images_load_process_images_path(file_id: @file.id), remote: true %></span>
+        <span class="tool"><%= link_to image_tag("refresh.png"), file_images_reload_file_images_path(file_id: @file.id), id: "refresh_link", onclick: "$('#refresh_link').hide(); $('#loading_small').show();", remote: true %></span>
+        <span class="tool"><%= image_tag "loading_small.gif", id: "loading_small", class: 'hide' %></span>
+      </div>
+    </div>
+    <div class="result_container">
+      <div class="grid_header"></div>
+      <div>
+        <table class="w100p sortable">
+          <thead class="grid_header_font">
+            <tr>
+              <th class="w25 padding_left_5"><div><input type="checkbox" id="ruff123" onclick="selectAll(this);" /></div></th>
+              <th class="w150 padding_left_5"><div>Type</div></th>
+              <th class="w425"><div>Note</div></th>
+              <th class="w45"><div>Active</div></th>
+              <th class="w125"><div>Created By</div></th>
+              <th class="w150"><div>Create Date</div></th>
+            </tr>
+          </thead>
+          <tbody id="file_images_list" class="grid_results highlight">
+            <%= render "file_images/partials/image_results" %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overlays -->
+<!-- Add Attachment -->
+<div class="overlay" id="overlay_new_file_attachment"></div>
+<div class="overlay" id="overlay_send_images"></div>

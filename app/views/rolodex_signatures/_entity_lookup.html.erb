@@ -1,0 +1,32 @@
+<div id="add_signature_entity">
+  <div class="overlay_header">
+    <h2>Add Entity</h2>
+   </div>
+  <div class="overlay_content">
+    <%= form_tag("rolodex/display_search_results?type=add_signature_entity&signature=#{@signature_entity.id}", remote: true) do |f| %>
+    <h4>Search: <%= text_field_tag "search", params[:search],  class: "search" %><%= image_submit_tag("search.png", class: 'icon') %></h4>
+    <% end %>
+    <div class="border_all_1">
+      <table class="grid_header">
+        <tr>
+          <td class="name">Name</td>
+          <td class="phone">Phone</td>
+          <td class="email">Email</td>
+          <td class="rolodex_address">Address</td>
+          <td class="city">City</td>
+          <td class="state">State</td>
+          <td class="action" id="entity_lookup_last">Action</td>
+        </tr>
+      </table>
+      <div class="results" id="entity_lookup_results">
+      </div>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <input type="button" value="Close" class="button close" onclick="closeOverlay('entity_lookup')" />
+  </div>
+</div>
+
+<script type="text/javascript">
+  openOverlay("entity_lookup");
+</script>

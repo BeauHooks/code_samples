@@ -1,0 +1,42 @@
+<% content_for :overlay_title do %>
+  Send Confirmation
+<% end %>
+<% content_for :overlay do %>
+  <div id="resend_confirmation" style="width: 400px;">
+    <div class="tools" style="position: absolute; right: 5px; top: 4px;">
+      <span id="sending_confirmations" style="display: none; font-weight: bold; margin-right: 10px;"><%= image_tag "loading.gif", id: "spinner", style: "width: 20px; margin-right: 5px; position: relative; top: 5px;" %>Sending...</span>
+    </div>
+    <div class="overlay_content">
+      <h4 style="text-decoration: underline;">Select contacts to receive confirmation:</h4>
+       <%= form_tag resend_confirmation_index_path(@file.ID), id: :resend_confirmation_form, remote: true do %>
+        <table id="send_confirmation_list">
+          <% @file.file_entities.each do |e| %>
+            <tr>
+              <% entity = e.entity %>
+              <% next if entity.nil? %>
+              <td>
+                <label>
+                  <%= check_box_tag "entity[][entity_id]", entity.EntityID, false, style: "margin-right: 5px; float: left;", class: :main_box %>
+                  <div style="float: left; width: 125px;"><%= hint_truncate(entity.name, 20) %></div>
+                </label>
+              </td>
+
+              <td style="vertical-align: top;">
+                <%= text_field_tag "entity[][email]", entity.Email, style: "width: 175px;" %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+        <h4 style="text-decoration: underline; margin-top: 10px;">Options</h4>
+        <table>
+          <tr>
+            <td><label><%= check_box_tag :print_copy, true, true, style: "position: relative; top: 2px; margin-right: 5px;" %>Print Copy</label></td>
+          </tr>
+          <tr>
+            <td><label><%= check_box_tag :hide_notes, true, true, style: "position: relative; top: 2px; margin-right: 5px;" %>Hide Notes</label></td>
+          </tr>
+        </table>
+      <% end %>
+    </div>
+  </div>
+<% end %>

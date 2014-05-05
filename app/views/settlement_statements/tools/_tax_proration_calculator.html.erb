@@ -1,0 +1,57 @@
+<% content_for :overlay_title do %>
+  Tax Proration calculator
+<% end %>
+
+<% content_for :overlay do %>
+  <div  id="tax_proration_calculator">
+    <%= form_for 'search_form', url: "settlement_statements/#{@ss.id}/update_tax_proration", remote: true do %>
+      <table style="float: left; margin-right: 10px;">
+        <tr>
+          <td class="label">Proration Date:</td>
+          <td style="padding-right: 10px;">
+            <% @ss.tax_proration_date != nil ? date = @ss.tax_proration_date.strftime("%m/%d/%Y") : date = "" %>
+            <%= text_field_tag :proration_date, date, class: "date", onchange: "validateDate(this);" %>
+          </td>
+        </tr>
+        <tr>
+          <td class="label" style="padding-right: 5px;">Total Taxes:</td>
+          <td style="padding-right: 10px;"><%= text_field_tag :total, number_to_currency(@ss.tax_total, unit: ""), onkeydown: "numbersOnly(event);", onchange: "toUSN(this);" %></td>
+        </tr>
+      </table>
+      <div style="float: left; padding-top: 5px; padding-right: 10px;">
+        <% status = @ss.tax_status %>
+        <label><%= radio_button_tag :status, "credit", status == "credit" %> Taxes have been paid.</label><br />
+        <label><%= radio_button_tag :status, "debit", status == "debit" %> Taxes are due, but have not been paid.</label><br />
+        <label><%= radio_button_tag :status, "none", status == nil || status == "none" %> None of the above.</label>
+      </div>
+      <div style="clear:both;"></div>
+    <% end %>
+  </div>
+
+  <script type="text/javascript">
+    openOverlay("tax_proration_calculator");
+
+    $( "#tax_proration_calculator .date").datepicker({
+      changeMonth: true,
+      changeYear: true
+    });
+
+    function validateTaxProration(){
+      var errors = "";
+
+      if($("#tax_proration_calculator #proration_date").val() == ""){
+        errors += "&list[]=Proration date cannot be left empty.";
+      }
+
+      if($("#tax_proration_calculator #total").val() == ""){
+        errors += "&list[]=Total amount cannot be left empty.";
+      }
+
+      if(errors != ""){
+        addToQueue("validate_tax_proration_calculator", "application/flash_notice?title=Errors on Form&notice=Please correct the following errors before proceeding:" + errors);
+        return false;
+      }
+      return true;
+    }
+  </script>
+<% end %>

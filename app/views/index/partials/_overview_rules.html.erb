@@ -1,0 +1,23 @@
+<% if !@file.has_rules? %>
+  <div id="rules" class="no_result" onclick="$('#rules_partial').toggle();">
+    <h4>
+      Rules for File #<%= @file.DisplayFileID %>
+    </h4>
+    <div id="rules_partial">
+      <span>No rules found</span>
+    </div>
+  </div>
+<% else %>
+  <div id="rules" class="rules" onclick="$('#rules_partial').toggle();">
+    <h4>
+      Rules for File #<%= @file.DisplayFileID %>
+    </h4>
+    <div id="rules_partial">
+      <% @file.entities.order("FirstName ASC").each do |entity| %>
+        <% entity.get_rules.each_with_index do |rule, index| %>
+  	      <span style="display: block; padding: 2px 5px;"><%= (index+1).to_s + ") " + entity.name %> - <%= rule.rule_text %></span>
+  	    <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

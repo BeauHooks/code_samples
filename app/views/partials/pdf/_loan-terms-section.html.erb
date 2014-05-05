@@ -1,0 +1,96 @@
+<br />
+<div style="text-align:left; padding-left:10px;"><b>Loan Terms</b></div>
+<table width="908" border="1" style="text-align:left; font-size:0.9em">
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Your Initial loan amount is</td>
+    <td width="558">&nbsp;$<%= f.text_field :initial_loan_amount %></td>
+  </tr>
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Your loan term is</td>
+    <td width="558"><%= f.text_field :loan_term, :style => 'width:50px; text-align:right;' %> years</td>
+  </tr>
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Your initial interest rate is</td>
+    <td width="558"><%= f.text_field :initial_interest_rate, :style => 'width:50px; text-align:right;' %> %</td>
+  </tr>
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Your initial monthly amount owed for principal, interest, and any mortgage insurance is</td>
+    <td width="558">
+      &nbsp;$<%= text_field_tag :total_inital,{}, :style => 'width:75px' %> includes<br /><br />
+      <%= f.check_box :initial_payment_amount_includes_principal %> Principal<br />
+      <%= f.check_box :initial_payment_amount_includes_interest  %> Interest<br />
+      <%= f.check_box :initial_payment_amount_includes_mortgage_insurance %> Mortgage Insurance<br />&nbsp;
+    </td>
+  </tr>
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Can your interest rate rise?</td>
+    <td width="558">
+      &nbsp;<%= f.radio_button :interest_rate_may_rise, '0' %> No <%= f.radio_button :interest_rate_may_rise, '1' %> 
+      Yes, it can rise to a maximum of <%= f.text_field :interest_rate_may_rise_by, :style => 'width:35px; text-align:right;' %>%. 
+      The first change will be on <%= f.text_field :interest_rate_first_changes_on, :id => 'datepicker', :style => 'width:70px; text-align:center;' %>
+      and can change again every <%= f.text_field :interest_rate_change_frequency, :style => 'width:100px; text-align:center;' %> after 
+      <%= f.text_field :interest_rate_may_change_frequently_after, :id => 'datepicker', :style => 'width:70px; text-align:center;' %>. Every change date, 
+      your interest rate can increase or decrease by <%= f.text_field :interest_rate_may_change_by, :style => 'width:35px; text-align:right;' %>%. 
+      Over the life of the loan, your interest rate is guaranteed to never be <b>lower</b> than 
+      <%= f.text_field :minimum_interest_rate, :style => 'width:35px; text-align:right;' %>% or <b>higher</b> than
+      <%= f.text_field :maximum_interest_rate, :style => 'width:35px; text-align:right;' %>%. 
+    </td>
+  </tr>
+  <tr>
+    <td width="350" style="background-color:#bbb;">Even if you make payments on time, can your loan balance rise?</td>
+    <td width="558">
+      &nbsp;<%= f.radio_button :balance_may_rise, '0' %> No <%= f.radio_button :balance_may_rise, '1' %> Yes, it can rise to a maximum of
+      $<%= f.text_field :maximum_balance, :style => 'width:100px;' %>
+    </td>
+  </tr>
+  <tr>
+    <td width="350" style="background-color:#bbb;">Even if you make payments on time, can your monthly amount owed for principal, interest, and mortgage insurance rise?</td>
+    <td width="558">
+      &nbsp;<%= f.radio_button :payment_amount_may_rise, '0' %> No <%= f.radio_button :payment_amount_may_rise, '1' %> Yes, the first increase
+      can be on <%= f.text_field :payment_amount_first_changes_on, :id => 'datepicker', :style => 'width:70px; text-align:center;' %> and the
+      monthly amount owed can rise to $<%= f.text_field :monthly_payment_amount, :style => 'width:100px;' %>. The maximum it can ever rise to is 
+      $<%= f.text_field :maximum_payment_amount, :style => 'width:100px;' %>
+    </td>
+  </tr>
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Does your loan have a prepayment penalty?</td>
+    <td width="558">
+      &nbsp;<%= f.radio_button :prepayment_penalty, '0' %> No <%= f.radio_button :prepayment_penalty, '1' %>
+      Yes, your maximum prepayment penalty is $<%= f.text_field :maximum_prepayment_penalty, :style => 'width:100px;' %>
+    </td>
+  </tr>
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Does your loan have a balloon payment?</td>
+    <td width="558">
+      &nbsp;<%= f.radio_button :balloon_payment, '0' %> No <%= f.radio_button :balloon_payment, '1' %> Yes, you have a balloon payment of
+      $<%= f.text_field :balloon_payment_amount, :style => 'width:80px;' %> due in 
+      <%= f.text_field :balloon_payment_years, :style => 'width:35px; text-align:center;' %> years<br />on
+      <%= f.text_field :balloon_payment_date, :id => 'datepicker', :style => 'width:70px; text-align:center;' %>
+    </td>
+  </tr>
+  <tr style="vertical-align:top;">
+    <td width="350" style="background-color:#bbb;">Total monthly amount owed including escrow account payments</td>
+    <td width="558">
+      &nbsp;<%= f.radio_button :escrow_payment, '0' %> You do not have a monthly escrow payment for items, such as property taxes and homeowner's 
+      insurance. You must pay these items directly yourself.<br />
+      &nbsp;<%= f.radio_button :escrow_payment, '1' %> You have an additional monthly escrow payment of 
+      $<%= f.text_field :escrow_payment_amount, :style => 'width:100px;' %><br />
+      that results in a total initial monthly amount owed of $<%= f.text_field :total_payment_amount, :style => 'width:100px' %>. This includes
+      pricipal, interest, any mortgage insurance and any items checked below:<br /><br />
+      <table border="0" width="608">
+        <tr>
+          <td>&nbsp;<%= f.check_box :escrow_payment_includes_property_taxes %> Property taxes</td>
+          <td>&nbsp;<%= f.check_box :escrow_payment_includes_homeowners_insurance %> Homeowner's insurance</td>
+        </tr>
+        <tr>
+          <td>&nbsp;<%= f.check_box :escrow_payment_includes_flood_insurance %> Flood insurance</td>
+          <td>&nbsp;<%= f.check_box :escrow_payment_includes_item4 %> <%= f.text_field :escrow_payment_item4_name, :style => 'width:250' %></td>
+        </tr>
+        <tr>
+          <td>&nbsp;<%= f.check_box :escrow_payment_includes_item5 %> <%= f.text_field :escrow_payment_item5_name, :style => 'width:250' %></td>
+          <td>&nbsp;<%= f.check_box :escrow_payment_includes_item6 %> <%= f.text_field :escrow_payment_item6_name, :style => 'width:250' %></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

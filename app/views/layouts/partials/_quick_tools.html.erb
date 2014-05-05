@@ -1,0 +1,13 @@
+<li class="menu_item menu_divider"><%= link_to "Quick Tools", "#", onclick: "return false;" %>
+  <ul class="submenu">
+    <li><%= link_to "New Order", new_order_overlays_path, remote: true, id: "new_order_menu_item" %></li>
+    <li><%= link_to "New Contact", new_contact_overlays_path, remote: true, id: "new_contact_menu_item" %></li>
+    <% if @permission_manage_doc_templates %>
+      <li><%= link_to "Manage Templates", "/doc_templates" %></li>
+    <% end %>
+    <% if current_user.is_developer? %>
+      <li><%= link_to "Products", main_app.file_products_path %></li>
+    <% end %>
+    <li><%= link_to "FedEx History", shipments_module.shipments_path %></li>
+  </ul>
+</li>

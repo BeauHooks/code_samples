@@ -1,0 +1,7 @@
+  $("div#hud").html("<%= j(render "huds/#{@view}" ).html_safe %>");
+
+  <% if @view == "simple" %>
+  $('#hud_view').val("normal");
+  <% else %>
+    $('#hud_view').val("simple");
+  <% end %>

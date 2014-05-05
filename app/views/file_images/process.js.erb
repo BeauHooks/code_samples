@@ -1,0 +1,5 @@
+$('#overlay_process_file_images').html("<%= j render 'file_images/process', file: @file, pre_hud: @pre_hud %>");
+
+<% if @success %>
+  $('#success').show().delay(2500).fadeOut(1300);
+<% end %>

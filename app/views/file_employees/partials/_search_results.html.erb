@@ -1,0 +1,29 @@
+<table>
+	<% c = 0 %>
+	<% if @employees != nil && @employees.count > 0 %>
+	<% @employees.each do |i| %>
+	<% c += 1 %>
+	<tr id="search_employee<%= i.ID %>">
+		<td class="name hint"><span><%= i.FullName if i.FullName != nil %></span><div><%= truncate(i.FullName, length: 19) if i.FullName != nil %></div></td>
+		<td class="phone hint"><span><%= i.DirectPhone if i.DirectPhone != nil %></span><div><%= i.DirectPhone if i.DirectPhone != nil %></div></td>
+		<% if i.Email != "" %>
+		<td class="email hint"><span><%= mail_to i.Email %></span><div><%= mail_to i.Email, truncate(i.Email, length: 35) %></div></td>
+		<% else %>
+		<td class="email"></td>
+		<% end %>
+		<td class="actions"><a class="trigger" href="index/add_employee_to_new_file/?employee_id=<%= i.ID %>" data-remote="true">Add</a></td>
+	</tr>
+	<% end %>
+	<% end %>
+</table>
+
+  <%# OPTIMIZE: Easier way to inject js? %>
+  <% if c > 4 %>
+	  <script type="text/javascript">
+		  addWidth('add_employee', 75);
+	  </script>
+  <% else %>
+	  <script type="text/javascript">
+      fixWidth('add_employee', 75);
+	  </script>
+  <% end %>

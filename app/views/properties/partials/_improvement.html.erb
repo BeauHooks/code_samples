@@ -1,0 +1,31 @@
+<div class="result_container">
+  <div class="box_header">
+    <span class="title">Improvement Information</span>
+  </div>
+  <div>
+    <div class="label float_left w175">Year Built:</div>
+    <div class="float_left"><%= @detail.information.yearbuilt %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w175">Land Assessed Value:</div>
+    <div class="float_left"><%= number_to_currency(@detail.information.Realestatemarketvalue) %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w175">Improvements Assessed Values:</div>
+    <div class="float_left"><%= number_to_currency(@detail.assessment.MarketValueImprovements) %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w175">Living Area:</div>
+    <div class="float_left"><%= @detail.information.LivingArea %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w175">Rooms:</div>
+    <div class="float_left"><%= @detail.information.Rooms %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w175">Bedrooms / Bath:</div>
+    <div class="float_left"><%= @detail.information.BedRooms %> / <%= @detail.information.NumFullBaths %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w175">Garage Area:</div>
+    <div class="float_left"><%= @detail.information.GarageArea %></div>
+    <div class="clear_fix" />
+    <div class="label float_left w175">Carport Area:</div>
+    <div class="float_left"><%= @detail.information.CarportArea %></div>
+    <div class="clear_fix" />
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div id="search_bar" class="search_bar">
+  <div id="search">
+    <%= render "admin/partials/search_bar" %>
+  </div>
+  <div id="search_nav" class="search_nav">
+    <%= render "shared/search_results_count" %>
+  </div>
+</div>
+<div class="result_container margin_bottom box">
+  <div class="grid_header"></div>
+  <div style="overflow-x:hidden; overflow-y:auto; height: 150px; position: static;" id="search_results">
+    <table class="w100p sortable" style="overflow-x: hidden; overflow-y: auto;">
+      <thead class="grid_header_font">
+        <%= render "shared/thead_row" %>
+      </thead>
+      <tbody id="user_results" class="grid_results">
+        <%= render 'shared/result_row' %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div id="user_detail">
+</div>

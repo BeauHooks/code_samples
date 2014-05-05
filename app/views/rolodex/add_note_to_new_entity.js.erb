@@ -1,0 +1,6 @@
+$("#new_rolodex_note").append("<%= j(render "rolodex/partials/note_row").html_safe %>");
+$("#overlay_new_rolodex input").keydown(function(event){
+  if(event.which == 13){
+    event.preventDefault();
+  }
+});

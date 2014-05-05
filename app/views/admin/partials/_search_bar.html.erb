@@ -1,0 +1,12 @@
+<form id="search_form" name="search_form" action="<%= display_search_results_admin_users_path() %>" data-remote="true" method="get" onsubmit="clearSorting('#search_results');">
+  <div>
+    <div class="search_control">
+      Search: <%= select :type, nil, @select_options, {}, name: :type %>
+    </div>
+    <div class="search_control">
+      <input name="search" type="text" value=""  id="search_box" placeholder="Begin typing here..." />
+      <%= image_tag "loading.gif", id: "spinner", class: 'spinner' %><span id="searching_text" class="hide">Searching...</span>
+      <%= image_submit_tag "search.png", class: "icon", id: "search_button", onclick: "$('#user_detail').html(''); $('#user_results').html(\"<tr id='0' controller='#{controller_name}'><td class='no_result' colspan='100'>Searching...</td></tr>\"); $('#search_box').attr('readonly', true); $('#search_button').hide(); $('#spinner').show(); $('#searching_text').show();" %>
+    </div>
+</div>
+</form>

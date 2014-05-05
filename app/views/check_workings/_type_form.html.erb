@@ -1,0 +1,31 @@
+<% if @type.downcase == "check" %>
+  <tr>
+    <td class="label">Print:</td>
+    <td><%= select :check, :print_office_id, options_for_select([["Downtown", "13"],["Hurricane Office", "6"],["Mesquite Title Company", "7"],["S. River Road", "9"],["Riverside Drive", "10"],["Kanab", "12"],["Terra Title St. George", "17"],["Cedar City", "18"],["Equity Escrow", "21"],["Title Managers, Inc.", "25"], ["Fiddlers Canyon", "29"]]), {:include_blank => false}, {name: "print_office_id", style: "width: 179px;"} %></td>
+  </tr>
+  <tr>
+    <td class="label" style="vertical-align: top; padding-top: 1px; padding-right: 5px;">Memo:</td>
+    <td><%= text_area_tag :memo_1, "", style: "width: 175px;" %></td>
+  </tr>
+<% else %>
+  <tr>
+    <td class="label" style="vertical-align: top; white-space: nowrap;">Bank Name:</td>
+    <td><%= text_field_tag :beneficiary_bank_name, "", style: "width: 175px;" %></td>
+  </tr>
+  <tr>
+    <td class="label" style="vertical-align: top; white-space: nowrap; padding-right: 5px;">Name on Account:</td>
+    <td><%= text_field_tag :beneficiary_name, "", style: "width: 175px;" %></td>
+  </tr>
+  <tr>
+    <td class="label" style="vertical-align: top; white-space: nowrap;">Bank Routing:</td>
+    <td><%= text_field_tag :beneficiary_bank_routing, "", style: "width: 175px;" %></td>
+  </tr>
+  <tr>
+    <td class="label" style="vertical-align: top; white-space: nowrap;">Account Number:</td>
+    <td><%= text_field_tag :beneficiary_account_number, "", style: "width: 175px;" %></td>
+  </tr>
+  <tr>
+    <td class="label" style="vertical-align: top; white-space: nowrap;">Wire Memo:</td>
+    <td><%= text_area_tag :memo_1, "", style: "width: 175px;" %></td>
+  </tr>
+<% end %>

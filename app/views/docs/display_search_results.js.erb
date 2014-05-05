@@ -1,0 +1,15 @@
+<% if @templates.nil? == false %>
+	<% if @templates.size == 0 %>
+		$("#doc_search_result").html("<tr><td style='font-style: italic; color: #9B9B9B; padding: 5px;' colspan='6'>Search returned 0 results.</td></tr>");
+	<% else %>
+  	$("#doc_search_result").html("<%= j(render :partial => "docs/doc_search_results").html_safe %>");
+  <% end %>
+<% elsif @groups.nil? == false %>
+	<% if @groups.size == 0 %>
+		$("#group_search_result").html("<tr><td style='font-style: italic; color: #9B9B9B; padding: 5px;' colspan='6'>Search returned 0 results.</td></tr>");
+	<% else %>
+  	$("#group_search_result").html("<%= j(render :partial => "docs/group_search_results").html_safe %>");
+  <% end %>
+<% end %>
+
+clearSorting("#doc_lookup");

@@ -1,0 +1,10 @@
+<% if @signature.block_text != nil %>
+	<div style="position: absolute; width: 100%; height: 100%; z-index: 10;">
+		<div style="position: absolute; width: 100%; height: 100%; background: #FFF; opacity:0.75;">
+		</div>
+		<h2 class="pos_absolute text_center w99p" style="top: 35%;">Using Custom HTML.<br /><a href="rolodex_signatures/<%= @signature.id %>/revert_to_signature_builder" data-remote="true">Revert to Signature Builder.</a> </h2>
+	</div>
+<% end %>
+<div id="tree">
+	<%= tree_list(@signature) %>
+</div>

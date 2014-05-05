@@ -1,0 +1,14 @@
+$('#search_box').attr('readonly', false);
+$('#search_button').show(); 
+$('#spinner').hide(); 
+$('#searching_text').hide();
+
+$("#search_nav").html("<%= j(render "shared/search_results_count").html_safe %>");
+$("#user_results").html("<%= j(render "shared/result_row").html_safe %>");
+
+<% if @search_results.size > 0 %>
+	$("#user_detail").html("<p class='no_result'>Loading User...</p>");
+	$("#user_results tr:first").click();
+<% else %>
+	$("#user_detail").html("");
+<% end %>

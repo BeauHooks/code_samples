@@ -1,0 +1,90 @@
+@import "base";
+
+$white: #FFF;
+$light_grey: #CCC;
+$grey: #BBB;
+$dark_grey: #222;
+$black: #000;
+$red: #96190e;
+$blue: #0054a0;
+
+/* Backgrounds */
+$background_color_active: gray;
+$background_color_body: #282828;
+$background_color_doc_content: transparent;
+$background_color_menu: #BBBBBB;
+$background_color_menu_hover: #282828;
+$background_color_error: #f8a7aa;
+$background_color_search_bar: #282828;
+$background_color_active: #555555;
+
+/* Highlights */
+$highlight_color_tr: $background_color_active;
+
+/* Gradients */
+$header_gradient_background_legacy: rgb(0,0,0);
+$header_gradient_background_color_1: #000000;
+$header_gradient_background_color_2: #000000;
+$header_gradient_background_rgba:  #464646 0px,#464646 1px,#222222 1px,#222222 34px;
+
+$table_header_gradient_background_legacy: rgb(0,0,0);
+$table_header_gradient_background_color_1: #000000;
+$table_header_gradient_background_color_2: #000000;
+$table_header_gradient_background_rgba: #464646 0px,#464646 1px,#222222 1px,#222222 34px,#111111 34px,#111111 35px;
+
+$gradient_background_grey_legacy: rgb(0,0,0);
+$gradient_background_grey_color_1: #000000;
+$gradient_background_grey_color_2: #000000;
+$gradient_background_grey_rgba:   #464646 0px,#464646 1px,#222222 1px,#222222 7px;
+
+/* Color Selector */
+$global_color: #008541;
+$error_color: #ed1c24;
+
+/* Fonts */
+$font_color_standard: #BBBBBB;
+$font_color_doc_input_fields: #BBBBBB;
+$font_color_placeholder: #9B9B9B;
+$font_color_doc_content: #000000;
+$font_color_flash: #FFF;
+$font_color_error: #464646;
+$font_color_active: #DDDDDD;
+$font_color_table_header: #BBBBBB;
+$font_color_company_name: #DDD;
+$font_color_search_nav: $font_color_standard;
+$font_color_search_bar: $font_color_standard;
+
+/* Links */
+$link_color_standard: #99c260;
+$link_color_menu: #282828;
+$link_color_menu_hover: #BBBBBB;
+
+/* Borders */
+$border_color_standard: #111111;
+$border_color_accent: #111111;
+$border_color_menu_hover: #282828;
+$border_color_menu: #282828;
+$border_color_row_divider: $border_color_standard;
+$border_color_header_divider: $border_color_standard;
+$border_form_element: $border_color_accent;
+
+/* Rules Etc. */
+$hr_color: #111111;
+
+/* Headlines */
+$h4_background_color: #FF0000;
+$h4_font_color: #FFF;
+
+/* tabs */
+$tab_background: url("/assets/lights_out_tab_bg.png") no-repeat;
+$tab_background_active: url("/assets/lights_out_tabactive_bg.png") no-repeat;
+$tab_font_color: $font_color_standard;
+$tab_font_color_hover: $font_color_standard;
+$tab_font_color_active: $font_color_standard;
+
+/* Navigation */
+$navigation_link_color: #99C260;
+$navigation_divider_color: #888;
+
+@import "main";
+@import "shame";

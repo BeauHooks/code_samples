@@ -1,0 +1,35 @@
+<% content_for :overlay_title do %>
+  Report a Bug
+<% end %>
+<% content_for :overlay do %>
+  <%= form_tag "feedback/send_bug_report", id: "bug_report_form", method: :post, remote: true do %>
+    <table>
+      <tr>
+        <td>
+          User:
+        </td>
+        <td>
+          <%= current_user.first_name %> <%= current_user.last_name %>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Date:
+        </td>
+        <td>
+          <%= Time.now.strftime("%-1m/%d/%Y %l:%M %p") %>
+        </td>
+      </tr>
+
+      <tr>
+        <td valign="top">
+          Description:
+        </td>
+        <td>
+          <%= text_area_tag :description, nil, placeholder: "Describe the bug here", style: "placeholder: #00ff00;" %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+<% end %>

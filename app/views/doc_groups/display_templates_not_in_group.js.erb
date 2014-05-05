@@ -1,0 +1,7 @@
+<% if @refresh == "refresh" %>
+  $("#search_templates_not_in_group").click();
+  <% @refresh = nil %>
+<% else %>
+  $("#templates_in_group").html("<%= j(render 'doc_groups/templates_in_group').html_safe %>");
+  $("#templates_not_in_group").html("<%= j(render 'doc_groups/templates_not_in_group').html_safe %>");
+<% end %>

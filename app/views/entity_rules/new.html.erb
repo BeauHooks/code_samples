@@ -1,0 +1,23 @@
+<div id="add_edit_rule">
+  <div class="overlay_header">
+    <h2>Add Rule</h2>
+	</div>
+  <%= form_for @rule, remote: true do |f| %>
+	  <div class="overlay_content">
+		  <span class="label">Rule:</span><br />
+		  <%= f.text_area :RuleText, rows: 3, cols: 33 %>
+	  </div>
+    <%= f.text_area :EntityID, value: "#{@entity.EntityID}", style: "display:none;" %>
+    <%= f.submit "Submit", id: "new_rule_submit", style: "display: none" %>
+    <% end %>
+    <div class="overlay_footer">
+      <form action="rolodex/<%= @entity.EntityID %>/show_contact?type=Rule" method="get" onsubmit="closeOverlay('new_rule');" data-remote="true">
+		<input type="submit" value="Cancel" class="button close" />
+		<input type="submit" value="Save" class="button close" onclick="document.getElementById('new_rule_submit').click();" />
+	</form>
+    </div>
+</div>
+
+<script type="text/javascript">
+  openOverlay("new_rule");
+</script>

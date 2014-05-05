@@ -1,0 +1,30 @@
+<% n = 0 %>
+<% @file.file_properties.active.each do |p| %>
+  <% n += 1 %>
+  <tr class="row_<%= n %>">
+    <td class="add_link padding_left_5"><%= button_to 'Remove', file_property_path(id: p.ID), method: "delete", remote: true, onclick: "$('tr.row_#{n}').hide(); $('#property_result_#{p.TaxID}').val('Add'); $('#property_result_#{p.TaxID}').attr('disabled', false);" %></td>
+    <% if p.TaxID != nil && p.TaxID.length > 25 %>
+      <td class="tax_id hint"><span><%= p.TaxID %></span><div><%= truncate(p.TaxID, length: 25) %></div></td>
+    <% else %>
+      <td class="tax_id"><div><%= truncate(p.TaxID, length: 25) %></div></td>
+    <% end %>
+
+    <% if p.AccountID != nil && p.AccountID.length > 25 %>
+      <td class="account hint"><span><%= p.AccountID %></span><div><%= truncate(p.AccountID, length: 25) %></div></td>
+    <% else %>
+      <td class="account"><div><%= truncate(p.AccountID, length: 25) %></div></td>
+    <% end %>
+
+    <% if p.PropertyAddress != nil && p.PropertyAddress.length > 15 %>
+      <td class="address hint"><span><%= p.PropertyAddress %></span><div><%= truncate(p.PropertyAddress, length: 15) %></div></td>
+    <% else %>
+      <td class="address"><div><%= truncate(p.PropertyAddress, length: 15) %></div></td>
+    <% end %>
+
+    <% if p.LegalDescription != nil && p.LegalDescription.length > 25 %>
+      <td class="legal hint"><span><%= p.LegalDescription %></span><div><%= truncate(p.LegalDescription, length: 25) %></div></td>
+    <% else %>
+      <td class="legal"><div><%= truncate(p.LegalDescription, length: 25) %></div></td>
+    <% end %>
+  </tr>
+<% end %>

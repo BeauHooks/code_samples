@@ -1,0 +1,45 @@
+<div class="file_product_wrapper">
+	<h1 style="text-align: center; margin: 0em;"><%= @company.CompanyName %></h1>
+	<p style="text-align: center; font-weight: bold; margin: 0em;">
+		<%= @company.CompanyAddress %> <br />
+		<%= @company.CompanyCSZ %>
+	</p>
+	<p style="clear: both;"><br />Utah is a good funds state. Utah code 31A-23-307 requires "collected or cleared" funds to be deposited into our trust account. Please wire your funds using the information below so we can disburse on the same day your wire is received.</p>
+	<h2 style="margin: 1em 0em;"><br />DO NOT "DIRECT DEPOSIT" TO OUR ACCOUNT</h2>
+	<h2 style="text-align: center; margin: 1em 0em;"><br />WIRING INSTRUCTIONS<br /><br /></h2>
+	<table>
+	<tbody>
+	<tr>
+	<td style="width: 15em; vertical-align: top; padding: .5em 0em;"><strong>WIRE FUNDS TO:</strong></td>
+	<td style="padding: .5em 0em;">
+		<%= @company.BankName %><br />
+		<%= @company.CompanyAddress %><br />
+		<%= @company.BankCSZ %>
+	</td>
+	</tr>
+	<tr>
+	<td style="vertical-align: top; padding: .5em 0em;"><strong>BANK ABA NO.:</strong></td>
+	<td style="padding: .5em 0em;"><%= @company.BankWireRouting %></td>
+	</tr>
+	<tr>
+	<td style="vertical-align: top; padding: .5em 0em;"><strong>CREDIT ACCOUNT NO.:</strong></td>
+	<td style="padding: .5em 0em;"><%= @company.BankAccountNum %></td>
+	</tr>
+	<tr>
+	<td style="vertical-align: top; padding: .5em 0em;"><strong>NAME OF ACCOUNT:</strong></td>
+	<td style="padding: .5em 0em;"><%= @company.CompanyName %> Trust Account</td>
+	</tr>
+	<tr>
+	<td style="vertical-align: top; padding: .5em 0em;"><strong>ATTN:</strong></td>
+	<td style="padding: .5em 0em;"><%= @file.closers.first.employee.FullName rescue nil %></td>
+	</tr>
+	<tr>
+	<td style="vertical-align: top; padding: .5em 0em;"><strong>REFERENCE:</strong></td>
+	<td style="padding: .5em 0em;">File <%= @file.DisplayFileID %> / <%= @file.buyer_names %></td>
+	</tr>
+	</tbody>
+	</table>
+	<p><em><strong><br /></strong>We cannot accept "direct deposits" to our account as "same-day- good funds". A "direct deposit" will delay the availability of your funds, and delay your closing.</em></p>
+	<p><em><strong><br />Note: Any funds interbank transferred other than wires will be returned to sender.<br /><br /></strong></em></p>
+	<p style="text-align: center;">** Good Funds **<br />Personal Check- 5 Days<br />Cashiers Check- 1 Day<br />Money Order- 1 Day<br />Wires- Instant Funds<em><strong><br /></strong></em></p>
+</div>

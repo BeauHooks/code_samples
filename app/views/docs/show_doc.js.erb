@@ -1,0 +1,46 @@
+if($("div#doc_left").attr("style").indexOf("none") == -1){
+  $("div#doc_tools").html("<%= j(render "docs/doc_tools", file: @file, doc: @doc, size: 'Large View').html_safe %>");
+}
+else{
+  $("div#doc_tools").html("<%= j(render "docs/doc_tools", file: @file, doc: @doc, size: 'Small View').html_safe %>");
+}
+
+$("div#doc_content").attr("class", "doc");
+$("div#doc_content").html("<%= j(render "docs/doc", file: @file, doc: @doc, fields: @fields).html_safe %>");
+
+
+$("div#doc_specific_container").show();
+$("div#doc_specific_contents").html("<%= j(render "docs/doc_specific_info").html_safe %>");
+
+$("span#reset_fields").show();
+<% post = "docs/#{@doc.id}/reset_fields" %>
+<% notice = "You are about to overwrite any changes that you may have made to Default Field values. Resetting default values will not affect fields that you have changed directly on documents. This action cannot be undone.  Continue?" %>
+$("span#reset_fields").attr("onclick", "$.post('application/flash_notice?notice=<%= notice %>&post=<%= post %>&confirm=Yes');");
+
+<%# if @doc.doc_template.short_name == "HUD" || @doc.doc_template.short_name == "SS" || @doc.doc_template.short_name == "LSS" %>
+  // $("#doc_specific_container").hide();
+  // $("#doc_specific_container_img").attr("src", "/assets/plusgrey.png");
+  // $("#doc_specific_container_img").attr("class", "expand");
+  // $("#doc_specific_contents").hide();
+  // $("#doc_specific_contents").html("");
+<%# else %>
+<%# end %>
+
+// Load Doc Entity if Doc has one
+<% if @doc.doc_entity_id != nil %>
+  // $("#doc_entity_contents").html("<%#= j(render :partial => "docs/doc_entity_info").html_safe %>");
+  // $("#doc_entity_container").show();
+<% else %>
+  $("#doc_entity_container").hide();
+  $("#doc_entity_container_img").attr("src", "/assets/plusgrey.png");
+  $("#doc_entity_container_img").attr("class", "expand");
+  $("#doc_entity_contents").hide();
+  $("#doc_entity_contents").html("");
+<% end %>
+
+<% if @refresh_file_info %>
+  $("div#info").html("<%= j(render partial: "index/file_info").html_safe %>");
+<% end %>
+
+countMissingFields();
+initializer();

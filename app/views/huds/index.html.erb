@@ -1,0 +1,174 @@
+<div id="normal">
+    <table id="hud_banner">
+      <tr>
+        <td id="hud_logo">
+          <% if @print == nil %>
+            <img id="doc_logo" src="/hud_logo.png" />
+          <% else %>
+            <img id="print_logo" src="<%= Rails.root %>/public/hud_logo.png" />
+            <% end %>
+        </td>
+        <td id="hud_title"><h1>A. <span>Settlement Statement (HUD-1)</span></h1></td>
+        <td id="hud_approval">OMB Approval No. 2502-0265</td>
+    </table>
+    <table>
+      <tr>
+        <td colspan = "2" class="hud_header" >
+            <h2> B. Type of Loan</h2>
+        </td>
+      </tr>
+      <tr>
+        <td class="content">
+          <table id="b-section">
+            <tr id="b-top" valign = "top" >
+              <td>
+                <table id="b_checkbox">
+                  <tr>
+                    <td style="white-space: nowrap;">1. {{CB_LOAN_TYPE_1}} FHA</td>
+                    <td style="white-space: nowrap;">2. {{CB_LOAN_TYPE_2}} RHS</td>
+                    <td style="white-space: nowrap;">3. {{CB_LOAN_TYPE_3}} Conv. Unins.</td>
+                  </tr>
+                  <tr>
+                    <td style="white-space: nowrap;">4. {{CB_LOAN_TYPE_4}} VA</td>
+                    <td style="white-space: nowrap;">5. {{CB_LOAN_TYPE_5}} Conv. Ins.</td>
+                </tr>
+                </table>
+              </td>
+              <td style="width: 16%"> 6. File Number:<br />{{FILE_ID_NUMBER}}</td>
+              <td style="width: 16%"> 7. Loan Number:<br />{{LOAN_NUMBER}}</td>
+              <td> 8. Mortgage Insurance Case Number:<br />{{MORTGAGE_INSURANCE_NUMBER}}</td>
+            <tr style = "text-align:left;" valign = "top" >
+              <td colspan = "4" >
+                <b> C. Note:
+                This form is furnished to give you a statement of actual settlement costs. Amounts paid to and by the settlement
+                agent are shown. Items marked "(p.o.c.)" were paid outside the closing; they are shown here for informational
+                purposes and are not included in the totals.</b>
+            <tr id="hud_address" >
+              <td> D. Name & Address of Borrower:<br />
+                {{GRANTEE_NAMES}}<br />
+                {{GRANTEE_ADDRESS_1}} {{GRANTEE_ADDRESS_2}}<br />
+                {{GRANTEE_CITY}}, {{GRANTEE_STATE}} {{GRANTEE_ZIP}}</td>
+              <td colspan = "2" > E. Name & Address of Seller:<br />
+                <% if @file.TransactionDescription1 == "Refinance" %>
+                  REFINANCE
+                <% else %>
+                  {{GRANTOR_NAMES}}<br />
+                  {{GRANTOR_ADDRESS_1}} {{GRANTOR_ADDRESS_2}}<br />
+                  {{GRANTOR_CITY}}, {{GRANTOR_STATE}} {{GRANTOR_ZIP}}
+                <% end %></td>
+              <td> F. Name & Address of Lender:<br />
+                {{LENDER_NAME}}<br />
+                {{LENDER_ADDRESS_1}} {{LENDER_ADDRESS_2}}<br />
+                {{LENDER_CITY}}, {{LENDER_STATE}} {{LENDER_ZIP}} </td>
+            <tr class="hud_settlement" >
+              <td rowspan = "2" > G. Property Location:<br />
+                {{PROPERTY_ADDRESS}}, {{PROPERTY_CITY}}, {{PROPERTY_STATE}} {{PROPERTY_ZIP}}<br /><br />Tax ID: {{PROPERTY_TAX_ID}}</td>
+              <td colspan = "2" > H. Settlement Agent<br />{{COMPANY_NAME}}<br />Phone: {{COMPANY_PHONE}}</td>
+              <td>
+                I. Settlement Date<br />
+                <%# if @show != "" && @show != nil %>
+                  <%#= @show == "Buyer" ? "{{GRANTEE_SIGNING_DATE}}" : "{{GRANTOR_SIGNING_DATE}}" %>
+                <%# else %>
+                  <%# if @file.TransactionDescription1 == "Refinance" %>
+                    <!-- {{GRANTEE_SIGNING_DATE}} -->
+                  <%# else %>
+                    <!-- {{GRANTOR_SIGNING_DATE}} -->
+                  <%# end %>
+                <%# end %>
+                {{SETTLEMENT_DATE}}
+                <script type="text/javascript">
+                  $( "input#settlement_date").datepicker({
+                    minDate: 0,
+                    changeMonth: true,
+                    changeYear: true
+                  });
+                </script>
+              </td>
+            <tr  class="hud_settlement"  >
+              <td colspan = "2" > Place of Settlement:<br />
+                {{COMPANY_ADDRESS}}<br />{{COMPANY_CITY}}, {{COMPANY_STATE}} {{COMPANY_ZIP}}<br />Phone: {{SETTLEMENT_PHONE}}</td>
+              <td class="full-content">
+                Closing Date<br />
+                {{CLOSING_DATE}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <div style="margin-right: 5px;" class="half-content">
+      <table>
+        <tr>
+          <td class="hud_header">
+              <h2>J. Summary of Borrower's Transaction</h2>
+          </td>
+        </tr>
+      </table>
+      <div class="content">
+        <table>
+          <tbody id="hud_section_100">
+          <% @hud.hud_lines.where("number >= 100 AND number <= 119").each do |builder| %>
+              <%= render 'huds/partials/half-line', builder: builder %>
+          <% end %>
+          </tbody>
+          <tbody id="hud_section_200">
+          <% @hud.hud_lines.where("number >= 120 AND number <= 303").each do |builder| %>
+              <%= render 'huds/partials/half-line', builder: builder %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="half-content">
+      <table>
+        <tr>
+          <td class="hud_header">
+              <h2>K. Summary of Seller's Transaction</h2>
+          </td>
+        </tr>
+      </table>
+      <div class="content">
+          <table>
+            <tbody id="hud_section_400">
+              <% @hud.hud_lines.where("number >= 400 AND number <= 419").each do |builder| %>
+                  <%= render 'huds/partials/half-line', builder: builder %>
+              <% end %>
+            </tbody>
+            <tbody id="hud_section_500">
+              <% @hud.hud_lines.where("number >= 420 AND number <= 603").each do |builder| %>
+                  <%= render 'huds/partials/half-line', builder: builder %>
+              <% end %>
+            </tbody>
+          </table>
+      </div>
+    </div>
+
+    <p style="clear: both;">The Public Reporting Burden for this collection of information is estimated at 35 minutes per response for collecting, reviewing, and reporting the data. This agency may not collect this information, and you are not required to complete this form, unless it displays a currently valid OMB control number. No confidentiality is assured; this disclosure is mandatory.  This is designed to provide the parties to a RESPA covered transaction with information during the settlement process.</p>
+    {{PAGE_BREAK}}
+    <div class="full-content">
+      <table>
+        <tr>
+          <td class="hud_header" >
+            <h2> L. Settlement Charges</h2>
+          </td>
+        </tr>
+      </table>
+      <%= render 'huds/partials/l-section' %>
+    </div>
+    <table class="full-content" style="margin-top: 5px; border: .75px solid #343434;">
+      <% @hud.hud_lines.where("number = 1400").each do |builder| %>
+        <tr>
+          <%= render 'huds/partials/full-line', builder: builder %>
+        </tr>
+      <% end %>
+    </table>
+    {{PAGE_BREAK}}
+    <div class="compare-content ">
+      <%= render 'huds/partials/comparison-section' %>
+    </div>
+    <div class="loan-terms" id="loan_terms_section">
+      <%= render 'huds/partials/loan-terms-section'  %>
+    </div>
+    <p>Note: If you have any questions about the Settlement Charges and Loan Terms listed on this form, please contact your lender.</p>
+    {{HUD_SIGNATURE_FUNCTION}}
+</div>

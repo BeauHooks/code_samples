@@ -1,0 +1,108 @@
+<% content_for :overlay_class do %>
+  employee_lookup
+<% end %>
+
+<% content_for :overlay_title do %>
+  Add Employee
+<% end %>
+
+<% content_for :overlay do %>
+  <% if @file != nil %>
+    <% url = "file_employees/search?file=#{@file.ID}" %>
+  <% else %>
+    <% url = "file_employees/search" %>
+  <% end %>
+  <%= form_for 'search_form', url: url, html: {:name => 'search_form', onsubmit: "$('#add_employee #result').html(\"<p style='margin-top: 5px; padding-left: 5px;'><img src='assets/loading.gif' style='margin-right: 5px; width: 15px; position: relative; top: 4px;' />Searching...</p>\");", :remote => true} do %>
+    <h4>Search: <input type="text" name="search_value" id="search_value" placeholder="Begin Typing Here..."><%= image_submit_tag "search.png", class: "icon" %></h4>
+  <% end %>
+
+  <div class="outer_table border">
+    <div class="grid_header"></div>
+    <div class="inner_table h100">
+      <table>
+        <thead class="grid_header_font">
+          <tr>
+            <th class="add_link">
+              <div>Actions</div>
+            </th>
+            <th class="name">
+              <div>Name</div>
+            </th>
+            <th class="position">
+              <div>Position</div>
+            </th>
+            <th class="email">
+              <div>Email</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render 'file_employees/search_employees' %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <% if @file != nil %>
+    <h3 style="margin-top: 10px;">Employees on File</h3>
+    <div class="outer_table border">
+      <div class="grid_header"></div>
+      <div class="inner_table h100">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="add_link">
+                <div>Actions</div>
+              </th>
+              <th class="name">
+                <div>Name</div>
+              </th>
+              <th class="position">
+                <div>Position</div>
+              </th>
+              <th class="phone">
+                <div>Phone</div>
+              </th>
+              <th class="email">
+                <div>Email</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="current_employees">
+            <%= render 'file_employees/current_employees', file: @file %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <h3 style="margin-top: 10px;">Employees on Order</h3>
+    <div class="outer_table border">
+      <div class="grid_header"></div>
+      <div class="inner_table h100">
+        <table>
+          <thead class="grid_header_font">
+            <tr>
+              <th class="add_link">
+                <div>Actions</div>
+              </th>
+              <th class="name">
+                <div>Name</div>
+              </th>
+              <th class="position">
+                <div>Position</div>
+              </th>
+              <th class="phone">
+                <div>Phone</div>
+              </th>
+              <th class="email">
+                <div>Email</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="employees_on_new_order">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+<% end %>

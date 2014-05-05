@@ -1,0 +1,52 @@
+<div id="add_edit_note">
+  <div class="overlay_header">
+    <h2>Add Note</h2>
+  </div>
+  <div class="overlay_content">
+    <%= form_for @rolodex_note, remote: true do |f| %>
+      <table>
+        <tr>
+          <td class="label">From:</td>
+          <td><select disabled="disabled"><option><%= current_user.employee.FullName %></option></select></td>
+        </tr>
+        <tr>
+          <td class="label">To:</td>
+          <td><%= select :note, :To, Employee.find(:all, :conditions => ["IsActive = 'True' AND ID NOT IN (190, 119, 95, 157, 327) "], :order => "FullName ASC").collect{|to| [to.FullName, to.ID]}, {:include_blank => true}, {name: "entity_note[TickleEmployeeID]"} %></td>
+        </tr>
+        <tr>
+          <td class="label">Reminder Date:</td>
+          <td><%= f.text_field :TickleDate, id: "note_datepicker", size: 36, placeholder: "mm/dd/yyyy" %></td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">Message:</td>
+          <td><%= f.text_area :NoteText, rows: 3, cols: 37 %></td>
+        </tr>
+        <tr>
+          <td colspan="2"><%= f.submit "Save", style: "float: right;" %></td>
+        </tr>
+      </table>
+    <%= f.text_field :EntityID, value: "#{@rolodex_entity.EntityID}", style: "display:none;" %>
+    <% end %>
+    <% if @rolodex_entity != nil %>
+      <h3 style="margin-top: 5px;">Notes On File</h3>
+      <div class="box">
+        <table class="grid_header">
+          <tr>
+          <td class="from">From</td>
+          <td class="to">To</td>
+          <td class="date">Entered Date</td>
+          <td class="note">Note</td>
+          <td class="action" id="current_notes_last"></td>
+          </tr>
+      </table>
+        <div id="current_notes" class="results">
+          <%= render 'entity_notes/current_notes' %>
+        </div>
+      </div>
+    <% end %>
+    </div>
+    <div class="overlay_footer">
+      <input type="button" value="Close" class="button close" onclick="closeOverlay('new_note');" />
+    </form>
+  </div>
+</div>

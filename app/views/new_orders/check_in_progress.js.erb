@@ -1,0 +1,40 @@
+<% if @in_progress %>
+  $("<%= j(render 'new_orders/dialogs/order_in_progress') %>").dialog({
+    buttons:
+      [
+        {
+          text: "Yes",
+          click: function(){
+            $.ajax({
+              url: Routes.new_order_overlays_path({file_id: <%= @in_progress.ID %>}),
+              type: "GET"
+            });
+            $(this).dialog("close");
+          }
+        },
+        {
+          text: "No",
+          click: function(){
+            $.ajax({
+              url: Routes.new_order_overlays_path(),
+              type: "GET"
+            });
+            $(this).dialog("close");
+          }
+        },
+        {
+          text: "Cancel",
+          click: function(){
+            $(this).dialog("close");
+          }
+        }
+      ],
+    modal: true,
+    resizable: false
+  });
+<% else %>
+  $.ajax({
+    url: Routes.new_order_overlays_path(),
+    type: "GET"
+  });
+<% end %>

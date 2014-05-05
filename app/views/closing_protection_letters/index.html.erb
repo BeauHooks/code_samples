@@ -1,0 +1,21 @@
+<h1>List of Recent CPL Orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>File #</th>
+      <th>Borrowers</th>
+      <th>Created</th>
+      <th>Created By</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @cpls.each do |cpl| %>
+    <tr>
+      <td><%= link_to cpl.file_id, "index?file_id=#{cpl.file_id}" %></td>
+      <td><%= cpl.pertains_to %></td>
+      <td><%= cpl.created_at.to_s %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

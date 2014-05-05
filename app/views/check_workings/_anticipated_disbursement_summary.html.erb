@@ -1,0 +1,57 @@
+<% hash = get_balance_hash() %>
+<% working = @file.check_workings.sum("amount").to_f %>
+<% total = hash["anticipated"] - working %>
+
+<table id="anticipated_disbursement_totals" style="width: 100%; border-collapse: collapse;">
+  <% unless hash["earnest_money"] == 0 %>
+    <tr>
+      <td class="label">Down Payments</td>
+      <td class="amount" style="text-align: right;"><%= number_to_currency(hash["earnest_money"], precision: 2, unit: "$") %></td>
+    </tr>
+  <% end %>
+  <% unless hash["loan_amount"] == 0 %>
+    <tr>
+      <td class="label">Lender</td>
+      <td class="amount" style="text-align: right;"><%= number_to_currency(hash["loan_amount"], precision: 2, unit: "$") %></td>
+    </tr>
+    <% hash["loan_fees"].each do |line| %>
+      <tr>
+        <% label = "#{line.number}. #{line.name.to_s.gsub(/to\s*\z/, "")}" %>
+        <% if label.length > 25 %>
+          <td style="padding-left: 10px;" class="hint"><span><%= label %></span><%= truncate(label, length: 25) %></td>
+        <% else %>
+          <td style="padding-left: 10px;"><%= label %></td>
+        <% end %>
+        <td class="amount" style="text-align: right;">-<%= number_to_currency(line.amount.to_f + line.borrower_amount.to_f + line.charges.to_f - line.credits.to_f, precision: 2, unit: "$") %></td>
+      </tr>
+    <% end %>
+  <% end %>
+  <% unless hash["buyer"] == 0 %>
+    <tr>
+      <td class="label">Buyer</td>
+      <td class="amount" style="text-align: right;"><%= number_to_currency(hash["buyer"], precision: 2, unit: "$") %></td>
+    </tr>
+  <% end %>
+  <% unless hash["seller"] == 0 %>
+    <tr>
+      <td class="label">Seller</td>
+      <td class="amount" style="text-align: right;"><%= number_to_currency(hash["seller"], precision: 2, unit: "$") %></td>
+    </tr>
+  <% end %>
+  <tr class="<%= 'red' if hash["anticipated"] < 0 %>">
+    <td class="border-top total label">Anticipated Receipts</td>
+    <td class="border-top total amount" style="text-align: right;">
+      <%= number_to_currency(hash["anticipated"], precision: 2, unit: "$") %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Disburse</td>
+    <td class="amount" style="text-align: right;"><%= number_to_currency(working * -1, precision: 2, unit: "$") %></td>
+  </tr>
+  <tr class="<%= 'red' if total < 0 %>">
+    <td class="total border-top label">Balance</td>
+    <td class="total border-top amount" style="text-align: right;">
+      <%= number_to_currency(total, precision: 2, unit: "$") %>
+    </td>
+  </tr>
+</table>

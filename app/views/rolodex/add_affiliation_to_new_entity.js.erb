@@ -1,0 +1,7 @@
+$("#new_rolodex_affiliations").append("<%= j(render "rolodex/partials/affiliation_row").html_safe %>");
+updateRolodexFormCurrent("affiliations");
+$("#overlay_new_rolodex input").keydown(function(event){
+  if(event.which == 13){
+    event.preventDefault();
+  }
+});

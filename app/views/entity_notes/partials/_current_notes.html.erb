@@ -1,0 +1,11 @@
+<table id="new_current_note">
+  <% @rolodex_entity.entity_notes.order("NoteDT DESC").each do |n| %>
+    <tr>
+      <td class="from"><%= n.taken_by.FullName rescue ""%></td>
+      <td class="to"><%= n.tickled_by.FullName rescue "" %></td>
+      <td class="date"><%= n.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p') rescue "" %></td>
+      <td class="note <%= "hint"  if n.NoteText != "" && n.NoteText != nil %> "><span><%= n.NoteText if n.NoteText != "" && n.NoteText != nil %></span><div><%= truncate(n.NoteText, length: 25) %></div></td>
+      <td class="action"><%#= button_to 'Remove', file_note_path("#{n.ID}"), method: :delete, remote: true, onclick: "$('tr.row_#{c}').hide();" %></td>
+    </tr>
+  <% end %>
+</table>

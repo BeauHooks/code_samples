@@ -1,0 +1,30 @@
+<tr id="file_image_<%= image.ImageID %>">
+  <td class="select">
+    <input type="checkbox" data-id="<%= image.ImageID %>" />
+  </td>
+  <td class="type" style="padding-left: 5px;">
+    <div>
+      <% if Rails.env == "staging" && image.ImageDate < Time.now.strftime("%Y-%m-%d 00:00:00") %>
+        <font color="gray"><%= image.ImageType %></font>
+      <% elsif image.tempfile == "PROCESSED" || image.tempfile == nil %>
+        <% if @file.Recorded != nil && @file.Recorded < (Time.now - 1.years) && !@permission_view_old_file_images %>
+          <%= link_to image.ImageType, "/index/#{@file.ID}/file_image?image_id=#{image.ImageID}", onclick: "alert('File ##{@file.DisplayFileID} is over 1 year old, cannot open attachment'); return false;" %>
+        <% else %>
+          <%= link_to image.ImageType, "/index/#{@file.ID}/file_image?image_id=#{image.ImageID}" %>
+        <% end %>
+      <% else %>
+        <font color="gray"><%= image.ImageType %> (Processing...)</font>
+      <% end %>
+    </div>
+  </td>
+  <% note = image.ImageNotes.to_s %>
+  <% click = "editInPlace(this, 'text_field', '/file_images/#{image.ImageID}?file_id=#{@file.ID}');" %>
+  <% if note.length > 70 %>
+    <td class="note hint" field="ImageNotes" onclick="<%= click %>"><span><%= note %></span><%= truncate(note, length: 70) %></td>
+  <% else %>
+    <td class="note" field="ImageNotes" onclick="<%= click %>"><%= note %></td>
+  <% end %>
+  <td class="active"><%= check_box_tag :Inactive, image.Inactive == 0 ? false : true, image.Inactive == 0 ? true : false, onclick: "addToQueue('toggle_active_image', 'file_images/#{image.ImageID}/toggle_active?show_inactive=#{@show_inactive}&active=' + $(this).val() ); if($(this).val() == 'false'){ $(this).val('true') }else{ $(this).val('false') } " %></td>
+  <td class="modify_user"><%= image.entered_by.FullName if image.entered_by != nil %></td>
+  <td class="modify_date"><%= image.ImageDate.strftime('%-1m/%-1d/%Y') if image.ImageDate != nil %></td>
+</tr>

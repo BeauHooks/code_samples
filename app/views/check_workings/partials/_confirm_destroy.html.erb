@@ -1,0 +1,14 @@
+<% content_for :overlay_class do %>
+  flash_error
+<% end %>
+
+<% content_for :overlay_title do %>
+  Destroy
+<% end %>
+
+<% content_for :overlay do %>
+  <%= form_tag "#{check_working_path(@disbursement)}", method: :delete, remote: true do %>
+    <p>Are you sure that you want to destroy this disbursement?</p>
+    <%= hidden_field_tag :confirm, true %>
+  <% end %>
+<% end %>

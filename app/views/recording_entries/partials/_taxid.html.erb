@@ -1,0 +1,10 @@
+<div id="detail_taxids">
+  <div class="box_header">
+    <span class="title">Tax ID</span>
+  </div>
+  <div>
+  <% @detail.recording_taxids.each do |taxid| %>
+    <div class="padding_left_5"><%= taxid.TaxID %></div>
+  <% end %>
+  </div>
+</div>

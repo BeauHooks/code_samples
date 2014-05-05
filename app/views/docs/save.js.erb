@@ -1,0 +1,15 @@
+<% content = print_doc %>
+<% if @docs.count == 1 %>
+  $.ajax({
+    url: "/docs/send_doc?content=<%= content %>&save_file=true&employee_id=<%= current_user.employee_id %>&company_id=<%= @file.Company %>&file_id=<%= @file.DisplayFileID %>",
+    type: "post"
+  });
+<% else %>
+  $.ajax({
+    url: "/docs/send_doc?<%= content %>&save_file=true&employee_id=<%= current_user.employee_id %>&company_id=<%= @file.Company %>&file_id=<%= @file.DisplayFileID %>",
+    type: "post"
+  });
+<% end %>
+
+print_doc_done();
+addToQueue("show_process_images", "file_images/load_process_images?display_file_id=<%= @file.FileID %>&pre_hud=<%= @pre_hud %>");

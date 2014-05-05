@@ -1,0 +1,107 @@
+<div id="new_disbursement" style="/*width: 575px;*/ width: 285px;">
+	<div class="overlay_header">
+	  <h2>Create Disbursement</h2>
+	</div>
+	<form action="check_workings/create?file_id=<%= @file.FileID %>" data-remote="true" method="post">
+	<div class="overlay_content">
+		<table style="float: left; margin-right: 20px;">
+				<tr>
+					<td colspan="2" class="label">Payable to <%= company_name @file.Company %>&nbsp;&nbsp;
+            <%= check_box_tag :company, "false", false, onchange: "payCompany(this);", id: "payment_to_company" %>
+          </td>
+        </tr>
+        <tr>
+        	<td colspan="2"><hr /></td>
+        </tr>
+				<tr>
+			 		<td class="label" style="padding-right: 5px;">Type:</td>
+	      	<td><%= select :disbursement, :funds_type, options_for_select([["Check", "check"],["Wire", "wire"]]), {:include_blank => false}, {name: "funds_type", id: "disbursements_type", onchange: "//addToQueue('show_type', 'check_workings/show_type?type=' + $(this).val() );", style: "width: 179px;"} %></td>
+        </tr>
+        <tr>
+          <td class="label" style="">Entity:</td>
+          <td>
+            <%= text_field_tag :entity, "", readonly: true, style: "width: 155px;"  %>
+            <%= link_to image_tag("search.png", class: "icon"), "rolodex/quick_search?title=Select Payee&post=check_workings/add_payee?entity_id=", remote: true %>
+            <%= hidden_field_tag :entity_id, "" %>
+          </td>
+        </tr>
+        <tr class="purpose_fields" style="display: none;">
+          <td class="label" style="">Purpose:</td>
+          <td><%= select :invoice, :purpose, options_for_select([["Invoice", "Invoice"],["File", "File"]]), {:include_blank => false}, {style: "width: 179px;", name: "purpose", onchange: "addToQueue('change_purpose', 'check_workings/change_purpose?purpose=' + $(this).val() );", id: "purpose_select"} %></td>
+        </tr>
+        <tr class="purpose_fields" style="display: none;">
+          <td colspan="2">
+            <tbody id="purpose_results" class="purpose_fields">
+              <%# purpose_results %>
+            </tbody>
+          </td>
+        </tr>
+        <tr class="payee_fields">
+          <td class="label" style="">Payee 1:</td>
+          <td>
+            <%= text_field_tag :payee_1, "", style: "width: 175px;"  %>
+          </td>
+        </tr>
+        <tr class="payee_fields">
+          <td class="label" style="">Payee 2:</td>
+          <td>
+            <%= text_field_tag :payee_2, "", style: "width: 175px;"  %>
+          </td>
+        </tr>
+        <tr>
+          <td class="label" style="padding-right: 5px;">Amount:</td>
+          <td><%= text_field_tag :amount, "", style: "width: 175px;", onkeydown: "numbersOnly(event);", onchange: "toUSD(this);"  %></td>
+        </tr>
+    </table>
+    <!-- <table style="float: left;">
+    	<tbody id="disbursement_form">
+      <%#= render "check_workings/type_form" %>
+    	</tbody>
+    </table> -->
+    <p style="clear: both;"></p>
+	</div>
+	<div class="overlay_footer" style="clear: both;">
+    <span class="button">
+      <input type="button" value="Save" data-remote="true" onclick="if(verifyNewDisbursement()){$(this).closest('form').submit(); closeOverlay('new_disbursement');}" />
+      <input type="button" value="Close" data-remote="true" onclick="closeOverlay('new_disbursement');" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+	$("#disbursements_type").val("check").change();
+  openOverlay("new_disbursement");
+
+  function verifyNewDisbursement(){
+  	var error = "";
+
+  	if($("#purpose_select").val() == "File" && $("#purpose_value").val() != undefined && $("#purpose_value").val() == ""){
+      error += "&list[]=File Number cannot be left blank.";
+    }
+
+    if(error != ""){
+      $.post('application/flash_notice?confirm=Okay&notice=Please correct the following:' + error);
+      return false;
+    }
+    return true;
+  }
+
+  function payCompany(object){
+    if( object.checked ){
+      $(object).val('true');
+      $('#new_disbursement input[name=entity]').val('<%= company_name @file.Company %>');
+      $('#new_disbursement input[name=entity_id]').val('<%= @file.Company %>');
+      $('.payee_fields').hide();
+      $('.purpose_fields').show();
+      $('#purpose_select').val("File").change();
+    }
+    else{
+      $(object).val('false');
+      $('#new_disbursement input[name=entity]').val('');
+      $('#new_disbursement input[name=entity_id]').val('');
+      $('.purpose_fields').hide();
+      $('#purpose_results').html("");
+      $('.payee_fields').show();
+    }
+  }
+</script>

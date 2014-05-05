@@ -1,0 +1,11 @@
+<% type = "Home" if type == nil %>
+<% check = "checkForDuplicates(this);" %>
+
+<tr id="contact_info_BLANK<%= n unless n.nil? %>"  data-section="contact_info" data-field="Primary">
+  <td class="primary"><img src="/assets/redx.png" onclick="removeContactInfo(this)" class="trigger" /><input type="checkbox" name="" onclick="updateRolodexPrimary(this.id)" id="" <%= "checked='checked'" if !n.nil? && n == 1 %> data-field="Primary" /></td>
+  <td class="type">
+    <%= select :entity_contact, :ContactDesc, options_for_select([["Cell", "Cell"], ["Email", "Email"], ["Fax", "Fax"], ["Home", "Home"], ["Office", "Office"], ["Website", "Website"]], type), { include_blank: false }, {"data-field" => "Type"} %>
+  </td>
+  <td class="info"><input type="text" name="" data-field="Info" data-check="contact_info" onchange="var sender = $(this).closest('tr').find('select:first').val(); var ind_corp = $('#overlay_new_rolodex #entity_IndCorp').val(); if( (['Home', 'Cell'].indexOf(sender) != -1 && ind_corp == 'Individual') || ( sender == 'Office' && ind_corp != 'Individual') || sender == 'Email' ){<%= check %>}" /></td>
+  <td class="description"><input type="text" name="" data-field="Description" /></td>
+</tr>

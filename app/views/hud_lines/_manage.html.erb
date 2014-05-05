@@ -1,0 +1,168 @@
+<% cannot_remove = [
+     100,101,102,103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 120,
+     200,201,202,203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219,220,
+     300,301,302,303,
+     400,401,402,403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 420,
+     500,501,502,503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519,520,
+     600,601,602,603,
+     700,701,702,703,
+     800,801,802,803,804,805,806,807,
+     900,901,902,903,
+     1000,1001,1002,1003,1004,1007,
+     1100,1101,1102,1103,1104,1105,1106,1107,1108,
+     1200,1201,1203,1204,1205, 1206,
+     1300,1301,1302, 1303, 1304, 1305,
+     1400,
+     2000,2001,2002,2003,
+     2100,2101,2102,2103,2104,2105,2106,2107,
+     2200,2201,2202,
+     3000,3001,3003,3004,3005,3006,3007,3008,3009,3011,3013,3014,3015,3017,3018,3096,3097,3099,
+     4000,4001,4003,4004,4005,4006,4007,4008,4009,4011,4013,4014,4015,4017,4018,4096,4097,4099,
+     5000,5001,5003,5004,5005,5006,5007,5008,5009,5011,5013,5014,5016,5017,5018,5019,5020,5096,5097,5099] %>
+
+<% if @line.type.gsub("_custom", "") == "ss_commission" %>
+  <% number = @line.number %>
+  <% while true %>
+    <% number += 1 %>
+    <% current = HudLine.where("number = #{number} AND hud_id = #{@line.hud_id} AND (type LIKE 'ss_commission%') ").first %>
+
+    <% if current == nil || current.type.gsub("_custom", "") == "ss_commission_total" %>
+      <% break %>
+    <% end %>
+  <% end %>
+
+  <% if current != nil && current.type.gsub("_custom", "") == "ss_commission_total" %>
+    <% @line = current %>
+  <% end %>
+<% end %>
+
+<div class="manage_hud_line" data-current="<%= @line.id %>">
+  <div class="overlay_header">
+    <h2>Line <%= @line.number %>
+      <span style="float: right; margin-bottom: 5px;">
+        <% if !cannot_remove.include?(@line.number) %>
+          <%= submit_tag "Remove", type: "button", onclick: "addToQueue('remove', '/hud_lines/#{@line.id}/destroy?hud_id=#{@hud.id}'); closeOverlay('manage_hud_line');", remote: true %>
+        <% end %>
+        <%#= submit_tag "Clear", type: "button", onclick: "addToQueue('clear', '/hud_lines/#{@line.id}/clear?hud_id=#{@hud.id}');", remote: true %>
+      </span>
+    </h2>
+  </div>
+  <div class="overlay_content" style="clear: both;">
+    <% if ["ss_normal", "jk_normal", "jk_proration", "l_normal"].include?(@line.type.gsub("_custom", "")) && ![703].include?(@line.number) %>
+    <p style="margin-top: 5px;">
+
+        <span class="label">Type:</span>
+        <% if @line != nil %>
+          <% if @line.number >= 3000 %>
+            <%= select_tag :hud_lines, "<option value='ss_commission_group' #{"selected='selected'" if @line.type.gsub('_custom', '').include?("ss_commission")}>Commission Group</option>
+                                        <option value='ss_commission' #{"selected='selected'" if @line.type.gsub('_custom', '').include?("ss_commission")}>Commission Line</option>
+                                        <option value='ss_commission_total' #{"selected='selected'" if @line.type.gsub('_custom', '').include?("ss_commission")}>Commission Total</option>
+                                        <option value='ss_header' #{"selected='selected'" if @line.type.gsub('_custom', '').include?("ss_header")}>Header</option>
+                                        <option value='ss_payee' #{"selected='selected'" if @line.type.gsub('_custom', '').include?("ss_payee")}>Payee</option>
+                                        <option value='ss_proration' #{"selected='selected'" if @line.type.gsub('_custom', '').include?("ss_proration")}>Proration</option>
+                                        <option value='ss_normal' #{"selected='selected'" if @line.type.gsub('_custom', '').include?("ss_normal")}>Normal</option>".html_safe, style: "width:200px;", id: "line_type", onchange: "
+                                                    addToQueue('create', '/hud_lines/create?hud_id=#{@hud.id}&id=#{@line.id}&line_num=#{@line.number}&type=' + $(this).val() );
+                                                    closeOverlay('manage_hud_line');
+                                                    //if($(this).val() == 'ss_commission_group'){
+                                                    //  $('#hud_row_#{@line.number + 3} .flyout').click();
+                                                    //}
+                                                    //else if ($(this).val() == 'ss_proration'){
+                                                    //  $('#hud_row_#{@line.number + 1} .flyout').click();
+                                                    //}
+                                                    //else{
+                                                    //  $('#hud_row_#{@line.number} .flyout').click();
+                                                    //}
+                                                    ", remote: true %>
+          <% else %>
+            <% @line.number < 1000 ? low = @line.number.to_s[0].to_i * 100 : low = @line.number.to_s[0..1].to_i * 100 %>
+            <% @line.number < 1000 ? high = @line.number.to_s[0].to_i * 100 + 20 : high = @line.number.to_s[0..1].to_i * 100 + 20 %>
+            <%= select :hud_lines, :type, @hud.hud_lines.where("number >= #{low} AND number <= #{high}  AND type LIKE '#{@type}%' AND type NOT LIKE '%checkbox' AND type NOT LIKE '%footer' AND type NOT LIKE '%header' AND type NOT LIKE '%inverse' AND type NOT LIKE '%main_payee' AND type NOT LIKE '%_custom' AND type NOT LIKE 'ss_proration_date' ").select("type").group("type").order("type ASC").collect{|t| [t.type.split("_")[1..-1].join(" ").titleize, t.type]}, {include_blank: false, selected: @line.type}, {style: "width:200px;", id: "line_type", onchange: "$.post('/hud_lines/#{@line.id}/show?hud_id=#{@line.hud_id}&file_id=#{@file.id}&type=' + $(this).val() );", remote: true} %>
+          <% end %>
+        <% else %>
+          <% @section.to_i < 1000 ? low = @section[0].to_i * 100 : low = @section[0..1].to_i * 100 %>
+          <% @section.to_i < 1000 ? high = @section[0].to_i * 100 + 20 : high = @section[0..1].to_i * 100 + 20 %>
+          <%= select :hud_lines, :type, @hud.hud_lines.where("number >= #{low} AND number <= #{high}  AND type LIKE '#{@type}%' AND type NOT LIKE '%checkbox' AND type NOT LIKE '%footer' AND type NOT LIKE '%header' AND type NOT LIKE '%inverse' AND type NOT LIKE '%main_payee' AND type NOT LIKE '%_custom' AND type NOT LIKE 'ss_proration_date' ").select("type").group("type").order("type ASC").collect{|t| [t.type.split("_")[1..-1].join(" ").titleize, t.type]}, {include_blank: false, selected: @line.type}, {style: "width:200px;", id: "line_type", onchange: "$.post('/hud_lines/#{@line.id}/show?hud_id=#{@line.hud_id}&file_id=#{@file.id}&type=' + $(this).val() );", remote: true} %>
+        <% end %>
+      </p>
+    <hr style="clear: both;" />
+    <% end %>
+
+    <div id="line_info" class="line_info">
+      <%= render "hud_lines/line_info" %>
+    </div>
+    <hr style="clear: both;" />
+    <div id="payments">
+
+      <h4 style="text-decoration: underline; margin-bottom: 5px;">Payments
+        <%= link_to image_tag("plus.png", class: "icon"), "hud_lines/#{@line.id}/create_payment?hud_id=#{@line.hud_id}", remote: true %>
+      </h4>
+      <div class="box">
+        <div class="grid_header">
+          <table>
+            <tr>
+              <td class="payee">Payee</td>
+              <td class="purpose">Purpose</td>
+              <td class="memo">Memo</td>
+              <td class="amount" id="payments_last">Amount</td>
+            </tr>
+          </table>
+        </div>
+        <div class="results" id="line_payments">
+          <%= render "hud_lines/line_payments" %>
+        </div>
+      </div>
+    </div>
+    <hr style="clear: both; margin-top: 5px;" />
+    <div id="check_view" style="width: 100%; position: relative;">
+      <h4 style="text-decoration: underline;">Payment Details</h4>
+      <div id="check" style="border: 1px solid #CCCCCC; padding:10px 10px 10px 10px; margin-top: 5px;">
+        <%#= render "hud_lines/check_view" %>
+      </div>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <span class="button">
+      <input type="button" value="Close" class="close" onclick="addToQueue('update_hud_line', 'hud_lines/<%= @line.id %>/update?hud_id=<%= @line.hud_id %>'); closeOverlay('manage_hud_line')" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  openOverlay('manage_hud_line');
+
+  function updateHudLine(object){
+    var field = $(object).attr('name');
+    var value = object.value.toString().replace(/,/g,'')
+    var hud_id = "<%= @line.hud_id %>";
+    var line_id = "";
+
+    if($(object).closest("tr").data("lineid") != undefined){
+      line_id = $(object).closest("tr").data("lineid");
+    }
+    else{
+      line_id = "<%= @line.id %>";
+    }
+
+    value = parseFloat(value);
+    if (isNaN(value)){
+      value = ""
+    }
+    if (value != "" && field != "start_date" && field != "end_date" && field != "periods" && field != "description" && field != "name"){
+      object.value = amountToUSD( value.toFixed(2) );
+    } else {
+      value = object.value;
+      if(value.toString() == "0" && field != "periods"){
+        value = parseFloat(value).toFixed(2);
+        object.value = value;
+      }
+    }
+
+    addToQueue( 'update_hud_line',"/hud_lines/" + line_id + "/update?refresh=refresh&hud_id=" + hud_id + "&field=" + field + "&value=" + encodeURIComponent(value) );
+    updateWallet(<%= @line.id %>, <%= @line.hud_id %>);
+    //addToQueue( 'update_hud_line',"/hud_lines/" + line_id + "/refresh_payments?hud_id=" + hud_id);
+  }
+</script>
+
+<!-- <div id="overlay_split" class="overlay"></div>
+<div id="overlay_new_payment" class="overlay"></div> -->
+

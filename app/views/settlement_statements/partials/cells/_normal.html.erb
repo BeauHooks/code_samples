@@ -1,0 +1,126 @@
+<div class="<%= cell.object.get_css_attributes %>">
+  <%########################################%>
+  <%# Filter by section/line_sub_type/cell_name %>
+  <%########################################%>
+  <% case "#{line.object.ss_section.name.downcase}_#{line.object.line_sub_type}_#{cell.object.cell_name}" %>
+  <% when "seller_downpayment_charges", "buyer_downpayment_credits" %>
+    <%= cell.text_field :cell_value,
+      value: number_to_currency(cell.object.cell_value, unit: ""),
+      placeholder: placeholder(cell.object),
+      data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "valueAsFormatted: viewModel.downpayment(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+      disabled: is_footer %>
+  <% when "buyer_sales_price_charges" %>
+    <%= cell.text_field :cell_value,
+      value: number_to_currency(cell.object.cell_value, unit: ""),
+      placeholder: placeholder(cell.object),
+      data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "valueAsFormatted: viewModel.sales_price(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+      disabled: is_footer %>
+  <% when "buyer_hoa_due_payee_name" %>
+    <%= cell.text_field :cell_value,
+        value: cell.object.cell_value,
+        placeholder: placeholder(cell.object),
+        data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.hoa_payee_name(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+        disabled: is_footer %>
+  <% when "buyer_downpayment_payee_name" %>
+      <%= cell.text_field :cell_value,
+        value: cell.object.cell_value,
+        placeholder: placeholder(cell.object),
+        data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.downpayment_payee_name(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+        disabled: is_footer %>
+  <% when "buyer_downpayment_poc" %>
+      <%= cell.text_field :cell_value,
+        value: cell.object.cell_value,
+        placeholder: placeholder(cell.object),
+        data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.downpayment_poc(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+        disabled: is_footer %>
+  <% else %>
+    <%########################################%>
+    <%# Filter by section/line_type/cell_name %>
+    <%########################################%>
+    <% case "#{line.object.ss_section.name.downcase}_#{line.object.line_type}_#{cell.object.cell_name}" %>
+    <% when "buyer_proration_payee_name" %>
+      <%= cell.text_field :cell_value,
+        value: cell.object.cell_value,
+        placeholder: placeholder(cell.object),
+        data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.proration_payee_name(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+        disabled: is_footer %>
+    <% else %>
+      <%########################################%>
+      <%# Filter by line_type/cell_name %>
+      <%########################################%>
+      <% case "#{line.object.line_type}_#{cell.object.cell_name}" %>
+      <% when "commission_percent" %>
+        <%= cell.text_field :cell_value,
+            value: "#{number_with_precision(cell.object.cell_value || 0, precision: 4)}%",
+            placeholder: placeholder(cell.object),
+            data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "valueAsPercent: viewModel.commission_percent(#{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+            disabled: is_footer %>
+      <% when "proration_end_date" %>
+        <%= cell.text_field :cell_value,
+          value: cell.object.cell_value,
+          placeholder: placeholder(cell.object),
+          data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.proration_date(#{cell.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+          disabled: is_footer,
+          class: "datepicker" %>
+      <% when "proration_start_date" %>
+        <%= cell.text_field :cell_value,
+          value: cell.object.cell_value,
+          placeholder: placeholder(cell.object),
+          data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.proration_date(#{cell.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+          disabled: is_footer,
+          class: "datepicker" %>
+      <% when "proration_credits", "proration_charges" %>
+        <%= cell.text_field :cell_value,
+          value: cell.object.cell_value,
+          placeholder: placeholder(cell.object),
+          data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.proration(#{cell.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+          disabled: is_footer %>
+      <% else %>
+        <%########################################%>
+        <%# Filter by identifier %>
+        <%########################################%>
+        <% case cell.object.identifier %>
+        <% when "balance_due" %>
+          <%= cell.text_field :cell_value,
+            value: format_value_for_display(cell.object.data_type, cell.object.cell_value, is_footer ? "$" : ""),
+            placeholder: placeholder(cell.object),
+            data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: #{section.object.name.downcase}_balance_due_text(#{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+            disabled: is_footer %>
+        <% when "commission_total" %>
+          <%= cell.text_field :cell_value,
+              value: format_value_for_display(cell.object.data_type, cell.object.cell_value, is_footer ? "$" : ""),
+              placeholder: placeholder(cell.object),
+              data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "valueAsFormatted: viewModel.commission_total(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+              disabled: is_footer %>
+        <% when "commission_charges" %>
+          <%= cell.text_field :cell_value,
+              value: format_value_for_display(cell.object.data_type, cell.object.cell_value, is_footer ? "$" : ""),
+              placeholder: placeholder(cell.object),
+              data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "valueAsFormatted: viewModel.commission_charges(#{line.object.ss_group_id}, #{section.options[:child_index]}, #{line.options[:child_index]}, #{cell.options[:child_index]})"},
+              disabled: is_footer %>
+        <% else %>
+          <%########################################%>
+          <%# Filter by cell_name %>
+          <%########################################%>
+          <% case cell.object.cell_name %>
+          <% when "charges", "credits", "amount", "proration_amount", "commission" %>
+            <%= cell.text_field :cell_value,
+              value: number_to_currency(cell.object.cell_value, unit: ""),
+              placeholder: placeholder(cell.object),
+              data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "valueAsFormatted: viewModel.ordered_sections()[#{section.options[:child_index]}].ordered_lines()[#{line.options[:child_index]}].ordered_cells()[#{cell.options[:child_index]}].cell_value"},
+              disabled: is_footer %>
+          <% else %>
+            <%= cell.text_field :cell_value,
+              value: cell.object.cell_value,
+              placeholder: placeholder(cell.object),
+              data: {id: cell.object.id, ss: f.object.id, type: cell.object.cell_name, identifier: cell.object.identifier, bind: "value: viewModel.ordered_sections()[#{section.options[:child_index]}].ordered_lines()[#{line.options[:child_index]}].ordered_cells()[#{cell.options[:child_index]}].cell_value"},
+              disabled: is_footer %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+<% if cell.object.is_resizable? %>
+  <div class="tru_resize_slider"></div>
+<% end %>

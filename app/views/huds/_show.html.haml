@@ -1,0 +1,77 @@
+#hud
+  %table{ :border => "0" }
+    %tr
+      %td{ :colspan => "2" }
+        .full-header
+          %h1 B. Type of Loan
+        %table#b-section{ :border => "1", :style => "text-align:left;" }
+          %tr{ :style => "height:80px;", :valign => "top" }
+            %td
+              1.
+              = radio_button_tag "type", "fha"
+              FHA&nbsp;&nbsp;
+              2.
+              = radio_button_tag "type", "rhs"
+              RHS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              3.
+              = radio_button_tag "type", "conv-unins"
+              Conv. Unins.
+              %br
+              4.
+              = radio_button_tag "type", "va"
+              VA&nbsp;&nbsp;&nbsp;&nbsp;
+              5.
+              = radio_button_tag "type", "conv-ins"
+              Conv. Ins.
+            %td 6. File Number:
+            %td 7. Loan Number:
+            %td 8. Mortgage Insurance Case Number:
+          %tr{ :style => "text-align:left;", :valign => "top" }
+            %td{ :colspan => "4" }
+              %b C. Note: 
+              This form is furnished to give you a statement of actual settlement costs. Amounts paid to and by the settlement 
+              agent are shown. Items marked "(p.o.c.)" were paid outside the closing; they are shown here for informational 
+              purposes and are not included in the totals.
+          %tr{ :style => "height:110px;", :valign => "top" }
+            %td D. Name & Address of Borrower:
+            %td{ :colspan => "2" } E. Name & Address of Seller:
+            %td F. Name & Address of Lender:
+          %tr{ :style => "height:45px;", :valign => "top" }
+            %td{ :rowspan => "2" } G. Property Location:
+            %td{ :colspan => "2" } H. Settlement Agent
+            %td I. Settlement Date
+          %tr{ :style => "height:45px", :valign => "top" }
+            %td{ :colspan => "2" } Place of Settlement:
+            %td
+        .full-content
+    %tr
+      %td
+        .half-header
+          %h1 J. Summary of Borrower's Transaction
+        .half-content
+          %table{ :border => "1", :width => "450", :style => "text-align:left;" }
+            = render 'huds/partials/j-section', :f => f
+      %td{ :style => "padding-left:8px" }
+        .half-header
+          %h1 K. Summary of Seller's Transaction
+        .half-content
+          %table{ :border => "1", :width => "450", :style => "text-align:left;" }
+            = render 'huds/partials/k-section', :f => f
+    %tr
+      %td{ :colspan => "2" }
+        .full-header
+          %h1 L. Settlement Charges
+        .full-content
+          = render 'huds/partials/l-section', :f => f
+    %tr
+      %td{ :colspan => "2" }
+        .full-content
+          = render 'huds/partials/totals_1400', :f => f
+    %tr
+      %td{ :colspan => "2" }
+        .compare-content
+          = render 'huds/partials/comparison-section', :f => f
+    %tr
+      %td{ :colspan => "2" }
+        .loan-terms
+          = render 'huds/partials/loan-terms-section', :f => f

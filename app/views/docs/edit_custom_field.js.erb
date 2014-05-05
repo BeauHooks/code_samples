@@ -1,0 +1,5 @@
+// Display Editable Field
+var id = "span.document_focus";
+$("#field_placeholder").html($(id).html());
+$(id).html("<%= j(render "docs/field", file: @file, doc: @doc).html_safe %>");
+$(id).children("form:first").children("textarea:first").focus();

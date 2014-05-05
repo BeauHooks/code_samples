@@ -1,0 +1,2 @@
+<%= label_tag :county_id, 'By County:' %>
+<%= select_tag(:county_id, options_from_collection_for_select(County.all, :CountyID, :CountyName, @county_id)) %>

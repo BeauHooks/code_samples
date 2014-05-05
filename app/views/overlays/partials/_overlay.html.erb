@@ -1,0 +1,17 @@
+<div id="<%= @identifier %>" data-instance="overlay" class="overlay draggable <%= yield :overlay_class %>">
+  <div class="overlay_header">
+    <h2><%= yield :overlay_title %></h2>
+    <div class="tools">
+    	<%=  yield(:overlay_tools) %>
+    </div>
+  </div>
+  <div class="overlay_content">
+    <%= flash_message %>
+    <%= yield :overlay %>
+  </div>
+  <div class="overlay_footer">
+    <span>
+      <%= content_for?(:overlay_footer) ? yield(:overlay_footer) : render("overlays/partials/overlay_footer", identifier: @identifier, buttons: @buttons) %>
+    </span>
+  </div>
+</div>

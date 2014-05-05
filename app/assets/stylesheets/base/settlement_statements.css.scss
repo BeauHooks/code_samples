@@ -1,0 +1,915 @@
+// Place all the styles related to the Docs controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#doc_preview.sticky {
+  position: fixed;
+  top: 10px;
+}
+
+#invoice_wrapper{
+  input.info{
+    width: 100%;
+  }
+
+  .amount{
+    text-align: right;
+
+    input{
+      width: 97%;
+      text-align: right;
+    }
+  }
+
+  td{
+    padding: 2px;
+  }
+
+  .invoice_header{
+    background: #EEE;
+    font-weight: bold;
+  }
+
+  .invoice_amounts{
+    margin-top: 5px;
+  }
+
+  .invoice_amounts .charge td, .invoice_header td{
+    border: 1px solid #464646;
+  }
+}
+
+#tpa_wrapper, #firpta_wrapper {
+  font-size: 11pt;
+}
+
+#doc_left, .signature_management{
+
+  .grid_header{
+    width: 100%;
+  }
+
+  #input{
+    .entity{
+      height: 25px;
+    }
+  }
+
+  .entity_select{
+    position: relative;
+    top: -1px;
+    margin-left: 0px !important;
+    max-width: 235px !important;
+    width: 235px !important;
+  }
+
+  #entities{
+      input[type=text], textarea{
+        width: 135px;
+        resize: vertical;
+      }
+
+      .grid_header{
+        margin-top: 5px;
+      }
+
+      .signature_line hr{
+        margin: 10px 0px 0px;
+      }
+
+      .entity_contents{
+        margin: auto;
+        padding: 5px;
+        max-width: 100%;
+
+        .signature{
+          padding-left: 5px;
+          width: 195px;
+
+          input[type=text], select{
+            width: 175px !important;
+            /*font-size: 10px;*/
+          }
+        }
+
+        .grid_header td{
+          padding-top: 4px !important;
+        }
+      }
+
+      .sort{
+        padding-left: 2px;
+        width: 15px;
+
+        input[type=text]{
+          width: 13px !important;
+          /*font-size: 10px;*/
+        }
+      }
+
+      .entity{
+        padding-left: 5px;
+        width: 205px;
+      }
+    }
+
+
+}
+
+.signature_management{
+  #manage_grantor_entities, #manage_grantee_entities{
+    width: 270px !important;
+  }
+
+  .entity_select{
+    top: -4px !important;
+  }
+}
+
+#doc_left #entities, .signature_management #blank_grantor{
+  .grid_header td{
+    padding-top: 0px !important;
+  }
+}
+
+#doc_left{
+  position: relative;
+  float: left;
+  margin: 0px 0px 10px 20px;
+  width: 270px;
+  /*font-size: 11px;*/
+  padding-top: 10px;
+
+  td.error{
+    color: #ed1c24;
+  }
+
+  td.complete{
+    color: #008541;
+  }
+
+  #doc_selection{
+    width: 100%;
+
+    .selected{
+      padding-left: 5px;
+      width: 20px;
+    }
+
+    .name{
+      width: 225px;
+    }
+
+    .modified_date{
+      width: 80px;
+    }
+
+    .modified_by{
+      width: 80px;
+    }
+  }
+
+  #input{
+    width: 100%;
+    /*font-size: 11px;*/
+
+    select{
+      /*font-size: 11px;*/
+      width: 110px;
+    }
+
+    p.disclaimer{
+      padding: 5px;
+      color: #999;
+      /*font-size: 10px;*/
+    }
+
+    input[type=text], textarea{
+      margin-bottom: 2px;
+      width: 163px;
+    }
+
+    textarea{
+      height: 50px;
+      resize: vertical;
+    }
+
+    .missing_item{
+      float: right;
+      padding-right: 5px;
+      color:  #ed1c24;
+    }
+
+    .collapse{
+      position: relative;
+      top: -2px;
+      margin-right: 5px;
+      margin-left: 2px;
+      width: 10px;
+    }
+
+    .expand{
+      position: relative;
+      top: 2px;
+      margin-right: 5px;
+      margin-left: 2px;
+      width: 10px;
+    }
+
+    .up{
+      width: 10px;
+    }
+
+    .down{
+      width: 10px;
+    }
+
+    .new_entity{
+      margin-left: 2px;
+      width: 10px;
+    }
+
+    table{
+      width: 100%;
+    }
+
+    .contents{
+      padding: 5px;
+    }
+
+    .label{
+      font-weight: bold;
+    }
+
+    .top{
+      vertical-align: top;
+    }
+
+    .city{
+      width: 75px !important;
+    }
+
+    .state{
+      width: 25px !important;
+    }
+
+    .zip{
+      width: 50px !important;
+    }
+
+    .date{
+      width: 142px !important;
+    }
+
+
+  }
+}
+
+.doc{
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 819px;
+}
+
+#doc_content{
+  height: 869px;
+}
+
+.calc{
+  color:blue;
+}
+
+.calc_custom{
+  color:#D2691E;
+}
+
+#doc_large{
+  padding: 0px 20px;
+
+  #doc_content, .mceContentBody, #editor{
+    width: 100%;
+
+    h1{
+      font-size: 3.25em !important;
+    }
+  }
+
+  #hud, #doc_content, .mceContentBody, #editor, #az_affidavit_of_property_value_container, input, #hud h1{
+    font-size: 1.5em !important;
+  }
+}
+
+.large_editor{
+  font-size: 1.5em !important;
+
+  h1{
+    font-size: 3.25em !important;
+  }
+}
+
+#editor{
+  margin-bottom: 20px;
+  width: 672px;
+  height: 897px;
+  border: 1px solid #CCC;
+}
+
+#doc_content{
+  width: 672px;
+}
+
+#loading_doc{
+  width: 672px;
+}
+
+.doc{
+  overflow-x: hidden;
+}
+
+#doc_content, #editor{
+  form{
+    /*height: 819px;*/
+  }
+}
+
+.mceContentBody{
+  margin: auto;
+  /*width: 630px;*/
+  padding: 25px 18px;
+  height: 94%;
+}
+
+.doc, .mceContentBody, #editor{
+      /*font-size: 11px;*/
+      font-family: arial !important;
+
+      #affidavit_of_property_value{
+        td{
+          padding: 2px;
+        }
+      }
+
+      table{
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      p, table, li{
+        font-size: 1em;
+      }
+
+      li{
+        margin: 5px 0px;
+      }
+
+      h1, h2{
+        font-size: 16px;
+      }
+
+      h2{
+        font-size: 1.2em;
+      }
+
+      p{
+        margin: 1em 0;
+      }
+
+      .doc{
+        padding: 25px 20px;
+      }
+
+      hr{
+        margin: 5px 0px;
+      }
+
+      #info_1099{
+        border-collapse: collapse;
+
+        td{
+          border: 1px solid #000;
+        }
+      }
+
+      .ssn_w9{
+        border-collapse: collapse;
+
+        td{
+          /*font-size: 11px;*/
+          border: 1px solid #000;
+        }
+      }
+
+      .doc_title{
+        margin: 10px 0px;
+        text-align: center;
+        font-weight: bold;
+        font-style: italic;
+        font-size: 24px;
+      }
+
+      .doc_action{
+        margin: 10px 0px;
+        text-align: center;
+        font-weight: normal;
+        font-size: 18px;
+      }
+
+      hr{
+        background: #464646;
+      }
+
+      #signature_block{
+        td{
+          padding-right: 50px;
+          width: 300px;
+          height: 100px;
+          vertical-align: bottom;
+        }
+      }
+
+        ul, ol{
+          padding-left: 40px;
+        }
+
+        li{
+          padding-left: 15px;
+        }
+
+        #az_request_for_information_container{
+          td{
+            padding-left: 5px;
+          }
+        }
+
+        #az_affidavit_of_property_value_container{
+          font-size: 8px;
+
+          input[type=checkbox]{
+            width: 1em;
+          }
+
+          p{
+            margin: .5em 0em;
+          }
+
+          ol{
+            padding-left: 20px;
+          }
+
+          li{
+            padding-left: 0px;
+          }
+        }
+    }
+
+#doc_right{
+  position: relative;
+  float: left;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  padding-top: 10px;
+
+  #doc_preview{
+    margin-bottom: 20px;
+
+    .zoom{
+      position: relative;
+      top: -2px;
+      float: right;
+    }
+  }
+}
+
+.signature_container{
+  width: 100%;
+
+  .left, .right{
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    min-width: 45%;
+    max-width: 45%;
+  }
+
+  hr{
+    margin-top: 30px !important;
+  }
+
+  h4{
+    margin-top: 25px;
+  }
+}
+
+.signature_table{
+  width: 100%;
+
+  td{
+    vertical-align: top;
+  }
+
+  .signature_line{
+    vertical-align: bottom;
+
+    hr{
+      margin: 30px 0px 0px !important;
+      /*margin-bottom: 0px !important;*/
+    }
+  }
+
+  .label{
+    width: 25px;
+    font-weight: normal !important;
+  }
+}
+
+#send_doc{
+  #recipients, #documents{
+    .label{
+      text-decoration: underline;
+    }
+  }
+}
+
+#doc_left{
+  #input{
+    .global, .global a{
+      color: #008541;
+    }
+    .custom, .custom a{
+      color: #D2691E;
+    }
+    .error, .error a{
+      color: #ED1C24 !important;
+    }
+
+    textarea.error, input.error{
+      color: #464646 !important;
+    }
+  }
+
+  hr{
+    margin: 10px 0px;
+  }
+
+  .label{
+    width: 90px;
+  }
+
+  .sort{
+    width: 25px;
+    text-align: right;
+  }
+}
+
+#overlay_send{
+      z-index : 2;
+}
+
+#overlay_edit_address{
+  width: 380px;
+
+  hr{
+    margin-top: 5px;
+  }
+
+  select{
+    min-width: 160px;
+  }
+
+  .description{
+    padding-left: 5px;
+    width: 90px;
+  }
+
+  .address{
+    width: 215px;
+  }
+
+  .modify_date{
+    width: 135px;
+  }
+
+  .modify_user{
+    width: 120px;
+  }
+
+  .actions{
+    width: 90px;
+  }
+}
+
+#overlay_manage_signature_block{
+  top: 30px;
+  z-index : 2;
+  min-width: 550px;
+
+  #rolodex_signatures{
+    margin-top: 20px;
+
+    #signature_left{
+      margin-right: 20px;
+    }
+
+    #signature_right{
+      margin-right: 20px;
+
+      #tree_view{
+          overflow-y: auto;
+          min-height: 200px;
+          max-height: 275px;
+      }
+    }
+  }
+}
+
+#overlay_choose_doc_entity{
+  top: 120px;
+  z-index: 10;
+
+  table{
+    margin: auto;
+  }
+
+  select{
+    width: 200px;
+  }
+}
+
+#overlay_add_doc{
+      z-index : 2;
+
+      #add_doc{
+        min-width: 600px;
+      }
+
+      select{
+        width: 100px;
+      }
+
+      input{
+        margin: 0px 2px;
+      }
+
+      h4{
+        margin-bottom: 5px;
+      }
+
+      .grid_header td{
+        padding-top: 0px !important;
+      }
+
+      .name{
+        padding-left: 5px;
+        width: 100px;
+      }
+
+      .version{
+        width: 50px;
+      }
+
+      .description{
+        width: 80px;
+      }
+
+      .county{
+        width: 85px;
+      }
+
+      .modify_date{
+        width: 75px;
+      }
+
+      .modify_by{
+        width: 75px;
+      }
+
+      .action{
+        width: 62px;
+      }
+}
+
+.doc{
+  textarea{
+    width: 350px;
+    height: 30px;
+    resize: both;
+  }
+
+  .icon{
+    margin-left: 2px !important;
+  }
+}
+
+#doc_tools{
+  ul .menu_item{
+    display: inline;
+  }
+
+  .menu_item:hover{
+    .submenu{
+      position: absolute;
+      left: 0px;
+      display: block !important;
+    }
+
+    ul li a{
+      display: block;
+      padding: 3px 2px;
+      padding: 4px 10px;
+      border: 1px solid #CCC;
+      background: #FFF; /* url("/assets/header_bg.jpg"); */
+      color: #0054A0;
+      text-decoration: none;
+    }
+  }
+
+
+  ul li:hover ul li a:hover{
+    border: 1px solid #fff;
+    background: #0054a0;
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+#overlay_manage_signatures{
+  .sub_entity{
+    .name{
+      padding-left: 5px;
+      width: 164px;
+    }
+  }
+
+}
+
+.sub_entity{
+  .name{
+    padding-left: 5px;
+    width: 88px;
+  }
+}
+
+#overlay_choose_side{
+  top: 120px;
+  z-index: 10;
+  width: 305px;
+
+  select{
+    width: 120px;
+  }
+}
+
+#overlay_show_duplicate_entities{
+  top: 120px;
+  z-index: 10;
+
+  .name{
+    padding-left: 5px;
+    width: 145px;
+  }
+
+  .email{
+    width: 150px;
+  }
+
+  .phone, .fax{
+    width: 150px;
+  }
+
+  .add_link{
+    width: 75px;
+  }
+}
+
+#rolodex_signatures{
+
+    #signature_left{
+      position: relative;
+      float: left;
+      margin: 0 10px 10px 20px;
+      width: 350px;
+
+      #manage_tree_view{
+        #tree_view{
+          overflow-y: auto;
+          min-height: 200px;
+          max-height: 275px;
+
+          #tree{
+            padding: 10px 10px;
+
+            table{
+              margin-bottom: 10px;
+
+              .label{
+                padding-top: 1px;
+                width: 35px;
+              }
+
+              td{
+                vertical-align: top;
+
+                textarea{
+                  width: 175px;
+                  height: 30px;
+                }
+
+                select{
+                  width: 175px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #signature_right{
+      position: relative;
+      float: left;
+      margin-bottom: 10px;
+
+      .tools{
+        ul .menu_item{
+          display: inline;
+        }
+
+        .menu_item:hover{
+          .submenu{
+            position: absolute;
+            left: 0px;
+            display: block;
+          }
+
+          ul li a{
+            display: block;
+            padding: 3px 2px;
+            padding: 4px 10px;
+            border: 1px solid #CCC;
+            background: #FFF;
+            color: #0054A0;
+            text-decoration: none;
+          }
+        }
+
+
+        ul li:hover ul li a:hover{
+          border: 1px solid #fff;
+          background: #0054a0;
+          color: #fff;
+          text-decoration: none;
+        }
+      }
+
+      #signature_content{
+        overflow-y: auto;
+        min-height: 400px;
+        max-height: 450px;
+        width: 697px;
+        font-family: arial;
+
+        #preview{
+          padding: 25px 20px;
+
+          table{
+            margin-bottom: 15px;
+          }
+
+          td{
+            vertical-align: top;
+          }
+
+          .signature_line{
+            width: 250px;
+            vertical-align: bottom;
+          }
+
+          .label{
+            width: 25px;
+            font-weight: normal !important;
+          }
+        }
+      }
+    }
+
+    .results{
+      max-height: 200px;
+    }
+
+    .signature{
+      padding-left: 5px;
+      width: 125px;
+    }
+
+    .modify_date{
+      width: 75px;
+    }
+
+    .modify_user{
+      width: 100px;
+    }
+
+    .active{
+      width: 45px;
+    }
+  }

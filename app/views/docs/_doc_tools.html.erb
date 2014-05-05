@@ -1,0 +1,48 @@
+<ul>
+<% if @file.file_doc_fields.count > 0 %>
+  <% if @doc.has_update? && @file.SentForFunding.blank? %>
+    <li class="menu_item trigger error margin_right" onclick="$.ajax({url: '<%= doc_path(id: @doc.id) %>', type: 'PUT'});">Update Available! Click Here!<!-- <a class="trigger error" href="docs/<%= @doc.id %>/update" data-remote="true" id="update_doc">Update Available! Click Here!</a> --></li>
+  <% end %>
+
+  <% code = @doc.doc_template.short_name %>
+  <% if ["HUD", "LSS", "SS"].include?(code) %>
+    <li class="menu_item"><%= link_to "Disbursement", balance_sheet_overlay_path(@file.ID), remote: true %></li>
+    <% if ["HUD"].include?(code) && @file.SentForFunding == nil %>
+      <li class="menu_item trigger link"><span style="margin-right: 10px;">Tools</span>
+        <ul class="submenu">
+          <li><%= link_to "Taxes Calculator", "huds/#{@doc.hud_id}/tax_proration_calculator", remote: true %></li>
+          <li><%= link_to "HOA Calculator", "huds/#{@doc.hud_id}/hoa_proration_calculator", remote: true %></li>
+        </ul>
+      </li>
+    <% elsif ["LSS", "SS"].include?(code) && @file.SentForFunding == nil %>
+      <li class="menu_item trigger link"><span style="margin-right: 10px;">Tools</span>
+        <ul class="submenu">
+          <li><%= link_to "Taxes Calculator", "overlays/#{@doc.settlement_statement_id}/tax_proration_calculator", remote: true %></li>
+          <li><%= link_to "HOA Calculator", "overlays/#{@doc.settlement_statement_id}/hoa_proration_calculator", remote: true %></li>
+        </ul>
+      </li>
+    <% end %>
+  <% end %>
+
+  <li class="menu_item"><a class="trigger" href="docs/<%= @doc.id %>/zoom" data-remote="true" id="zoom_doc"><%= size %></a></li>
+  <% if @doc.doc_signature_type != nil %>
+    <% unless ["HUD", "LSS", "SS", "1099"].include?(@doc.doc_template.short_name) && @file.SentForFunding != nil %>
+      <li class="menu_item"><%= link_to "Signature Block",  manage_signatures_overlay_path(id: @doc.id), remote:true, id: "manage_signature_link" %>
+      <ul class="submenu">
+        <% if @doc.doc_signature_type.name.split("_")[0] == "both" %>
+          <li><%= link_to "Grantor First", "docs/#{@doc.id}/format_signature?block=grantorfirst", remote: true %></li>
+          <li><%= link_to "Grantee First", "docs/#{@doc.id}/format_signature?block=granteefirst", remote: true %></li>
+        <% else %>
+          <li><%= link_to "Left", "docs/#{@doc.id}/format_signature?block=left", remote: true %></li>
+          <li><%= link_to "Right", "docs/#{@doc.id}/format_signature?block=right", remote: true %></li>
+          <li><%= link_to "Both", "docs/#{@doc.id}/format_signature?block=both", remote: true %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+  </li>
+  <% if @doc.doc_template.is_editable? %>
+    <li class="menu_item"><a class="trigger" href="docs/<%= @doc.id %>/show_editor" data-remote="true" id="edit_doc">Edit</a></li>
+  <% end %>
+<% end %>
+</ul>

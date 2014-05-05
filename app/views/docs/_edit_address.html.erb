@@ -1,0 +1,65 @@
+<% content_for :overlay_title do %>
+  Edit <%= @tag.titleize %> Address
+<% end %>
+
+<% content_for :overlay do %>
+  <%= form_tag "docs/update_address?file_id=#{@file.ID}&tag=#{@tag}", remote: true, id: "doc_address_form" do %>
+    <div>
+      <table>
+        <% file_entities = @file.file_doc_entities.find(:all, :conditions => ["tag = '#{@tag}' AND is_active != 0 AND doc_id = 0"]) %>
+        <% size = file_entities.size %>
+        <% if size > 0 %>
+          <tr>
+            <td class="label">Select Entity:</td>
+            <td><%= select_tag :entity_id, options_from_collection_for_select(file_entities, "entity_id", "entity_name"), {include_blank: false, onchange: "$.get('#{display_address_results_docs_path(file_id: @file.ID, tag: @tag)}&entity_id=' + $(this).val() );", style: "width: 204px"} %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td class="label" style="width: 95px;">Address:</td>
+          <td>
+            <%= render "docs/display_address_results" %>
+          </td>
+        </tr>
+      </table>
+      <div id="address_entry">
+        <%= render "docs/display_address_entry" %>
+      </div>
+    </div>
+    <%= hidden_field_tag :commit, "Save" %>
+    <script type="text/javascript">
+      function submitEditAddress(sender){
+        $('#doc_address_form').find('#commit').val( $(sender).val() );
+        $('#doc_address_form').submit();
+        $(sender).closest('.overlay').remove();
+      }
+
+      $('#address_select').val($('#address_select option:first').val()).change();
+
+      function validateDocAddressSave(){
+        if(["new", "property", "current"].indexOf($('#address_select :selected').val()) != -1 ){
+          $('#doc_address_form').find('#commit').val('Save');
+          addToQueue('doc_address_warning', "application/flash_notice?notice=Having \'" + $('#address_select :selected').text()+ "\' selected will create a NEW address for this entity rather than editing an existing one. Are you sure you want to continue?&confirm=Yes&click_action=" + encodeURIComponent("$('#doc_address_form').submit(); $('#doc_address_form').closest('.overlay').remove();"));
+          return false;
+        }
+        return true
+      }
+
+      function checkSelectedAddress(){
+        if(["property", "current"].indexOf($('#address_select').val()) != -1 ){
+          $('#address_select option[value=new]').attr('selected', true);
+        }
+      }
+    </script>
+  <% end %>
+<% end %>
+
+<% content_for :overlay_footer do %>
+  <% file_entities = @file.file_doc_entities.find(:all, :conditions => ["tag = '#{@tag}' AND is_active = 1 AND doc_id = 0"]) %>
+  <% size = file_entities.size %>
+  <% if size > 0 %>
+    <input type="button" value="Save" onclick="if(validateDocAddressSave()){submitEditAddress(this);}else{return false;}" title="Save address to entity and apply to current doc set." name="commit" />
+  <% end %>
+  <input type="button" value="Apply" onclick="submitEditAddress(this);" title="Apply address to the current doc set, but do not save to entity." name="commit" />
+  <input type="button" value="Close" class="close" onclick="$(this).closest('.overlay').remove();" title="Close overlay without saving." />
+<% end %>
+

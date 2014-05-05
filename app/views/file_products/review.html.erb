@@ -1,0 +1,19 @@
+<div style="width: 100%;" id="file_product_wrapper">
+  <div>
+    <div id="search_bar" class="search_bar">
+      <%= render 'shared/search_bar' %>
+    </div>
+    <hr style="margin: 0;" />
+    <div id="search_results" class="box tableContainer">
+      <%= render 'shared/results_table' %>
+    </div>
+  </div>
+  <div id="tabs_container" class="tabs_container">
+    <div id="detail_container">
+      <%= render "file_products/partials/result_detail" %>
+    </div>
+  </div>
+  <% if @match %>
+    <%= hidden_field_tag 'match', @match.id %>
+  <% end %>
+</div>

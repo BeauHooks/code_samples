@@ -1,0 +1,45 @@
+<table>
+	<% entities = @file.buyers_and_sellers %>
+	<% if entities.size == 0 %>
+		<tr>
+			<td class="no_result">No File Entities</td>
+		</tr>
+	<% else %>
+		<% entities.each do |file_entity| %>
+			<% entity = file_entity.entity %>
+			<tr>
+				<td class="w230 <%= "hint" if entity.name.length > 35 %>">
+					<% checked = !file_entity.NameCheckedDT.blank? %>
+					<% update_entity = "update('#{rolodex_path(id: entity.EntityID)}', this);" %>
+					<%= image_tag "redx.png", onclick: "destroy('#{file_entity_path(id: file_entity.ID, form: 'file_product')}', $(this).closest('tr'));", class: "trigger" %>
+					<% if checked %>
+						<% if entity.name.length > 35 %><span><%= entity.name %></span><% end %>
+						<%= truncate(entity.name, length: 35) %>
+					<% else %>
+						<% if entity.IndCorp == "Individual" %>
+							<%= text_field_tag :FirstName, entity.FirstName, onchange: update_entity, placeholder: "First", class: "w75" %>
+							<%= text_field_tag :MiddleInitial, entity.MiddleInitial, onchange: update_entity, placeholder: "Middle", class: "w75" %>
+							<%= text_field_tag :LastName, entity.LastName, onchange: update_entity, placeholder: "Last", class: "w75" %>
+						<% else %>
+							<%= text_field_tag :FullName, entity.FullName, onchange: update_entity, placeholder: "Full Name", class: "w230" %>
+						<% end %>
+					<% end %>
+				</td>
+				<td class="w90">
+					<% can_view = @permission_view_tax_id || current_user.has_file_with_entity?(entity.EntityID) %>
+	        <% if can_view && !entity.TaxID.blank? %>
+	          <%= checked ? entity.TaxID : text_field_tag(:TaxID, entity.TaxID, onchange: update_entity, placeholder: "SSN/TaxID", class: "w75") %>
+	        <% elsif !entity.TaxID.blank? && entity.IndCorp == "Individual" %>
+	          <%= "xxx-xx-#{entity.TaxID[-4..-1]}" %>
+	        <% elsif !entity.TaxID.blank? %>
+	          <%= "xx-xxx#{entity.TaxID[-4..-1]}" %>
+	        <% else %>
+	        	<%= checked ? "" : text_field_tag(:TaxID, "", onchange: update_entity, placeholder: "SSN/TaxID", class: "width: 75px;") %>
+	        <% end %>
+				</td>
+				<td class="w210">
+					<%= check_box_tag :NameCheckedBy, current_user.employee_id, checked, onchange: "update('#{file_entity_path(id: file_entity.ID, form: 'file_product')}', this); $(this).prop('disabled', true);", disabled: checked, class: "margin_right_5" %><%= "#{file_entity.NameCheckedDT.strftime("%-1m/%d/%Y %l:%M%p")} by #{file_entity.name_checked_by}" if checked %></td>
+			</tr>
+		<% end %>
+	<% end %>
+</table>

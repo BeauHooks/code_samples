@@ -1,0 +1,43 @@
+$("div#anticipated_disbursement_summary").html("<%= j(render "check_workings/anticipated_disbursement_summary").html_safe %>");
+$("div#disbursement_summary").html("<%= j(render "check_workings/disbursement_summary").html_safe %>");
+$('#disbursement_results').html('<%= j(render 'check_workings/partials/results').html_safe %>');
+
+<% if @refresh %>
+  if ($("#disbursement_results").find("tr.active_row").attr("id") == "disbursement_<%= @check.id %>") {
+    // $('#disbursement_view').html('<%= j(render 'check_workings/partials/show').html_safe %>');
+  };
+<% else %>
+
+  $("div#disbursement_errors").html("");
+  <% if @errors != nil && @errors.size > 0 %>
+  	$("div#disbursement_errors").append("<h4 class='error' style='text-decoration: underline;'>Error(s):</h4>");
+    <% n = 0 %>
+    <% @errors.each do |w| %>
+      <% n += 1 %>
+      $("div#disbursement_errors").append("<p class='error'><%= "#{n}) #{w}" %></p>");
+    <% end %>
+    $("div#disbursement_errors").append("<p style='margin-bottom: 10px;'></p>");
+  <% end %>
+
+  $("#disbursement_entity_rules").html("");
+  <% if @check != nil %>
+    <% entity = Entity.find(@check.payee_1_id) rescue nil %>
+    <%# entity != nil ? rules = entity.show_rules : rules = [] %>
+    <% rules = entity != nil ? entity.get_rules("Add to Disbursement") : @check.payee_1.to_s != "" ? Rule.check_name(@check.payee_1, "Add to Disbursement") : [] %>
+    <% if rules.size > 0 %>
+      <% if @check.rules_checked.to_i != 0 %>
+        checkbox = "<input id=\"rules_checked\" type=\"checkbox\" value=\"false\" style=\"position: relative; top: 2px; margin-left: 2px;\" onchange=\"updateCheck(this); if($(this).val() == 'true'){$(this).val('false')}else{$(this).val('true')}\" name=\"rules_checked\" checked=\"checked\">"
+      <% else %>
+        checkbox = "<input id=\"rules_checked\" type=\"checkbox\" value=\"true\" style=\"position: relative; top: 2px; margin-left: 2px;\" onchange=\"updateCheck(this); if($(this).val() == 'true'){$(this).val('false')}else{$(this).val('true')}\" name=\"rules_checked\">"
+      <% end %>
+      $("#disbursement_entity_rules").append("<h4 class='error' style='text-decoration: underline;'>Entity Rules - <label>Reviewed: " + checkbox + "</label></h4>");
+      <% n = 0 %>
+      <% rules.each do |rule| %>
+        <% n += 1 %>
+        $("#disbursement_entity_rules").append("<p class='error'><%= "#{n}) #{rule.rule_text.html_safe}" %></p>");
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+closeOverlay("new_contact");

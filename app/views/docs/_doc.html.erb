@@ -1,0 +1,35 @@
+<% doc_name = @doc.doc_template.short_name %>
+<div class="doc" style="position: relative;" data-doc="<%= doc_name %>">
+  <%= get_doc(@doc) %>
+</div>
+
+<script type="text/javascript">
+  if($("#doc_content .signature_table") != undefined){
+    $("#doc_content .signature_table").attr("onclick", "$('#manage_signature_link').click();");
+  }
+
+  $("#doc_content").find('a').each(function(){
+    $(this).click(function(){
+      if($('span.document_focus').html() != undefined){
+        var e = jQuery.Event('keydown');
+        e.keyCode = 27;
+        $('span.document_focus').find('textarea:first').trigger(e);
+        $('span.document_focus').removeClass('document_focus');
+      }
+      $(this).closest('span').addClass('document_focus');
+    });
+  });
+
+  <% if @file.SentForFunding != nil && "HUD, INV, 1099, SS, LSS".include?(doc_name) %>
+  	$("div.doc a").each(function(){
+  		$(this).replaceWith( $(this).html() );
+  	});
+
+  	$("div.doc input[type=checkbox]").each(function(){
+  		$(this).attr('disabled', true);
+  	});
+
+  	$("table.signature_table").removeAttr("onclick");
+  	$("table.signature_table td").attr("style", "color: #1F1F1F !important;");
+  <% end %>
+</script>

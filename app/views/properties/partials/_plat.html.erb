@@ -1,0 +1,17 @@
+<div class="result_container">
+  <div class="box_header">
+    <span class="title">Property Images</span>
+  </div>
+  <div class="float_left w31p">
+    <div class="label">Photo</div>
+    <%= image_tag assessor_image_properties_path(account: @detail.accountnum, type: "Photo"), class: "photo w100p" %>
+  </div>
+  <div class="float_left w31p">
+    <div class="label">Sketch</div>
+    <%= image_tag assessor_image_properties_path(account: @detail.accountnum, type: "Sketch"), class: "sketch w100p" %>
+  </div>
+  <div class="float_left w31p">
+    <div class="label">Plat</div>
+    <%= image_tag assessor_image_properties_path(account: @detail.accountnum, type: "Plat"), class: "plat w100p" %>
+  </div>
+</div>

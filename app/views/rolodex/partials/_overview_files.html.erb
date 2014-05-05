@@ -1,0 +1,50 @@
+<div class="result_container">
+	<div class="grid_header"></div>
+	<div>
+		<table class="w100p">
+		  <thead class="grid_header_font">
+		  	<tr>
+		  		<th class="file"><div>File #</div></th>
+		  		<th class="closer"><div>Closer</div></th>
+		  		<th class="type"><div>Type</div></th>
+		  		<th class="stage"><div>Stage</div></th>
+		  	</tr>
+		  </thead>
+		  <tbody class="results highlight">
+				<% if @files %>
+					<% @files.each do |i| %>
+						<tr>
+							<td class="file">
+								<% if i.DisplayFileID != nil %>
+								  <% file_id = i.DisplayFileID %>
+								<% else %>
+								  <% file_id = i.FileID.to_s[3..-1] rescue "Error" %>
+								<% end %>
+								<%= link_to file_id, "/index?file_id=#{i.FileID}", target: "_blank" %>
+							</td>
+
+							<% if i.CloserName.to_s.length > 15 %>
+								<td class="closer hint">
+									<span><%= i.CloserName %></span>
+									<%= truncate(i.CloserName, length: 15) %>
+								</td>
+							<% else %>
+								<td class="closer">
+									<%= i.CloserName %>
+								</td>
+							<% end %>
+
+							<td class="type"><%= i.TransactionDescription1 %></td>
+							<% stage = i.stage %>
+							<% if stage.to_s.length > 15 %>
+								<td class="stage hint"><span><%= stage %></span><%= truncate(stage, length: 20) %></td>
+							<% else %>
+								<td class="stage"><%= stage %></td>
+							<% end %>
+						</tr>
+					<% end %>
+				<% end %>
+		  </tbody>
+		</table>
+	</div>
+</div>

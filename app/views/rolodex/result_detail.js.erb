@@ -1,0 +1,3 @@
+$("#rolodex_overview").html("<%= j(render 'rolodex/partials/result_detail').html_safe %>");
+document.title = "Filetrak - Rolodex: <%= @entity.EntityID.to_s.html_safe %>";
+$("#rolodex_attachments").html("<%= j(render "rolodex/partials/attachments", rolodex: @entity ).html_safe %>");

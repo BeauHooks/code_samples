@@ -1,0 +1,63 @@
+<table style="width: 100%;">
+	<tr>
+		<td class="label" colspan="2" style="text-decoration: underline;">Invoices</td>
+	</tr>
+	<% total_invoices = 0.0 %>
+	<% @file.invoices.where("void = 0").each do |invoice| %>
+		<% total_invoices += invoice.InvoiceTotal || 0.0 %>
+		<tr>
+			<% label = "##{invoice.InvoiceID} - #{invoice.DeliverTo}" %>
+			<% if label.length > 30 %>
+				<td class="hint"><span><%= label %></span><%= truncate(label, length: 30) %></td>
+			<% else %>
+				<td><%= label %></td>
+			<% end %>
+			<td style="text-align: right;"><%= number_to_currency(invoice.InvoiceTotal || 0.0, unit: "$") %></td>
+		</tr>
+	<% end %>
+	<tr>
+		<td class="label" colspan="2" style="padding-top: 10px; text-decoration: underline;">Company Disbursements</td>
+	</tr>
+	<% total_fees = 0 %>
+	<% @file.check_workings.where("payee_1_id = #{@file.Company} AND purpose != 'FILE'").each do |disbursement| %>
+		<% total_fees += disbursement.amount.to_f %>
+		<tr>
+			<% disbursement.memo_1.to_s != "" ? label = disbursement.memo_1 : label = disbursement.payee_1 %>
+			<% if label.to_s.length > 30 %> 
+				<td class="hint"><span><%= label %></span><%= truncate(label, length: 30) %></td>
+			<% else %>
+				<td><%= label %></td>
+			<% end %>
+			<td style="text-align: right;"><%= number_to_currency(disbursement.amount.to_f, unit: "$") %></td>
+		</tr> 
+	<% end %>
+	<tr><td colspan="2"><hr></td></tr>
+	<tr>
+		<td class="label">Total Invoices:</td>
+		<td class="label" style="text-align: right;"><%= number_to_currency(total_invoices || 0.0, unit: "$") %></td>
+	</tr>
+	<tr>
+		<td class="label">Total Disbursements:</td>
+		<td style="text-align: right; width: 75px;" class="label">- <%= number_to_currency(total_fees || 0.0, unit: "$") %></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><hr style="margin-top: 0px;"></td>
+	</tr>
+	<tr>
+		<% total = (total_invoices || 0.0) - (total_fees || 0.0) %>
+		<% if total == 0 %>
+			<% error = "" %>
+			<% message = "Settlements and Invoices are Balanced" %>
+		<% elsif total > 0 %>
+			<% error = "error" %>
+			<% message = "Fees have been invoiced that are not appearing on the Settlement" %>
+		<% else %>
+			<% error = "error" %>
+			<% message = "Fees on the Settlement have not been invoiced" %>
+		<% end %>
+
+		<td class="label <%= error %>" style="vertical-align: top;">Balance</td>
+		<td style="text-align: right; vertical-align: top;" class="label <%= error %>"><%= number_to_currency(total, unit: "$") %></td>
+	</tr>
+</table>

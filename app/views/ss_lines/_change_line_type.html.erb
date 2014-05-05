@@ -1,0 +1,21 @@
+<% content_for :overlay_class do %>
+  line_type
+<% end %>
+
+<% content_for :overlay_title do %>
+  <%= "#{@line.ss_section.name} Section" %>
+<% end %>
+
+<% content_for :overlay do %>
+  <div class="overlay_content">
+    <%= form_for @line, url: "#{change_line_type_ss_line_path(@line)}", html: {method: :put, remote: true} do |f| %>
+      <table>
+        <tr>
+          <td class="label">Type:</td>
+          <td><%= f.select :line_type, options_for_select(SsLine.line_type_options, @line.line_type) %></td>
+        </tr>
+      </table>
+      <%= f.hidden_field :updated_by, value: current_user.employee_id %>
+    <% end %>
+  </div>
+<% end %>

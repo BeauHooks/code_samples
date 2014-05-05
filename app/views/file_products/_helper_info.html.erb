@@ -1,0 +1,30 @@
+<div id="helper_info">
+  <div class="overlay_header">
+    <h2>Info</h2>
+  </div>
+  <div class="overlay_content" style="width: 650px;">
+    <div class="box">
+      <table class="grid_header">
+        <tr>
+          <td style="width: 75px;">Code</td>
+          <td>Response</td>
+        </tr>
+      </table>
+      <div class="results" style="min-height: 300px;">
+        <table>
+          <% Alth.find(:all).each do |alth| %>
+            <tr class="trigger" onclick="$('#Shortcut').val('<%= alth.Shortcut %>'); $('#Shortcut').closest('form').submit();">
+              <td class="label" style="width: 75px; vertical-align: top; padding-top: 5px;"><%= alth.Shortcut %></td>
+              <td style="vertical-align: top; padding-top: 5px;"><%= alth.Response %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <span style="float: right;">
+      <%= submit_tag "Close", onclick: "$('#overlay_helper_info').hide();", type: "button" %>
+    </span>
+  </div>
+</div>

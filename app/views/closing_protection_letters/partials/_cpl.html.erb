@@ -1,0 +1,201 @@
+<% content_for :overlay_title do %>
+  CPL Working File
+<% end %>
+<% content_for :overlay do %>
+<% update = "update('#{closing_protection_letter_path(@cpl)}', this);" %>
+  <div id="cpl_form">
+    <div class="overlay_content">
+      <div>
+        <table>
+          <tr>
+            <td>
+              <%= label_tag :order_id, "File Number:" %>
+              <%= text_field_tag :order_id, @cpl.DisplayFileID, disabled: true %>
+              <%= label_tag :underwriter, "Underwriter:" %>
+              <%= text_field_tag :underwriter, @cpl.underwriter.Underwriter, disabled: true %>
+              <%= label_tag :letter_type, "Letter Type:" %>
+              <%= text_field_tag :letter_type, @cpl.letter_type, disabled: true %>
+              <%= label_tag :transaction_state, "Transaction State:" %>
+              <%= text_field_tag :transaction_state, @cpl.transaction_state, disabled: true %>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="padding_sides_5">
+        <hr />
+      </div>
+      <div>
+        <h4>Agent Contact Information</h4>
+        <table>
+          <thead class="label_row">
+            <tr>
+              <th class="w200">Name</th>
+              <th class="w120">Phone</th>
+              <th class="w200">Email</th>
+              <th class="w100">Fax</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <td class="w200">
+                <%= text_field_tag "closing_protection_letter[closer_name]", @cpl.closer_name, onchange: update %>
+              </td>
+              <td class="w120">
+                <%= text_field_tag "closing_protection_letter[closer_phone]", @cpl.closer_phone, size: 15, onchange: update %>
+              </td>
+              <td class="w200">
+                <%= text_field_tag "closing_protection_letter[closer_email]", @cpl.closer_email, onchange: update %>
+              </td>
+              <td class="w100">
+                <%= text_field_tag "closing_protection_letter[closer_fax]", @cpl.closer_fax, size: 15, onchange: update %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="padding_sides_5">
+        <hr />
+      </div>
+      <div>
+        <table>
+          <tr>
+            <td class="label">
+              <span class="red">*</span>
+              Pertains To / Borrower:
+            </td>
+            <td>
+              <%= text_field_tag "closing_protection_letter[pertains_to]", @cpl.pertains_to, size: 75, onchange: update %>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="padding_sides_5">
+        <hr />
+      </div>
+      <div>
+        <table>
+          <tr>
+            <td colspan=4>
+              <h4>Property Address</h4>
+            </td>
+          </tr>
+          <tr>
+            <td class="label w200"><span class="red">*</span>Address</td>
+            <td class="label w140">City</td>
+            <td class="label w100">State</td>
+            <td class="label w100">Zip</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table>
+          <tr>
+            <td class="w200">
+              <%= text_field_tag "closing_protection_letter[property_street_address]", @cpl.property_street_address, onchange: update %>
+            </td>
+            <td class="w140">
+              <%= text_field_tag "closing_protection_letter[property_city]", @cpl.property_city, size: 20, onchange: update %>
+            </td>
+            <td class="w100">
+              <%= text_field_tag "closing_protection_letter[property_state]", @cpl.transaction_state, disabled: true, size: 10 %>
+            </td>
+            <td class="w100">
+              <%= text_field_tag "closing_protection_letter[property_zip]", @cpl.property_zip, size: 20, onchange: update %>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="padding_sides_5">
+        <hr />
+      </div>
+      <div>
+        <table>
+          <tr>
+            <td colspan=2>
+              <h4>Lender Information</h4>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+              <span class="red">*</span>
+              Lender Name:
+            </td>
+            <td>
+              <%= text_field_tag "closing_protection_letter[lender_name]", @cpl.lender_name, size: 75, onchange: update%>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td class="label w200">Contact Name</td>
+            <td class="label w140">Phone</td>
+            <td class="label w100">Fax</td>
+            <td class="label w100">Email</td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td class="w200">
+              <%= text_field_tag "closing_protection_letter[lender_contact_name]", @cpl.lender_contact_name, onchange: update %>
+            </td>
+            <td class="w140">
+              <%= text_field_tag "closing_protection_letter[lender_telephone_number]", @cpl.lender_telephone_number, size: 15, onchange: update %>
+            </td>
+            <td class="w100">
+              <%= text_field_tag "closing_protection_letter[lender_fax_number]", @cpl.lender_fax_number, size: 15, onchange: update %>
+            </td>
+            <td class="w100">
+              <%= text_field_tag "closing_protection_letter[lender_email_address]", @cpl.lender_email_address, size: 15, onchange: update %>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td class="label w200"><span class="red">*</span>Address 1</td>
+            <td class="label w200">Address 2</td>
+            <td class="label w140"><span class="red">*</span>City</td>
+            <td class="label w100"><span class="red">*</span>State</td>
+            <td class="label w100"><span class="red">*</span>Zip</td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td class="w200">
+              <%= text_field_tag "closing_protection_letter[lender_address_line_1]", @cpl.lender_address_line_1, onchange: update %>
+            </td>
+            <td class="w200">
+              <%= text_field_tag "closing_protection_letter[lender_address_line_2]", @cpl.lender_address_line_2, onchange: update %>
+            </td>
+            <td class="w140">
+              <%= text_field_tag "closing_protection_letter[lender_city]", @cpl.lender_city, size: 20, onchange: update %>
+            </td>
+            <td class="w100">
+              <%= text_field_tag "closing_protection_letter[lender_state]", @cpl.lender_state, size: 10, onchange: update %>
+            </td>
+            <td class="w100">
+              <%= text_field_tag "closing_protection_letter[lender_zip_code]", @cpl.lender_zip_code, size: 10, onchange: update %>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="padding_sides_10">
+        <hr />
+      </div>
+    </div>
+    <div id="cpl_errors" class="padding_left_10">
+      <%= render "closing_protection_letters/partials/cpl_link" %>
+    </div>
+    <% if @file.closing_protection_letters.count > 1 %>
+      <div class="margin_all_10">
+        <%= render "closing_protection_letters/partials/current_cpl_orders" %>
+      </div>
+    <% end %>
+    <div>
+      <span class="red bold padding_left_10">*</span> <span class="italic">Required Fields</span>
+    </div>
+  </div>
+<% end %>

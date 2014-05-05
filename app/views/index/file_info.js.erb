@@ -1,0 +1,141 @@
+// Update Tab File Number
+$("#tab_file_id").html()
+
+// Overview partials
+<% case @type %>
+<% when "Contact" %>
+  <% @update_row = true %>
+<% when "Employee" %>
+  <% @update_row = true %>
+<% when "Property" %>
+  <% @update_row = true %>
+<% when "update_row" %>
+  <% @update_row = true %>
+<% else %>
+  <% case @tab %>
+  <% when "Documents" %>
+    // Documents
+    //Hide Docs
+    $("#file_docs").html("");
+    $("#file_docs").html("<%= j(render "index/partials/docs", file: @file, :template => @template, :file_doc_fields => @file_doc_fields).html_safe %>");
+    if($('#all_docs .active_row').attr('id') != undefined){
+      $("a.docs").attr("onclick", "addToQueue('refresh_input_fields', 'docs/refresh_input_fields?file_id=<%= @file.FileID %>&doc_id=' + $('#all_docs .active_row').attr('id').replace('doc_', '') );");
+    }
+  <% when "Attachments" %>
+    // Attachment partials
+    $("#file_attachments").html("<%= j(render "index/partials/attachments", file: @file).html_safe %>");
+  <% when "Emails" %>
+    $("#file_emails").html("<%= j(render "index/partials/emails", file: @file).html_safe %>");
+  <% when "Recording" %>
+    // Recording partials
+    $("#file_recording").html("<%= j(render "index/partials/recording", file: @file).html_safe %>");
+  <% when "Clearing" %>
+    $("#file_clearing").html("<%= j(render "index/partials/clearing", file: @file).html_safe %>");
+  <% when "Disbursements" %>
+    $("#file_disbursements").html("<%= j(render "check_workings/index").html_safe %>");
+    $("a.disbursements").attr("onclick", "");
+  <% else %>
+    <% if @permission_create_docs %>
+      //Hide Previous Content
+      $("#file_recording").html("");
+      $("#doc_content").html("");
+      $("#all_docs").html("");
+      $("#doc_tools").html("");
+      $("#doc_input_fields").html("");
+
+      // Link
+      $("a.docs").attr("onclick", "$.get('/index/<%= @file.ID %>/file_info?tab=Documents');");
+      $("a.recording").attr("onclick", "$.get('/index/<%= @file.ID %>/file_info?tab=Recording');");
+
+      // Show
+      $("#docs_tab").show();
+      $("#recording_tab").show();
+    <% end %>
+
+    <% if current_user.is_developer? %>
+      $("a.clearing").attr("onclick", "$.get('/index/<%= @file.ID %>/file_info?tab=Clearing');");
+    <% end %>
+
+    //Hide
+    $("#file_attachments").html("");
+
+    //Link
+    $("a.attachments").attr("onclick", "$.get('/index/<%= @file.ID %>/file_info?tab=Attachments');");
+    $("a.emails").attr("onclick", "$.get('/index/<%= @file.ID %>/file_info?tab=Emails');");
+
+    //Show
+    $("#attachments_tab").show();
+    $("#emails_tab").show();
+    $("a.overview").click();
+    document.title = "Filetrak - File Index #<%= @file.DisplayFileID %>";
+    <% if @file.confidential? %>
+      addToQueue("limited_access_notice", "application/flash_notice?title=Limited Access Notice&notice=This file has been flagged as CONFIDENTIAL. Only administrators with view access and employees that are part of the file can view its contents.");
+    <% end %>
+  <% end %>
+<% end %>
+
+
+<% if @file.has_rules? == false %>
+  $("#rules").addClass('empty');
+<% else %>
+  $("#rules").removeClass('empty');
+<% end %>
+
+// Update current file row if needed
+<% if @update_row == true %>
+  $("#index_row_<%= @file.FileID %>").replaceWith("<%= j(render "index/partials/index_row", i: @file).html_safe %>");
+  if($("#grid_results .active_row").html() == undefined){
+    $("#index_row_<%= @file.FileID %>").addClass("active_row");
+  }
+  $('#index_row_<%= @file.FileID %>').bind('click', function() {
+    clearRows();
+    $(this).toggleClass('active_row');
+    $(this).find('a#index_row')[0].click();
+  );
+<% end %>
+
+// Update stages partial if needed
+<% if @update_stage == true %>
+  $(".recording_prep_container").html("<%= j(render partial: 'index/recording_prep').html_safe %>");
+  <% case @stage %>
+  <% when "Date Down" %>
+  <% when "Funding" %>
+    <% if @file.SentForFunding != nil %>
+      // Reconveyances
+      $("#reconveyance_results").html("<%= j(render "recon_trackings/results").html_safe %>");
+
+      // Disbursements
+      $("#funding_notice").html("- Sent for funding on <%= @file.SentForFunding.strftime("%-1m/%d/%Y at %l:%M %p") %>");
+      $("#add_disbursement_button").replaceWith("<img src='/assets/plusgrey.png' class='icon' title='Adding disbursements is disabled after file has been sent for funding.' />");
+      $('#disbursement_results').html('<%= j(render 'hud_lines/disbursement_results').html_safe %>');
+      $('#disbursement_list_last').html('');
+
+      // Receipts
+      $('#receipt_results').html("<%= j(render 'check_workings/receipt_results').html_safe %>");
+
+      if($("#all_docs tr.active_row").attr("id") != undefined){
+        row = $("#all_docs tr.active_row");
+        $(row).removeClass("active_row");
+        $(row).click();
+      }
+    <% end %>
+  <% end %>
+<% end %>
+
+// Display Error to Page
+<% if @error %>
+  addToQueue('show_error', 'application/flash_notice?notice=<%= @error.html_safe %>');
+<% end %>
+
+$("#file_overview").html("<%= j(render 'index/partials/overview', file: @file) %>");
+
+<% if @file.nil? %>
+  $("#tab_content").show();
+<% else %>
+  $("#tab_content").hide();
+<% end %>
+
+fixLoadingHeight('overview_left', 'overview_right');
+
+// Call formatting
+initializer();

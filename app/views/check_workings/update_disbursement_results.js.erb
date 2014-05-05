@@ -1,0 +1,31 @@
+$('#disbursement_results').html('<%= j(render 'hud_lines/disbursement_results').html_safe %>');
+$("div#anticipated_disbursement_summary").html("<%= j(render "check_workings/anticipated_disbursement_summary").html_safe %>");
+$("div#disbursement_summary").html("<%= j(render "check_workings/disbursement_summary").html_safe %>");
+$("div#invoice_balancing").html("<%= j(render "check_workings/invoice_balancing").html_safe %>");
+
+<% if @check != nil %>
+	$("#disbursement_results .active_row").removeClass("active_row");
+	$("#disbursement_<%= @check.id %>").click();
+<% end %>
+
+if($("input[type=checkbox]#no_disbursement").val() != undefined){
+	<% count_checks = @file.check_workings.size %>
+  <% count_1099s = @file.docs.find(:all, conditions: ["doc_templates.short_name='1099' AND docs.is_active != 0"], include: [:doc_template]).size %>
+	<% if count_checks > 0 %>
+		$("input[type=checkbox]#no_disbursement").closest('label').hide();
+	<% else %>
+		$("input[type=checkbox]#no_disbursement").closest('label').show();
+	<% end %>
+
+	<% if count_1099s > 0 %>
+		$("input[type=checkbox]#no_1099").closest('label').hide();
+	<% else %>
+		$("input[type=checkbox]#no_1099").closest('label').show();
+	<% end %>
+
+	<% if count_checks == 0 || count_1099s == 0 %>
+		$("input[type=checkbox]#no_disbursement").closest('p').show();
+	<% else %>
+		$("input[type=checkbox]#no_disbursement").closest('p').hide();
+	<% end %>
+}

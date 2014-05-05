@@ -1,0 +1,35 @@
+<% if @html.blank? %>
+	<% @template.blank? ? @html = "" : @html = @template.doc_template_versions.last.template_text.to_s.html_safe %>
+<% end %>
+<% @template = DocTemplate.new if @template.blank? %>
+<%# (@template == nil || @template == "") ? action = doc_templates_path() : action = "doc_templates/#{@template.id}/update" %>
+<%= form_for @template, class: 'editor_form', id: "editor_form", remote: true do |f| %>
+  <div style="width: 100%; background: #F0F0EE;">
+    <% cancel = "if($('#doc_list .active_row').html() != undefined){ $('#doc_list .active_row').click(); }else{ $('#doc_list tr:first').click(); } " %>
+    <%= submit_tag "Save", onclick: "return verifyDoc(this);" %>
+    <input type="button" value="Cancel" onclick="<%= cancel %>" /></div>
+
+  <%= text_area_tag :editor, @html, id: "tinymce", class: "tinymce", style: "width: 657px; height: 869px;", name: "text"  %>
+  <%= tinymce :content_css => asset_path("doc_themes/#{current_user.users_preferences[:docs_theme]}.css") %>
+  <%= hidden_field_tag "description", "#{!@template.new_record? ? @template.description : ''}" %>
+  <%= hidden_field_tag "short_name", "#{!@template.new_record? ? @template.short_name : ''}" %>
+  <%= hidden_field_tag "min_version", "#{!@template.new_record? ? @template.minimum_version : '1' }" %>
+  <%= hidden_field_tag "editable", "#{!@template.new_record? ? @template.is_editable : '1' }" %>
+  <%= hidden_field_tag "entity_doc", "#{!@template.new_record? ? @template.is_entity_doc : '0' }" %>
+  <%= hidden_field_tag "update", "#{!@template.new_record? ? '1' : 'New' }" %>
+  <%= hidden_field_tag "note", "#{!@template.new_record? ? '' : 'New Document' }" %>
+
+  <%= hidden_field_tag "category", "#{!@template.new_record? ? @template.category : 'Title' }" %>
+  <%= hidden_field_tag "sub_category", "#{!@template.new_record? ? @template.sub_category : 'Commitment' }" %>
+  <%= hidden_field_tag "underwriter", "#{!@template.new_record? ? @template.underwriter_id : '' }" %>
+  <%= hidden_field_tag "state", "#{!@template.new_record? ? @template.state : '' }" %>
+  <%= hidden_field_tag "company", "#{!@template.new_record? ? @template.company_id : '' }" %>
+  <% (!@template.new_record?) ? (signers, format = get_signature_options(@template)) : (signers, format = "", "") %>
+  <%= hidden_field_tag "signature_block", format %>
+  <%= hidden_field_tag "signers", signers %>
+
+  <% DocGroup.all.each do |group| %>
+    <% DocGroupTemplate.where("doc_group_id=#{group.id} AND doc_template_id=#{@template.id || 0}").first != nil ? in_group = true : in_group = false %>
+    <%= hidden_field_tag "group[#{group.id}]", in_group, id: "group_#{group.id}" %>
+  <% end %>
+<% end %>

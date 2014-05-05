@@ -1,0 +1,3 @@
+class FileDocFieldsController < ApplicationController
+    
+end

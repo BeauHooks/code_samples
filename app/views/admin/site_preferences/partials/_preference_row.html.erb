@@ -1,0 +1,6 @@
+<tr id="preference_<%= preference.id %>" class="trigger" onclick="rowSelect(this); $.get('<%= admin_site_preference_path(preference) %>');">
+  <td><%= preference.name %></td>
+  <td><%= preference.category %></td>
+  <td><%= preference.updated_at.strftime("%m/%d/%Y") unless preference.updated_at.blank? %></td>
+  <td></td>
+</tr>

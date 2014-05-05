@@ -1,0 +1,135 @@
+<h2>CPL Order Summary for: <%= @cpl.order_id %></h2>
+
+<table>
+  <% if @cpl.closed? || @cpl.canceled? %>
+    <tr>
+      <td colspan=2><h2><span style="color:red;">CPL <%= @cpl.cpl_status %>: </span><%= @cpl.cpl_updated_at.to_s(:db)  %></h2></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class="label">Letter Type:</td>
+    <td><%= @cpl.letter_type %></td>
+  </tr>
+  <tr>
+    <td class="label">Transaction State:</td>
+    <td><%= @cpl.transaction_state %></td>
+  </tr>
+  <tr>
+    <td class="label">Company:</td>
+    <td><%= @cpl.company.CompanyName %></td>
+  </tr>
+  <tr>
+    <td class="label">Agent Contact Name:</td>
+    <td><%= @cpl.agent_contact_name %></td>
+  </tr>
+  <tr>
+    <td class="label">Agent Contact Phone:</td>
+    <td><%= @cpl.agent_contact_phone %></td>
+  </tr>
+  <tr>
+    <td class="label">Agent Contact Fax:</td>
+    <td>
+      <%= @cpl.agent_contact_fax %>
+      <%= "(This has been selected to receive a copy of the CPL)" if @cpl.agent_deliver_via_fax? %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Agent Contact Email:</td>
+    <td>
+      <%= @cpl.agent_contact_email %>
+      <%= "(This has been selected to receive a copy of the CPL)" if @cpl.agent_deliver_via_email? %>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="label">Lender Name:</td>
+    <td>
+      <%= @cpl.lender_name %>
+      <br /><%= @cpl.lender_name_continued unless @cpl.lender_name_continued.blank? %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Lender Contact Name:</td>
+    <td><%= @cpl.lender_contact_name %></td>
+  </tr>
+  <tr>
+    <td class="label">Lender Address:</td>
+    <td>
+      <%= @cpl.lender_address_line_1 %><br />
+      <%= @cpl.lender_address_line_2 unless @cpl.lender_address_line_2.blank? %><br />
+      <%= @cpl.lender_city %>, <%= @cpl.lender_state %> <%= @cpl.lender_zip_code %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Lender Phone:</td>
+    <td><%= @cpl.lender_telephone_number %></td>
+  </tr>
+  <tr>
+    <td class="label">Lender Fax:</td>
+    <td>
+      <%= @cpl.lender_fax_number %>
+      <%= "(This has been selected to receive a copy of the CPL)" if @cpl.lender_deliver_via_fax? %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Lender Email:</td>
+    <td>
+      <%= @cpl.lender_email_address %>
+      <%= "(This has been selected to receive a copy of the CPL)" if @cpl.lender_deliver_via_email? %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Pertains To / Borrower:</td>
+    <td><%= @cpl.pertains_to %></td>
+  </tr>
+  <tr>
+    <td class="label">Property Address:</td>
+    <td>
+      <%= @cpl.property_street_address %><br />
+      <%= @cpl.property_city %>, <%= @cpl.transaction_state %> <%= @cpl.property_zip %>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">Created:</td>
+    <td><%= @cpl.created_at.to_s(:db) %></td>
+  </tr>
+  <tr>
+    <td class="label">Created By:</td>
+    <td><%= @cpl.created_by.name %></td>
+  </tr>
+  <% unless @cpl.updated_by.blank? %>
+    <tr>
+      <td class="label">Last Updated:</td>
+      <td><%= @cpl.updated_at.to_s(:db) %></td>
+    </tr>
+    <tr>
+      <td class="label">Last Updated By:</td>
+      <td><%= @cpl.updated_by.name %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class="label">Reference Number:</td>
+    <td>
+      <%= @cpl.letter_reference_number %> -
+      <% if @cpl.closed? %>
+        CPL is Closed.
+      <% else %>
+        <% if @cpl.cpl_status.blank? or @cpl.canceled? %>
+          <%= link_to "Order CPL (Send to Underwriter)", submit_cpl_order_closing_protection_letter_path(@cpl) %>
+        <% else %>
+          <%= link_to "Update CPL (Update with Underwriter)", update_cpl_closing_protection_letter_path(@cpl) %>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan=2>
+      <% unless @cpl.closed? %>
+        <%= link_to "Edit This CPL", edit_closing_protection_letter_path(@cpl) %>
+        - <%= link_to "Cancel This CPL", cancel_cpl_closing_protection_letter_path(@cpl) unless @cpl.canceled? %>
+        - <%= link_to "Close this CPL", close_cpl_closing_protection_letter_path(@cpl) %>
+        - <%= link_to "Lookup CPL Data", get_lookup_data_closing_protection_letter_path(@cpl) %>
+      <% end %>
+    </td>
+  </tr>
+</table>

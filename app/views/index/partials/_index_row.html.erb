@@ -1,0 +1,38 @@
+<tr class='record trigger row_divider' data-id="<%= i.ID %>" id="index_row_<%= i.FileID %>">
+  <td class="w80">
+      <%= link_to i.DisplayFileID, "index?file_id=#{i.FileID}", onclick: "event.stopPropagation();", class: ("red" if i.confidential?), target: "_blank" %>
+      <%= image_tag "/assets/#{current_user.users_preferences[:theme]}_lock.png", class: "w10" if i.confidential? %>
+  </td>
+
+  <td class="w130">
+    <%= hint_truncate(link_to(i.buyer_1.blank? ? "" : i.buyer_1.name_last_first, rolodex_index_path(entity_id: i.Buyer1), onclick: "event.stopPropagation();", target: "_blank"), 18, true) %>
+  </td>
+
+  <td class="w130">
+    <%= hint_truncate(link_to(i.seller_1.blank? ? "" : i.seller_1.name_last_first, rolodex_index_path(entity_id: i.Seller1), onclick: "event.stopPropagation();", target: "_blank"), 18, true) %>
+  </td>
+
+  <td class="w130">
+    <%= hint_truncate(link_to(i.lender.blank? ? "" : i.lender.name_last_first, rolodex_index_path(entity_id: i.Lender1), onclick: "event.stopPropagation();", target: "_blank"), 18, true) %>
+  </td>
+
+  <td class="w130">
+    <%= hint_truncate(i.CloserName, 18) %>
+  </td>
+
+  <td class="w130">
+    <%= i.TransactionDescription1 %>
+  </td>
+
+  <td class="w130">
+    <%= hint_truncate(i.Address1, 18) %>
+  </td>
+
+  <td class="w130">
+    <%= i.stage %>
+  </td>
+
+  <td class="w125">
+    <%= hint_truncate(i.TaxID1, 18) %>
+  </td>
+</tr>

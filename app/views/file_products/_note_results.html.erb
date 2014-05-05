@@ -1,0 +1,67 @@
+<div class="box w612">
+	<div class="grid_header">
+	  <table>
+	    <tr>
+	      <td class="w225 no_sort">Note <%= link_to image_tag("plus.png", class: "icon"), "index/show_overlay?id=#{@file.ID}&overlay=File Notes", remote: true %></td>
+	      <td class="w75">From</td>
+	      <td class="w75">To</td>
+	      <td class="w100">Entered</td>
+	    </tr>
+	  </table>
+	</div>
+	<div class="results">
+		<table>
+      <% c = 0 %>
+      <% if @permission_view_private_notes_index %>
+        <% notes = @file.file_notes %>
+      <% else %>
+        <% notes = @file.file_notes.where("IsPrivate = 0 OR EnteredBy = #{current_user.employee_id} OR TickleEmployeeID = #{current_user.employee_id}") %>
+      <% end %>
+      <% notes.each do |i| %>
+        <% c += 1 %>
+        <tr>
+        	<% note_text = i.NoteText.to_s %>
+        	<% if note_text.length > 45 %>
+            <td class="hint w225">
+            	<%= image_tag "redx.png", class: "trigger margin_right_2", onclick: "destroy('#{file_note_path(id: i.NoteID)}', $(this).closest('tr'));" %>
+            	<%= truncate(note_text.html_safe , length: 45) %>
+            	<span>
+            		<%= image_tag "redx.png", class: "trigger margin_right_2", onclick: "destroy('#{file_note_path(id: i.NoteID)}', $(this).closest('tr'));" %>
+            		<% note_text = note_text.gsub(/\w+[.a-zA-Z0-9.][.a-zA-Z0-9.]+@[a-zA-Z0-9]+.[a-zA-Z]+/) do %>
+			            <% mail_to $&, $&, body: "#{@file.company.DirName} ##{@file.DisplayFileID}" %>
+			          <% end %>
+            		<%= note_text.html_safe %>
+            	</span>
+            </td>
+          <% else %>
+            <td class="w225">
+            	<%= image_tag "redx.png", class: "trigger margin_right_2", onclick: "destroy('#{file_note_path(id: i.NoteID)}', $(this).closest('tr'));" %>
+            	<% note_text = note_text.gsub(/\w+[.a-zA-Z0-9.][.a-zA-Z0-9.]+@[a-zA-Z0-9]+.[a-zA-Z]+/) do %>
+		            <% mail_to $&, $&, body: "#{@file.company.DirName} ##{@file.DisplayFileID}" %>
+		          <% end %>
+            	<%= note_text.html_safe %>
+            </td>
+          <% end %>
+
+          <% if i.entered_by != nil && i.entered_by.FullName.length > 15 %>
+            <td class="hint w75"><span><%= i.entered_by.FullName %></span><%= truncate(i.entered_by.FullName, length: 15) %></td>
+          <% else %>
+            <td class="w75"><%= truncate(i.entered_by.FullName, length: 15) rescue "" %></td>
+          <% end %>
+
+          <% if i.tickled_by != nil && i.tickled_by.FullName.length > 15 %>
+            <td class="hint w75"><span><%= i.tickled_by.FullName %></span><%= truncate(i.tickled_by.FullName, length: 15) %></td>
+          <% else %>
+            <td class="w75"><%= truncate(i.tickled_by.FullName, length: 15) rescue "" %></td>
+          <% end %>
+
+          <% if i.NoteDT != nil && i.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p').length > 25 %>
+            <td class="hint" style="w100"><span><%= i.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p') %></span><%= truncate(i.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p'), length: 25) %></td>
+          <% else %>
+            <td class="w100"><%= truncate(i.NoteDT.strftime('%-1m/%-1d/%Y - %-1I:%M %p'), length: 25) rescue "" %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

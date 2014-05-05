@@ -1,0 +1,6 @@
+<% if @rules.size > 0 %>
+	$("#rules_search_result").html("<%= j(render "admin/rules/results").html_safe %>");
+	$("#rules_search_result tr:first").click();
+<% else %>
+	showZeroResults("rules_search_result");
+<% end %>

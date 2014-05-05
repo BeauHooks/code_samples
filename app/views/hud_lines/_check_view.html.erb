@@ -1,0 +1,208 @@
+<% if @check == nil %>
+  <p style="font-weight: bold;">The disbursement for this payment has been removed.</p>
+<% else %>
+  <% @check.payee_1_id.to_s == @check.file_id.to_s[0..2] ? is_company = true : is_company = false %>
+  <% @file.SentForFunding == nil && @check.check_number == nil && @check.check_id == nil ? disabled = false : disabled = true %>
+  <% size = @check.hud_line_payments.size %>
+  <% update = "updateCheck(this);" %>
+
+  <div>
+    <div id="company_info">
+      <table style="margin: 0em; float: right;">
+        <tr>
+          <td class="label">Type:</td>
+          <td><%= select :invoice, :funds_type, options_for_select([["Check", "check"],["Wire", "wire"]], @check.funds_type.downcase), {:include_blank => false}, {style: "width: 144px;", name: "funds_type", onchange: "#{update} if($(this).val() == 'check'){$('#check_print_office').show()}else{$('#check_print_office').hide()}", disabled: @check.purpose == "FILE" || disabled || is_company} %>
+          </td>
+        </tr>
+        <tbody id="check_print_office" style="<%= @check.funds_type.downcase == "check" ? '' : 'display: none' %>">
+          <tr>
+            <td class="label">Print:</td>
+            <td><%= select :check, :print_office_id, options_for_select([["Downtown", "13"],["Hurricane Office", "6"],["Mesquite Title Company", "7"],["S. River Road", "9"],["Riverside Drive", "10"],["Kanab", "12"],["Terra Title St. George", "17"],["Cedar City", "18"],["Equity Escrow", "21"],["Title Managers, Inc.", "25"], ["Fiddlers Canyon", "29"]], @check.print_office_id), {:include_blank => true}, {style: "width: 144px;", name: "print_office_id", onchange: "#{update}", disabled: is_company || disabled} %></td>
+            <td></td>
+          </tr>
+          <% if is_company %>
+            <% if @check.purpose == "INVOICE" %>
+              <tr>
+                <td class="label">Purpose:</td>
+                <td><%= text_field_tag :purpose, @check.purpose, style: "width: 125px;", disabled: :disabled %></td>
+              </tr>
+              <tr>
+                <td style="padding-right: 5px;" class="label">Number:</td>
+                <td>
+                  <%= text_field_tag :purpose_value, @check.purpose_value, onchange: "#{update}", style: "width: 125px;", placeholder: "Invoice Number", disabled: disabled %>
+                </td>
+              </tr>
+            <% elsif @check.purpose == "FILE" %>
+              <tr>
+                <td style="padding-right: 5px;" class="label">Pay to File:</td>
+                <td>
+                  <%= check_box_tag :purpose, @check.purpose == "FILE" ? "" : "FILE", @check.purpose == "FILE", onchange: "#{update}", style: "position: relative; top: 2px;", disabled: disabled %>
+                  <%= text_field_tag :purpose_value, @check.purpose_value, onchange: "#{update} if($(this).val() != ''){$('#memo_1').val('Transfer to File #' + $(this).val()).change()}else{$('#memo_1').val('').change()}", style: "width: 100px; position: relative; top: -2px;", placeholder: (@check.purpose == "FILE" ? "File Number" : "Invoice Number"), disabled: disabled %>
+                </td>
+              </tr>
+            <% end %>
+          <% elsif %>
+            <tr>
+              <td style="padding-right: 5px;" class="label">Pay to File:</td>
+              <td>
+                <%= check_box_tag :purpose, @check.purpose == "FILE" ? "" : "FILE", @check.purpose == "FILE", onchange: "#{update}", style: "position: relative; top: 2px;", disabled: disabled %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div style="float: right; width: 250px;">
+        <div id="disbursement_errors">
+          <% errors = @check.get_disbursement_errors %>
+          <% unless errors.size == 0 %>
+            <h4 class="error" style="text-decoration: underline;">Error(s):</h4>
+            <% n = 0 %>
+            <% errors.each do |w| %>
+              <% n += 1 %>
+              <p class="error"><%= "#{n}) #{w}" %></p>
+            <% end %>
+            <p style="margin-bottom: 5px;"></p>
+          <% end %>
+        </div>
+        <div class="error" id="disbursement_entity_rules">
+          <% entity = Entity.find(@check.payee_1_id) rescue nil %>
+          <%# entity != nil ? rules = entity.show_rules : rules = [] %>
+          <% rules = entity != nil ? entity.get_rules("Add to Disbursement") : @check.payee_1.to_s != "" ? Rule.check_name(@check.payee_1, "Add to Disbursement") : [] %>
+          <% if rules.size > 0 %>
+            <h4 class="error" style="text-decoration: underline;">Entity Rules - <label>Reviewed: <%= check_box_tag :rules_checked, !(@check.rules_checked.to_i != 0), @check.rules_checked.to_i != 0, onchange: "#{update} if($(this).val() == 'true'){$(this).val('false')}else{$(this).val('true')}", style: "position: relative; top: 2px; margin-left: 2px;", disabled: disabled %></label></h4>
+            <% n = 0 %>
+            <% rules.each do |rule| %>
+              <% n += 1 %>
+              <p class="error"><%= "#{n}) #{rule.rule_text}" %></li>
+            <% end %>
+          <% end %>
+        </div>
+        <p style="margin-bottom: 5px;"></p>
+      </div>
+      <p class="label" style="margin: 0em;">
+        <% company = Company.find @check.company_id %>
+        <%= company.CompanyName %><br />
+        <%= company.CompanyAddress %><br />
+        <%= company.CompanyCSZ %>
+      </p>
+    </div>
+
+  </div>
+  <div style="clear: both; margin-top: 10px;">
+    <table>
+      <tbody>
+        <% if !is_company %>
+          <tr>
+            <td class="label" style="white-space: nowrap; padding-right: 5px; vertical-align; top;">Entity:</td>
+            <td style="white-space: nowrap; width:510px; padding: 2px 0px 1px 0px;">
+              <%= select :disbursement_entity, :payee_1_id, FileEntity.find(:all, joins: [:entity], conditions: ["tblFileEntities.FileID = #{@file.FileID}"], order: "tblEntities.FullName").collect{|e| [e.entity.FullName, e.EntityID]}, {include_blank: true, selected: @check.payee_1_id}, {style: "width: 90%;", onchange: "addToQueue('add_payee', 'check_workings/add_payee?id=#{@check.id}&entity_id=' + $(this).val() );", disabled: disabled} %>
+              <%= link_to image_tag("search.png", :class => "icon"), "index/show_overlay?overlay=File Entities&id=#{@file.ID}&form=disbursement&check_id=#{@check.id}", remote: true if !disabled  %>
+              <%= link_to image_tag("redx.png"), "check_workings/#{@check.id}/remove_payee", remote: true if !disabled %>
+              <%= hidden_field_tag :payee_1_id, @check.payee_1_id, onchange: update %>
+            </td>
+            <td style="width: 5px;">&nbsp;</td>
+            <td style="width: 150px;">
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tbody id="manage_disbursement">
+        <%= render "hud_lines/manage_disbursement", disabled: is_company || disabled %>
+      </tbody>
+    </table>
+  </div>
+  <div style="padding-top: 10px;">
+    <% if size >= 1 %>
+    <hr style="margin: 0px 0px 10px;"/>
+      <table>
+        <tr>
+          <td class="label" style="text-decoration: underline; width: 50px;">Line</td>
+          <td class="label" style="text-decoration: underline;">Amount</td>
+          <td class="label" style="text-decoration: underline;">Memo</td>
+        </tr>
+        <% @check.hud_line_payments.find(:all, joins: [:hud_line], order: "hud_lines.number ASC").each do |payment| %>
+          <tr data-payment="<%= payment.id %>" class="payment_line">
+            <td><%= payment.hud_line.number %></td>
+
+            <% if @line == nil %>
+              <% type = "&type=disbursement" %>
+            <% else %>
+              <% type = "&type=hud_line" %>
+            <% end %>
+
+            <% post = " 'hud_lines/#{payment.hud_line_id}/update_payment?hud_id=#{payment.hud_line.hud_id}#{type}&payment_id=#{payment.id}&key=' + $(this).attr('name') + '&value=' + $(this).val() + '&current=#{payment.hud_line.id}'" %>
+            <td style="vertical-align: top; padding-right: 5px;">$<%= text_field_tag :amount, number_to_currency(payment.amount || 0.0, precision: 2, unit: ""), onkeydown: "numbersOnly(event);", onchange: "addToQueue('update_payment', #{post}); toUSD(this);", disabled: disabled %></td>
+            <td style="vertical-align: top;">
+              <%= text_field_tag :memo_1, payment.memo_1, onchange: "addToQueue('update_payment', #{post});", style: "width: 350px" , disabled: disabled %>
+              <% if size > 1 && !disabled %>
+                <input type="button" value="Split" onclick="addToQueue('split_disbursement', 'check_workings/split?payment_id=<%= payment.id %>');" />
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    <% else %>
+      <% unless @hud == nil || disabled %>
+        <tr>
+          <td style="white-space: nowrap;">
+            <span class="label" style="margin-right: 5px;">Associate With Hud Line:</span>
+            <% list = "" %>
+            <% @file.check_workings.each do |c| %>
+              <% c.hud_line_payments.each do |p| %>
+                <% list == "" ? list = " AND id NOT IN (#{p.hud_line_id}" : list += ", #{p.hud_line_id}" %>
+              <% end %>
+            <% end %>
+            <% list += ")" if list != "" %>
+
+            <% options = @hud.hud_lines.select("*, (IFNULL(amount, 0) + IFNULL(borrower_amount, 0) + IFNULL(seller_amount, 0) + IFNULL(charges, 0)) AS AMOUNT").where("payee_name IS NOT NULL AND payee_name != '' #{list} AND (((IFNULL(amount, 0) + IFNULL(borrower_amount, 0) + IFNULL(seller_amount, 0) + IFNULL(charges, 0)) > 0 AND number != 303) OR ((IFNULL(amount, 0) + IFNULL(borrower_amount, 0) + IFNULL(seller_amount, 0) + IFNULL(charges, 0)) < 0 AND number != 603)) AND number NOT IN (1101, 1105, 1106)").collect{|line| ["Line ##{line.number} - Payee:&nbsp;#{line.payee_name} &nbsp;&nbsp;&nbsp; Amount:&nbsp;#{number_to_currency(line.AMOUNT, unit: '$')}".html_safe, line.number]} %>
+            <% no_of_options = options.size %>
+            <%= select :line, :number, options, {include_blank: no_of_options == 0 ? "No options to display." : true}, {class: "associate_with_hud_line", disabled: disabled, name: "line", style: "width: 225px; #{'font-style: italic; color: #CCCCCC;' if no_of_options == 0}", onchange: "if($(this).val() != ''){$('input[type=text].associate_with_hud_line').val();}"} %> or <%= text_field_tag :line, "", onkeydown: "numbersOnly(event);", class: "associate_with_hud_line", onchange: "$('select.associate_with_hud_line').val('');" %>
+            <%= submit_tag "Link", type: "button", onclick: "associateWithLine();" %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+    <p style="margin: 0em; clear: both;"></p>
+  </div>
+
+  <script type="text/javascript">
+    function updateCheck(object){
+      var field = $(object).attr("name");
+      var value = $(object).val();
+      var post = "check_workings/update_check?id=<%= @check.id %>&field=" + field + "&value=" + encodeURIComponent(value);
+      addToQueue('update_check', post);
+    }
+
+    function toggleDisburseToFile(sender){
+      if($('#hidden_purpose_field').val() == '' && $(sender).val() != ''){
+        $('#hidden_purpose_field').val('FILE').change();
+        addToQueue('update_payee', 'check_workings/update_check?id=<%= @check.id %>&field=payee_1_id&value=<%= @check.file_id.to_s[0..2] %>');
+        $("#disbursement_results .active_row").removeClass("active_row").click();
+      }
+      else if($(sender).val() == ''){
+        $('#hidden_purpose_field').val('').change();
+        addToQueue('update_payee', 'check_workings/update_check?id=<%= @check.id %>&field=payee_1_id&value=');
+        addToQueue('update_payee', 'check_workings/update_check?id=<%= @check.id %>&field=payee_1&value=');
+        $("#disbursement_results .active_row").removeClass("active_row").click();
+      }
+    }
+
+    function updateMemo(button){
+      var value = $("#check .memo_field").val() == "" ? $(button).data('memo') : $("#check .memo_field").val() + " " + $(button).data('memo');
+      $("#check .memo_field").val(value).change();
+    }
+
+    function associateWithLine(){
+      var value = $("input[type=text].associate_with_hud_line").val() != "" ? $("input[type=text].associate_with_hud_line").val() : $("select.associate_with_hud_line").val();
+
+      if(value == ""){
+        addToQueue("associate_fail", "application/flash_notice?title=Association Failure&notice=No line selected. Please select or enter a line number to continue.");
+        $(".associate_with_hud_line").addClass("error");
+      }
+      else{
+        $(".associate_with_hud_line").removeClass("error");
+        addToQueue('associate_with_line', 'application/flash_notice?title=Associate With Line?&confirm=Yes&notice=This action will disassociate line ' + encodeURIComponent("#") + value + ' from all other disbursements and will overwrite any changes on this disbursement.<br /><br />Continue?&post=' + encodeURIComponent('check_workings/<%= @check.id %>/associate_with_hud_line?line=' + value ) );
+      }
+    }
+  </script>
+<% end %>

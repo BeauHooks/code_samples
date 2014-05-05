@@ -1,0 +1,4 @@
+<% disabled = [2000,2001,2002,2003,2100,2101,2102,2103,2104,2105,2105,2106,2107,2200,2201,2202] %>
+
+<td class="hud_line_total description"><%= text_field_tag :gfe_amount, number_with_precision(builder.gfe_amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_gfe_amount", onchange: "updateLine(this,#{builder.id},'#{@hud.id}','gfe_amount',this.value);", onkeydown: "numbersOnly(event);", style: "background-color: transparent;" %></td>
+<td class="hud_line_total description"><%= text_field_tag :hud_amount, number_with_precision(builder.hud_amount, precision: 2, delimiter: ',', separator: '.'), id: "#{builder.number}_hud_amount", onchange: "updateLine(this,#{builder.id},'#{@hud.id}','hud_amount',this.value);", onkeydown: "numbersOnly(event);", style: "background-color: transparent;", disabled:  (disabled.include? builder.number) && @print == nil && 1 == 2 %></td

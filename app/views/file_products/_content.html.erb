@@ -1,0 +1,215 @@
+<% unless @file_product == nil %>
+	<div id="schedule_a_content" class="container sb_container" data-record="<%= @schedule_a.id %>">
+		<h2 style="margin-bottom: 10px; float: left;">Schedule A</h2>
+		<ul style="float: right; margin-right: 10px;">
+      <li class="menu_item"><%= link_to "Print", file_products_print_path(id: @file_product.id), style: "margin-right: 10px;", remote: true %></li>
+      <li class="menu_item"><span class="trigger link">Import</span>
+        <ul class="submenu" style="width: 85px;">
+          <li><%= link_to "Prior", file_products_import_path(id: @file_product.id, type: "prior"), remote: true %></li>
+          <li><%= link_to "Base", file_products_import_path(id: @file_product.id, type: "base"), remote: true %></li>
+        </ul>
+      </li>
+    </ul>
+
+		<% update = "update('#{schedule_a_path(@schedule_a.id)}', this);" %>
+		<table style="clear: both; float: left;">
+			<tr>
+				<td class="label" style="padding-right: 10px;">Commitment:</td>
+				<td style="text-align: right;"><%= link_to @file.DisplayFileID, "index?file_id=#{@file.FileID}", target: "_blank" %> - <%= select :schedule_a, :amended, options_for_select(amended_options(), @schedule_a.amended), {include_blank: true}, {style: "width: 165px;", name: "amended", onchange: update} %></td>
+			</tr>
+			<tr>
+				<td class="label" style="padding-right: 5px;">Underwriter:</td>
+				<td>
+					<%= select :underwriter, :id, options_for_select(Underwriter.where("IsActive = -1").order("Underwriter ASC").collect {|u| [u.Underwriter, u.ID]}, @schedule_a.underwriter_id), {include_blank: true}, {style: "width: 229px", onchange: update, name: "underwriter_id"} %>
+					<!-- <span class="label" style="margin: 0px 5px 0px 10px;" title="Version">Version:</span><%#= select :version, :id, options_for_select(RateVersion.find(:all).collect {|v| [v.number, v.id]}, @schedule_a.version_id), {include_blank: true}, {style: "width: 50px", onchange: update, name: "version_id"} %> -->
+				</td>
+			</tr>
+			<tr>
+				<td class="label" style="padding-right: 5px;">Effective Date:</td>
+				<td>
+					<% effective_at = !@schedule_a.effective_at.nil? ? @schedule_a.effective_at.strftime("%m/%d/%Y %l:%M %p").gsub(/\s\s/, " ") : "" %>
+					<%= text_field_tag :effective_at, effective_at, placeholder: "mm/dd/yyyy hh:mm AM", style: "width: 171px; margin-right: 5px; padding-left: 4px;", class: "datetime", onchange: "if($(this).val() != '#{effective_at}'){$('div#effective_at_warning').show();}else{$('div#effective_at_warning').hide();}" %><%= submit_tag "Update", type: "button", onclick: "validateFileProduct();" %>
+				</td>
+			</tr>
+		</table>
+
+		<div style="float: left; margin-left: 20px;" id="file_product_closer_results">
+			<%= render "closer_results" %>
+		</div>
+
+		<div style="display: none; font-style: italic; clear: both; padding-left: 5px;" class="red" id="effective_at_warning">*Effective date has been changed but not updated.</div>
+
+		<p class="clear"></p>
+
+		<h4 style="padding-left: 2px; margin: 20px 0px 5px; text-decoration: underline;">Entity Information:</h4>
+		<div style="padding-left: 7px;">
+			<div>
+				<span class="label" style="padding-right: 5px;">Current Vesting:</span>
+				<%= text_field_tag :vesting_type, @schedule_a.vesting_type, style: "width: 350px; margin-right: 10px;", onchange: update, placeholder: "Vesting Type", class: "first" %>
+				<label style="float: right; position: relative; right: 10px;">
+					Use Exhibit "A"<%= check_box_tag :use_vesting_exhibit_a, true, @schedule_a.use_vesting_exhibit_a?, onchange: update, style: "margin-left: 5px;" %>
+				</label>
+				<br />
+				<%= text_area_tag :vesting, @schedule_a.vesting, style: "width: 610px; height: 100px; resize: vertical; margin-top: 5px; padding: 2px;", onchange: update %>
+			</div>
+			<div class="box" style="width: 612px; margin-top: 5px;">
+				<table class="grid_header">
+					<tr>
+						<td style="width: 230px;" class="no_sort">File Entity <%= link_to image_tag("plus.png", class: "icon"), "index/show_overlay?id=#{@file.ID}&overlay=File Entities&form=file_product", remote: true %></td>
+						<td style="width: 90px;">SSN/Tax ID</td>
+						<td style="width: 210px;">Name Checked</td>
+					</tr>
+				</table>
+				<div class="results" id="file_product_entity_results">
+					<%= render "entity_results" %>
+				</div>
+			</div>
+		</div>
+
+		<h4 style="padding-left: 2px; margin: 20px 0px 5px; text-decoration: underline;">Property Information:</h4>
+		<div style="padding-left: 7px;">
+			<div><span class="label">Legal Description:</span><label style="float: right; position: relative; right: 10px;">Use Exhibit "A"<%= check_box_tag :use_legal_exhibit_a, true, @schedule_a.use_legal_exhibit_a?, onchange: update, style: "margin-left: 5px;" %></label><br />
+				<%= text_area_tag :legal_description, @schedule_a.legal_description, style: "width: 610px; height: 100px; resize: vertical; padding: 2px;", onchange: update %>
+			</div>
+			<table style="margin-top: 5px;">
+				<tr>
+					<td class="label" style="padding-right: 5px;">Type:</td>
+					<td style="padding-right: 10px;"><%= select :land, :type, options_for_select(land_types(), @schedule_a.land_type), {include_blank: true}, {style: "width: 304px; margin-right: 10px;", name: "land_type", onchange: update} %></td>
+					<td class="label"><label>Verified:<%= check_box_tag :land_address_verified_by, current_user.employee_id, @schedule_a.land_address_verified_by != nil, onchange: update, style: "margin: 0px 10px 0px 5px;" %></label> Per: <%= select :land_address_verified, :per, options_for_select([["City Office", "City Office"], ["Prior File", "Prior File"]], @schedule_a.land_address_verified_per), {include_blank: true}, {style: "width: 95px; margin-right: 10px;", name: "land_address_verified_per", onchange: update} %></td>
+				</tr>
+				<tr>
+					<td class="label" style="padding-right: 5px;">Address:</td>
+					<td><%= text_field_tag :land_address, @schedule_a.land_address, onchange: update, style: "width: 296px; padding-left: 4px;" %></td>
+				</tr>
+				<tr>
+					<td class="label" style="padding-right: 5px;">City, State Zip:</td>
+					<td>
+						<%= text_field_tag :land_city, @schedule_a.land_city, onchange: update, style: "width: 138px; padding-left: 4px;" %>
+						<%= select :state, :type, options_for_select(state_collection, @schedule_a.state), {include_blank: true}, {style: "width: 75px;", name: "state", onchange: update} %>
+						<%= text_field_tag :land_zip_code, @schedule_a.land_zip_code, onchange: update, style: "width: 75px;" %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label" style="padding-right: 5px;">County:</td>
+					<td><%= select :county, :type, options_for_select(County.name_collection, @schedule_a.county), {include_blank: true}, {style: "width: 304px; margin-right: 10px;", name: "county", onchange: update} %></td>
+				</tr>
+			</table>
+			<div class="box" style="width: 612px; margin-top: 5px;">
+				<table class="grid_header">
+					<tr>
+						<td style="width: 75px;" class="no_sort">Tax ID <%= image_tag "plus.png", class: "icon trigger", onclick: "create('#{file_properties_path(id: @file.ID, form: 'file_product')}');" %></td>
+						<td style="width: 215px;">Address</td>
+						<td style="width: 200px;">Property Verified</td>
+					</tr>
+				</table>
+				<div class="results" id="file_product_property_results">
+					<%= render "property_results" %>
+				</div>
+			</div>
+		</div>
+
+		<h4 style="padding-left: 2px; margin: 20px 0px 5px; text-decoration: underline;">File Notes:</h4>
+		<div style="padding-left: 7px;" id="fp_file_notes">
+			<%= render "note_results" %>
+		</div>
+	</div>
+
+	<div id="policies_content" class="container" style="display: none; width: 640px;">
+		<%= render "policies/index" %>
+	</div>
+
+	<div id="requirements_content" class="container" style="display: none; width: 710px;">
+		<%= render "fp_requirements/index" %>
+	</div>
+
+	<div id="exceptions_content" class="container" style="display: none; width: 710px;">
+		<%= render "fp_exceptions/index" %>
+	</div>
+
+<!-- 	<div id="overlay_policy" class="overlay"></div>
+	<div id="overlay_endorsement" class="overlay"></div>
+	<div id="overlay_fp_requirement" class="overlay"></div>
+	<div id="overlay_fp_exception" class="overlay"></div>
+	<div id="overlay_import" class="overlay"></div>
+	<div id="overlay_history" class="overlay"></div>
+	<div id="overlay_helper" class="overlay"></div>
+	<div id="overlay_helper_info" class="overlay"></div> -->
+
+	<script type="text/javascript">
+		$(".datetime").datetimepicker({
+	    changeMonth: true,
+	    changeYear: true,
+	    timeFormat: "h:mm TT",
+	    ampm: true,
+	  });
+
+	  function validateFileProduct(){
+	  	errors = "";
+	  	warnings = "";
+
+	  	if(!validateDateTime($("input#effective_at"))){
+	  		errors += "&list[]=Effective date is not in a valid format. Please use the date time picker to select your date.";
+	  	}
+
+	  	if( $("div#file_product_entity_results").find("tr").length == 0){
+	  		errors += "&list[]=There must be at least one entity associated with this file.";
+	  	}
+
+	  	$("div#file_product_entity_results").find("input[type=checkbox]").each(function(){
+	  		if($(this).attr('checked') != 'checked'){
+	  			errors += "&list[]=All File Entities must be marked as checked.";
+	  			return false;
+	  		}
+	  	});
+
+	  	if( $("div#file_product_property_results").find("tr").length == 0){
+	  		errors += "&list[]=There must be at least one property associated with this file.";
+	  	}
+
+	  	$("div#file_product_property_results").find("input[type=checkbox]").each(function(){
+	  		if($(this).attr('checked') != 'checked'){
+	  			errors += "&list[]=All File Properties must be marked as checked.";
+	  			return false;
+	  		}
+	  	});
+
+	  	if(errors != ""){
+	  		addToQueue("file_product_error", "application/flash_notice?title=Error&notice=The following errors occurred while processing your request:" + errors);
+	  		return;
+	  	}
+
+	  	warnings += "&list[]=Please ensure that all file entities are present and that no entities exist that should not be on the file."
+	  	warnings += "&list[]=Please ensure that all file properties are present and that no properties exist that should not be on the file."
+	  	if(warnings != ""){
+	  		addToQueue("file_product_warning", "application/flash_notice?title=Warning&click_action=" + encodeURIComponent("update(\"<%= schedule_a_path(@schedule_a.id) %>\", $(\"input#effective_at\") );") + "&confirm=Update&notice=The following warnings were raised while processing your request. Are you ready to update the effective date?" + warnings);
+	  	}
+	  	else{
+	  		update("<%= schedule_a_path(@schedule_a.id) %>", $("input#effective_at") );
+	  	}
+	  }
+
+	  function fileProductInitializer(){
+	  	$("select, input[type=text], div[contenteditable='true'], textarea").unbind("dblclick");
+	  	$("select, input[type=text], div[contenteditable='true'], textarea").bind("dblclick", function(){
+				if($("#policies_content").is(":visible")){
+					url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "policies") %>";
+				}
+				else if($("#requirements_content").is(":visible")){
+					url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "fp_requirements") %>";
+				}
+				else if($("#exceptions_content").is(":visible")){
+					url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "fp_exceptions") %>";
+				}
+				else{
+					url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "schedule_as") %>";
+				}
+
+				$.get( url + "&field_name=" + $(this).attr('name') + "&container=" + $(this).attr('id') + "&record_id=" + $(this).closest('.sb_container').data('record') );
+			});
+
+			initializer();
+	  }
+
+	  fileProductInitializer();
+	</script>
+<% end %>

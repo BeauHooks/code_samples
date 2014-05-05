@@ -1,0 +1,8 @@
+<fieldset style="border:0px;">
+  <%= f.label :description, "Description" %>
+  <%= f.text_field :description %>
+  <%= f.label :setting, "Setting" %>
+  <%= f.text_field :setting %>
+  <%= f.hidden_field :_destroy %>
+  <%= link_to "remove", '#', class: "remove_fields" %>
+</fieldset>

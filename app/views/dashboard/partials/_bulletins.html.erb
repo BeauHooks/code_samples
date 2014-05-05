@@ -1,0 +1,8 @@
+<div class="result_container">
+  <div class="box_header">
+    <p class="title">Bulletin Board <%= link_to image_tag("/assets/plus.png", class: "icon"), new_bulletin_path, remote: true if @permission_can_create_bulletins %></p>
+  </div>
+  <div>
+    <%= render "bulletins/partials/results" %>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+<% unless @user.blank? %>
+	$("#user_detail").html("<%= j(render :partial => 'admin/partials/user_detail').html_safe -%>");
+<% else %>
+	$("#user_detail").html("");
+<% end %>

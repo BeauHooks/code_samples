@@ -1,0 +1,57 @@
+<% n = 0 %>
+<% @file.file_entities.each do |e| %>
+  <% entity = e.entity %>
+  <% unless entity == nil %>
+    <% n += 1 %>
+    <tr class="row_<%= e.ID %>">
+      <td class="add_link">
+        <%= submit_tag "Remove", type: "button", onclick: "destroy('#{file_entity_path(:id => e.ID, form: @form)}', $(this).closest('tr'));" %>
+      </td>
+      <% name = entity.FullName.to_s %>
+      <% if name.length > 20 %>
+        <td class="name hint"><span><%= link_to name, "rolodex?entity_id=#{e.EntityID}", target: "_blank" %></span><%= link_to truncate(name, length: 20), "rolodex?entity_id=#{e.EntityID}", target: "_blank" %></td>
+      <% else %>
+        <td class="name"><%= link_to name, "rolodex?entity_id=#{e.EntityID}", target: "_blank" %></td>
+      <% end %>
+      <td class="position"><%= e.position %></td>
+      <% description = entity.Description.to_s %>
+      <% if description.length > 17 %>
+        <td class="name hint">
+          <span><%= description %></span>
+          <%= truncate(description, length: 17) %>
+        </td>
+      <% else %>
+        <td class="name">
+          <%= description %>
+        </td>
+      <% end %>
+
+      <% affiliation = entity.primary_affiliation_name.to_s %>
+        <% if affiliation.length > 17 %>
+          <td class="name hint">
+            <span><%= affiliation %></span>
+            <%= truncate(affiliation, length: 17) %>
+          </td>
+        <% else %>
+          <td class="name">
+            <%= affiliation %>
+          </td>
+        <% end %>
+      <td class="phone"><%= entity.primary_phone_number %></td>
+      <% email = entity.Email.to_s %>
+      <% if email.length > 17 %>
+        <td class="email hint">
+          <span><%= email %></span>
+          <%= truncate(email.downcase, length: 17) %>
+        </td>
+      <% else %>
+        <td class="email hint">
+          <%= email %>
+        </td>
+      <% end %>
+      <td class="files"><%= entity.FileCount.to_i %></td>
+      <td class="used"><%= entity.LastUsedDT != nil ? entity.LastUsedDT.strftime("%m/%d/%y") : "Never" %></td>
+      <td class="modified"><%= entity.LastModifiedDT != nil ? entity.LastModifiedDT.strftime("%m/%d/%y") : "Never" %></td>
+    </tr>
+  <% end %>
+<% end %>

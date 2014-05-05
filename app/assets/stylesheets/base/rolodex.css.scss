@@ -1,0 +1,920 @@
+
+
+.contact_header{
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.entity_info {
+  float: left;
+  margin-bottom: 5px;
+  margin-left: 5px;
+
+  td{
+    width: 110px;
+  }
+}
+
+.expand{
+  width: 7px;
+}
+
+#search_results{
+  .name{
+    width: 150px;
+  }
+
+  .description{
+    width: 150px;
+  }
+
+  .affiliation{
+    width: 150px;
+  }
+
+  .phone{
+    width: 150px;
+  }
+
+  .email{
+    width: 150px;
+  }
+
+  .rolodex_address{
+    width: 150px;
+  }
+
+  .city{
+    width: 100px;
+  }
+
+  .state{
+    width: 170px;
+  }
+
+  .employee{
+    width: 220px;
+  }
+
+  .files{
+    width: 120px;
+  }
+
+  .master{
+    background: #d3ecfb;
+    color: #464646;
+  }
+}
+
+.overview_addresses{
+  .actions{
+    min-width: 80px;
+    width: 1%;
+  }
+  .description{
+    min-width: 115px;
+    width: 1%;
+    input{
+      width: 115px;
+    }
+  }
+  .address1{
+    min-width: 141px;
+    width: 1%;
+    input{
+      width: 115px;
+    }
+  }
+  .address2{
+    min-width: 115px;
+    width: 1%;
+    input{
+      width: 115px;
+    }
+  }
+  .city{
+    min-width: 65px;
+    width: 1%;
+    input{
+      width: 65px;
+    }
+  }
+  .state{
+    min-width: 25px;
+    width: 1%;
+    input{
+      width: 25px;
+    }
+  }
+  .zip{
+    min-width: 55px;
+    width: 1%;
+    input{
+      width: 55px;
+    }
+  }
+  .county{
+    min-width: 90px;
+    width: 1%;
+    input{
+      width: 90px;
+    }
+  }
+  .ship{
+    min-width: 45px;
+    width: 1%;
+  }
+}
+
+.open_container{
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    background: #EEE;
+    min-width: 960px;
+  }
+}
+
+.closed_container{
+  display:none;
+  width: 100%;
+}
+
+.contact{
+  padding: 5px 20px;
+}
+
+.overview_contacts{
+  th, td{
+    width: 1%;
+  }
+
+  select{
+    width: 75px;
+  }
+
+  .actions{
+  }
+
+  .is_primary{
+    padding-left: 5px;
+    min-width: 30px;
+    max-width: 45px;
+  }
+
+  .description{
+    min-width: 125px;
+  }
+
+  .type{
+    min-width: 75px;
+  }
+
+  .info{
+    min-width: 145px;
+  }
+
+  .address{
+    min-width: 270px;
+  }
+
+  .modify_date{
+    min-width: 75px;
+  }
+
+  .modify_user{
+    min-width: 95px;
+  }
+}
+
+.overview_files{
+  table{
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    th, td{
+      white-space: nowrap;
+      width: 1%;
+
+      div{
+        overflow: hidden;
+      }
+    }
+  }
+
+  .file{
+    padding-left: 5px;
+    min-width: 50px;
+  }
+
+  .closer{
+    min-width: 80px;
+  }
+
+  .type{
+    min-width: 80px;
+  }
+
+  .stage{
+    min-width: 110px;
+  }
+}
+
+
+
+.rolodex_active{
+  input{
+    margin-left: 5px;
+    width: 10px;
+  }
+}
+
+.hasDatepicker{
+  width: 75px;
+}
+
+.first{
+  width: 80px;
+}
+
+.middle{
+  width: 25px;
+}
+
+.last{
+  width: 80px;
+}
+
+.overview_affiliations{
+  th, td{
+    width: 1%;
+  }
+
+  .primary{
+    min-width: 95px;
+  }
+
+  .entity{
+    min-width: 144px;
+
+  }
+
+  .relationship{
+    min-width: 125px;
+  }
+
+  select{
+    width: 125px;
+  }
+}
+
+.overview_notes{
+  width: 100%;
+
+  .from{
+    width: 100px;
+  }
+
+  .to{
+    width: 100px;
+  }
+
+  .entered{
+    width: 144px;
+  }
+
+  .remind{
+    width: 144px;
+  }
+
+  .note{
+    overflow-x:hidden;
+    width: 281px;
+  }
+}
+
+.rolodex_attachments{
+  margin: 10px 20px 10px;
+
+  .private{
+    padding-left: 5px;
+    width: 50px;
+  }
+
+  .notes{
+    width: 490px;
+  }
+
+  .type{
+    width: 195px;
+  }
+
+  .modify_date{
+    width: 150px;
+  }
+
+  .results{
+    max-height: 200px;
+  }
+
+  .attachment{
+    padding-left: 5px;
+    width: 25px;
+  }
+
+  .to{
+    width: 150px;
+  }
+
+  .from{
+    width: 150px;
+  }
+
+  .sent_date{
+    width: 200px;
+  }
+
+  .subject{
+    width: 670px;
+  }
+}
+
+.add_edit_contact_info{
+  position: relative;
+
+  select{
+    width: 168px;
+  }
+
+  #overlay_content{
+    margin:auto;
+
+    input[type=text]{
+      width: 164px;
+    }
+
+    #city{
+      width: 75px;
+    }
+
+    #state{
+      width: 25px;
+    }
+
+    #zip{
+      width: 50px;
+    }
+  }
+}
+
+.add_edit_address, .add_edit_contact_info{
+  .description{
+    padding-left: 5px;
+    width: 100px;
+  }
+
+  .type{
+    width: 75px;
+  }
+
+  .info{
+    width: 150px;
+  }
+
+  .modify_date{
+    width: 150px;
+  }
+
+  .modify_user{
+    width: 100px;
+  }
+
+  .action{
+    width: 80px;
+  }
+}
+
+.add_edit_address{
+  position: relative;
+
+  select{
+    width: 168px;
+  }
+
+  select, input{
+    margin-right: 3px;
+  }
+
+  #display_content{
+    input[type=text]{
+      width: 164px;
+    }
+
+    #city{
+      width: 75px;
+    }
+
+    #state{
+      width: 25px;
+    }
+
+    #zip{
+      width: 50px;
+    }
+  }
+}
+
+#add_edit_note{
+
+  select{
+    width: 254px;
+  }
+
+  input[type=text], textarea{
+    width: 250px;
+  }
+
+  .from{
+    padding-left: 5px;
+    width: 100px;
+  }
+
+  .to{
+    width: 100px;
+  }
+
+  .date{
+    width: 125px;
+  }
+
+  .note{
+    width: 200px;
+  }
+
+  .action{
+    width: 80px;
+  }
+}
+
+.add_affiliation{
+  width: 850px;
+}
+
+#add_edit_signature{
+  width:350px;
+
+  table{
+    margin:auto;
+    width: 310px;
+
+    input{
+      width: 200px;
+    }
+  }
+}
+
+#add_edit_rolodex{
+  a{
+    font-size: 10px;
+  }
+
+  .header{
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+
+  p{
+    padding-top: 5px;
+    select{
+      width: 242px;
+    }
+  }
+
+  .type_select{
+    margin-right: 16px;
+    margin-left: 3px;
+  }
+
+  #primary_info{
+    float: left;
+    margin-bottom: 5px;
+
+    .prefix, .suffix{
+      width: 45px;
+    }
+
+    .name{
+      width: 75px;
+    }
+
+    .last{
+      width: 100px;
+    }
+
+    .middle{
+      float: right;
+      width: 35px;
+    }
+
+    input{
+      width: 239px;
+    }
+
+    select{
+      width: 243px;
+    }
+
+    .custom_type{
+      width: 77px;
+    }
+
+    #custom_type{
+      width: 160px;
+    }
+
+    .col1{
+      width: 80px;
+    }
+  }
+
+  #secondary_info{
+    float: left;
+    margin-left: 10px;
+
+    input{
+      width: 95px;
+    }
+
+    select{
+      width: 99px;
+    }
+
+    .date{
+      input{
+        width: 79px;
+      }
+
+      img{
+        position: relative;
+        top: 1px;
+        margin-left: 5px;
+        width: 12px;
+      }
+    }
+  }
+
+  hr{
+    clear: both;
+  }
+
+  .new_rolodex_info{
+
+    .description{
+      padding-left: 5px;
+      width: 100px;
+
+      input{
+        width: 125px;
+      }
+    }
+
+    .info{
+      padding-right: 5px;
+      padding-left: 5px;
+
+      input{
+        width: 325px;
+      }
+
+      .addr1{
+        width: 100px;
+      }
+
+      .addr2{
+        width: 75px;
+      }
+
+      .city{
+        width: 65px;
+      }
+
+      .state{
+        width: 25px;
+      }
+
+      .zip{
+        width: 40px;
+      }
+    }
+
+    .county {
+      width: 95px;
+    }
+
+    .primary{
+      width: 65px;
+    }
+
+    .type{
+      width: 85px;
+    }
+
+    .type select{
+      width: 75px;
+    }
+  }
+
+  .affiliations{
+
+    .entity{
+      width: 125px;
+    }
+
+    .primary{
+      width: 50px;
+
+      input{
+        position: relative;
+        top: 1px;
+        left: 4px;
+      }
+    }
+
+    .info {
+      width: 95px;
+    }
+
+    .relationship{
+
+      input{
+        width: 150px;
+      }
+    }
+
+    select{
+      width: 200px;
+    }
+  }
+
+  .note{
+    width: 155px;
+
+    input{
+      width: 350px;
+    }
+  }
+
+  .from, .to{
+    width: 100px;
+  }
+
+  .date{
+
+    input{
+      width: 110px;
+    }
+  }
+}
+
+#add_edit_rule{
+
+  td{
+    vertical-align: top;
+
+    input{
+      width: 205px;
+    }
+
+    textarea{
+      width: 225px;
+    }
+  }
+}
+
+#overlay_rolodex_affiliation{
+  top: 120px;
+}
+
+#overlay_new_contact_info{
+  top: 120px;
+}
+
+#overlay_new_note{
+  top: 120px;
+}
+
+#overlay_new_rule{
+  top: 120px;
+}
+
+#overlay_new_affiliation{
+  top: 60px;
+  z-index: 3;
+
+  .entity{
+    padding-left: 5px;
+    width: 125px;
+  }
+
+  .relationship{
+    width: 125px;
+  }
+}
+
+#overlay_signature{
+  top: 120px;
+  z-index: 10;
+}
+
+#overlay_entity_lookup{
+  top: 120px;
+  z-index: 10;
+  min-width: 725px;
+
+  .name{
+      padding-left: 5px;
+      width: 110px;
+    }
+
+    .phone{
+      width: 155px;
+    }
+
+    .email{
+      width: 150px;
+    }
+
+    .rolodex_address{
+      width: 150px;
+    }
+
+    .city{
+      width: 100px;
+    }
+
+    .state{
+      width: 50px;
+    }
+
+    .action{
+      width: 75px;
+    }
+
+  .results{
+    height: 200px;
+  }
+}
+
+.new_contact_rolodex{
+  position: absolute;
+  right: 5px;
+  top: 4px;
+}
+
+.saving_new_contact{
+  width: 20px;
+  margin-right: 5px;
+  position: relative;
+  top: 5px;
+}
+
+.checking_for_duplicates{
+  width: 20px;
+  margin-right: 5px;
+  position: relative;
+  top: 5px;
+}
+
+#rolodex_signatures{
+
+    #signature_left{
+      position: relative;
+      float: left;
+      margin: 0 10px 10px 20px;
+      width: 350px;
+
+      #manage_tree_view{
+        #tree_view{
+          overflow-y: auto;
+          min-height: 200px;
+          max-height: 275px;
+
+          #tree{
+            padding: 10px 10px;
+
+            table{
+              margin-bottom: 10px;
+
+              .label{
+                padding-top: 1px;
+                width: 35px;
+              }
+
+              td{
+                vertical-align: top;
+                text-align: right;
+
+                textarea{
+                  width: 175px;
+                  height: 30px;
+                }
+
+                select{
+                  width: 179px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #signature_right{
+      position: relative;
+      float: left;
+      margin-bottom: 10px;
+
+      .tools{
+        ul .menu_item{
+          display: inline;
+        }
+
+        .menu_item:hover{
+          .submenu{
+            position: absolute;
+            left: 0px;
+            display: block;
+          }
+
+          ul li a{
+            display: block;
+            padding: 3px 2px;
+            padding: 4px 10px;
+            border: 1px solid #CCC;
+            background: #FFF;
+            color: #0054A0;
+            text-decoration: none;
+          }
+        }
+
+
+        ul li:hover ul li a:hover{
+          border: 1px solid #fff;
+          background: #0054a0;
+          color: #fff;
+          text-decoration: none;
+        }
+      }
+
+      #signature_content{
+        overflow-y: auto;
+        min-height: 400px;
+        max-height: 450px;
+        width: 697px;
+        font-family: arial;
+
+        #preview{
+          padding: 25px 20px;
+
+          table{
+            margin-bottom: 15px;
+          }
+
+          td{
+            vertical-align: top;
+          }
+
+          .signature_line{
+            width: 250px;
+          }
+
+          .label{
+            width: 25px;
+            font-weight: normal !important;
+          }
+        }
+      }
+    }
+
+    .results{
+      max-height: 200px;
+    }
+
+    .signature{
+      padding-left: 5px;
+      width: 125px;
+    }
+
+    .modify_date{
+      width: 75px;
+    }
+
+    .modify_user{
+      width: 100px;
+    }
+
+    .active{
+      width: 45px;
+    }
+  }

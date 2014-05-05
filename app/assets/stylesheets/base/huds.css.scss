@@ -1,0 +1,1251 @@
+  // Place all the styles related to the huds controller here.
+  // They will automatically be included in application.css.
+  // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#doc_theme_dark{
+  select{
+    background-color: #282828;
+    color: #e6e6e6;
+  }
+
+  .flyout{
+    .trigger {
+      color: #34e2e2 !important;
+    }
+
+    ul li a{
+      border: 1px solid #e6e6e6;
+      background: #282828;
+      color: #e6e6e6;
+    }
+  }
+
+  #hud{
+    .flyout ul li a:hover{
+      border: 1px solid #e6e6e6;
+      background: #e6e6e6;
+      color: #282828;
+    }
+
+    #normal input[type=text]{
+      background-color: #282828;
+    }
+
+    input[type=text]{
+      color: #e6e6e6;
+    }
+
+    input[type=text]:focus {
+      background-color:#afa !important;
+    }
+
+    .disabled{
+      background: #222 !important;
+      color: #FFF !important;
+    }
+
+    input[type=text]:disabled{
+      background: #222 !important;
+      color: #FFF !important;
+    }
+
+    input[type=text]:focus {
+      background-color:#afa;
+    }
+
+    .description{
+      background: #282828;
+    }
+
+  #normal{
+    /* Loan Terms */
+    #loan_terms{
+      border: 1px solid #e6e6e6;
+
+
+      td{
+        border: 1px solid #e6e6e6;
+      }
+
+      input[type=text]{
+        background-color: #282828;
+        color: #e6e6e6;
+      }
+    }
+    /* End Loan Terms */
+
+    .local_header{
+      background: #282828;
+      color: #e6e6e6;
+
+      input[type=text]{
+        background: #282828;
+      }
+
+      input[type=text]:focus {
+        background-color:#afa;
+      }
+    }
+
+    .section_header{
+       background-color: #343434;
+
+       input[type=text]{
+        background: #343434;
+      }
+
+      input[type=text]:focus {
+        background-color:#afa;
+      }
+    }
+
+    #b-section td {
+      border: 1px solid #343434;
+    }
+
+    .content{
+      table{
+        border: 1px solid #343434;
+
+        td{
+          border-bottom: 1px solid #343434;
+        }
+      }
+    }
+
+    .line_total{
+        border-left: 1px solid #343434;
+
+        input[type=text]{
+          background: #282828;
+          color: #e6e6e6;
+        }
+      }
+
+      .hud_line_total{
+        border-left: 1px solid #343434;
+      }
+
+    .header {
+      background: none;
+      background-color: #343434;
+      color: #FFF;
+    }
+
+    .compare-content{
+      td{
+        border: 1px solid #343434;
+      }
+    }
+
+    /* calendar root element */
+    #calroot {
+      border:1px solid #343434;
+      background-color:#fff;
+      -webkit-box-shadow: 0 0 15px #666;
+      -moz-box-shadow: 0 0 15px #666;
+    }
+
+    #caltitle {
+      color:#0150D1;
+      text-shadow:0 1px 0 #ddd;
+    }
+
+    #calnext, #calprev {
+      background:transparent url() no-repeat scroll center center;
+    }
+
+    /* names of the days */
+    #caldays {
+      border-bottom:1px solid #ddd;
+    }
+
+    /* container for weeks */
+    #calweeks {
+      background-color:#fff;
+    }
+
+    /* single day */
+    .calweek a {
+      -webkit-border-radius:3px;
+      -moz-border-radius:3px;
+      color:#666;
+    }
+
+    /* different states */
+    .calweek a:hover, .calfocus {
+      background-color:#ddd;
+    }
+
+    /* sunday */
+    a.calsun {
+      color:red;
+    }
+
+    /* offmonth day */
+    a.caloff {
+      color:#343434;
+    }
+
+    a.caloff:hover {
+      background-color:rgb(245, 245, 250);
+    }
+
+
+    /* unselecteble day */
+    a.caldisabled {
+      background-color:#efefef !important;
+      color:#343434 !important;
+    }
+
+    /* current day */
+    #calcurrent {
+      background-color:#498CE2;
+      color:#fff;
+    }
+
+    /* today */
+    #caltoday {
+      background-color:#333;
+      color:#fff;
+    }
+  }
+  }
+}
+
+#doc_theme_light{
+  .flyout{
+    ul li a{
+      border: 1px solid #CCC;
+      background: #FFF; /* url("/assets//assets/header_bg.jpg"); */
+      color: #464646;
+    }
+  }
+
+
+  .flyout ul li a:hover{
+    border: 1px solid #fff;
+    background: #0054a0;
+    color: #fff;
+  }
+
+  #hud{
+    #normal input[type=text]{
+      background-color: #EEEEEE;
+    }
+
+    input[type=text]{
+      color: #343434;
+    }
+
+    input[type=text]:focus {
+      background-color:#afa !important;
+    }
+
+    /*Settlement Statement*/
+    .hud_border table{
+      border: 1px solid #000;
+    }
+
+    .hud_box_title{
+      border-bottom: 1px solid #000;
+    }
+
+    .ss_body{
+      td{
+        border: 1px solid #000;
+      }
+    }
+    /*End Settlement Statement*/
+
+    .disabled{
+      background: #222 !important;
+      color: #FFF !important;
+    }
+
+    input[type=text]:disabled{
+      background: #222 !important;
+      color: #FFF !important;
+    }
+
+    input[type=text]:focus {
+      background-color:#afa;
+    }
+
+    .description{
+      background: #EEEEEE;
+    }
+
+
+  #normal{
+    /* Loan Terms */
+    #loan_terms{
+      border: 1px solid #343434;
+
+
+      td{
+        border: 1px solid #343434;
+      }
+
+      input[type=text]{
+        background-color: #EEEEEE;
+      }
+    }
+    /* End Loan Terms */
+
+    .local_header{
+      background: #CBCBCB;
+
+      input[type=text]{
+        background: #CBCBCB;
+      }
+
+      input[type=text]:focus {
+        background-color:#afa;
+      }
+    }
+
+    .section_header{
+       background-color: #343434;
+
+       input[type=text]{
+        background: #343434;
+      }
+
+      input[type=text]:focus {
+        background-color:#afa;
+      }
+    }
+
+    #b-section td {
+      border: 1px solid #343434;
+    }
+
+    .content{
+      table{
+        border: 1px solid #343434;
+
+        td{
+          border-bottom: 1px solid #343434;
+        }
+      }
+    }
+
+
+    .line_total{
+        border-left: 1px solid #343434;
+
+        input[type=text]{
+          background: #FFF;
+        }
+      }
+
+      .hud_line_total{
+        border-left: 1px solid #343434;
+      }
+
+    .hud_header {
+      background-color: #343434;
+      color: #fff;
+    }
+
+    .compare-content{
+      td{
+        border: 1px solid #343434;
+      }
+    }
+
+    /* calendar root element */
+    #calroot {
+      border:1px solid #343434;
+      background-color:#fff;
+      -webkit-box-shadow: 0 0 15px #666;
+      -moz-box-shadow: 0 0 15px #666;
+    }
+
+    #caltitle {
+      color:#0150D1;
+      text-shadow:0 1px 0 #ddd;
+    }
+
+    #calnext, #calprev {
+      background:transparent url() no-repeat scroll center center;
+    }
+
+    /* names of the days */
+    #caldays {
+      border-bottom:1px solid #ddd;
+    }
+
+    /* container for weeks */
+    #calweeks {
+      background-color:#fff;
+    }
+
+    /* single day */
+    .calweek a {
+      color:#666;
+    }
+
+    /* different states */
+    .calweek a:hover, .calfocus {
+      background-color:#ddd;
+    }
+
+    /* offmonth day */
+    a.caloff {
+      color:#343434;
+    }
+
+    a.caloff:hover {
+      background-color:rgb(245, 245, 250);
+    }
+
+
+    /* unselecteble day */
+    a.caldisabled {
+      background-color:#efefef !important;
+      color:#343434 !important;
+    }
+
+    /* current day */
+    #calcurrent {
+      background-color:#498CE2;
+      color:#fff;
+    }
+
+    /* today */
+    #caltoday {
+      background-color:#333;
+      color:#fff;
+    }
+  }
+  }
+}
+
+
+// ********************** HUD START ***************************
+
+
+#hud{
+  font-size: 6.5pt;
+  font-family: Arial, sans-serif;
+
+  .flyout ul li a:hover{
+    text-decoration: none;
+  }
+
+  .flyout{
+    position: relative;
+    display: inline;
+
+    .submenu_hide{
+      display: none;
+    }
+
+    .submenu_show{
+      position: absolute;
+      top:  0px;
+      right: -75px;
+      z-index: 1;
+      display: block !important;
+      margin-left: 0px;
+      width: 75px;
+      list-style-type: none;
+    }
+
+    ul{
+      margin: 0px;
+      padding: 0px !important;
+    }
+
+    ul li a{
+      display: block;
+      padding: 3px 2px;
+    }
+
+    li{
+      margin: 0px !important;
+      padding: 0px !important;
+    }
+  }
+
+  p, table, li, input{
+    // font-size: 95%;
+  }
+
+  hr{
+    margin-top: 25px;
+  }
+
+  // h1, h2{
+  //   font-size: .75em;
+  // }
+
+  h4{
+    margin-top: 5px;
+  }
+
+  td{
+    padding: 1px 2px;
+  }
+
+  .hud_border, .hud_border table td{
+    vertical-align: top;
+  }
+
+  .hud_box_title{
+    vertical-align: middle !important;
+  }
+
+  .hud_notice{
+    margin-top: 5px;
+    font-size: .75em;
+  }
+
+  #print_logo{
+    display: none;
+  }
+
+  #hud_banner{
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  #hud_title{
+    font-weight: normal;
+    font-size: 2em !important;
+  }
+
+  #hud_title span{
+    font-weight: bold;
+    font-size: 1.5em !important;
+  }
+
+  #hud_logo img{
+    margin: 0px 30px 0px 0px;
+    height: 30px;
+  }
+
+  #hud_approval{
+    vertical-align: top;
+    text-align: right;
+  }
+
+  .tools{
+    float: right;
+  }
+
+  .icon{
+    width: 9px;
+  }
+
+  .document_focus .icon{
+    width: 11px !important;
+  }
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  input[type=text]{
+    font-family: Arial, sans-serif;
+  }
+
+  .label{
+    input[type=text]{
+      font-weight: bold;
+    }
+  }
+
+  #normal{
+    input{border: none; width: 20%;}
+
+    #b_checkbox{
+      border: none !important;
+
+      td{
+        border: none !important;
+      }
+    }
+
+    #hud_address{
+      vertical-align: top;
+
+      input[type=text]{
+        width: 98%;
+      }
+
+      .full{
+        width: 98% !important;
+      }
+
+      .city{
+        width: 55% !important;
+      }
+
+      .state{
+        width: 10% !important;
+      }
+
+      .zip{
+        width: 25% !important;
+      }
+
+      .tax_id{
+        width: 80% !important;
+      }
+    }
+
+    .hud_settlement{
+      vertical-align: top;
+
+      input[type=text]{
+        width: 99%;
+      }
+    }
+    /* End B Section */
+
+    /* Line Classes */
+    /* JK */
+    .jk_normal{
+      #name{
+          width: 90%;
+      }
+    }
+
+    .jk_header{
+      input[type=text]{
+        width: 100%;
+      }
+    }
+
+    .jk_footer{
+      input[type=text]{
+        width: 100%;
+      }
+    }
+
+    .jk_checkbox{
+      font-weight: bold;
+
+      input[type=text]{
+        font-weight: bold;
+      }
+    }
+
+    .jk_inverse{
+      input[type=text]{
+        width: 100%;
+      }
+    }
+
+    .jk_proration{
+      .name{
+        width: 30%;
+        #name{
+          width: 80%;
+        }
+      }
+
+      .date_short{
+        width: 43%;
+      }
+    }
+
+    .jk_none{
+      input[type=text]{
+        width: 100%;
+      }
+    }
+
+    /* L */
+    .l_main_payee{
+      .amount{
+        width: 15%;
+      }
+
+      .name{
+        width: 40%;
+      }
+
+      .payee_description{
+        width: 25%;
+      }
+
+      .comm_percent {
+        width: 8%;
+        text-align: right;
+      }
+    }
+
+    .l_payee{
+      #name{
+          width: 30%;
+      }
+
+      #payee_name{
+          width: 55%;
+      }
+    }
+
+    #hud_section_1100{
+      .l_payee_amount{
+        #name{
+            width: 80%;
+        }
+
+        .amount{
+          width: 66%;
+        }
+      }
+    }
+
+    #hud_section_800{
+      .l_payee_amount{
+        #name{
+            width: 73%;
+        }
+
+        #amount{
+          width: 90%;
+        }
+      }
+    }
+
+    .l_amount{
+      #name{
+          width: 80%;
+
+      }
+
+      #amount{
+        width: 46%;
+      }
+    }
+
+    #hud_section_1100{
+      .l_amount_desc{
+        .name{
+          width: 56%;
+        }
+        #name{
+            width: 70%;
+        }
+      }
+    }
+
+    #hud_section_800{
+      .l_amount_desc{
+        .name{
+          width: 56%;
+        }
+        #name{
+            width: 89%;
+        }
+      }
+    }
+
+    .l_descriptive{
+      .description{
+        input[type=text]{
+          width: 80%;
+        }
+      }
+    }
+
+    .l_daily_int{
+      #name{
+        width: 30%;
+      }
+
+      #amount{
+          width: 15%;
+      }
+
+      .date_short{
+        width: 12%;
+      }
+    }
+
+    .l_mort_ins, .l_home_ins{
+      #name{
+        width: 32%;
+      }
+
+      #periods{
+        width: 12%;
+      }
+
+      #payee_name{
+        width: 32%;
+      }
+    }
+
+    .l_periodic{
+      #name{
+        width: 75%;
+      }
+    }
+
+    .l_dmr{
+      input[type=text]{
+        width: 18%;
+      }
+    }
+
+    .l_dm{
+      #name{
+        width: 73%;
+      }
+    }
+
+    .l_inverse{
+      #name{
+          width: 70%;
+      }
+    }
+
+    .l_footer{
+
+    }
+
+    .l_normal{
+      .description{
+        input[type=text]{
+          width: 90%;
+        }
+      }
+    }
+
+    .l_none{
+      .description{
+        input[type=text]{
+          width: 90%;
+        }
+      }
+    }
+
+    /* M */
+    .m_normal, .m_none{
+
+      .hud_description{
+        #name{
+            width: 94%;
+        }
+      }
+
+      .hud_number{
+        #name{
+          width: 25%;
+        }
+      }
+    }
+
+    .m_periodic{
+      .hud_description{
+        #name{
+          width: 60%;
+        }
+      }
+
+      #periodic_amount{
+        width: 15%;
+        text-align: right;
+      }
+
+      .hud_number{
+        #name{
+          width: 25%;
+        }
+      }
+    }
+
+    /* End Line Classes */
+
+    /* Loan Terms */
+    #loan_terms{
+      td{
+        vertical-align: top;
+      }
+
+      table{
+        td{
+          border: none;
+        }
+      }
+
+      .description{
+        width: 40%;
+      }
+
+      input[type=text]{
+        width: 15%;
+      }
+
+      .long{
+        width: 15% !important;
+      }
+
+      #initial_loan_amount{
+        width: 95%;
+      }
+    }
+
+    #escrow_accounts{
+      td{
+        border: none !important;
+      }
+
+      input[type=text]{
+        width: 125px;
+      }
+    }
+    /* End Loan Terms */
+
+    #hud_section_100 .local_header, #hud_section_400 .local_header{
+      height: 2em;
+    }
+
+    .local_header{
+      height: 1.5em;
+    }
+
+    .GFE_label{
+      width: 75px;
+    }
+
+    .date_short{
+      text-align: center;
+    }
+
+    .gfe{
+      width: 12%;
+      text-align: right;
+    }
+
+    .full-content{
+      clear: both;
+    }
+
+    .half-content {
+      float: left;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      width: 49.5%;
+    }
+
+    .content{
+      padding-top: 5px;
+      padding-right: 0px;
+      padding-left: 0px;
+      border: 0px;
+      min-width: 0;
+    }
+
+    .half-content{
+      .line_total{
+        width: 25%;
+      }
+    }
+
+    .full-content{
+      .line_total{
+        width: 11%;
+      }
+    }
+
+    .line_total{
+        text-align: right;
+
+        input[type=text]{
+          width: 99%;
+          text-align: right;
+        }
+      }
+
+      .hud_line_total{
+        width: 17%;
+        text-align: right;
+        text-align: center;
+
+        input[type=text]{
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      .hud_overall_total{
+        input[type=text]{
+          width: 42%;
+        }
+      }
+
+    .amount{
+        width: 10%;
+        text-align: right;
+
+        input[type=text]{
+          width: 90%;
+        }
+      }
+
+      .periodic_label{
+        width: 28%;
+      }
+
+      .periodic_amount{
+        input[type=text]{
+        }
+      }
+
+    .hud_header {
+      padding: 5px 5px 5px 10px;
+      border: none;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    div.header{
+      padding-top: 4px;
+    }
+
+    .hud_description{
+      max-width: 48%;
+      width: 48%;
+      border-right: none !important;
+    }
+
+    .hud_number{
+      padding-right: 5px;
+      padding-left: 5px;
+      width: 17%;
+      border-left: none !important;
+    }
+
+    table .compare-amount {
+      position: relative;
+      left: 29px;
+      text-align:left;
+    }
+
+    .compare-content{
+      .spacer{
+        width: 10px;
+        border-top: none !important;
+        border-bottom: none !important;
+      }
+    }
+
+    /* calendar root element */
+    #calroot {
+      /* place on top of other elements. set a higher value if nessessary */
+      z-index:100000;
+      margin-top:-1px;
+      padding:2px;
+      -webkit-border-radius:5px;
+      -moz-border-radius:5px;
+      font-size:11px;
+    }
+
+    /* head. contains title, prev/next month controls and possible month/year selectors */
+    #calhead {
+      padding:2px 0;
+      height:22px;
+    }
+
+    #caltitle {
+      float:left;
+      text-align:center;
+      font-size:14px;
+      line-height:20px;
+    }
+
+    #calnext, #calprev {
+      display:block;
+      float:left;
+      height:20px;
+      cursor:pointer;
+    }
+
+    #calnext {
+      float:right;
+      background-image:url();
+    }
+
+    #calprev.caldisabled, #calnext.caldisabled {
+      visibility:hidden;
+    }
+
+    /* year/month selector */
+    #caltitle select {
+      font-size:10px;
+    }
+
+    /* names of the days */
+    #caldays {
+      height:14px;
+    }
+
+    #caldays span {
+      display:block;
+      float:left;
+      text-align:center;
+    }
+
+    /* container for weeks */
+    #calweeks {
+      margin-top:4px;
+    }
+
+    /* single week */
+    .calweek {
+      clear:left;
+      height:22px;
+    }
+
+    /* single day */
+    .calweek a {
+      display:block;
+      float:left;
+      margin-left:1px;
+      height:20px;
+      -webkit-border-radius:3px;
+      -moz-border-radius:3px;
+      text-align:center;
+      text-decoration:none;
+      font-size:11px;
+      line-height:20px;
+    }
+
+    /* unselecteble day */
+    a.caldisabled {
+      cursor:default;
+    }
+  }
+}
+
+// ************************ END HUD ***************************
+
+#overlay_split{
+  top: 120px;
+
+  div#split{
+    width: 350px;
+  }
+}
+
+#overlay_new_payment{
+  top: 120px;
+  width: 350px;
+}
+
+#overlay_disbursements{
+  position: absolute !important;
+  top: 15px;
+}
+
+#overlay_create_receipt{
+  top:50px;
+  width:450px;
+
+  #receipt_content{
+    padding-top:15px;
+    padding-left:15px;
+    width: 435px;
+
+    input[type=text],textarea,{
+      width: 280px;
+    }
+
+    select{
+      width: 286px;
+    }
+
+    form{
+      width: 420px;
+    }
+  }
+}
+
+#overlay_manage_hud_line{
+  top: 15px;
+}
+
+#overlay_new_hud_line{
+  width: 300px;
+
+  select{
+    margin-left: 5px;
+    width: 100px;
+  }
+}
+
+#payments{
+  .payee{
+    padding-left: 5px;
+    width: 100px;
+  }
+
+  .purpose{
+    width: 100px;
+  }
+
+  .memo{
+    width: 150px;
+  }
+
+  .amount{
+    width: 105px;
+
+    input{
+      width: 100px;
+      text-align: right;
+    }
+  }
+}
+
+.manage_hud_line{
+  #overlay_content{
+    width: 800px;
+  }
+
+  table#line_info{
+    width: 78%;
+  }
+
+  .line_info{
+    input[type=text]{
+      width: 99%;
+    }
+
+    .amount{
+      width: 95px !important;
+      text-align: right;
+    }
+
+    .split{
+      width: 35px !important;
+      text-align: right;
+    }
+
+    .commission_payee{
+      width: 110px !important;
+    }
+
+    .date_short{
+      width: 147px !important;
+    }
+
+    .periods{
+      width: 79px !important;
+    }
+
+    select.units {
+      width: 200px;
+    }
+  }
+
+
+}

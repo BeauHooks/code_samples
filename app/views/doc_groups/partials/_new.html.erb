@@ -1,0 +1,20 @@
+<% content_for :overlay_title do %>
+  New Document Group<% end %>
+<% content_for :overlay do %>
+  <form action="<%= doc_groups_path() %>" data-remote="true" method="post" onsubmit="closeOverlay('new_group');">
+    <table>
+      <tr>
+        <td><span class="label">Name:</span></td>
+        <td>
+         <input type="text" name="name" style="width: 200px;" />
+        </td>
+      </tr>
+      <tr>
+        <td><span class="label">State:</span></td>
+        <td>
+         <%= select :doc_groups, :state, options_for_select([["All", "All"],["Arizona", "Arizona"], ["Nevada", "Nevada"], ["Utah", "Utah"]]), {:include_blank => false}, {style: "width: 204px;", name: "state"} %>
+        </td>
+      </tr>
+    </table>
+  </form>
+<% end %>

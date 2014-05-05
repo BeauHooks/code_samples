@@ -1,0 +1,6 @@
+$("#contact_search_result").find('.preview td:first').html('');
+$("#contact_search_result").find('.preview').remove();
+var index = $("#entity_lookup_row_<%= @entity.EntityID %>").index();
+$("#contact_search_result").scrollTop($("#entity_lookup_row_<%= @entity.EntityID %>").offset().top - $("#contact_search_result").offset().top + $("#contact_search_result").scrollTop());
+$("#entity_lookup_row_<%= @entity.EntityID %>").after("<%= j(render "rolodex/partials/preview").html_safe %>")
+

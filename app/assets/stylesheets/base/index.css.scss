@@ -1,0 +1,718 @@
+// Overview File Info
+.file_info{
+  margin-left: 5px;
+  margin-bottom: 5px;
+  float: left;
+
+  td{
+    width: 110px;
+  }
+}
+//
+
+// Overview Contacts
+.overview_contacts{
+  min-width: 750px;
+
+  td{
+    width: 10%
+  }
+
+  select{
+    width: 120px;
+  }
+
+  .name{
+    min-width: 150px
+  }
+
+  .position{
+    min-width: 130px;
+  }
+
+  .pr{
+    min-width: 40px;
+  }
+
+  .phone{
+    min-width: 140px;
+  }
+
+  .email{
+    min-width: 150px;
+  }
+
+  .send{
+    min-width: 100px;
+  }
+
+  .fedex{
+    min-width: 60px;
+  }
+}
+//
+
+.type{
+  width: 75px;
+}
+
+.side{
+  width: 75px;
+}
+
+.sale{
+  width: 75px;
+}
+
+.loan{
+  width: 75px;
+}
+
+.underwriter{
+  width: 85px;
+}
+
+.employees{
+  width: 150px;
+}
+
+.new_file_employees{
+  width: 250px;
+}
+
+.loan_number{
+  width: 203px;
+}
+
+.file_entities{
+  .add_link{
+    width: 80px;
+  }
+  .name{
+    width: 145px;
+  }
+  .position{
+    width: 120px;
+  }
+  .phone{
+    width: 135px;
+  }
+  .description{
+    width: 100px;
+  }
+  .affiliation{
+    width: 100px;
+  }
+  .email{
+    width: 120px;
+  }
+  .files{
+    width: 50px;
+  }
+  .used{
+    width: 65px;
+  }
+  .modified{
+    width: 50px;
+  }
+}
+
+.add_employee{
+  width: 600px;
+
+  .name{
+    padding-left: 5px;
+    width: 120px;
+  }
+
+  .position{
+    width: 105px;
+
+    select{
+      width: 100px;
+    }
+  }
+
+  .right{
+    margin-top: 8px;
+  }
+
+  .email{
+    width: 200px;
+  }
+}
+
+.result{
+  overflow: auto;
+  height: 210px;
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+
+    td{
+      height: 25px;
+      border-bottom: 1px solid #CCC;
+    }
+  }
+}
+
+.result_current{
+  overflow: auto;
+  height: 100px;
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+
+    td{
+      height: 25px;
+      border-bottom: 1px solid #CCC;
+    }
+  }
+}
+
+.overview_employees{
+  width: 100%;
+
+  .name{
+    width: 117px;
+  }
+
+  .position{
+    width:125px;
+
+    select{
+    width: 110px;
+    }
+  }
+
+  .phone{
+    width: 151px;
+  }
+
+  .fax{
+    width: 151px;
+  }
+
+  .email{
+    width: 270px;
+  }
+}
+
+.overview_notes{
+  width: 100%;
+
+  .from{
+    width: 100px;
+  }
+
+  .to{
+    width: 100px;
+  }
+
+  .entered{
+    width: 144px;
+  }
+
+  .remind{
+    width: 144px;
+  }
+
+  .note{
+    overflow-x:hidden;
+    width: 281px;
+  }
+}
+
+.overview_properties{
+  width: 100%;
+
+  .tax_id{
+    padding-left: 5px;
+    width: 165px;
+  }
+
+  .account{
+    width: 100px;
+  }
+
+  .address{
+    width: 120px;
+  }
+
+  .legal{
+    width: 220px;
+  }
+
+  .add_link{
+    width: 80px;
+  }
+}
+
+.file_attachments{
+  padding: 10px 20px;
+}
+
+.file_emails{
+  padding: 10px 20px;
+}
+
+.file_disbursements{
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+
+  .disbursements_left{
+    width: 650px;
+    margin-right: 10px;
+    float: left;
+
+    .disbursements{
+      table{
+        max-width: 100%;
+      }
+
+      .payee{
+        padding-left: 5px;
+        width: 120px;
+      }
+
+      .amount{
+        width: 75px;
+      }
+
+      .purpose{
+        width: 100px;
+      }
+
+      .memo{
+        width: 100px;
+      }
+
+      .type{
+        width: 75px;
+      }
+
+      .date{
+        width: 75px;
+      }
+
+      .number{
+        width: 75px;
+      }
+
+      .hold{
+        width: 50px;
+      }
+
+      .instructions{
+        width: 75px;
+      }
+
+      .office{
+        width: 110px;
+      }
+
+      .clear{
+        width: 100px;
+      }
+
+      .display_disbursements{
+        padding: 5px;
+
+        .check{
+
+          float: left;
+          margin: 4px;
+          padding: 10px;
+          width: 65%;
+
+          td{
+            vertical-align: top;
+          }
+
+          .col1{
+            width: 60px;
+          }
+
+          .col2{
+            width: 200px;
+          }
+
+          .col3{
+            width: 100px;
+            text-align: right;
+          }
+
+          .col4{
+            width: 100px;
+          }
+
+          textarea{
+            width: 99%;
+            height: 50px;
+          }
+        }
+
+        .send{
+          float: left;
+          padding-left: 10px;
+          width: 25%;
+
+          select{
+            width: 100%;
+          }
+
+          input{
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .disbursements_right{
+    float: left;
+    width: 250px;
+
+    .disbursement_info{
+
+      table{
+        margin: 5px 5px 0px;
+        border-collapse: collapse;
+
+        td{
+          padding: 2px;
+        }
+      }
+
+      .amounts{
+        float: left;
+        margin-right: 5px;
+        width: 39%;
+
+        input{
+          width: 75px;
+          text-align: right;
+        }
+
+        .amount{
+          text-align: right;
+        }
+      }
+
+      .options{
+        width: 56%;
+
+        select{
+          width: 85px;
+        }
+
+        input{
+          position: relative;
+          top: 2px;
+        }
+      }
+
+      .total{
+        font-weight: bold;
+      }
+    }
+
+    .invoices{
+      width: 99%;
+      border-right: 1px solid #CCC;
+      border-left: 1px solid #CCC;
+
+      td{
+        height: 15px;
+        border-bottom: 1px solid #CCC;
+      }
+
+      .col1{
+        width: 65%;
+      }
+    }
+
+
+    .funding_info{
+      position: relative;
+      width: 100%;
+
+      .funding_comments{
+        text-align: center;
+
+        textarea{
+          margin: 5px auto;
+          padding: 5px;
+          width: 93%;
+          text-align: left;
+        }
+      }
+    }
+  }
+}
+
+.send_doc{
+  width: 750px;
+
+  .recipients{
+    float: left;
+    margin-bottom: 5px;
+    padding-right: 10px;
+    width: 300px;
+    border-right: 1px solid #CCC;
+
+    table{
+      width: 100%;
+    }
+
+    .name{
+      width: 100px;
+    }
+
+    .position{
+      width: 75px;
+    }
+
+    .send{
+      width: 75px;
+
+      select{
+        width: 75px;
+      }
+    }
+  }
+
+  .documents{
+    float: left;
+    margin-bottom: 5px;
+    margin-left: 15px;
+
+    table{
+      width: 100%;
+
+      .name{
+        width: 125px;
+      }
+
+      .modify_date{
+        width: 125px;
+      }
+
+      .modify_user{
+        width: 90px;
+      }
+    }
+  }
+
+  .message_content{
+    input{
+      margin-bottom: 5px;
+      width: 95%;
+    }
+
+    textarea{
+      width: 95%;
+    }
+  }
+
+  .checkbox{
+    width: 25px;
+  }
+}
+
+.add_entity, .add_employee{
+
+  .add_link{
+    width: 80px;
+  }
+
+  .entity{
+    width: 420px;
+  }
+
+  .entity_container{
+    background: #EEE;
+  }
+
+  .signature{
+    padding-left: 20px;
+  }
+
+  .add_to_doc{
+    width: 75px;
+  }
+
+  .name{
+    padding-left: 5px;
+    width: 130px;
+  }
+
+  .phone{
+    width: 100px;
+  }
+
+  .email{
+    padding-left: 5px;
+    width: 100px;
+  }
+
+  .actions{
+    width: 75px;
+  }
+
+  .minus{
+    position: relative;
+    top: -3px;
+    margin-right: 5px;
+  }
+
+  .plus{
+    margin-right: 5px;
+    width: 8px;
+  }
+}
+
+.add_note{
+  width: 605px;
+
+  .note_entry{
+    width: 350px;
+  }
+
+  .input_field{
+    padding-left: 10px;
+
+    select{
+      width: 249px;
+    }
+  }
+
+  textarea{
+    width: 340px;
+  }
+
+  .from{
+    padding-left: 5px;
+    width: 100px;
+  }
+
+  .to{
+    width: 100px;
+  }
+
+  .date{
+    width: 120px;
+  }
+
+  .note{
+    width: 120px;
+  }
+
+  .remove_button{
+    width: 75px;
+  }
+}
+
+.add_property_to_new_order{
+  width: 800px;
+
+  .tax_id{
+    padding-left: 5px;
+    width: 100px;
+  }
+
+  .owner{
+    width: 100px;
+  }
+
+  .acres{
+    width: 50px;
+  }
+
+  .address{
+    width: 100px;
+  }
+
+  .legal{
+    width: 150px;
+  }
+
+  .county{
+    width: 75px;
+  }
+
+  .actions{
+    width: 75px;
+  }
+}
+
+.add_property{
+
+  .custom_property{
+    margin-top: 5px;
+
+    .parcel_num{
+      width: 25px;
+    }
+
+    .tax_id{
+      width: 150px;
+    }
+
+    .account{
+      width: 75px;
+    }
+
+    .address{
+      width: 150px;
+    }
+
+    .city{
+      width: 95px;
+    }
+
+    .state{
+      width: 95px;
+    }
+
+    .zip{
+      width: 75px;
+    }
+
+    .county{
+      width: 60px;
+    }
+
+    .legal{
+      width: 275px;
+    }
+
+    .action{
+      width: 65px;
+    }
+  }
+
+  .tax_id{
+    padding-left: 5px;
+    width: 165px;
+  }
+
+  .account{
+    width: 100px;
+  }
+
+  .address{
+    width: 120px;
+  }
+
+  .legal{
+    width: 220px;
+  }
+
+  .add_link{
+    width: 80px;
+  }
+}

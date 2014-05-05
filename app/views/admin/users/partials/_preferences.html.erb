@@ -1,0 +1,34 @@
+<div id="navigation_preferences" class="pref_box">
+  <table>
+    <% SitePreference.navigation.each do |site_preference| %>
+      <tr class="pref_desc"><td colspan="2"><strong><%= site_preference.question %></strong></td></tr>
+      <% site_preference.site_preference_options.each do |option| %>
+        <tr class="pref_option">
+          <td>
+            <%= radio_button_tag site_preference.name, option.id, @user.users_preferences[site_preference.name] == option.setting, :class => "pref", onclick: "editPreference(#{@user.id}, #{option.id})" %>
+          </td>
+          <td>
+            <%= option.description.html_safe %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+<div id="style_preferences" class="pref_box">
+  <table>
+    <% SitePreference.style.each do |site_preference| %>
+      <tr class="pref_desc"><td colspan="2"><strong><%= site_preference.question %></strong></td></tr>
+      <% site_preference.site_preference_options.each do |option| %>
+        <tr class="pref_option">
+          <td>
+            <%= radio_button_tag site_preference.name, option.id, @user.users_preferences[site_preference.name] == option.setting, :class => "pref", onclick: "editPreference(#{@user.id}, #{option.id})" %>
+          </td>
+          <td>
+            <%= option.description.html_safe %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>

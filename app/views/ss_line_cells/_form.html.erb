@@ -1,0 +1,27 @@
+<% content_for :overlay_class do %>
+  cell_attributes
+<% end %>
+
+<% content_for :overlay_title do %>
+  <%= "#{@cell.ss_line.ss_section.name.downcase}.#{@cell.ss_line.number}.#{@cell.cell_name}" %>
+<% end %>
+
+<% content_for :overlay do %>
+  <div class="overlay_content">
+    <%= form_tag update_attributes_ss_line_cells_path(), method: :put, remote: true do |f| %>
+      <table>
+        <tr>
+          <td class="label">Font Size:</td>
+          <td><%= select_tag "cells[#{@cell.id}][font_size]", options_for_select(SsLineCell.cell_font_size_options,  (@cell.settings[:font_size].blank? ? "tru_font_7pt" : @cell.settings[:font_size] ) ) %></td>
+        </tr>
+        <tr>
+          <td class="label">Font Styles:</td>
+          <td>
+            <%= check_box_tag "cells[#{@cell.id}][font_style_bold]", "tru_bold", !@cell.settings[:font_style_bold].blank? %> Bold<br />
+            <%= check_box_tag "cells[#{@cell.id}][font_style_italic]", "tru_italic", !@cell.settings[:font_style_italic].blank?  %> Italic
+          </td>
+        </tr>
+      </table>
+    <% end %>
+  </div>
+<% end %>

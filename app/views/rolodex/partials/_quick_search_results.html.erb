@@ -1,0 +1,94 @@
+<table id="grid_results" tabindex="0">
+    <% c = 0 %>
+    <% @search_results.each do |i| %>
+      <% c += 1 %>
+      <tr id="<%= i.EntityID %>" onclick="rowSelect(this, '');" class="trigger">
+        <% if i.name_last_first != nil && i.name_last_first.length > 15 %>
+          <td class="name hint">
+            <span><%= i.name_last_first %></span>
+            <%= truncate(i.name_last_first, length: 15) %>
+          </td>
+        <% else %>
+          <td class="name">
+            <%= i.name_last_first %>
+          </td>
+        <% end %>
+
+        <% phone = i.primary_phone_number.to_s %>
+        <% if phone.length > 25 %>
+          <td class="phone hint">
+            <span><%= phone %></span>
+            <%= truncate(phone, length: 25) %>
+          </td>
+        <% else %>
+          <td class="phone">
+            <% if phone != nil -%>
+              <%= phone %>
+            <% end %>
+          </td>
+        <% end %>
+
+        <% email = i.Email.to_s %>
+        <% if email.length > 25 %>
+          <td class="email hint">
+            <span><%= mail_to email, email.downcase %></span>
+            <%= link_to truncate(email, length: 25), email.downcase %>
+          </td>
+        <% else %>
+          <td class="email">
+            <%= mail_to email, email.downcase if email != "" %>
+          </td>
+        <% end -%>
+
+        <% address = i.primary_address.to_s %>
+        <% if address.length > 17 %>
+          <td class="rolodex_address hint">
+            <span><%= address %></span>
+            <%= truncate(address, length: 17) %>
+          </td>
+        <% else %>
+          <td class="rolodex_address">
+            <%= address %>
+          </td>
+        <% end %>
+
+        <% city = i.primary_city.to_s %>
+        <% if city.length > 17 %>
+          <td class="city hint">
+            <span><%= city %></span>
+            <%= truncate(city, length: 17) %>
+          </td>
+        <% else %>
+          <td class="city">
+            <%= city %>
+          </td>
+        <% end %>
+
+        <% state = i.primary_state.to_s %>
+        <% if state.length > 2 %>
+          <td class="state hint">
+            <span><%= state %></span>
+            <%= truncate(state, length: 2) %>
+          </td>
+        <% else %>
+          <td class="state">
+            <%= state %>
+          </td>
+        <% end %>
+
+      </tr>
+    <% end %>
+</table>
+
+<%# OPTIMIZE: Easier way to inject js? %>
+<% if c > 8 %>
+  <script type="text/javascript">
+    $("#quick_search .results tr:first").click();
+    addWidth('entity_lookup', 50);
+  </script>
+<% else %>
+  <script type="text/javascript">
+    $("#quick_search .results tr:first").click();
+    fixWidth('entity_lookup', 50);
+  </script>
+<% end %>

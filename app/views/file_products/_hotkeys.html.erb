@@ -1,0 +1,458 @@
+<% unless @file_product.nil? %>
+	<h2>Hotkeys</h2>
+	<h4>Import</h4>
+	<table>
+		<tbody>
+			<tr><td>1</td><td> - Import From Prior</td></tr>
+			<tr><td>2</td><td> - Import From Base</td></tr>
+		</tbody>
+	</table>
+
+	<h4>Navigation</h4>
+	<table>
+		<tbody>
+			<tr><td>a</td><td> - Schedule A</td></tr>
+			<tr><td>p</td><td> - Policies</td></tr>
+			<tr><td>r</td><td> - Requirements</td></tr>
+			<tr><td>e</td><td> - Exceptions</td></tr>
+		</tbody>
+	</table>
+
+	<h4>Fields</h4>
+	<table>
+		<tbody>
+			<tr><td>z</td><td> - Last Value</td></tr>
+			<tr><td>o</td><td> - History</td></tr>
+			<tr><td>h</td><td> - Helpers</td></tr>
+		</tbody>
+	</table>
+
+	<div id="policies_hotkeys" class="hotkey_section">
+		<h4>Policies</h4>
+		<table>
+			<tbody>
+				<tr><td>n</td><td> - New</td></tr>
+				<tr><td>d</td><td> - Delete</td></tr>
+				<tr><td>s</td><td> - Edit Sort Number</td></tr>
+				<tr><td>&#8593;</td><td> - Move Up</td></tr>
+				<tr><td>&#8595;</td><td> - Move Down</td></tr>
+				<tr><td>&#8592;</td><td> - Previous</td></tr>
+				<tr><td>&#8594;</td><td> - Next</td></tr>
+				<tr><td>Home</td><td> - First</td></tr>
+				<tr><td>End</td><td> - Last</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="requirements_hotkeys" class="hotkey_section">
+		<h4>Requirements</h4>
+		<table>
+			<tbody>
+				<tr><td>n</td><td> - New</td></tr>
+				<tr><td>d</td><td> - Delete</td></tr>
+				<!-- <tr><td>t</td><td> - Editor</td></tr> -->
+				<tr><td>b</td><td> - Bold</td></tr>
+				<tr><td>i</td><td> - Italicize</td></tr>
+				<tr><td>u</td><td> - Underline</td></tr>
+				<tr><td>s</td><td> - Edit Sort Number</td></tr>
+				<tr><td>&#8593;</td><td> - Move Up</td></tr>
+				<tr><td>&#8595;</td><td> - Move Down</td></tr>
+				<tr><td>&#8592;</td><td> - Previous</td></tr>
+				<tr><td>&#8594;</td><td> - Next</td></tr>
+				<tr><td>Home</td><td> - First</td></tr>
+				<tr><td>End</td><td> - Last</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="exceptions_hotkeys" class="hotkey_section">
+		<h4>Exceptions</h4>
+		<table>
+			<tbody>
+				<tr><td>n</td><td> - New</td></tr>
+				<tr><td>d</td><td> - Delete</td></tr>
+				<!-- <tr><td>t</td><td> - Editor</td></tr> -->
+				<tr><td>b</td><td> - Bold</td></tr>
+				<tr><td>i</td><td> - Italicize</td></tr>
+				<tr><td>u</td><td> - Underline</td></tr>
+				<tr><td>s</td><td> - Edit Sort Number</td></tr>
+				<tr><td>&#8593;</td><td> - Move Up</td></tr>
+				<tr><td>&#8595;</td><td> - Move Down</td></tr>
+				<tr><td>&#8592;</td><td> - Previous</td></tr>
+				<tr><td>&#8594;</td><td> - Next</td></tr>
+				<tr><td>Home</td><td> - First</td></tr>
+				<tr><td>End</td><td> - Last</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<script type="text/javascript">
+		var active;
+
+		function bindBodyKeydown(){
+			$("#file_product_hotkeys").hide();
+			$("body").unbind(".hotkey");
+			$("body").bind("keydown.hotkey", function(event){
+		    var code = event.which;
+		    if(code == 192 && !event.shiftKey){
+		    	active = document.activeElement;
+		    	$("#file_product_hotkeys").show();
+		    	$("body").unbind(".hotkey");
+		      $("body").bind("keydown.hotkey", function(event){
+			     	var code = event.which;
+			     	switch(code)
+						{
+						case 27: //esc - escape
+							event.preventDefault();
+						  break;
+						case 35: //end - last
+							event.preventDefault();
+							if($("#policies_content").is(":visible")){
+								$("#policies_content").find(".sb_container").eq(-1).find(".first").eq(0).focus();
+							}
+							else if($("#requirements_content").is(":visible")){
+								$("#requirements_content").find(".sb_container").eq(-1).find(".first").eq(0).focus();
+							}
+							else if($("#exceptions_content").is(":visible")){
+								$("#exceptions_content").find(".sb_container").eq(-1).find(".first").eq(0).focus();
+							}
+						  break;
+						case 36: //home - first
+							event.preventDefault();
+							if($("#policies_content").is(":visible")){
+								$("#policies_content").find(".sb_container").eq(0).find(".first").eq(0).focus();
+							}
+							else if($("#requirements_content").is(":visible")){
+								$("#requirements_content").find(".sb_container").eq(0).find(".first").eq(0).focus();
+							}
+							else if($("#exceptions_content").is(":visible")){
+								$("#exceptions_content").find(".sb_container").eq(0).find(".first").eq(0).focus();
+							}
+						  break;
+						case 37: //left - previous
+							event.preventDefault();
+							active = $(active).closest(".sb_container").prev().find(".first").eq(0)
+							if($(active)[0] != undefined){
+								$(active).focus();
+								$(active)[0].selectionStart = 0;
+								$(active)[0].selectionEnd = 0;
+							}
+						  break;
+						case 38: //up - move up
+							event.preventDefault();
+							var sort = $(active).closest(".sb_container").find("input[name='sort_order']").eq(0)
+							if($(sort).val() != undefined){
+								var current = Number($(sort).val()) - 1;
+								$(sort).val(current).change();
+							}
+						  break;
+						case 39: //right - next
+							event.preventDefault();
+							active = $(active).closest(".sb_container").next().find(".first").eq(0);
+							if($(active)[0] != undefined){
+								$(active).focus();
+								$(active)[0].selectionStart = 0;
+								$(active)[0].selectionEnd = 0;
+							}
+						  break;
+						case 40: //down - move down
+							event.preventDefault();
+							var sort = $(active).closest(".sb_container").find("input[name='sort_order']").eq(0)
+							if($(sort).val() != undefined){
+								var current = Number($(sort).val()) + 1;
+								$(sort).val(current).change();
+							}
+						  break;
+						case 49: //1 - import from prior
+							event.preventDefault();
+							$.get("<%= file_products_import_path(id: @file_product.id, type: "prior") %>");
+						  break;
+						case 50: //2 - import from base
+							event.preventDefault();
+							$.get("<%= file_products_import_path(id: @file_product.id, type: "base") %>");
+						  break;
+						case 65: //a - open schedule a
+							event.preventDefault();
+							$("#schedule_a_nav").click();
+						  break;
+						case 66: //b - bold
+							event.preventDefault();
+							var startPos = active.selectionStart;
+							var endPos = active.selectionEnd;
+							var begin_tag = "<b>"
+							var end_tag = "</b>";
+
+					  	if(startPos - endPos != 0){
+					  		$(active).val(active.value.slice(0, startPos) + begin_tag + active.value.slice(startPos, endPos) + end_tag + active.value.slice(endPos)).change();
+					  		active.selectionStart = startPos + 3;
+					  		active.selectionEnd = endPos + 3;
+					  	}
+						  break;
+						case 68: //d - delete
+							event.preventDefault();
+							$(active).closest(".sb_container").find(".destroy").eq(0).click();
+						  break;
+						case 69: //e - open exceptions
+							event.preventDefault();
+							$("#exceptions_nav").click();
+						  break;
+						case 72: //h - helper
+							event.preventDefault();
+							if($(active).attr('id') != undefined && ["INPUT", "TEXTAREA"].indexOf(active.nodeName) != -1){
+								var start = "";
+								var end = ""
+								if (active.nodeName == "DIV"){
+									var selection = window.getSelection();
+									start = selection.anchorOffset;
+									end = selection.focusOffset;
+								}
+								else{
+									start = active.selectionStart;
+									end = active.selectionEnd;
+								}
+								$.get("<%= file_products_helper_path %>?container=" + $(active).attr('id') + "&start=" + start + "&end=" + end );
+							}
+						  break;
+						case 73: //i - italicize
+							event.preventDefault();
+							var startPos = active.selectionStart;
+							var endPos = active.selectionEnd;
+							var begin_tag = "<i>"
+							var end_tag = "</i>";
+
+					  	if(startPos - endPos != 0){
+					  		$(active).val(active.value.slice(0, startPos) + begin_tag + active.value.slice(startPos, endPos) + end_tag + active.value.slice(endPos)).change();
+					  		active.selectionStart = startPos + 3;
+					  		active.selectionEnd = endPos + 3;
+					  	}
+						  break;
+						case 78: //n - new
+							event.preventDefault();
+							if($("#policies_content").is(":visible")){
+								$.get("<%= new_policy_path(file_product_id: @file_product.id, schedule_a_id: @schedule_a.id) %>");
+							}
+							else if($("#requirements_content").is(":visible")){
+								$.get("<%= new_fp_requirement_path(file_product_id: @file_product.id) %>");
+							}
+							else if($("#exceptions_content").is(":visible")){
+								$.get("<%= new_fp_exception_path(file_product_id: @file_product.id) %>");
+							}
+						  break;
+						case 79: //o - open history
+							event.preventDefault();
+							if($(active).attr('name') != undefined && ["INPUT", "TEXTAREA", "SELECT"].indexOf(active.nodeName) != -1){							
+								if($("#policies_content").is(":visible")){
+									url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "policies") %>";
+								}
+								else if($("#requirements_content").is(":visible")){
+									url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "fp_requirements") %>";
+								}
+								else if($("#exceptions_content").is(":visible")){
+									url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "fp_exceptions") %>";
+								}
+								else{
+									url = "<%= file_product_histories_view_path(file_product_id: @file_product.id, table_name: "schedule_as") %>";
+								}
+
+								$.get( url + "&field_name=" + $(active).attr('name') + "&container=" + $(active).attr('id') + "&record_id=" + $(active).closest('.sb_container').data('record') );
+							}
+						  break;
+						case 80: //p - open policies
+							event.preventDefault();
+							$("#policies_nav").click();
+						  break;
+						case 82: //r - open requirements
+							event.preventDefault();
+							$("#requirements_nav").click();
+						  break;
+						case 83: //s - select sort order
+							event.preventDefault();
+							$(active).closest(".sb_container").find("input[name='sort_order']").eq(0).select();
+						  break;
+						// case 84: //t - editor
+						// 	event.preventDefault();
+						// 	$(active).closest(".sb_container").find("a.editor_link").eq(0).click();
+						//   break;
+						case 85: //u - underline
+							event.preventDefault();
+							var startPos = active.selectionStart;
+							var endPos = active.selectionEnd;
+							var begin_tag = "<u>"
+							var end_tag = "</u>";
+
+					  	if(startPos - endPos != 0){
+					  		$(active).val(active.value.slice(0, startPos) + begin_tag + active.value.slice(startPos, endPos) + end_tag + active.value.slice(endPos)).change();
+					  		active.selectionStart = startPos + 3;
+					  		active.selectionEnd = endPos + 3;
+					  	}
+						  break;
+						case 90: //z - undo
+							event.preventDefault();
+							if($(active).attr('name') != undefined && ["INPUT", "TEXTAREA", "SELECT"].indexOf(active.nodeName) != -1){							
+								if($("#policies_content").is(":visible")){
+									url = "<%= file_product_histories_undo_path(file_product_id: @file_product.id) %>&table_name=policies";
+								}
+								else if($("#requirements_content").is(":visible")){
+									url = "<%= file_product_histories_undo_path(file_product_id: @file_product.id) %>&table_name=fp_requirements";
+								}
+								else if($("#exceptions_content").is(":visible")){
+									url = "<%= file_product_histories_undo_path(file_product_id: @file_product.id) %>&table_name=fp_exceptions";
+								}
+								else{
+									url = "<%= file_product_histories_undo_path(file_product_id: @file_product.id) %>&table_name=schedule_as";
+								}
+
+								$.get( url + "&field_name=" + $(active).attr('name') + "&container=" + $(active).attr('id') + "&record_id=" + $(active).closest('div.sb_container').data('record') );
+							}
+						  break;
+						case 97: //1 (keypad) - import from prior
+							event.preventDefault();
+							$.get("<%= file_products_import_path(id: @file_product.id, type: "prior") %>");
+						  break;
+						case 98: //2 (keypad) - import from base
+							event.preventDefault();
+							$.get("<%= file_products_import_path(id: @file_product.id, type: "base") %>");
+						  break;
+						default:
+							// alert(code);
+						}
+						bindBodyKeydown();
+			    });
+		    }
+		    else if(code == 120){
+		    	var active = document.activeElement;
+		    	var container = $(active).closest('.container')
+		    	var keep_checking = true;
+		    	var startPos = 0;
+		    	var endPos = 0;
+
+		    	if(["TEXTAREA"].indexOf(active.nodeName) == -1 || $(active).val() == undefined || $(active).val().match(/{{(.*?)}}/g) == null){
+		    		if($(container).html() == undefined || $(container).find("textarea").length == 0){
+		    			// alert("No container")
+		    			return;
+		    		}
+		    		else{
+		    			
+		    			if(["TEXTAREA"].indexOf(active.nodeName) == -1){
+		    				$(active).closest('.sb_container').find("textarea").each(function(){
+		    					active = this;
+		    					$(active).focus();
+		    					$(active)[0].selectionStart = 0;
+		    					$(active)[0].selectionEnd = 0;
+			    				matches = $(active).val().match(/{{(.*?)}}/g);
+			    				if(matches != null){
+			    					keep_checking = false;
+			    					// alert("Found 0")
+			    					return false;
+			    				}
+			    			});
+
+		    				if(keep_checking){
+		    					$(container).find("textarea").each(function(){
+			    					active = this;
+			    					$(active).focus();
+			    					$(active)[0].selectionStart = 0;
+		    						$(active)[0].selectionEnd = 0;
+				    				matches = $(active).val().match(/{{(.*?)}}/g);
+				    				if(matches != null){
+				    					keep_checking = false;
+				    					// alert("Found 1")
+				    					return false;
+				    				}
+				    			});
+		    				}
+		    			}
+		    			else{
+		    				index = $(container).find("textarea").index(active);
+		    				$(container).find("textarea").slice(index).each(function(){
+		    					active = this;
+		    					$(active).focus();
+		    					$(active)[0].selectionStart = 0;
+		    					$(active)[0].selectionEnd = 0;
+			    				matches = $(active).val().match(/{{(.*?)}}/g);
+			    				if(matches != null){
+			    					keep_checking = false;
+			    					// alert("Found 2")
+			    					return false;
+			    				}
+			    			});
+
+			    			if(keep_checking == true){
+			    				$(container).find("textarea").slice(0, index).each(function(){
+			    					active = this;
+			    					$(active).focus();
+			    					$(active)[0].selectionStart = 0;
+		    						$(active)[0].selectionEnd = 0;
+				    				matches = $(active).val().match(/{{(.*?)}}/g);
+				    				if(matches != null){
+				    					keep_checking = false;
+				    					// alert("Found 3")
+				    					return false;
+				    				}
+				    			});
+			    			}
+		    			}
+
+		    			if(keep_checking == true){
+		    				$(active)[0].selectionStart = $(active).val().length;
+		    				$(active)[0].selectionEnd = $(active).val().length;
+		    				return;
+		    			}
+		    		}
+		    	}
+
+		    	keep_checking = true;
+		    	while(keep_checking){
+		    		// alert("Content:" + $(active).val());
+		    		startPos = $(active)[0].selectionStart;
+			    	endPos = $(active)[0].selectionEnd;
+			    	value = $(active).val();
+			    	matches = value.match(/{{(.*?)}}/g);
+			    	split = value.split(/{{[A-Za-z0-9_]+}}/);
+		    		i = 0;
+		    		content = ""; 
+
+		    		// alert("End: " + endPos + " Matches:" + String(matches) + "Split:" + String(split));
+		    		if(matches != null){
+		    			while(endPos >= content.length && i < matches.length){
+		    				// alert("Split: " + split[i] + " Match:" + matches[i]);
+			    			content += split[i] + matches[i];
+			    			if(endPos < content.length){
+			    				startPos = content.length - matches[i].length;
+			    				endPos = content.length;
+			    				keep_checking = false;
+			    				break;
+			    			}
+			    			i += 1;
+			    		}
+		    		}
+		    		
+		    		if(keep_checking == true){
+		    			index = $(container).find("textarea").index($(active)) + 1;
+		    			if($(container).find("textarea").eq(index).val() == undefined){
+		    				$(active)[0].selectionStart = $(active).val().length;
+		    				$(active)[0].selectionEnd = $(active).val().length;
+		    				// alert("All done")
+		    				return
+		    			}
+		    			else{
+		    				active = $(container).find("textarea").eq(index);
+		    				$(active).focus();
+		    				$(active)[0].selectionStart = 0;
+		    				$(active)[0].selectionEnd = 0;
+		    				// alert("Moving on...")
+		    			}
+		    		}
+		    	}
+
+		    	$(active)[0].selectionStart = startPos;
+			    $(active)[0].selectionEnd = endPos;
+			    // alert("We reached the end")
+		    }
+		  });
+		}
+
+		$("body").unbind(".hotkey");
+		bindBodyKeydown();
+	</script>
+<% end %>

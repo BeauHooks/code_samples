@@ -1,0 +1,6 @@
+$("div#check").html("<%= j(render "hud_lines/check_view").html_safe %>");
+
+if($('#disbursement_<%= @check.id %>').attr('class').indexOf('active_row') == -1){
+	$("#disbursement_results .active_row").removeClass('active_row')
+	$('#disbursement_<%= @check.id %>').addClass('active_row');
+}

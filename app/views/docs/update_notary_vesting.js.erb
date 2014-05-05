@@ -1,0 +1,61 @@
+<% @section = @doc_entity.tag.downcase %>
+<% value = FileDocField.where("file_id = #{@doc_entity.file_id} AND tag = '#{@section.upcase}_NOTARY_VESTING' AND doc_id=0").first.value rescue "" %>
+
+<% if @remove_entity != nil %>
+	$("div#doc_entity_<%= @remove_entity.id %>_container").remove();
+<% end %>
+
+<% if @file.docs.where("is_active = -1").count > 0 && @doc_entity.doc_id == 0%>
+  var style = "";
+  <% vesting = "" %>
+  <% doc_entities = @file.file_doc_entities.where("tag = '#{@section.upcase}' AND doc_id = 0 AND is_active = 1") %>
+  <% count = doc_entities.count %>;
+  <% n = 0 %>
+  //Load Entities
+  <% doc_entities.order("sort_order ASC").each do |doc_entity| %>
+    <% n += 1 %>
+    <% @doc_entity = doc_entity %>
+    <% @type = @doc_entity.entity.IndCorp %>
+    <% @doc_id = 0 %>
+    style = $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style");
+    $("div#doc_entity_<%= @doc_entity.id %>_container").remove();
+    $("div#<%= @section %>_entities").append("<%= j(render :partial => "docs/entity").html_safe %>");
+    $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style", style);
+    <%# name = @doc_entity.rolodex_signature.rolodex_signature_entities.where('parent_id = 0').first.name %>
+
+    <%# if vesting == "" %>
+      <%# vesting = "#{name}" %>
+    <%# elsif count == 2 && n == 2 %>
+      <%# vesting += " and #{name}" %>
+    <%# elsif n > count %>
+      <%# vesting += ", #{name}" %>
+    <%# else %>
+      <%# vesting += ", and #{name}" %>
+    <%# end %>
+  <% end %>
+  // $("textarea#<%#= @section %>_notary_vesting").val("<%#= value.html_safe %>").change();
+  // $("#<%#= @section %>_names").val("<%#= vesting.html_safe %>").change();
+  // $("#<%#= @section %>_vesting").val("<%#= vesting.html_safe %>").change();
+
+  // $('#all_docs .active_row a').click();
+  row = $("tbody#all_docs .active_row");
+  doc_request( $(row).attr("id").replace("doclist_", "") );
+  selectDocRow(row, $(row).attr("id").replace("doclist_", ""));
+<% elsif @doc_entity.doc_id != 0 %>
+  <% @doc_id = @doc_entity.doc_id %>
+  var style = ""
+  //Load Entities
+  <% @file.file_doc_entities.where("tag = '#{@doc_entity.tag}' AND doc_id = #{@doc_id} AND is_active = 1").each do |doc_entity| %>
+    <% @doc_entity = doc_entity %>
+    <% @type = @doc_entity.entity.IndCorp %>
+    style = $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style");
+    $("div#doc_entity_<%= @doc_entity.id %>_container").remove();
+    $("div#manage_<%= @doc_entity.tag.downcase %>_entities").append("<%= j(render :partial => "docs/entity").html_safe %>");
+    $("div#doc_entity_<%= @doc_entity.id %>_contents").attr("style", style);
+  <% end %>
+
+  $("#preview_link").click();
+<% end %>
+
+initializer();
+

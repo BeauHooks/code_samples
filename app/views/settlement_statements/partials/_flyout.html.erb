@@ -1,0 +1,10 @@
+<div class="tru_line_number link menu_item">
+  <span class="line_number <%= payment_class(line.object) %>"><%= line.options[:child_index]+1 %></span>
+  <ul class="submenu">
+    <li><%= link_to "Change", change_line_type_overlay_path(line.object), remote: true %></li>
+    <li><%= link_to "Insert Above", insert_line_overlay_path(id: line.object.id, where: "above"), remote: true %></li>
+    <li><%= link_to "Insert Below", insert_line_overlay_path(id: line.object.id, where: "below"), remote: true %></li>
+    <li><%= link_to "Remove", ss_line_path(id: line.object.id), method: :delete, remote: true, onclick: "show_spinner('#{line.object.ss_section.name.downcase}')" %></li>
+    <li><%= link_to "Disburse", view_payments_ss_line_path(id: line.object.id, view: 'settlement_statement'), remote: true %></li>
+  </ul>
+</div>

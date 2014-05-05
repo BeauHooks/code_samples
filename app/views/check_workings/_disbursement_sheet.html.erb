@@ -1,0 +1,142 @@
+<div id="disbursement_schedule" class="disbursement_schedule">
+	<div style="float: left;"><h1><%= @file.company.CompanyName %></h1>
+	<h3>File #<%= @file.DisplayFileID %> Disbursement Schedule - <%= Time.now.strftime("%B, %d %Y at %l:%M %p") %>.</h3></div>
+
+	<% receipts = @file.receipts.sum("ReceiptAmount").to_f %>
+	<% working = @file.check_workings.sum("amount").to_f %>
+	<% adjustments = @file.adjustments.sum("incrdeccash").to_f %>
+
+	<% total = receipts - working + adjustments %>
+
+	<div style="float: right;">
+		<table style="float: right; width: 20em; border-collapse: collapse;">
+		  <tr>
+		    <td class="label">Receipts</td>
+		    <td class="amount" style="text-align: right;"><%= number_to_currency(receipts, precision: 2, unit: "$") %></td>
+		  </tr>
+		  <tr>
+		    <td class="label">Disbursements</td>
+		    <td class="amount" style="text-align: right;"><%= number_to_currency(working, precision: 2, unit: "$") %></td>
+		  </tr>
+		  <tr>
+		    <td class="label" style="border-bottom: 1px solid #000000;">Adjustments</td>
+		    <td class="amount" style="text-align: right; border-bottom: 1px solid #000000;"><%= number_to_currency(adjustments, precision: 2, unit: "$") %></td>
+		  </tr>
+		  <tr class="<%= 'error' if total < 0 %>">
+		    <td class="total label">Balance</td>
+		    <td class="total amount" style="text-align: right;">
+		      <%= number_to_currency(total, precision: 2, unit: "$") %>
+		    </td>
+		  </tr>
+		</table>
+	</div>
+	<p style="clear: both;"></p>
+	<div>
+		<h3 style="margin: 2em 0em .5em;">Receipts</h3>
+		<div style="padding-left: .5em;">
+			<% receipts = @file.receipts.order("ReceiptID ASC") %>
+			<% if receipts.size == 0 %>
+				<p class="no_result">None</p>
+			<% else %>
+				<table style="width: 100%;">
+					<tr>
+						<td style="width: 5em;" class="label">Ref.</td>
+						<td style="width: 10em;" class="label">From</td>
+						<td style="width: 8em;" class="label">Amount</td>
+						<td style="width: 8em;" class="label">Type</td>
+						<td style="width: 8em;" class="label">Number</td>
+						<td style="width: 6em;" class="label">Received</td>
+						<td style="width: 8em;" class="label">Good</td>
+						<td style="width: 8em;" class="label">Voided</td>
+						<td style="width: 13.5em;" class="label">Notes</td>
+					</tr>
+					<% receipts.each do |receipt| %>
+						<tr>
+							<td><%= receipt.ReceiptID %></td>
+							<td><%= truncate(receipt.Payer, length: 15) %></td>
+							<td><%= number_to_currency(receipt.ReceiptAmount) %></td>
+							<td><%= truncate(receipt.type.name, length: 15) %></td>
+							<td><%= receipt.Instrument %></td>
+							<td><%= receipt.DateReceived.strftime("%m/%d/%y") unless receipt.DateReceived.nil? %></td>
+							<td><%= check_box_tag :good, nil, !receipt.DateOfGoodFunds.nil? && receipt.DateOfGoodFunds <= Time.now, style: "margin-right: .5em;" %><%= receipt.DateOfGoodFunds.strftime("%m/%d/%y") unless receipt.DateOfGoodFunds.nil? %></td>
+							<td><%= check_box_tag :void, nil, receipt.void? %></td>
+							<td><%= truncate(receipt.ReceiptNotes.to_s, length: 20) %></td>
+						</tr>
+					<% end %>
+				</table>
+			<% end %>
+		</div>
+	</div>
+
+	<div>
+		<h3 style="margin: 2em 0em .5em;">Disbursements</h3>
+		<div style="padding-left: .5em;">
+			<% disbursements = @file.check_workings.order("payee_1 ASC") %>
+			<% if disbursements.size == 0 %>
+				<p class="no_result">None</p>
+			<% else %>
+				<table style="width: 100%;">
+					<tr>
+						<td style="width: 10em;" class="label">To</td>
+						<td style="width: 7em;" class="label">Amount</td>
+						<td style="width: 5em;" class="label">Type</td>
+						<td style="width: 5em;" class="label">Number</td>
+						<td style="width: 5em;" class="label">Issued</td>
+						<td style="width: 7em;" class="label">Print</td>
+						<td style="width: 7em;" class="label">Instructions</td>
+						<td style="width: 5em;" class="label">Hold</td>
+						<td style="width: 7em;" class="label">Cleared</td>
+						<td style="width: 7em;" class="label">Voided</td>
+						<td style="width: 9.5em;" class="label">Memo</td>
+					</tr>
+					<% disbursements.each do |disbursement| %>
+						<tr>
+							<td><%= truncate(disbursement.payee_1, length: 15) %></td>
+							<td><%= number_to_currency(disbursement.amount) %></td>
+							<td><%= disbursement.funds_type.titleize %></td>
+							<td><%= disbursement.check_number %></td>
+							<td><%= disbursement.issue_date %></td>
+							<td><%= truncate(disbursement.print_office.OfficeName, length: 12) %></td>
+							<td><%= truncate(disbursement.check_deliver, length: 12) %></td>
+							<td><%= check_box_tag :hold_back, nil, disbursement.hold_back? %></td>
+							<td>
+								<%= check_box_tag :cleared, nil, disbursement.cleared?, style: "margin-right: .5em;" %><%= disbursement.cleared_date %>
+							</td>
+							<td><%= check_box_tag :void, nil, disbursement.voided?, style: "margin-right: .5em;" %><%= disbursement.void_date %></td>
+							<td><%= truncate(disbursement.memo, length: 15) %></td>
+						</tr>
+					<% end %>
+				</table>
+			<% end %>
+		</div>
+	</div>
+
+	<div>
+		<h3 style="margin: 2em 0em .5em;">Adjustments</h3>
+		<div style="padding-left: .5em;">
+			<% adjustments = @file.adjustments %>
+			<% if adjustments.size == 0 %>
+				<p class="no_result">None</p>
+			<% else %>
+				<table style="width: 100%;">
+					<tr>
+						<td style="width: 21em;" class="label">Description</td>
+						<td style="width: 8em;" class="label">Amount</td>
+						<td style="width: 8em;" class="label">Type</td>
+						<td style="width: 8em;" class="label">Date</td>
+						<td style="width: 29.5em;" class="label">Memo</td>
+					</tr>
+					<% adjustments.each do |adjustment| %>
+						<tr>
+							<td><%= truncate(adjustment.descript.to_s, length: 35) %></td>
+							<td><%= number_to_currency(adjustment.incrdeccash) %></td>
+							<td><%= adjustment.AdjustType %></td>
+							<td><%= adjustment.adjdate.strftime("%m/%d/%y") unless adjustment.adjdate.nil? %></td>
+							<td><%= truncate(adjustment.notes.to_s, length: 45) %></td>
+						</tr>
+					<% end %>
+				</table>
+			<% end %>
+		</div>
+	</div>
+</div>

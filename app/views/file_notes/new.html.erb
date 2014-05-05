@@ -1,0 +1,69 @@
+<div id="add_note">
+  <div class="overlay_header">
+    <h2>Add Notes</h2>
+  </div>
+  <form action="file_notes" method="post" data-remote="true">
+    <div class="overlay_content">
+      <table>
+        <tr>
+          <td class="label">From:</td>
+          <td class="input_field"><select disabled ="disabled"><option><%= "#{current_user.first_name} #{current_user.last_name}" %></option></select></td>
+
+        </tr>
+        <tr>
+          <td class="label">To:</td>
+          <td class="input_field"><%= select :note, :To, Employee.find(:all, :conditions => ["IsActive = 'True' AND ID NOT IN (190, 119, 95, 157, 327) "], :order => "FullName ASC").collect{|to| [to.FullName, to.ID]}, {:include_blank => true}, {name: "to_employee"} %></td>
+        </tr>
+          <td class="label">Reminder:</td>
+          <td style="padding-left: 10px;" class="input_field"><%= text_field_tag :reminder, '', id: "note_datepicker", placeholder: "mm/dd/yyyy" %></td>
+        </tr>
+        <tr>
+          <td class="label" style="vertical-align: top;"><span>Message:</span></td>
+          <td class="input_field"><%= text_area_tag :message, '', rows: 3, cols: 37 %></td>
+        </tr>
+        <tr>
+          <td colspan="2"><%= submit_tag 'Save', class: "save", style: "float: right;" %></td>
+        </tr>
+      </table>
+
+        <%= text_field_tag :entered_by,{} , value: "#{current_user.employee_id}", style: "display:none;" %>
+        <%= text_field_tag :file,{} , value: @file.ID, style: "display:none;" %>
+
+    <%#= link_to "Refresh", "/file_notes/add_to_view?type=Note&file=#{@file.FileID}", style: "display: none", id: "refresh", remote: true %>
+      </div>
+  </form>
+    <div class="overlay_content">
+        <h3 style="margin-top: 5px;">Notes On File</h3>
+    <div class="box">
+    <table class="grid_header">
+      <tr>
+      <td class="from">From</td>
+      <td class="to">To</td>
+      <td class="date">Entered Date</td>
+      <td class="note">Note</td>
+      <td class="remove_button" id="current_notes_last"></td>
+      </tr>
+    </table>
+    <div id="current_notes" class="results">
+      <%= render 'file_notes/current_notes', file: @file %>
+    </div>
+    </div>
+  </div>
+  <div class="overlay_footer">
+    <input type="submit" value="Close" class="button close" onclick="closeOverlay('new_index_note');" />
+  </div>
+</div>
+<%#FIXME: Find a way to do xhr request through javascript to replace this button with javascript function %>
+<%#= button_to 'Refresh', "/file_notes/#{@file.ID}/current_notes", :style => 'display:none;', :class => 'refresh_button', :remote => true %>
+
+<script type="text/javascript">
+  openOverlay("new_index_note");
+
+  $( "#note_datepicker" ).datetimepicker({
+    ampm: true,
+    timeFormat: 'h:mm TT',
+    stepMinute: 5,
+    changeMonth: true,
+    changeYear: true,
+  });
+</script>

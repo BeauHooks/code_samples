@@ -1,0 +1,49 @@
+<% unless @search_results.nil? %>
+  <% @search_results.each do |result| %>
+    <tr id="<%= result.id %>" controller="<%= controller_name %>" class="row_divider result_row trigger">
+      <% @search_display.each do |display| %>
+        <% value = result.send(display[:attribute]) %>
+        <% value = format_value_for_display(display[:format], value) %>
+        <% if value.to_s.length > display[:limit] && display[:limit] != 0 %>
+          <td class="<%= display[:style] %> hint"><span><%= value %></span>
+          <% value = value[0..display[:limit]] %>
+        <% else %>
+          <td class="<%= display[:style] %>">
+        <% end %>
+          <% if display[:to_link] %>
+            <% case display[:link_type] %>
+            <% when "recording_entry" %>
+              <% if result.get_file %>
+                <%= link_to value, show_file_recording_entry_path(result), target: '_blank' %>
+              <% else %>
+                <%= value %>
+              <% end %>
+            <% when "file" %>
+              <%= link_to "#{value.to_s[3..8]}", index_index_path(file_id: value), target: :blank, onclick: "event.stopPropagation();" %>
+            <% when "buyer" %>
+              <%= link_to result.send(display[:association]).try(:name_last_first) || "", rolodex_index_path(entity_id: value), target: :blank, onclick: "event.stopPropagation();" %>
+            <% when "seller" %>
+              <%= link_to result.send(display[:association]).try(:name_last_first) || "", rolodex_index_path(entity_id: value), target: :blank, onclick: "event.stopPropagation();" %>
+            <% when "lender" %>
+              <%= link_to result.send(display[:association]).try(:name_last_first) || "", rolodex_index_path(entity_id: value), target: :blank, onclick: "event.stopPropagation();" %>
+            <% when "name" %>
+              <%= link_to value, result_detail_rolodex_path(result), target: '_blank', remote: true %>
+            <% when "phone" %>
+              <%= link_to value, "tel:#{sanitize_phone(value)}" unless value.blank? %>
+            <% when "email" %>
+              <%= mail_to value, value %>
+            <% end %>
+          <% else %>
+            <%= value %>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+<% end %>
+
+<% if @search_results.blank? || @search_results.size == 0 %>
+  <tr id="0" controller="<%= controller_name %>">
+    <td class="no_result" colspan="100">0 results found.</td>
+  </tr>
+<% end %>

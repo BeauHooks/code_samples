@@ -1,0 +1,3 @@
+<% if @update_view %>
+	$('span.invoice_total').html('<%= number_to_currency(@invoice.InvoiceTotal || 0.0) %>');
+<% end %>

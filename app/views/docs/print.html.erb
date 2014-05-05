@@ -1,0 +1,12 @@
+<% content = print_doc %>
+<% if @docs.count == 1 %>
+  <a id="get_doc" target="_blank" href="/docs/send_doc?content=<%= content %>"></a>
+<% else %>
+  <a id="get_doc" target="_blank" href="/docs/send_doc?<%= content %>"></a>
+<% end %>
+
+<script type="text/javascript">
+  document.getElementById("get_doc").click(function(){});
+  print_doc_done();
+  $("div#print_box").html("");
+</script>

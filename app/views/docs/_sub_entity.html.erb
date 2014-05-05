@@ -1,0 +1,10 @@
+<% (@doc_entity.doc_id == 0) ? click = "$('#all_docs .active_row:first').click();" : click = "$('#preview_link').click();" %>
+<tr id="<%= @doc_signature.id %>"  class="sub_entity">
+  <td class="name"><%= image_tag "redx.png", :class => "remove_entity", onclick: "removeSignatureRow(this); $.post('/docs/remove_signature?id=#{@doc_signature.id}", remote: true %>
+  </td>
+  <td class="individual_signature">
+  	<input type="text" id='grantee_signature_<%= @doc_signature.id %>' value="<%= @doc_signature.signature rescue '' %>" onchange="$.post('/docs/update_signature?id=<%= @doc_signature.id %>&value=' + encodeURIComponent(this.value)); $('#add_sub_entity_to_<%= @doc_entity.id %>').show(); <%= click %>" /></td>
+  <td class="sort">
+  	<%= image_tag "up.png", :class => "up trigger", remote: true, onclick: "updatePosition(this, 'signature', 'up'); $.post('/docs/update_signature_position?id=#{@doc_signature.id}&direction=up');  #{click}" %>
+  	<%=  image_tag "down.png", :class => "down trigger", remote: true, onclick: "updatePosition(this, 'signature', 'down'); $.post('/docs/update_signature_position?id=#{@doc_signature.id}&direction=down'); #{click}" %></td>
+</tr>

@@ -1,0 +1,84 @@
+<% content_for :overlay_title do %>
+  Select Doc Entity
+<% end %>
+
+<% content_for :overlay do %>
+  <% template_name = @template.short_name %>
+  <div id="signature_error" class="flash_error" style="display: none"></div>
+  <%= form_tag docs_path(file_id: @file.FileID, type: "Template"), remote: true, onsubmit: "closeOverlay('choose_doc_entity');" do %>
+    <div class="overlay_content">
+      <table>
+        <% if template_name != "1099" %>
+          <tr>
+            <td style="padding-right: 5px;" class="label">
+              Select Entity:
+            </td>
+            <td>
+              <% if @template.short_name == "INV" %>
+                <% tag = "" %>
+                <%= select :doc_entity, :entity_id, @file.file_entities.find(:all, order: "Position ASC").collect{|e| [e.entity.name, e.EntityID]}, {include_blank: false}, {name: "entity_id"} %>
+              <% elsif tag != "both" %>
+                <% tag = "AND tag = '#{@template.doc_template_versions.last.doc_signature_type.name.split("_")[0].upcase}'" %>
+                <%= select :doc_entity, :entity_id, @file.file_doc_entities.find(:all, :conditions => ["is_active = 1 AND doc_id = 0 #{tag}"]).collect{|e| [e.entity.name, e.id]} + [ [ 'All', 'all' ] ], {include_blank: false}, name: "doc_entity_id" %>
+              <% else %>
+                <%= select :doc_entity, :entity_id, @file.file_doc_entities.find(:all, :conditions => ["is_active = 1 AND doc_id = 0 #{tag}"]).collect{|e| [e.entity.name, e.id]} + [ [ 'All', 'all' ] ], {include_blank: false}, name: "doc_entity_id" %>
+              <% end %>
+                <input type="hidden" name="tag" value="<%= tag != '' ? tag : 'all' %>" />
+              <input type="hidden" name="quickadd" value="<%= @template.id %>" />
+            </td>
+          </tr>
+        <% else %>
+          <tr>
+            <td style="padding-right: 5px;" class="label">
+              Primary Entity for 1099:
+            </td>
+            <td>
+              <% tag = "AND tag = 'GRANTOR'" %>
+              <%= select :doc_entity, :entity_id, @file.file_doc_entities.find(:all, :conditions => ["is_active = 1 AND doc_id = 0 #{tag}"]).collect{|e| [e.entity.name, e.id]}, {include_blank: true}, name: "doc_entity_id", id: "primary_1099_select", onchange: "set1099Selection(this);" %>
+              <input type="hidden" name="tag" value="<%= tag != '' ? tag : 'all' %>" />
+              <input type="hidden" name="quickadd" value="<%= @template.id %>" />
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-right: 5px;" class="label">
+              Secondary Entity:
+            </td>
+            <td>
+              <% tag = "AND tag = 'GRANTOR'" %>
+              <%= select :doc_entity, :entity_id, @file.file_doc_entities.find(:all, :conditions => ["is_active = 1 AND doc_id = 0 #{tag}"]).collect{|e| [e.entity.name, e.id]}, {include_blank: true}, name: "second_doc_entity_id", id: "secondary_1099_select", onchange: "set1099Selection(this);" %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+
+  <script type="text/javascript">
+    <% if template_name == "1099" %>
+      function set1099Selection(object){
+        var second = $(object).attr('id') == "primary_1099_select" ? $("#secondary_1099_select") : $("#primary_1099_select");
+
+        $(second).find("option").each(function(){
+          if($(this).val() != $(object).val()){
+            $(this).show();
+          }
+          else if($(object).val() != ""){
+            $(this).hide();
+          }
+        });
+      }
+    <% end %>
+
+    function validateChooseDocEntity(){
+      if($('#overlay_choose_doc_entity').find('select').eq(0).val() == ""){
+        <% if template_name == "1099" %>
+          addToQueue('choose_doc_entity_error', 'application/flash_notice?notice=You must have the primary entity selected to continue.');
+        <% else %>
+          addToQueue('choose_doc_entity_error', 'application/flash_notice?notice=You must have an entity selected to continue.');
+        <% end %>
+        return false;
+      }
+      return true;
+    }
+  </script>
+<% end %>

@@ -1,0 +1,5 @@
+<%= label_tag :search, 'Search:' %>
+<%= text_field_tag(:search, params[:search], id: 'search_box', placeholder: 'Begin typing here...') %>
+<%= image_submit_tag 'search.png', id: 'search_button', class: 'icon' %>
+<%= image_tag 'loading.gif', id: 'spinner', class: 'spinner' %><span id='searching_text' class='hide'>Searching...</span>
+<%= hidden_field_tag 'page', 1 %>

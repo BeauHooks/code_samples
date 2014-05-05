@@ -1,0 +1,30 @@
+<div class="box_header">
+  <span class="title">Section</span>
+</div>
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_section">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="section"><div>Section</div></th>
+          <th class="township"><div>Township</div></th>
+          <th class="range"><div>Range</div></th>
+          <th class="quarter"><div>Quarter</div></th>
+          <th class="qq"><div>Q-Q</div></th>
+        </tr>
+      </thead>
+      <tbody class="results">
+        <% @detail.recording_sections.each do |section| %>
+          <tr id="<%= section.id %>">
+            <td class="section"><%= section.Section %></td>
+            <td class="township"><%= section.Township %></td>
+            <td class="range"><%= section.Range %></td>
+            <td class="quarter"><%= section.QuarterSection %></td>
+            <td class="qq"><%= section.QQuarter %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

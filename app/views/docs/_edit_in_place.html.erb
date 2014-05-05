@@ -1,0 +1,5 @@
+<%= text_field :doc, :description, name: "description", onchange: "title = $(this.parentNode.parentNode).attr('title'); $(this.parentNode.parentNode).attr('title', title.replace('#{@doc.description.gsub(/[']/,"\\\\\'")}', $(this).val())); $.post('docs/#{@doc.id}/update_description?description=' + encodeURIComponent($(this).val()) );", onkeydown: "if(event.keyCode == 27){this.parentNode.innerHTML='#{@doc.doc_template.short_name.upcase.gsub(/[']/,"\\\\\'")} - #{@doc.description.gsub(/[']/,"\\\\\'")}';}", id: "doc_focus", remote: true %>
+
+<script type="text/javascript">
+	$("#doc_focus").focus();
+</script>

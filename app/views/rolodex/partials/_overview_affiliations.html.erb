@@ -1,0 +1,49 @@
+<div class="result_container">
+  <div class="grid_header"></div>
+  <div>
+    <table class="overview_affiliations">
+      <thead class="grid_header_font">
+        <tr>
+          <th class="primary"><div>Affiliations <%= link_to image_tag("search.png", class: "icon"), add_affiliations_overlay_path(@entity), title: "Manage Affiliations", remote: true %></div></th>
+          <th class="entity"><div>Entity</div></th>
+          <th class="relationship"><div>Relationship</div></th>
+        </tr>
+      </thead>
+      <tbody class="results highlight">
+        <% options, collection = relationship_list() %>
+        <% hash = Hash.new %>
+        <% list_1 = @entity.affiliations_as_entity_1 + @entity.affiliations_as_contact_1 %>
+        <% list_2 = @entity.affiliations_as_entity_2 + @entity.affiliations_as_contact_2 %>
+        <% hash["1"] = list_1 %>
+        <% hash["2"] = list_2 %>
+        <% c = 0 %>
+        <% hash.each do |key, list| %>
+          <% list.each do |i| %>
+            <% c += 1 %>
+            <% if key == "1" %>
+              <% affiliate = !i.entity_2.nil? ? i.entity_2 : !i.contact_2.nil? ? i.contact_2 : nil %>
+            <% else %>
+              <% affiliate = !i.entity_1.nil? ? i.entity_1 : !i.contact_1.nil? ? i.contact_1 : nil %>
+            <% end %>
+
+            <% next if affiliate.nil? %>
+            <tr id="affiliation_<%= i.ID %>">
+              <td class="primary">
+                <%= link_to image_tag("/assets/redx.png"), rolodex_affiliation_path(i.ID, entity_id: @entity.EntityID), class: "trigger x_image", title: "Remove", data: {method: :delete, remote: true, confirm: "Are you sure that you want to remove this affiliation?"} %>
+                <%= radio_button_tag 'primary', i.send("Primary#{key}".to_sym), i.send("Primary#{key}?".to_sym), title: "Make Primary", id: "overview_affiliation_#{c}", data: {remote: true, method: :put, url: rolodex_affiliation_path(i.ID, entity_id: @entity.EntityID)} %>
+              </td>
+
+              <td class="entity">
+                <%= hint_truncate(link_to(affiliate.name_last_first, rolodex_path(affiliate.EntityID), target: :blank, data: {affiliation: true}), 17, true) %>
+              </td>
+
+              <td class="relationship">
+                <%= select_tag :Relationship, options_for_select(collection, i.Relationship), include_blank: (!i.Relationship.nil? ? i.Relationship : true), data: {remote: true, method: :put, url: rolodex_affiliation_path(i.ID)} %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

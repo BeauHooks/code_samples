@@ -1,0 +1,8 @@
+<% case @tab %>
+<% when "Documents" %>
+  $("div#file_docs").html("");
+  $("div#file_docs").html("<%= j(render 'index/partials/docs', file: @file, template: @template, file_doc_fields: @file_doc_fields).html_safe %>");
+  if($('#all_docs .active_row').attr('id') != undefined){
+    $("a.docs").attr("onclick", "addToQueue('refresh_input_fields', 'docs/refresh_input_fields?file_id=<%= @file.FileID %>&doc_id=' + $('#all_docs .active_row').attr('id').replace('doc_', '') );");
+  }
+<% end %>

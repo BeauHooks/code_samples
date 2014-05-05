@@ -1,0 +1,38 @@
+<% @file.receipts.each do |r| %>
+  <% can_delete = r.PaymentMethod == "1" && @file.SentForFunding == nil %>
+  <tr>
+    <% if r.Payer != nil && r.Payer.length > 12 %>
+      <td class="hint w90 padding_left_5">
+        <span><%= image_tag "redx.png", class: "trigger", onclick: "destroyReceipt('#{r.ReceiptID}');" if can_delete  %><%= r.Payer %></span>
+        <%= image_tag "redx.png", class: "trigger", onclick: "destroyReceipt('#{r.ReceiptID}');" if can_delete %><%= truncate(r.Payer, :length => 12) %></td>
+    <% else %>
+      <td class="payer"><%= image_tag "redx.png", class: "trigger", onclick: "destroyReceipt('#{r.ReceiptID}');" if can_delete %><%= r.Payer %></td>
+    <% end %>
+
+    <td class="amount"><%= number_to_currency(r.ReceiptAmount, precision: 2, unit: "$") %></td>
+    <td class="good"><%= check_box_tag :good, nil, !r.DateOfGoodFunds.nil? && r.DateOfGoodFunds <= Time.now, disabled: true %></td>
+    <td class="receipt_id"><%= r.PaymentMethod == "1" ? r.ReceiptID : link_to(r.ReceiptID, "check_workings/print_receipt?id=#{r.ReceiptID}", remote: true)  %> <%# Disable link to receipt if anticipated wire %></td>
+    <td class="received"><%= r.DateReceived.strftime("%m/%d/%y") unless r.DateReceived.nil? %></td>
+    <td class="gf_date"><%= r.DateOfGoodFunds.strftime("%m/%d/%y") unless r.DateOfGoodFunds.nil? %></td>
+    <td class="instrument"><%= r.Instrument %></td>
+    <td class="void"><%= check_box_tag :void, nil, r.void?, disabled: true %></td>
+    <% if r.type.name.to_s.length > 12 %>
+      <td class="type hint"><span><%= r.type.name %></span><%= truncate(r.type.name, length: 12) %></td>
+    <% else %>
+      <td class="type"><%= r.type.name %></td>
+    <% end %>
+
+    <% if r.ReceiptNotes != nil && r.ReceiptNotes.length > 12 %>
+      <td class="hint notes"><span><%= r.ReceiptNotes %></span><%= truncate(r.ReceiptNotes, length: 12) %></td>
+    <% else %>
+      <td class="notes"><%= r.ReceiptNotes %></td>
+    <% end %>
+
+  </tr>
+<% end %>
+
+<script type="text/javascript">
+  function destroyReceipt(id){
+    addToQueue("destroy_receipt", "check_workings/destroy_receipt?receipt_id=" + id + "&file_id=<%= @file.ID %>");
+  }
+</script>

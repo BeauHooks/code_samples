@@ -1,0 +1,16 @@
+<div class="result_container">
+  <div class="box_header">
+    <p class="title">Mailing Information</p>
+  </div>
+  <div>
+    <p>
+      <%= @detail.assessment.OwnerName %><br />
+      <%= @detail.assessment.Address1 %>
+      <% unless @detail.assessment.Address2.blank? %>
+        <%= @detail.assessment.Address2 %>
+      <% end %>
+      <br />
+      <%= @detail.assessment.City %>, <%= @detail.assessment.State %> <%= @detail.assessment.ZipCode %>
+    </p>
+  </div>
+</div>

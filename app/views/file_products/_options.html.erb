@@ -1,0 +1,13 @@
+<span id="file_product_form">
+	<% update = "getFileProduct(#{@file.FileID if @file != nil});" %>
+	Product:
+	<%= select :file_product, :id, options_for_select((@file != nil ? @file.file_product_collection : [[]]), (@file_product.id unless @file_product.nil?) ), {include_blank: @file != nil ? "New" : false}, {style: "width: 8em;", name: "ID", disabled: @file == nil, onchange: "if($(this).val() != ''){$(this).next().hide(); #{update}}else{$(this).next().show(); $(this).next().change(); $('#file_product_history').hide();}" } %> 
+	<%= select :product, :type_id, options_for_select(@file != nil ? ProductType.find(:all).collect{|p| [p.name, p.id]} : [[]]), {include_blank: false}, {style: "width: 75px;", name: "product_type_id", disabled: @file == nil} %> 
+	<%= submit_tag "Load", onclick: update, disabled: @file == nil, id: "load_product" %>
+</span>
+
+<% unless @file_product.nil? %>
+	<script type="text/javascript">
+		$("#product_type_id").hide();
+	</script>
+<% end %>

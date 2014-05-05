@@ -1,0 +1,12 @@
+$("#file_product_options").html("<%= j(render "options").html_safe %>");
+$("#file_product_nav").html("<%= j(render "nav").html_safe %>");
+$("#file_product_content").html("<%= j(render "content").html_safe %>");
+$("#file_product_hotkeys").hide();
+$("#file_product_hotkeys").html("<%= j(render "hotkeys").html_safe %>");
+$("#file_product_id").val("<%= @file_product.id %>");
+
+if($("#overlay_import").is(":visible")){
+	closeOverlay("import");
+}
+
+fileProductInitializer();

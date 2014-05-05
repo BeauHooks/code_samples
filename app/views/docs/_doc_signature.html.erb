@@ -1,0 +1,188 @@
+<% i = 0 %>
+<% left = [] %>
+<% right  = [] %>
+<% name, position = @sig_name.split("_") %>
+<% doc_name = @doc.doc_template.short_name %>
+<% ["HUD", "SS", "LSS"].include?(doc_name) ? is_hud = true : is_hud = false %>
+<% sigs = 0 %>
+<% signature_addendum = false %>
+
+<% if @doc.has_active_entities? == true %>
+  <% class_name = " custom " %>
+  <% doc_id = @doc.id %>
+  <% location = @doc %>
+  <% doc_entity = "" %>
+<% else %>
+  <% class_name = " global " %>
+  <% doc_id = 0 %>
+  <% location = @file %>
+
+  <% if @doc.doc_entity_id != nil %>
+    <% doc_entity = " AND id = #{@doc.doc_entity_id}" %>
+  <% else %>
+    <% doc_entity = "" %>
+  <% end %>
+
+<% end %>
+
+<%# To cover grantor_both and grantee_both %>
+<% if position == "both" %>
+  <% name == "grantor" ? tag = "GRANTOR" : tag = "GRANTEE" %>
+
+  <% if !(@show == "Seller" && tag == "GRANTEE" && (is_hud)) && !(@show == "Buyer" && tag == "GRANTOR" && (is_hud)) && !(@force_hide == "Seller" && tag == "GRANTOR") && !(@force_hide == "Buyer" && tag == "GRANTEE") %>
+
+    <% location.file_doc_entities.where("tag = '#{tag}' AND is_active = 1 AND doc_id = #{doc_id} #{doc_entity} ").order("sort_order ASC").each do |entity| %>
+      <% if i%2 == 0 %>
+        <% left << entity %>
+      <% else %>
+        <% right << entity %>
+      <% end %>
+
+      <% if entity.rolodex_signature_id != nil ||  entity.file_doc_entity_signatures.where("is_active = -1").count > 2 %>
+        <% signature_addendum = true %>
+      <% elsif entity.entity.IndCorp != "Individual" %>
+        <% sigs +=  entity.file_doc_entity_signatures.where("is_active = -1").count %>
+      <% end %>
+
+      <% sigs += 1 %>
+      <% i += 1 %>
+
+    <% end %>
+  <% end %>
+
+<%# To cover grantor_left and grantee_left and right %>
+<% elsif name == "grantor" || name == "grantee" %>
+  <% name == "grantor" ? tag = "GRANTOR" : tag = "GRANTEE" %>
+  <% list = [] %>
+
+  <% if !(@show == "Seller" && tag == "GRANTEE" && (is_hud)) && !(@show == "Buyer" && tag == "GRANTOR" && (is_hud)) && !(@force_hide == "Seller" && tag == "GRANTOR") && !(@force_hide == "Buyer" && tag == "GRANTEE") %>
+    <% location.file_doc_entities.where("tag = '#{tag}' AND is_active = 1 AND doc_id = #{doc_id} #{doc_entity} ").order("sort_order ASC").each do |entity| %>
+      <% list << entity %>
+
+      <% if entity.rolodex_signature_id != nil ||  entity.file_doc_entity_signatures.where("is_active = -1").count > 2 %>
+        <% signature_addendum = true %>
+      <% elsif entity.entity.IndCorp != "Individual" %>
+        <% sigs +=  entity.file_doc_entity_signatures.where("is_active = -1").count %>
+      <% end %>
+
+      <% sigs += 1 %>
+
+    <% end %>
+  <% end %>
+
+  <% position == "left" ? left = list : right = list %>
+  <% list = nil %>
+
+<%# To cover when both sides are included %>
+<% else %>
+  <% position == "grantorfirst" ? tag = "GRANTOR" : tag = "GRANTEE" %>
+
+  <% if !(@show == "Seller" && tag == "GRANTEE" && (is_hud)) && !(@show == "Buyer" && tag == "GRANTOR" && (is_hud)) && !(@force_hide == "Seller" && tag == "GRANTOR") && !(@force_hide == "Buyer" && tag == "GRANTEE") %>
+
+    <% if doc_name == "ACK" || doc_name == "TPA" || doc_name == "BA" %>
+      <% position == "grantorfirst" ? left << "Seller" : left << "Buyer" %>
+    <% elsif doc_name == "TCI" %>
+      <% position == "grantorfirst" ? left << "Lender" : left << "Borrower" %>
+    <% end %>
+
+    <% location.file_doc_entities.where("tag = '#{tag}' AND is_active = 1 AND doc_id = #{doc_id} #{doc_entity} ").order("sort_order ASC").each do |entity| %>
+      <% left << entity %>
+
+      <% if entity.rolodex_signature_id != nil ||  entity.file_doc_entity_signatures.where("is_active = -1").count > 2 %>
+        <% signature_addendum = true %>
+      <% elsif entity.entity.IndCorp != "Individual" %>
+        <% sigs +=  entity.file_doc_entity_signatures.where("is_active = -1").count %>
+      <% end %>
+
+      <% sigs += 1 %>
+
+    <% end %>
+  <% end %>
+
+  <% if sigs > 2 %>
+    <% signature_addendum = true %>
+  <% else %>
+    <% sigs = 0 %>
+  <% end %>
+
+  <% tag == "GRANTOR" ? tag = "GRANTEE" : tag = "GRANTOR" %>
+
+  <% if !(@show == "Seller" && tag == "GRANTEE" && (is_hud)) && !(@show == "Buyer" && tag == "GRANTOR" && (is_hud)) && !(@force_hide == "Seller" && tag == "GRANTOR") && !(@force_hide == "Buyer" && tag == "GRANTEE") %>
+
+    <% if doc_name == "ACK" || doc_name == "TPA" || doc_name == "BA" %>
+      <% position == "grantorfirst" ? right << "Buyer" : right << "Seller" %>
+    <% elsif doc_name == "TCI" %>
+      <% position == "grantorfirst" ? right << "Borrower" : right << "Lender" %>
+    <% end %>
+
+    <% location.file_doc_entities.where("tag = '#{tag}' AND is_active = 1 AND doc_id = #{doc_id} #{doc_entity} ").order("sort_order ASC").each do |entity| %>
+      <% right << entity %>
+
+      <% if entity.rolodex_signature_id != nil ||  entity.file_doc_entity_signatures.where("is_active = -1").count > 2 %>
+        <% signature_addendum = true %>
+      <% elsif entity.entity.IndCorp != "Individual" %>
+        <% sigs +=  entity.file_doc_entity_signatures.where("is_active = -1").count %>
+      <% end %>
+
+      <% sigs += 1 %>
+
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if sigs > 2 %>
+  <% signature_addendum = true %>
+<% end %>
+
+<% if ((doc_name == "HUD") && @show == "Seller") || @force_hide == "Buyer" %>
+  <% container = [right, left] %>
+<% else %>
+  <% container = [left, right] %>
+<% end %>
+
+<% if doc_name == "SS" || doc_name == "LSS" %>
+  <% new_left = [] %>
+  <% new_right = [] %>
+  <% i = 0 %>
+  <% (right + left).each do |entity| %>
+    <% i%2 == 0 ? new_left << entity : new_right << entity %>
+    <% i += 1 %>
+  <% end %>
+  <% container = [new_left, new_right] %>
+<% end %>
+
+<% done = false %>
+<%# if @force_run != nil %>
+  <div class="signature_container">
+    <% container.each do |side| %>
+      <% break if done %>
+      <div class="<%= side == left ? 'left' : 'right'  %>">
+        <% side.each do |e| %>
+
+          <% if e == "Buyer" || e == "Seller" || e == "Borrower" || e == "Lender" %>
+            <%# Place a header instead of entity%>
+            <% done ? break : done = @force_hide ?  true : false %>
+            <h4><%= e %></h4>
+            <br />
+            <% next %>
+          <% end %>
+
+            <table class="signature_table">
+              <% if e.signature_block? == true %>
+                <tr>
+                  <td class="<%= class_name %>">
+                    <% if e.signature_block.nil? %>
+                      <%= get_sig_children(e.rolodex_signature.rolodex_signature_entities.where("parent_id = 0").first, e.rolodex_signature,"docs/block") %>
+                    <% else %>
+                      <%= e.signature_block.html_safe %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+        <% end %>
+      </div>
+    <% end %>
+    <% unless doc_name == "TCI" && @force_hide %><p class="clear"></p><% end %>
+  </div>
+<%# end %>

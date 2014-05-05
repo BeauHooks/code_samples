@@ -1,0 +1,180 @@
+ <div id="create_receipt">
+  <div class="overlay_header">
+    <h2>Receipt Funds for File #<%= @file.DisplayFileID %></h2>
+  </div>
+  <div id="flash_message" class="hide flash_message">
+    <center><h3 id="flash_text" style="padding-top: 5px; color: white;"></h3></center>
+  </div>
+  <div id="receipt_content" class="padding_top_10">
+    <form action="check_workings/create_receipt?file_id=<%= @file.FileID %>&action=create" id="create_receipt_form" data-remote="true" method="post">
+      <%= hidden_field_tag :office, current_user.employee.Office %>
+      <table>
+        <tbody>
+          <!-- <tr>
+            <td class="label">Deposited:</td>
+            <td><%#= select_tag :office, options_from_collection_for_select(Office.all, "ID", "OfficeName", current_user.employee.Office) %></td>
+          </tr> -->
+          <tr>
+            <td class="label padding_right_5 w105">Choose HUD:</td>
+            <td><%= select_tag "choose_hud", get_hud_list, class: "w100p" %></td>
+          </tr>
+          <tr>
+            <td class="label padding_right_5 w105">Amount From:</td>
+            <td>
+              <div class="float_left">
+                <%= select_tag "anticipated_wire", "<option>From Lender</option><option>From Borrower</option>".html_safe, class: "w125px" %>
+              </div>
+              <%= button_to "Calculate", "#calculate_receipt", onclick: "wire_amount(); return false;", class: "float_right margin_right_60" %>
+              <div class="clear_fix"></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="label padding_right_5 w105">Earnest Money:</td>
+            <td>
+              <label><%= radio_button_tag :earnest_money, "yes", false, style: "position: relative; top: 2px; margin-right: 2px;" %>Yes</label><label class="margin_left_10"><%= radio_button_tag :earnest_money, "no", true, style: "position: relative; top: 2px; margin-right: 2px;" %> No</label>
+            </td>
+          </tr>
+          <tr>
+            <td class="label" style="padding-right: 5px; width: 105px;">Funds Type:</td>
+            <td>
+              <%= select_tag :funds_type, options_for_select([["Anticipated Wire", "1"],["Cash", "2"],["Cashier's Check", "3"],["Money Order", "4"],["Personal Check", "5"],["#{@file.company.DirName} Internal Check", "7"]]), class: "w255", onchange: "updateReceiptType($(this).find(':selected').text());" %>
+            </td>
+          </tr>
+          <tr id="receipt_company_select">
+            <td class="label">Company:</td>
+            <td><%= select_tag :company, options_from_collection_for_select(Company.all, "CompanyID", "CompanyName", @file.Company), class: "w255" %></td>
+          </tr>
+        </tbody>
+        <tbody id="type_fields" class="hide">
+            <!-- <tr>
+              <td style="padding-right: 5px;" class="label">Issuing Bank Name:</td>
+              <td><%#= text_field_tag :paying_bank_name, nil, style: "width: 250px;" %></td>
+            </tr> -->
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="label">Amount:</td>
+            <td><%= text_field_tag :amount, nil, onkeydown: "numbersOnly(event);", onchange: "toUSD(this);", class: "w250" %></td>
+          </tr>
+          <tr>
+            <td class="label">Received For:</td>
+            <td><%= select_tag :received_for, options_from_collection_for_select(@file.file_entities.where("Position != 34"), "EntityID", "entity_name"), include_blank: true, class: "w255", onchange: "if($('#create_receipt #funds_type').find(':selected').text() != '#{@file.company.DirName} Internal Check'){$('#received_from').val($(this).find(':selected').text());}" %></td>
+          </tr>
+          <tr>
+            <td class="label" style="width: 105px;" id="received_from_label">Received From:</td>
+            <td><%= text_field_tag :received_from, nil, class: "w250", onchange: "if($('#create_receipt #funds_type').find(':selected').text() == '#{@file.company.DirName} Internal Check'){$('#create_receipt #notes').val('Transfer from File #' + $(this).val() );}" %></td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;" class="label">Notes:</td>
+            <td><%= text_area_tag :notes, nil, class: "w250" %></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="overlay_footer">
+    <span>
+      <input type="button" value="Save" onclick="if(validateReceiptForm()){$('#create_receipt_form').submit();}" />
+      <input type="button" value="Close" data-remote="true" onclick="closeOverlay('create_receipt');" />
+    </span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function wire_amount(){
+    var hud_id = $("#choose_hud").val();
+    $.ajaxq("anticipate_wire", {
+      url: "/check_workings/calculate_wire?hud_id=" + hud_id,
+      type: "get"
+    })
+  }
+
+  function updateReceiptType(type){
+    if(type != "Anticipated Wire"){
+      $("#anticipated_wire_link").hide();
+    }
+    $("#type_fields").show();
+
+    if(type == "Anticipated Wire"){
+      $("#anticipated_wire_link").show();
+      $("#type_fields").hide();
+    }
+    else if(type == "Cash"){
+      $("#type_fields").hide();
+    }
+    else if(type == "Cashier's Check"){
+      $("#type_fields").html("<tr><td style='padding-right: 5px;' class='label'>Issuing Bank Name:</td><td><input name='paying_bank_name' value='' style='width: 250px;'></td></tr><tr><td style='padding-right: 5px;' class='label'>Check Number:</td><td><input name='instrument' value='' onchange='getFileNumber($(this).val());' style='width: 250px;' id='check_number'></td></tr>");
+    }
+    else if(type == "Personal Check" || type == "<%= @file.company.DirName %> Internal Check"){
+      $("#type_fields").html("<tr><td style='padding-right: 5px;' class='label'>Check Number:</td><td><input name='instrument' value='' onchange='getFileNumber($(this).val());' style='width: 250px;' id='check_number'></td></tr>");
+    }
+    else if(type == "Money Order"){
+      $("#type_fields").html("<tr><td style='padding-right: 5px;' class='label'>Serial Number:</td><td><input name='instrument' value='' style='width: 250px;' id='serial_number'></td></tr>");
+    }
+
+    if(type == "<%= @file.company.DirName %> Internal Check"){
+      $("#received_from_label").html('Received From File #:');
+      $("#received_from").val('');
+      $("#received_from").attr('disabled', 'disabled');
+      $("#create_receipt #amount").val('');
+      $("#create_receipt #amount").attr('disabled', 'disabled');
+      $("#receipt_company_select select").val('<%= @file.Company %>');
+      $("#receipt_company_select").hide();
+    }
+    else{
+      $("#received_from_label").html('Received From:');
+      $("#receipt_company_select").show();
+      $("#received_from").removeAttr('disabled');
+      $("#create_receipt #amount").removeAttr('disabled');
+    }
+
+    initializer();
+  }
+
+  function validateReceiptForm(){
+    var test;
+    var errors = "";
+
+    if(Number($("#create_receipt #amount").val()) == 0){
+      errors += "&list[]=Receipt must have amount greater than $0.00 to save.";
+    }
+
+    if($("#create_receipt #received_for").find(":selected").text() == ""){
+      errors += "&list[]=Received for cannot be left blank.";
+    }
+
+    if($("#create_receipt #received_from").val() == ""){
+      if($("#create_receipt #funds_type").find(":selected").text() == "<%= @file.company.DirName %> Internal Check"){
+        errors += "&list[]=Received from file number cannot be left blank.";
+      }
+      else{
+        errors += "&list[]=Received from cannot be left blank.";
+      }
+    }
+
+    if($("#create_receipt #check_number").val() == ""){
+      errors += "&list[]=Check number cannot be left blank.";
+    }
+
+    if($("#create_receipt #serial_number").val() == ""){
+      errors += "&list[]=Serial number cannot be left blank.";
+    }
+
+    if(errors != ""){
+      addToQueue("validate_new_order", "application/flash_notice?title=Errors on Form&notice=Please correct the following errors before proceeding:" + errors);
+      return false;
+    }
+
+    $("#received_from").removeAttr('disabled');
+    $("#create_receipt #amount").removeAttr('disabled');
+    return true;
+  }
+
+  function getFileNumber(value){
+    if($("#create_receipt #funds_type").find(":selected").text() == "<%= @file.company.DirName %> Internal Check"){
+      addToQueue('get_check_file_number', 'check_workings/get_check_file_number?check_number=' + value + '&company=<%= @file.Company %>');
+    }
+  }
+
+  openOverlay("create_receipt");
+</script>

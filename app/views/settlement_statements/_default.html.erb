@@ -1,0 +1,99 @@
+<% if @show == "Buyer" || @show == "Seller" %>
+  <% sides = [@show] %>
+<% end %>
+
+<div id="ss" class="ss<%= " print" if !@print.blank? %>">
+  <% @doc.settlement_statements.each do |settlement_statement| %>
+    <%= form_for settlement_statement, remote: true, id: "settlement_statement_#{settlement_statement.id}" do |f| %>
+      <%= f.text_field :created_by %>
+      <div class="ss_row">
+        <div id="ss_company_title">
+          <h1 class="upper">{{COMPANY_NAME}}</h1>
+          <h2>{{COMPANY_ADDRESS}}, {{COMPANY_CITY}}, {{COMPANY_STATE}} {{COMPANY_ZIP}}</h2>
+        </div>
+        <div class="ss_doc_title">
+          <p class="label"><%= f.object.ss_type.upcase %>'S SETTLEMENT STATEMENT</p>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div class="ss_row">
+        <table>
+          <tr>
+            <td class="ss_box_title label ss_w50 ss_box">Seller</td>
+            <td class="ss_vert_spacer"></td>
+            <td class="ss_box_title label ss_box">Buyer</td>
+          </tr>
+          <tr>
+            <td class="ss_box ss_info">
+              {{GRANTOR_NAMES}}<br />
+              {{GRANTOR_ADDRESS_1}} {{GRANTOR_ADDRESS_2}}<br />
+              {{GRANTOR_CITY}}, {{GRANTOR_STATE}} {{GRANTOR_ZIP}}
+            </td>
+            <td></td>
+            <td class="ss_box ss_info">
+              {{GRANTEE_NAMES}}<br />
+              {{GRANTEE_ADDRESS_1}} {{GRANTEE_ADDRESS_2}}<br />
+              {{GRANTEE_CITY}}, {{GRANTEE_STATE}} {{GRANTEE_ZIP}}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="ss_row">
+        <table>
+          <tr>
+            <td class="ss_box_title ss_box label ss_w75">Property Address/Description</td>
+            <td class="ss_vert_spacer"></td>
+            <td class="ss_box_title ss_box  label">Closing Date</td>
+          </tr>
+          <tr>
+            <td rowspan="3" class="ss_box">{{PROPERTY_ADDRESS}}<br />{{PROPERTY_CITY}}, {{PROPERTY_STATE}} {{PROPERTY_ZIP}}
+              <br />
+              <% legal = @doc.file_doc_fields.where("tag = 'PROPERTY_LEGAL_DESCRIPTION' AND value != '' AND is_active = 1").first %>
+              <% legal == nil ? legal = @file.file_doc_fields.where("doc_id = 0 AND tag = 'PROPERTY_LEGAL_DESCRIPTION' AND is_active = 1").first.value : legal = legal.value %>
+              <%= (legal.length < 50 ? "{{PROPERTY_LEGAL_DESCRIPTION}}" : "{{PROPERTY_TAX_ID}}") unless legal.nil? %>
+            </td>
+            <td></td>
+            <td class="ss_box ss_half_info">{{CLOSING_DATE}}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td class="ss_box_title ss_box  label">Order Number</td>
+          </tr>
+          <tr>
+            <td class="ss_hide_bottom"></td>
+            <td class="ss_box ss_half_info">{{FILE_ID_NUMBER}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="tru_container">
+        <div class="tru_new_line tru_header_line">
+          <div class="tru_11"></div>
+          <div class="tru_header">Charges</div>
+          <div class="tru_header">Credits</div>
+          <div class="tru_clear"></div>
+        </div>
+        <%= render "settlement_statements/partials/form", f: f %>
+      </div>
+      <div class="ss_row">
+        <div>{{CB_FINAL_2}} Preliminary <span class="ss_push_left_10">{{CB_FINAL_1}} Final</span></div>
+      </div>
+      {{<%= f.object.ss_type.upcase %>_SIGNATURES}}
+      <div class="ss_w45">
+        <table class='signature_container ss_closer_sig'>
+          <tr>
+             <td colspan='2'><h4>{{COMPANY_NAME}}</h4></td>
+          </tr>
+          <tr>
+            <td class="ss_w5">By: </td>
+            <td class="ss_w70 ss_sig_line" colspan='2'></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>{{CLOSER_NAME}}</td>
+          </tr>
+        </table>
+      </div>
+      <%= "{{PAGE_BREAK}}" if f.object.ss_type.downcase == "seller" %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,77 @@
+<% disabled = @file.SentForFunding == nil ? false : true %>
+<% Index.find(@file.ID).check_workings.order("CASE WHEN check_id IS NULL THEN 0 ELSE 1 END, payee_1 ASC").each do |c| %>
+  <% post = "check_workings/view_check?id=#{c.id}&file_id=#{@file.FileID}" %>
+  <% disabled = true if c.check_id != nil || c.check_number != nil %>
+  <tr class="trigger" onclick="rowSelect(this, '<%= post %>');" id="disbursement_<%= c.id %>">
+    <% if c.payee_1 != nil && c.payee_1.length > 15 %>
+      <td class="payee hint w100">
+        <span>
+          <%= image_tag("redx.png", onclick: "event.stopPropagation(); destroyDisbursement(this);") if !disabled %>
+          <%= c.payee_1 %>
+        </span>
+        <%= image_tag("redx.png", onclick: "event.stopPropagation(); destroyDisbursement(this);") if !disabled %>
+        <%= truncate(c.payee_1, length: 15) %>
+      </td>
+    <% else %>
+      <td class="payee w100">
+        <%= image_tag("redx.png", onclick: "event.stopPropagation(); destroyDisbursement(this);") if !disabled %>
+        <%= c.payee_1 %>
+      </td>
+    <% end %>
+
+    <% memo = c.funds_type.downcase == "check" ? c.memo_1.to_s : c.b2b_information_message.to_s %>
+    <% if memo.length > 15 %>
+      <td class="memo hint"><span><%= memo %></span><%= truncate(memo, length: 15) %></td>
+    <% else %>
+      <td class="memo"><%= memo %></td>
+    <% end %>
+
+    <td class="amount"><%= number_to_currency(c.amount, precision: 2, unit: "$") %></td>
+    <td class="type"><%= c.funds_type.titleize %></td>
+    <td class="hold"><%= check_box_tag :hold_back, !c.hold_back?, c.hold_back?, onchange: "$.post('check_workings/update_check?id=#{c.id}&field=' + $(this).attr('name') + '&value=' + $(this).val() );", disabled: disabled %></td>
+
+    <% if c.check_deliver != nil && c.check_deliver.length > 15 %>
+      <td class="instructions hint"><span><%= c.check_deliver %></span><%= truncate(c.check_deliver, length: 15) %></td>
+    <% else %>
+      <td class="instructions"><%= c.check_deliver %></td>
+    <% end %>
+
+    <% if c.print_office != nil && c.print_office.OfficeName.length > 15 %>
+      <td class="office hint"><span><%= c.print_office.OfficeName %></span><%= truncate(c.print_office.OfficeName, length: 15) %></td>
+    <% else %>
+      <td class="office"><%= c.print_office.OfficeName unless c.print_office.nil? %></td>
+    <% end %>
+    <td class="w40">
+      <% if @file.SentForFunding == nil %>
+        <%= check_box_tag :ready, "true", c.get_disbursement_errors.size == 0, disabled: true %>
+      <% elsif c.check != nil && c.check.CheckNo != nil %>
+        <%= link_to "View", "check_workings/#{c.id}/get_printed_confirmation.js", target: "_blank" %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+
+<script type="text/javascript">
+  if($("#disbursement_results").find("tr").length > 0){
+    <% if @check != nil %>
+      <% if @refresh == true %>
+        $('tr#disbursement_<%= @check.id %>').click();
+      <% else %>
+        $('tr#disbursement_<%= @check.id %>').addClass('active_row');
+      <% end %>
+    <% else %>
+      $('#disbursement_results').find("tr").eq(0).click();
+    <% end %>
+  }
+
+  <% if @file.check_workings.count > 0 && !disabled %>
+    $("#merge_disbursments_link").show();
+  <% else %>
+    $("#merge_disbursments_link").hide();
+  <% end %>
+
+  function destroyDisbursement(object){
+    var row = $(object).closest('tr');
+    addToQueue('remove_payment', 'application/flash_notice?notice=Are you sure you want to remove this disbursement?&confirm=Yes&post=/check_workings/destroy?id=' + $(row).attr("id").replace("disbursement_", "") );
+  }
+</script>

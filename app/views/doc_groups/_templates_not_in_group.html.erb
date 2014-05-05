@@ -1,0 +1,14 @@
+<% if @results.count == 0 %>
+  <tr>
+    <td class="name">No documents matched your criteria or they have already been added.</td>
+  </tr>
+<% end %>
+
+<% @results.each do |i| %>
+  <tr>
+    <td class="name <%= "hint" if i.description.length > 25 %>"><span><%= i.description if i.description.length > 25 %></span><a href="doc_templates/<%= i.id %>" style="display: none" data-remote="true"></a><%= truncate(i.description, length: 25) %></td>
+    <td class="version"><%= i.current_version %></td>
+    <td class="state"><%= i.state %></td>
+    <td class="actions"><%= button_to "Add", update_group_doc_group_path(id: @group.id, template: i.id, update: "add"), remote: true %></td>
+  </tr>
+<% end %>

@@ -1,0 +1,5 @@
+// $("#section_<%= @section %>").replaceWith("<%#= j(render "settlement_statements/partials/form", side: @section).html_safe %>");
+$("#doclist_<%= @ss.doc.id %>").removeClass("active_row");
+if($("#all_docs").find(".active_row").length == 0){
+  $("#doclist_<%= @ss.doc.id %>").click();
+}

@@ -1,0 +1,32 @@
+<div id="loading_cover" class="loading_cover hide"><p>Loading</p></div>
+<% if @entity %>
+  <div id="contact">
+    <h2 id="contact_header" class="contact_header"></h2>
+  </div>
+  <div id="overview_left" class="overview_left">
+
+    <div id="overview_contacts" class="box overview_contacts">
+      <%= render 'rolodex/partials/overview_contacts' %>
+    </div>
+
+    <div id="overview_addresses" class="box overview_addresses">
+      <%= render 'rolodex/partials/overview_addresses' %>
+    </div>
+
+    <div id="overview_notes" class="box overview_notes">
+      <%= render 'rolodex/partials/overview_notes' %>
+    </div>
+  </div>
+
+  <div id="overview_right" class="overview_right">
+    <div id="overview_info" class="box overview_info">
+      <%= render "rolodex/partials/overview_info" %>
+    </div>
+    <div id="overview_affiliations" class="box overview_affiliations">
+      <%= render 'rolodex/partials/overview_affiliations' %>
+    </div>
+    <div id="overview_files" class="box overview_files">
+      <%= render 'rolodex/partials/overview_files' %>
+    </div>
+  </div>
+<% end %>
